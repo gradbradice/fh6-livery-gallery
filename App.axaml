@@ -1,0 +1,67 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="LiveryGallery.App"
+             RequestedThemeVariant="Dark">
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://LiveryGallery/Themes/Styles.axaml" />
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://LiveryGallery/Themes/Icons.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="BgBrush" Color="#F5F6FA" />
+                    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="GroupBackgroundBrush" Color="#E9E9EC" />
+                    <SolidColorBrush x:Key="CardHoverBrush" Color="#FBFBFE" />
+                    <SolidColorBrush x:Key="BorderBrush2" Color="#E1E3EB" />
+                    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#1E2129" />
+                    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6B7280" />
+                    <SolidColorBrush x:Key="TextTertiaryBrush" Color="#9AA0AC" />
+                    <SolidColorBrush x:Key="AccentBrush" Color="#4F46E5" />
+                    <SolidColorBrush x:Key="AccentHoverBrush" Color="#4338CA" />
+                    <SolidColorBrush x:Key="AccentSoftBrush" Color="#EEEDFC" />
+                    <SolidColorBrush x:Key="DangerBrush" Color="#DC2626" />
+                    <SolidColorBrush x:Key="SuccessBrush" Color="#16A34A" />
+                    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="ThumbnailPlaceholderBrush" Color="#EEEFF3" />
+                    <SolidColorBrush x:Key="ThumbnailPlaceholderTextBrush" Color="#9AA0AC" />
+                    <SolidColorBrush x:Key="HoverBrush" Color="#F3F4F6" />
+                    <SolidColorBrush x:Key="ToolbarBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="ChipBackgroundBrush" Color="#EEEDFC" />
+                    <SolidColorBrush x:Key="ChipTextBrush" Color="#4F46E5" />
+                    <Color x:Key="ShadowColor">#22000000</Color>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="BgBrush" Color="#15161B" />
+                    <SolidColorBrush x:Key="SurfaceBrush" Color="#1B1D24" />
+                    <SolidColorBrush x:Key="CardBrush" Color="#1F2128" />
+                    <SolidColorBrush x:Key="GroupBackgroundBrush" Color="#2A2A2E" />
+                    <SolidColorBrush x:Key="CardHoverBrush" Color="#262832" />
+                    <SolidColorBrush x:Key="BorderBrush2" Color="#2E3039" />
+                    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#EDEDF2" />
+                    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#9498A3" />
+                    <SolidColorBrush x:Key="TextTertiaryBrush" Color="#6E7280" />
+                    <SolidColorBrush x:Key="AccentBrush" Color="#6366F1" />
+                    <SolidColorBrush x:Key="AccentHoverBrush" Color="#818CF8" />
+                    <SolidColorBrush x:Key="AccentSoftBrush" Color="#262445" />
+                    <SolidColorBrush x:Key="DangerBrush" Color="#F87171" />
+                    <SolidColorBrush x:Key="SuccessBrush" Color="#4ADE80" />
+                    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#25272F" />
+                    <SolidColorBrush x:Key="ThumbnailPlaceholderBrush" Color="#2A2C34" />
+                    <SolidColorBrush x:Key="ThumbnailPlaceholderTextBrush" Color="#6E7280" />
+                    <SolidColorBrush x:Key="HoverBrush" Color="#262832" />
+                    <SolidColorBrush x:Key="ToolbarBrush" Color="#1B1D24" />
+                    <SolidColorBrush x:Key="ChipBackgroundBrush" Color="#262445" />
+                    <SolidColorBrush x:Key="ChipTextBrush" Color="#A5A6F6" />
+                    <Color x:Key="ShadowColor">#55000000</Color>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

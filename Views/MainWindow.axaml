@@ -1,0 +1,286 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:LiveryGallery.Localisation"
+        xmlns:models="clr-namespace:LiveryGallery.Models"
+        x:Class="LiveryGallery.Views.MainWindow"
+        Title="{x:Static loc:Strings.AppTitle}"
+        Icon="avares://LiveryGallery/Assets/app-icon.png"
+        Height="860" Width="1320" MinHeight="560" MinWidth="960"
+        Background="{DynamicResource BgBrush}"
+        WindowStartupLocation="CenterScreen"
+        WindowDecorations="BorderOnly"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1">
+
+    <Window.Resources>
+        <DataTemplate x:Key="LiveryCardTemplate" x:DataType="models:LiveryEntry">
+            <Border Classes="liveryCard" Width="270" Margin="8" ToolTip.Tip="{Binding FolderName}">
+                <StackPanel>
+                    <Grid Height="150" ClipToBounds="True">
+                        <Border CornerRadius="14,14,0,0" ClipToBounds="True">
+                            <Grid>
+                                <Image Source="{Binding Thumbnail}" Stretch="UniformToFill"
+                                       IsVisible="{Binding HasThumbnail}" />
+                                <Border Background="{DynamicResource ThumbnailPlaceholderBrush}"
+                                        IsVisible="{Binding !HasThumbnail}">
+                                    <Path Data="{StaticResource IconCarSide}" Width="34" Height="34" Stretch="Uniform"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          Fill="{DynamicResource ThumbnailPlaceholderTextBrush}" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Button Classes="favoriteStar" Click="ToggleFavorite_Click"
+                                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,8,0"
+                                ToolTip.Tip="{x:Static loc:Strings.FavoriteToggleTooltip}">
+                            <Panel>
+                                <Path Data="{StaticResource IconStarOutline}" Width="13" Height="13" Stretch="Uniform"
+                                      Fill="White" IsVisible="{Binding !IsFavorite}" />
+                                <Path Data="{StaticResource IconStarFilled}" Width="13" Height="13" Stretch="Uniform"
+                                      Fill="#FFD54F" IsVisible="{Binding IsFavorite}" />
+                            </Panel>
+                        </Button>
+                    </Grid>
+                    <StackPanel Margin="14,12,14,14">
+                        <TextBlock Text="{Binding LiveryName}" FontSize="14.5" FontWeight="SemiBold"
+                                   TextTrimming="CharacterEllipsis" />
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0" VerticalAlignment="Center">
+                            <Border Classes="carChip">
+                                <TextBlock Text="{Binding CarManufacturer}" FontSize="11.5" FontWeight="Medium"
+                                           Foreground="{DynamicResource ChipTextBrush}"
+                                           TextTrimming="CharacterEllipsis" MaxWidth="110" />
+                            </Border>
+                            <TextBlock Text="{Binding CarModelName}" FontSize="12" FontWeight="Medium" Margin="6,0,0,0"
+                                       TextTrimming="CharacterEllipsis" MaxWidth="120" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding CarYear, StringFormat=({0})}" FontSize="11.5" Margin="4,0,0,0"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,9,0,0">
+                            <Path Data="{StaticResource IconUser}" Width="11" Height="11" Stretch="Uniform"
+                                  Fill="{DynamicResource TextSecondaryBrush}" Margin="2,0,3,0"
+                                  ToolTip.Tip="{x:Static loc:Strings.AuthorLabel}" />
+                            <TextBlock Text="{Binding Author}" FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       TextTrimming="CharacterEllipsis" MaxWidth="200" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <Path Data="{StaticResource IconCalendarDay}" Width="11" Height="11" Stretch="Uniform"
+                                  Fill="{DynamicResource TextSecondaryBrush}" Margin="0,0,5,0"
+                                  ToolTip.Tip="{x:Static loc:Strings.DateLabel}" />
+                            <TextBlock Text="{Binding DateDisplay}" FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <Button Classes="tagEdit" Click="EditTags_Click" Width="18" Height="18"
+                                    Margin="-3,-3,3,-3"
+                                    ToolTip.Tip="{x:Static loc:Strings.EditTagsTooltip}">
+                                <Path Data="{StaticResource IconBookmark}" Width="10.5" Height="10.5" Stretch="Uniform"
+                                      Fill="{DynamicResource TextSecondaryBrush}" />
+                            </Button>
+                            <TextBlock Text="{x:Static loc:Strings.EditTagsTooltip}"
+                                       FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                        <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Tags}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Border Background="{DynamicResource ChipBackgroundBrush}" CornerRadius="5"
+                                            Padding="6,2" Margin="0,0,5,5">
+                                        <TextBlock Text="{Binding}" FontSize="10.5"
+                                                   Foreground="{DynamicResource ChipTextBrush}" />
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock Text="{Binding FolderName}" FontSize="10" Margin="0,8,0,0"
+                                   Foreground="{DynamicResource TextTertiaryBrush}"
+                                   TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="GroupTemplate" x:DataType="models:LiveryGroup">
+            <Expander Classes="groupExpander" HorizontalAlignment="Center"
+                      Width="{Binding GroupWidth}">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Key}" FontSize="15" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding CountText}" FontSize="13" Margin="7,0,0,0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Expander.Header>
+                <ItemsControl ItemsSource="{Binding Items}" ItemTemplate="{StaticResource LiveryCardTemplate}"
+                              Background="Transparent" Width="{Binding GroupWidth}" HorizontalAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" Background="Transparent" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Expander>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Background="{DynamicResource BgBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" x:Name="CustomTitleBar" Background="{DynamicResource ToolbarBrush}"
+                Height="36" PointerPressed="TitleBar_PointerPressed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="12,0,0,0" VerticalAlignment="Center"
+                            IsHitTestVisible="False">
+                    <Path Data="{StaticResource IconFlag}" Width="13" Height="13" Stretch="Uniform"
+                          Fill="{DynamicResource TextSecondaryBrush}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                    <TextBlock x:Name="CustomTitleBarText" FontSize="12" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button x:Name="MinimizeButtonEl" Classes="titlebar" Click="MinimizeButton_Click">
+                        <TextBlock Text="&#xE921;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                    </Button>
+                    <Button x:Name="MaximizeButtonEl" Classes="titlebar" Click="MaximizeButton_Click">
+                        <TextBlock x:Name="MaximizeIcon" Text="&#xE922;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                    </Button>
+                    <Button x:Name="CloseButtonEl" Classes="titlebar close" Click="CloseButton_Click">
+                        <TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border Grid.Row="1" Background="{DynamicResource ToolbarBrush}" BorderBrush="{DynamicResource BorderBrush2}"
+                BorderThickness="0,0,0,1" Padding="20,16">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="SearchBox" Grid.Column="0" Classes="search"
+                             Margin="0,0,10,0" TextChanged="SearchBox_TextChanged" />
+
+                    <ComboBox x:Name="SortCombo" Grid.Column="1" Classes="modern" Width="260" Margin="0,0,10,0"
+                              SelectionChanged="SortCombo_SelectionChanged">
+                        <ComboBoxItem />
+                        <ComboBoxItem />
+                        <ComboBoxItem />
+                    </ComboBox>
+                    <ComboBox x:Name="FavoritesModeCombo" Grid.Column="2" Classes="modern" Width="270" Margin="0,0,10,0"
+                              SelectionChanged="FavoritesModeCombo_SelectionChanged">
+                        <ComboBoxItem />
+                        <ComboBoxItem />
+                        <ComboBoxItem />
+                        <ComboBoxItem />
+                    </ComboBox>
+
+                    <Button x:Name="RefreshButton" Grid.Column="3" Classes="icon" Margin="0,0,8,0"
+                            Click="RefreshButton_Click">
+                        <Path Data="{StaticResource IconRefresh}" Width="16" Height="16" Stretch="Uniform"
+                              Fill="{DynamicResource TextPrimaryBrush}" />
+                    </Button>
+                    <Button x:Name="LanguageButton" Grid.Column="4" Classes="icon" Margin="0,0,8,0">
+                        <Path Data="{StaticResource IconGlobe}" Width="15" Height="15" Stretch="Uniform"
+                              Fill="{DynamicResource TextPrimaryBrush}" />
+                        <Button.Flyout>
+                            <Flyout Placement="BottomEdgeAlignedRight">
+                                <StackPanel MinWidth="190">
+                                    <Button Classes="langItem" Tag="de" Content="DE — Deutsch" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="en" Content="EN — English" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="es" Content="ES — Español" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="fr" Content="FR — Français" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="it" Content="IT — Italiano" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="ja" Content="JA — 日本語" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="ko" Content="KO — 한국어" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="pt" Content="PT — Português" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="ru" Content="RU — Русский" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="zh-Hans" Content="ZH-CN — 中文（简体）" Click="LanguageItem_Click" />
+                                    <Button Classes="langItem" Tag="zh-Hant" Content="ZH-TW — 中文（繁體）" Click="LanguageItem_Click" />
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+
+                    <Button x:Name="ThemeToggleButton" Grid.Column="5" Classes="icon" Margin="0,0,8,0"
+                            Click="ThemeToggleButton_Click">
+                        <Path x:Name="ThemeIconPath" Width="15" Height="15" Stretch="Uniform"
+                              Fill="{DynamicResource TextPrimaryBrush}" />
+                    </Button>
+                    <Button x:Name="AboutButton" Grid.Column="6" Classes="icon"
+                            Click="AboutButton_Click">
+                        <Path Data="{StaticResource IconInfo}" Width="16" Height="16" Stretch="Uniform"
+                              Fill="{DynamicResource TextPrimaryBrush}" />
+                    </Button>
+                </Grid>
+                <Grid x:Name="TagsFilterRow" Margin="0,12,0,0" ColumnDefinitions="Auto,*" IsVisible="False">
+                    <TextBlock Grid.Column="0" x:Name="TagsFilterLabel" FontSize="12" Margin="0,5,10,0"
+                               VerticalAlignment="Top" Foreground="{DynamicResource TextSecondaryBrush}" />
+                    <WrapPanel Grid.Column="1" x:Name="TagsBar" Orientation="Horizontal" />
+                </Grid>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="2" Background="{DynamicResource BgBrush}" Padding="20,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="StatusText" Grid.Column="0" Text="" FontSize="12"
+                           Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
+                <Button x:Name="UpdateBanner" Grid.Column="1" Classes="pill"
+                        Margin="0,0,12,0" Padding="10,4" FontSize="11.5" IsVisible="False"
+                        Click="UpdateBanner_Click">
+                    <TextBlock x:Name="UpdateBannerText" />
+                </Button>
+                <TextBlock x:Name="CountText" Grid.Column="2" Text="" FontSize="12"
+                           Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+        <Grid Grid.Row="3" Background="{DynamicResource BgBrush}">
+            <ScrollViewer x:Name="GalleryScroll" Padding="12,0,12,20">
+                <ItemsControl x:Name="GroupsHost" ItemTemplate="{StaticResource GroupTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False">
+                <Path Data="{StaticResource IconPalette}" Width="42" Height="42" Stretch="Uniform"
+                      HorizontalAlignment="Center" Fill="{DynamicResource TextSecondaryBrush}" />
+                <TextBlock x:Name="EmptyStateText" FontSize="14" Margin="0,10,0,0"
+                           Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" />
+            </StackPanel>
+
+            <Border x:Name="LoadingOverlay" Background="{DynamicResource BgBrush}" Opacity="0.85" IsVisible="False">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Path Data="{StaticResource IconRefresh}" Width="30" Height="30" Stretch="Uniform"
+                          HorizontalAlignment="Center" Fill="{DynamicResource AccentBrush}" />
+                    <TextBlock x:Name="LoadingText" FontSize="13" Margin="0,10,0,0"
+                               Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

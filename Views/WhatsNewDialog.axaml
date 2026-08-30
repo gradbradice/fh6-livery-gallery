@@ -1,0 +1,82 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mv="using:MarkView.Avalonia"
+        x:Class="LiveryGallery.Views.WhatsNewDialog"
+        Width="560" Height="560" WindowStartupLocation="CenterOwner"
+        CanResize="True" MinWidth="420" MinHeight="360"
+        ShowInTaskbar="False"
+        Background="{DynamicResource BgBrush}"
+        WindowDecorations="BorderOnly"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1">
+    <Window.Styles>
+        <StyleInclude Source="avares://MarkView.Avalonia/Themes/MarkdownTheme.axaml" />
+        <Style Selector="TextBlock.markdown-h1, TextBlock.markdown-h2, TextBlock.markdown-h3">
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+        </Style>
+        <Style Selector="TextBlock.markdown-paragraph">
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        </Style>
+        <Style Selector="Border.markdown-code-inline, Border.markdown-code-block">
+            <Setter Property="Background" Value="{DynamicResource ChipBackgroundBrush}" />
+        </Style>
+    </Window.Styles>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="{DynamicResource ToolbarBrush}" Height="36"
+                PointerPressed="TitleBar_PointerPressed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="12,0,0,0"
+                            VerticalAlignment="Center" IsHitTestVisible="False">
+                    <Path Data="{StaticResource IconFlag}" Width="12" Height="12" Stretch="Uniform"
+                          Fill="{DynamicResource TextSecondaryBrush}" Margin="0,0,8,0" />
+                    <TextBlock x:Name="TitleBarText" FontSize="12"
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button x:Name="MinimizeButtonEl" Classes="titlebar" Click="MinimizeButton_Click">
+                        <TextBlock Text="&#xE921;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                    </Button>
+                    <Button x:Name="MaximizeButtonEl" Classes="titlebar" Click="MaximizeButton_Click">
+                        <TextBlock x:Name="MaximizeIcon" Text="&#xE922;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                    </Button>
+                    <Button x:Name="CloseButtonEl" Classes="titlebar close" Click="CloseButton_Click">
+                        <TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <TextBlock x:Name="TitleText" FontSize="17" FontWeight="Bold" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <Border Grid.Row="1" Background="{DynamicResource CardBrush}" BorderBrush="{DynamicResource BorderBrush2}"
+                    BorderThickness="1" CornerRadius="10" Margin="0,16,0,0" Padding="16,10">
+                <ScrollViewer>
+                    <mv:MarkdownViewer x:Name="MarkdownContent" />
+                </ScrollViewer>
+            </Border>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
+                <Button x:Name="CloseDialogButton" Classes="secondary" Width="110" Margin="0,0,10,0" Click="CloseButton_Click" />
+                <Button x:Name="DownloadButton" Classes="primary" Width="130" Click="DownloadButton_Click" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

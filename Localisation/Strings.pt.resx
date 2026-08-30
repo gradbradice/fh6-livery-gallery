@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>FH6 Livery Gallery</value>
+  </data>
+  <data name="SavePathNotChosen" xml:space="preserve">
+    <value>Pasta de salvamento não selecionada</value>
+  </data>
+  <data name="RefreshTooltip" xml:space="preserve">
+    <value>Atualizar (verificar alterações novamente)</value>
+  </data>
+  <data name="ThemeToggleTooltip" xml:space="preserve">
+    <value>Tema claro / escuro</value>
+  </data>
+  <data name="LanguageToggleTooltip" xml:space="preserve">
+    <value>Idioma da interface</value>
+  </data>
+  <data name="AboutTooltip" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Pesquisar por veículo (fabricante, modelo, ano) ou autor…</value>
+  </data>
+  <data name="SortManufacturer" xml:space="preserve">
+    <value>Ordenar por: fabricante</value>
+  </data>
+  <data name="SortAuthor" xml:space="preserve">
+    <value>Ordenar por: autor</value>
+  </data>
+  <data name="SortDownloadDate" xml:space="preserve">
+    <value>Ordenar por: data de download</value>
+  </data>
+  <data name="UnknownDownloadDate" xml:space="preserve">
+    <value>Data desconhecida</value>
+  </data>
+  <data name="StatusProcessed" xml:space="preserve">
+    <value>Processado: {0} novos/alterados, {1} do cache</value>
+  </data>
+  <data name="StatusErrors" xml:space="preserve">
+    <value>, {0} com erros</value>
+  </data>
+  <data name="StatusRemoved" xml:space="preserve">
+    <value>, {0} removidos</value>
+  </data>
+  <data name="StatusScanError" xml:space="preserve">
+    <value>Erro de verificação: {0}</value>
+  </data>
+  <data name="CountShowing" xml:space="preserve">
+    <value>Mostrando {0} de {1}</value>
+  </data>
+  <data name="EmptyNoLiveries" xml:space="preserve">
+    <value>Nenhuma pintura (Livery_*) encontrada na pasta selecionada</value>
+  </data>
+  <data name="EmptyNoResults" xml:space="preserve">
+    <value>Nenhum resultado encontrado para «{0}»</value>
+  </data>
+  <data name="LoadingScanning" xml:space="preserve">
+    <value>Verificando…</value>
+  </data>
+  <data name="LoadingSavingCache" xml:space="preserve">
+    <value>Salvando cache...</value>
+  </data>
+  <data name="ParsingProgress" xml:space="preserve">
+    <value>Analisando {0}/{1}: {2}</value>
+  </data>
+  <data name="UnknownManufacturer" xml:space="preserve">
+    <value>Fabricante desconhecido</value>
+  </data>
+  <data name="UnknownCarIdFormat" xml:space="preserve">
+    <value>ID {0}</value>
+  </data>
+  <data name="FolderNotFoundTitle" xml:space="preserve">
+    <value>Pasta de salvamento não encontrada</value>
+  </data>
+  <data name="FolderNotFoundMessage" xml:space="preserve">
+    <value>Não foi possível encontrar automaticamente a pasta de salvamento do Forza Horizon 6.\n\nEscolher manualmente?\n(Normalmente: C:\\XboxGames\\GameSave\\pgs\\u_...\\&lt;número&gt;\\ContainersRoot)</value>
+  </data>
+  <data name="ButtonYes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="ButtonNo" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="SelectFolderDialogTitle" xml:space="preserve">
+    <value>Selecione a pasta de salvamento (ContainersRoot ou a pasta numerada)</value>
+  </data>
+  <data name="CarDbUpdating" xml:space="preserve">
+    <value>Verificando atualizações do banco de dados de veículos…</value>
+  </data>
+  <data name="CarDbUpdated" xml:space="preserve">
+    <value>Banco de dados de veículos atualizado ({0})</value>
+  </data>
+  <data name="CarDbUpToDate" xml:space="preserve">
+    <value>Banco de dados de veículos atualizado ({0})</value>
+  </data>
+  <data name="CarDbDownloadFailed" xml:space="preserve">
+    <value>Não foi possível baixar o banco de dados de veículos — usando a última cópia salva ({0})</value>
+  </data>
+  <data name="CarDbNoDataAtAll" xml:space="preserve">
+    <value>Não foi possível baixar o banco de dados de veículos e não há cópia local — os nomes dos veículos ficarão indisponíveis</value>
+  </data>
+  <data name="CarDbCarsWord" xml:space="preserve">
+    <value>veículos</value>
+  </data>
+  <data name="AuthorLabel" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="DateLabel" xml:space="preserve">
+    <value>Data de criação</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>Sobre o FH6 Livery Gallery</value>
+  </data>
+  <data name="AboutVersionLabel" xml:space="preserve">
+    <value>Versão</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>Um visualizador de galeria para pinturas salvas do Forza Horizon 6.</value>
+  </data>
+  <data name="ButtonClose" xml:space="preserve">
+    <value>Fechar</value>
+  </data>
+  <data name="TagsDialogTitle" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagsDialogHint" xml:space="preserve">
+    <value>Separadas por vírgulas, ex.: drift, anime, favorito</value>
+  </data>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="ButtonCancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="EditTagsTooltip" xml:space="preserve">
+    <value>Editar tags</value>
+  </data>
+  <data name="TagsFilterLabel" xml:space="preserve">
+    <value>Tags:</value>
+  </data>
+  <data name="OnlyFavoritesToggle" xml:space="preserve">
+    <value>⭐ Somente favoritos</value>
+  </data>
+  <data name="FavoritesFirstToggle" xml:space="preserve">
+    <value>⭐ Favoritos primeiro</value>
+  </data>
+  <data name="NormalOrderToggle" xml:space="preserve">
+    <value>Ordem normal</value>
+  </data>
+  <data name="FavoriteToggleTooltip" xml:space="preserve">
+    <value>Adicionar/remover dos favoritos</value>
+  </data>
+  <data name="SeparateFavoritesToggle" xml:space="preserve">
+    <value>⭐ Mostrar favoritos separadamente</value>
+  </data>
+  <data name="SeparateFavoritesGroupName" xml:space="preserve">
+    <value>⭐ Favoritos</value>
+  </data>
+  <data name="UpdateAvailableFormat" xml:space="preserve">
+    <value>Nova versão {0} disponível →</value>
+  </data>
+  <data name="ButtonUpdateDownload" xml:space="preserve">
+    <value>Baixar</value>
+  </data>
+  <data name="WhatsNewTitleFormat" xml:space="preserve">
+    <value>Novidades da versão {0}</value>
+  </data>
+  <data name="ChangelogNotAvailable" xml:space="preserve">
+    <value>O changelog detalhado não está disponível. Abra a página da versão no GitHub para mais detalhes.</value>
+  </data>
+  <data name="ChangelogSectionHeader" xml:space="preserve">
+    <value>Português</value>
+  </data>
+  <data name="FavoritesCountFormat" xml:space="preserve">
+    <value> · ⭐ {0}</value>
+  </data>
+  <data name="MinimizeTooltip" xml:space="preserve">
+    <value>Minimizar</value>
+  </data>
+  <data name="MaximizeTooltip" xml:space="preserve">
+    <value>Maximizar / Restaurar</value>
+  </data>
+  <data name="CloseTooltip" xml:space="preserve">
+    <value>Fechar</value>
+  </data>
+  <data name="LiveryNoName" xml:space="preserve">
+    <value>(Sem nome)</value>
+  </data>
+  <data name="UnknownAuthor" xml:space="preserve">
+    <value>Desconhecido</value>
+  </data>
+  <data name="HeaderParserVersionFormat" xml:space="preserve">
+    <value>Biblioteca de análise de cabeçalho: {0}</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+</root>

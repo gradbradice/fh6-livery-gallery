@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>FH6 Livery Gallery</value>
+  </data>
+  <data name="SavePathNotChosen" xml:space="preserve">
+    <value>저장 폴더가 선택되지 않았습니다</value>
+  </data>
+  <data name="RefreshTooltip" xml:space="preserve">
+    <value>새로고침 (변경 사항 다시 스캔)</value>
+  </data>
+  <data name="ThemeToggleTooltip" xml:space="preserve">
+    <value>라이트 / 다크 테마</value>
+  </data>
+  <data name="LanguageToggleTooltip" xml:space="preserve">
+    <value>인터페이스 언어</value>
+  </data>
+  <data name="AboutTooltip" xml:space="preserve">
+    <value>정보</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>차량(제조사, 모델, 연식) 또는 작성자로 검색…</value>
+  </data>
+  <data name="SortManufacturer" xml:space="preserve">
+    <value>정렬: 제조사</value>
+  </data>
+  <data name="SortAuthor" xml:space="preserve">
+    <value>정렬: 작성자</value>
+  </data>
+  <data name="SortDownloadDate" xml:space="preserve">
+    <value>정렬: 다운로드 날짜</value>
+  </data>
+  <data name="UnknownDownloadDate" xml:space="preserve">
+    <value>날짜 알 수 없음</value>
+  </data>
+  <data name="StatusProcessed" xml:space="preserve">
+    <value>처리됨: 신규/변경 {0}개, 캐시에서 {1}개</value>
+  </data>
+  <data name="StatusErrors" xml:space="preserve">
+    <value>, 오류 {0}개</value>
+  </data>
+  <data name="StatusRemoved" xml:space="preserve">
+    <value>, 제거됨 {0}개</value>
+  </data>
+  <data name="StatusScanError" xml:space="preserve">
+    <value>스캔 오류: {0}</value>
+  </data>
+  <data name="CountShowing" xml:space="preserve">
+    <value>{1}개 중 {0}개 표시</value>
+  </data>
+  <data name="EmptyNoLiveries" xml:space="preserve">
+    <value>선택한 폴더에서 리버리(Livery_*)를 찾을 수 없습니다</value>
+  </data>
+  <data name="EmptyNoResults" xml:space="preserve">
+    <value>「{0}」에 대한 결과가 없습니다</value>
+  </data>
+  <data name="LoadingScanning" xml:space="preserve">
+    <value>스캔 중…</value>
+  </data>
+  <data name="LoadingSavingCache" xml:space="preserve">
+    <value>캐시 저장 중...</value>
+  </data>
+  <data name="ParsingProgress" xml:space="preserve">
+    <value>분석 중 {0}/{1}: {2}</value>
+  </data>
+  <data name="UnknownManufacturer" xml:space="preserve">
+    <value>알 수 없는 제조사</value>
+  </data>
+  <data name="UnknownCarIdFormat" xml:space="preserve">
+    <value>ID {0}</value>
+  </data>
+  <data name="FolderNotFoundTitle" xml:space="preserve">
+    <value>저장 폴더를 찾을 수 없습니다</value>
+  </data>
+  <data name="FolderNotFoundMessage" xml:space="preserve">
+    <value>Forza Horizon 6 저장 폴더를 자동으로 찾을 수 없습니다.\n\n수동으로 선택하시겠습니까?\n(보통: C:\\XboxGames\\GameSave\\pgs\\u_...\\&lt;번호&gt;\\ContainersRoot)</value>
+  </data>
+  <data name="ButtonYes" xml:space="preserve">
+    <value>예</value>
+  </data>
+  <data name="ButtonNo" xml:space="preserve">
+    <value>아니요</value>
+  </data>
+  <data name="SelectFolderDialogTitle" xml:space="preserve">
+    <value>저장 폴더를 선택하세요 (ContainersRoot 또는 번호가 붙은 폴더)</value>
+  </data>
+  <data name="CarDbUpdating" xml:space="preserve">
+    <value>차량 데이터베이스 업데이트 확인 중…</value>
+  </data>
+  <data name="CarDbUpdated" xml:space="preserve">
+    <value>차량 데이터베이스가 업데이트되었습니다 ({0})</value>
+  </data>
+  <data name="CarDbUpToDate" xml:space="preserve">
+    <value>차량 데이터베이스가 최신 상태입니다 ({0})</value>
+  </data>
+  <data name="CarDbDownloadFailed" xml:space="preserve">
+    <value>차량 데이터베이스를 다운로드하지 못했습니다 — 마지막으로 저장된 데이터를 사용합니다 ({0})</value>
+  </data>
+  <data name="CarDbNoDataAtAll" xml:space="preserve">
+    <value>차량 데이터베이스를 다운로드하지 못했고 로컬 사본도 없습니다 — 차량 이름을 표시할 수 없습니다</value>
+  </data>
+  <data name="CarDbCarsWord" xml:space="preserve">
+    <value>대</value>
+  </data>
+  <data name="AuthorLabel" xml:space="preserve">
+    <value>작성자</value>
+  </data>
+  <data name="DateLabel" xml:space="preserve">
+    <value>생성일</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>FH6 Livery Gallery 정보</value>
+  </data>
+  <data name="AboutVersionLabel" xml:space="preserve">
+    <value>버전</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>Forza Horizon 6 저장 데이터의 리버리를 보여주는 갤러리 뷰어입니다.</value>
+  </data>
+  <data name="ButtonClose" xml:space="preserve">
+    <value>닫기</value>
+  </data>
+  <data name="TagsDialogTitle" xml:space="preserve">
+    <value>태그</value>
+  </data>
+  <data name="TagsDialogHint" xml:space="preserve">
+    <value>쉼표로 구분, 예: 드리프트, 애니메이션, 즐겨찾기</value>
+  </data>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>저장</value>
+  </data>
+  <data name="ButtonCancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="EditTagsTooltip" xml:space="preserve">
+    <value>태그 편집</value>
+  </data>
+  <data name="TagsFilterLabel" xml:space="preserve">
+    <value>태그:</value>
+  </data>
+  <data name="OnlyFavoritesToggle" xml:space="preserve">
+    <value>⭐ 즐겨찾기만</value>
+  </data>
+  <data name="FavoritesFirstToggle" xml:space="preserve">
+    <value>⭐ 즐겨찾기 우선</value>
+  </data>
+  <data name="NormalOrderToggle" xml:space="preserve">
+    <value>일반 순서</value>
+  </data>
+  <data name="FavoriteToggleTooltip" xml:space="preserve">
+    <value>즐겨찾기 추가/제거</value>
+  </data>
+  <data name="SeparateFavoritesToggle" xml:space="preserve">
+    <value>⭐ 즐겨찾기 별도 표시</value>
+  </data>
+  <data name="SeparateFavoritesGroupName" xml:space="preserve">
+    <value>⭐ 즐겨찾기</value>
+  </data>
+  <data name="UpdateAvailableFormat" xml:space="preserve">
+    <value>새 버전 {0} 사용 가능 →</value>
+  </data>
+  <data name="ButtonUpdateDownload" xml:space="preserve">
+    <value>다운로드</value>
+  </data>
+  <data name="WhatsNewTitleFormat" xml:space="preserve">
+    <value>{0} 버전의 새로운 기능</value>
+  </data>
+  <data name="ChangelogNotAvailable" xml:space="preserve">
+    <value>자세한 변경 사항을 사용할 수 없습니다. 자세한 내용은 GitHub 릴리스 페이지를 확인하세요.</value>
+  </data>
+  <data name="ChangelogSectionHeader" xml:space="preserve">
+    <value>한국어</value>
+  </data>
+  <data name="FavoritesCountFormat" xml:space="preserve">
+    <value> · ⭐ {0}</value>
+  </data>
+  <data name="MinimizeTooltip" xml:space="preserve">
+    <value>최소화</value>
+  </data>
+  <data name="MaximizeTooltip" xml:space="preserve">
+    <value>최대화 / 복원</value>
+  </data>
+  <data name="CloseTooltip" xml:space="preserve">
+    <value>닫기</value>
+  </data>
+  <data name="LiveryNoName" xml:space="preserve">
+    <value>(이름 없음)</value>
+  </data>
+  <data name="UnknownAuthor" xml:space="preserve">
+    <value>알 수 없음</value>
+  </data>
+  <data name="HeaderParserVersionFormat" xml:space="preserve">
+    <value>헤더 파서 라이브러리: {0}</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>새로고침</value>
+  </data>
+</root>

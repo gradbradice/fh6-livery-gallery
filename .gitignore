@@ -97,6 +97,7 @@ ClientBin/
 *.dbmdl
 *.[Pp]ublish.xml
 .vs
+**\strings.Designer.cs
 
 *.publishsettings
 

@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>FH6 Livery Gallery</value>
+  </data>
+  <data name="SavePathNotChosen" xml:space="preserve">
+    <value>尚未选择存档文件夹</value>
+  </data>
+  <data name="RefreshTooltip" xml:space="preserve">
+    <value>刷新(重新扫描更改)</value>
+  </data>
+  <data name="ThemeToggleTooltip" xml:space="preserve">
+    <value>浅色 / 深色主题</value>
+  </data>
+  <data name="LanguageToggleTooltip" xml:space="preserve">
+    <value>界面语言</value>
+  </data>
+  <data name="AboutTooltip" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>按车辆(厂牌、车型、年份)或作者搜索…</value>
+  </data>
+  <data name="SortManufacturer" xml:space="preserve">
+    <value>排序: 厂牌</value>
+  </data>
+  <data name="SortAuthor" xml:space="preserve">
+    <value>排序: 作者</value>
+  </data>
+  <data name="SortDownloadDate" xml:space="preserve">
+    <value>排序: 下载日期</value>
+  </data>
+  <data name="UnknownDownloadDate" xml:space="preserve">
+    <value>日期未知</value>
+  </data>
+  <data name="StatusProcessed" xml:space="preserve">
+    <value>已处理: {0} 个新增/更改, {1} 个来自缓存</value>
+  </data>
+  <data name="StatusErrors" xml:space="preserve">
+    <value>，{0} 个出错</value>
+  </data>
+  <data name="StatusRemoved" xml:space="preserve">
+    <value>，已移除 {0} 个</value>
+  </data>
+  <data name="StatusScanError" xml:space="preserve">
+    <value>扫描错误: {0}</value>
+  </data>
+  <data name="CountShowing" xml:space="preserve">
+    <value>显示 {0} / {1}</value>
+  </data>
+  <data name="EmptyNoLiveries" xml:space="preserve">
+    <value>所选文件夹中未找到任何涂装(Livery_*)</value>
+  </data>
+  <data name="EmptyNoResults" xml:space="preserve">
+    <value>未找到与「{0}」匹配的结果</value>
+  </data>
+  <data name="LoadingScanning" xml:space="preserve">
+    <value>扫描中…</value>
+  </data>
+  <data name="LoadingSavingCache" xml:space="preserve">
+    <value>正在保存缓存...</value>
+  </data>
+  <data name="ParsingProgress" xml:space="preserve">
+    <value>解析中 {0}/{1}: {2}</value>
+  </data>
+  <data name="UnknownManufacturer" xml:space="preserve">
+    <value>未知厂牌</value>
+  </data>
+  <data name="UnknownCarIdFormat" xml:space="preserve">
+    <value>ID {0}</value>
+  </data>
+  <data name="FolderNotFoundTitle" xml:space="preserve">
+    <value>未找到存档文件夹</value>
+  </data>
+  <data name="FolderNotFoundMessage" xml:space="preserve">
+    <value>无法自动找到 Forza Horizon 6 的存档文件夹。\n\n是否手动选择?\n(通常位于: C:\\XboxGames\\GameSave\\pgs\\u_...\\&lt;编号&gt;\\ContainersRoot)</value>
+  </data>
+  <data name="ButtonYes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="ButtonNo" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="SelectFolderDialogTitle" xml:space="preserve">
+    <value>请选择存档文件夹(ContainersRoot 或数字编号的文件夹)</value>
+  </data>
+  <data name="CarDbUpdating" xml:space="preserve">
+    <value>正在检查车辆数据库更新…</value>
+  </data>
+  <data name="CarDbUpdated" xml:space="preserve">
+    <value>车辆数据库已更新 ({0})</value>
+  </data>
+  <data name="CarDbUpToDate" xml:space="preserve">
+    <value>车辆数据库已是最新 ({0})</value>
+  </data>
+  <data name="CarDbDownloadFailed" xml:space="preserve">
+    <value>无法下载车辆数据库 — 使用上次保存的数据 ({0})</value>
+  </data>
+  <data name="CarDbNoDataAtAll" xml:space="preserve">
+    <value>无法下载车辆数据库，且没有本地备份 — 车辆名称将无法显示</value>
+  </data>
+  <data name="CarDbCarsWord" xml:space="preserve">
+    <value>辆车</value>
+  </data>
+  <data name="AuthorLabel" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="DateLabel" xml:space="preserve">
+    <value>创建日期</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>关于 FH6 Livery Gallery</value>
+  </data>
+  <data name="AboutVersionLabel" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>用于浏览 Forza Horizon 6 存档中涂装的图库查看器。</value>
+  </data>
+  <data name="ButtonClose" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="TagsDialogTitle" xml:space="preserve">
+    <value>标签</value>
+  </data>
+  <data name="TagsDialogHint" xml:space="preserve">
+    <value>以逗号分隔，例如: 漂移, 动漫, 收藏</value>
+  </data>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="ButtonCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="EditTagsTooltip" xml:space="preserve">
+    <value>编辑标签</value>
+  </data>
+  <data name="TagsFilterLabel" xml:space="preserve">
+    <value>标签:</value>
+  </data>
+  <data name="OnlyFavoritesToggle" xml:space="preserve">
+    <value>⭐ 仅显示收藏</value>
+  </data>
+  <data name="FavoritesFirstToggle" xml:space="preserve">
+    <value>⭐ 收藏优先</value>
+  </data>
+  <data name="NormalOrderToggle" xml:space="preserve">
+    <value>常规顺序</value>
+  </data>
+  <data name="FavoriteToggleTooltip" xml:space="preserve">
+    <value>添加/移除收藏</value>
+  </data>
+  <data name="SeparateFavoritesToggle" xml:space="preserve">
+    <value>⭐ 将收藏单独显示</value>
+  </data>
+  <data name="SeparateFavoritesGroupName" xml:space="preserve">
+    <value>⭐ 收藏</value>
+  </data>
+  <data name="UpdateAvailableFormat" xml:space="preserve">
+    <value>发现新版本 {0} →</value>
+  </data>
+  <data name="ButtonUpdateDownload" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="WhatsNewTitleFormat" xml:space="preserve">
+    <value>版本 {0} 的新增内容</value>
+  </data>
+  <data name="ChangelogNotAvailable" xml:space="preserve">
+    <value>暂无详细更新日志。请前往 GitHub 发布页面查看详情。</value>
+  </data>
+  <data name="ChangelogSectionHeader" xml:space="preserve">
+    <value>中文（简体）</value>
+  </data>
+  <data name="FavoritesCountFormat" xml:space="preserve">
+    <value> · ⭐ {0}</value>
+  </data>
+  <data name="MinimizeTooltip" xml:space="preserve">
+    <value>最小化</value>
+  </data>
+  <data name="MaximizeTooltip" xml:space="preserve">
+    <value>最大化 / 还原</value>
+  </data>
+  <data name="CloseTooltip" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="LiveryNoName" xml:space="preserve">
+    <value>（未命名）</value>
+  </data>
+  <data name="UnknownAuthor" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="HeaderParserVersionFormat" xml:space="preserve">
+    <value>标头解析库：{0}</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+</root>
