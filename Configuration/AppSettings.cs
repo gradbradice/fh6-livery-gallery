@@ -2,7 +2,7 @@
 
 internal static class AppSettings
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
 
     public static string BaseCachePath { get; } = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
