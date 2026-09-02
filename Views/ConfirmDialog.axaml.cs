@@ -17,9 +17,6 @@ internal partial class ConfirmDialog : Window
         NoButton.Content = Strings.ButtonNo;
     }
 
-    // Нативного заголовка окна больше нет (WindowDecorations="BorderOnly" +
-    // ExtendClientAreaToDecorationsHint="True" в ConfirmDialog.axaml) — красить
-    // через DWM/WindowChromeHelper тут больше нечего, рисуем свой заголовок.
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
