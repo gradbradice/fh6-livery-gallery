@@ -190,7 +190,10 @@
     <value>Carpeta de guardado no encontrada</value>
   </data>
   <data name="FolderNotFoundMessage" xml:space="preserve">
-    <value>No se pudo encontrar automáticamente la carpeta de guardado de Forza Horizon 6.\n\n¿Elegirla manualmente?\n(Normalmente: C:\\XboxGames\\GameSave\\pgs\\u_...\\&lt;número&gt;\\ContainersRoot)</value>
+    <value>No se pudo encontrar automáticamente la carpeta de guardado de Forza Horizon 6.
+
+¿Elegirla manualmente?
+(Normalmente: C:\XboxGames\GameSave\pgs\u_[número]_16D460)</value>
   </data>
   <data name="ButtonYes" xml:space="preserve">
     <value>Sí</value>
