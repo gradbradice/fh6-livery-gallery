@@ -41,7 +41,7 @@ internal static class AppUpdateCheckService
         for (int i = 0; i < 3; i++)
         {
             int cmp = pa[i].CompareTo(pb[i]);
-            if (cmp != 0) return true;
+            if (cmp != 0) return cmp > 0;
         }
         return false;
     }
