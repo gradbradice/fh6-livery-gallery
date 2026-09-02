@@ -315,4 +315,43 @@ Sceglierla manualmente?
   <data name="Refresh" xml:space="preserve">
     <value>Aggiorna</value>
   </data>
+  <data name="SettingsToggleTooltip" xml:space="preserve">
+    <value>Impostazioni</value>
+  </data>
+  <data name="SettingsMenuGamePath" xml:space="preserve">
+    <value>Percorso del gioco</value>
+  </data>
+  <data name="GamePathPlaceholder" xml:space="preserve">
+    <value>Rilevamento automatico non riuscito: inserisci il percorso manualmente</value>
+  </data>
+  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+    <value>Seleziona la cartella di installazione del gioco</value>
+  </data>
+  <data name="SettingsMenuPaths" xml:space="preserve">
+    <value>Percorsi</value>
+  </data>
+  <data name="SavePathFieldLabel" xml:space="preserve">
+    <value>Percorso dei salvataggi</value>
+  </data>
+  <data name="PathFieldAutoHint" xml:space="preserve">
+    <value>Lascia vuoto per rilevare automaticamente il percorso</value>
+  </data>
+  <data name="SaveFolderContentHint" xml:space="preserve">
+    <value>Di solito: C:\XboxGames\GameSave\pgs\u_[numero]_16D460</value>
+  </data>
+  <data name="SaveFolderValidationFailed" xml:space="preserve">
+    <value>Dati di salvataggio non trovati</value>
+  </data>
+  <data name="ButtonRetry" xml:space="preserve">
+    <value>Riprova</value>
+  </data>
+  <data name="SaveFolderValidationFailedTitle" xml:space="preserve">
+    <value>Nessuna livrea trovata</value>
+  </data>
+  <data name="SavedPathNotFoundNotice" xml:space="preserve">
+    <value>La cartella dei salvataggi specificata non è stata trovata; verrà cercata automaticamente.</value>
+  </data>
+  <data name="ButtonOk" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

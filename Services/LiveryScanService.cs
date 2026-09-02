@@ -35,7 +35,7 @@ internal partial class LiveryScanService
     {
         var oldCache = _appCacheService.Load();
 
-        var folders = LocalFileService.GetListLiveryDirs(savePath)
+        var folders = LocalSaveService.GetListLiveryDirs(savePath)
             .Select(name => Path.Combine(savePath, name))
             .ToList();
 

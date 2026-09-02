@@ -315,4 +315,43 @@
   <data name="Refresh" xml:space="preserve">
     <value>重新整理</value>
   </data>
+  <data name="SettingsToggleTooltip" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="SettingsMenuGamePath" xml:space="preserve">
+    <value>遊戲路徑</value>
+  </data>
+  <data name="GamePathPlaceholder" xml:space="preserve">
+    <value>無法自動偵測，請手動輸入路徑</value>
+  </data>
+  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+    <value>選擇遊戲安裝資料夾</value>
+  </data>
+  <data name="SettingsMenuPaths" xml:space="preserve">
+    <value>路徑</value>
+  </data>
+  <data name="SavePathFieldLabel" xml:space="preserve">
+    <value>存檔路徑</value>
+  </data>
+  <data name="PathFieldAutoHint" xml:space="preserve">
+    <value>留空以自動偵測路徑</value>
+  </data>
+  <data name="SaveFolderContentHint" xml:space="preserve">
+    <value>通常位於: C:\XboxGames\GameSave\pgs\u_[編號]_16D460</value>
+  </data>
+  <data name="SaveFolderValidationFailed" xml:space="preserve">
+    <value>找不到存檔資料</value>
+  </data>
+  <data name="ButtonRetry" xml:space="preserve">
+    <value>重試</value>
+  </data>
+  <data name="SaveFolderValidationFailedTitle" xml:space="preserve">
+    <value>找不到塗裝</value>
+  </data>
+  <data name="SavedPathNotFoundNotice" xml:space="preserve">
+    <value>找不到指定的存檔資料夾 — 將自動搜尋。</value>
+  </data>
+  <data name="ButtonOk" xml:space="preserve">
+    <value>確定</value>
+  </data>
 </root>

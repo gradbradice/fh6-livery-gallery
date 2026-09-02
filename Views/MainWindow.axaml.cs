@@ -24,6 +24,9 @@ internal partial class MainWindow : Window
     private List<LiveryEntry> _allEntries = new();
     private readonly HashSet<string> _selectedTags = new(StringComparer.OrdinalIgnoreCase);
     private string? _savePath;
+    private string? SaveDataPath =>
+        _savePath is null ? null : LocalSaveService.GetSaveDataPath(_savePath);
+
     private CancellationTokenSource? _scanCts;
     private readonly AppSettingsData _settings = AppSettingsService.Load();
 
@@ -81,11 +84,19 @@ internal partial class MainWindow : Window
 
         _carDb.LoadLocal();
 
+        bool savedPathMissing = !string.IsNullOrWhiteSpace(_settings.SavePath)
+            && !Directory.Exists(_settings.SavePath);
+
         _savePath = !string.IsNullOrWhiteSpace(_settings.SavePath) && Directory.Exists(_settings.SavePath)
             ? _settings.SavePath
-            : LocalFileService.FindLocalFilesPath();
+            : LocalSaveService.FindLocalSavePath();
 
         await RefreshCarDatabaseAsync();
+
+        if (savedPathMissing)
+        {
+            await InfoDialog.ShowAsync(this, Strings.FolderNotFoundTitle, Strings.SavedPathNotFoundNotice);
+        }
 
         if (_savePath is null)
         {
@@ -167,20 +178,37 @@ internal partial class MainWindow : Window
         var provider = StorageProvider;
         if (provider is null) return;
 
-        var result = await provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        while (true)
         {
-            Title = Strings.SelectFolderDialogTitle,
-            AllowMultiple = false
-        });
+            var result = await provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            {
+                Title = Strings.SelectFolderDialogTitle,
+                AllowMultiple = false
+            });
 
-        var folder = result.Count > 0 ? result[0] : null;
-        string? path = folder?.TryGetLocalPath();
-        if (string.IsNullOrEmpty(path)) return;
+            var folder = result.Count > 0 ? result[0] : null;
+            string? path = folder?.TryGetLocalPath();
+            if (string.IsNullOrEmpty(path)) return;
 
-        _savePath = path;
-        _settings.SavePath = _savePath;
-        AppSettingsService.Save(_settings);
-        await RunScanAsync();
+            if (!LocalSaveService.IsSavePathValid(path))
+            {
+                bool retry = await ConfirmDialog.AskAsync(
+                    this,
+                    Strings.SaveFolderValidationFailedTitle,
+                    Strings.SaveFolderValidationFailed,
+                    yesText: Strings.ButtonRetry,
+                    noText: Strings.ButtonCancel);
+
+                if (!retry) return;
+                continue;
+            }
+
+            _savePath = path;
+            _settings.SavePath = _savePath;
+            AppSettingsService.Save(_settings);
+            await RunScanAsync();
+            return;
+        }
     }
 
     private async void RefreshButton_Click(object? sender, RoutedEventArgs e)
@@ -197,7 +225,7 @@ internal partial class MainWindow : Window
 
     private async Task RunScanAsync()
     {
-        if (_savePath is null) return;
+        if (SaveDataPath is null) return;
 
         _scanCts?.Cancel();
         var cts = new CancellationTokenSource();
@@ -210,7 +238,7 @@ internal partial class MainWindow : Window
 
         try
         {
-            var result = await _scanService.ScanAsync(_savePath, progress, cts.Token);
+            var result = await _scanService.ScanAsync(SaveDataPath, progress, cts.Token);
             if (cts.IsCancellationRequested) return;
 
             _allEntries = result.Entries;
@@ -521,10 +549,24 @@ internal partial class MainWindow : Window
         ApplyFilterAndSort();
     }
 
-    private async void AboutButton_Click(object? sender, RoutedEventArgs e)
+    private async void AboutMenuItem_Click(object? sender, RoutedEventArgs e)
     {
+        SettingsButton.Flyout?.Hide();
         var dlg = new AboutDialog();
         await dlg.ShowDialog(this);
+    }
+
+    private async void PathsMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        SettingsButton.Flyout?.Hide();
+        var dlg = new PathsDialog(_settings);
+        await dlg.ShowDialog(this);
+
+        if (dlg.SavePathChanged)
+        {
+            _savePath = _settings.SavePath;
+            if (SaveDataPath is not null) await RunScanAsync();
+        }
     }
 
     private void LanguageItem_Click(object? sender, RoutedEventArgs e)
@@ -565,7 +607,9 @@ internal partial class MainWindow : Window
         RefreshButton.SetValue(ToolTip.TipProperty, Strings.RefreshTooltip);
         LanguageButton.SetValue(ToolTip.TipProperty, Strings.LanguageToggleTooltip);
         ThemeToggleButton.SetValue(ToolTip.TipProperty, Strings.ThemeToggleTooltip);
-        AboutButton.SetValue(ToolTip.TipProperty, Strings.AboutTooltip);
+        SettingsButton.SetValue(ToolTip.TipProperty, Strings.SettingsToggleTooltip);
+        PathsMenuItem.Content = Strings.SettingsMenuPaths;
+        AboutMenuItem.Content = Strings.AboutTitle;
         SearchBox.PlaceholderText = Strings.SearchPlaceholder;
 
         SetComboItemText(SortCombo, (int)SortMode.Manufacture, Strings.SortManufacturer);

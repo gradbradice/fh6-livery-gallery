@@ -315,4 +315,43 @@
   <data name="Refresh" xml:space="preserve">
     <value>새로고침</value>
   </data>
+  <data name="SettingsToggleTooltip" xml:space="preserve">
+    <value>설정</value>
+  </data>
+  <data name="SettingsMenuGamePath" xml:space="preserve">
+    <value>게임 경로</value>
+  </data>
+  <data name="GamePathPlaceholder" xml:space="preserve">
+    <value>자동으로 감지할 수 없습니다. 경로를 직접 입력하세요</value>
+  </data>
+  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+    <value>게임 설치 폴더 선택</value>
+  </data>
+  <data name="SettingsMenuPaths" xml:space="preserve">
+    <value>경로</value>
+  </data>
+  <data name="SavePathFieldLabel" xml:space="preserve">
+    <value>저장 파일 경로</value>
+  </data>
+  <data name="PathFieldAutoHint" xml:space="preserve">
+    <value>비워두면 경로가 자동으로 감지됩니다</value>
+  </data>
+  <data name="SaveFolderContentHint" xml:space="preserve">
+    <value>보통: C:\XboxGames\GameSave\pgs\u_[번호]_16D460</value>
+  </data>
+  <data name="SaveFolderValidationFailed" xml:space="preserve">
+    <value>저장 데이터를 찾을 수 없습니다</value>
+  </data>
+  <data name="ButtonRetry" xml:space="preserve">
+    <value>다시 시도</value>
+  </data>
+  <data name="SaveFolderValidationFailedTitle" xml:space="preserve">
+    <value>리버리를 찾을 수 없음</value>
+  </data>
+  <data name="SavedPathNotFoundNotice" xml:space="preserve">
+    <value>지정된 저장 폴더를 찾을 수 없습니다 — 자동으로 검색합니다.</value>
+  </data>
+  <data name="ButtonOk" xml:space="preserve">
+    <value>확인</value>
+  </data>
 </root>

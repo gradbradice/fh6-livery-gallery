@@ -315,4 +315,43 @@ Escolher manualmente?
   <data name="Refresh" xml:space="preserve">
     <value>Atualizar</value>
   </data>
+  <data name="SettingsToggleTooltip" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="SettingsMenuGamePath" xml:space="preserve">
+    <value>Caminho do jogo</value>
+  </data>
+  <data name="GamePathPlaceholder" xml:space="preserve">
+    <value>Não foi possível detectar automaticamente — insira o caminho manualmente</value>
+  </data>
+  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+    <value>Selecione a pasta de instalação do jogo</value>
+  </data>
+  <data name="SettingsMenuPaths" xml:space="preserve">
+    <value>Caminhos</value>
+  </data>
+  <data name="SavePathFieldLabel" xml:space="preserve">
+    <value>Caminho dos salvamentos</value>
+  </data>
+  <data name="PathFieldAutoHint" xml:space="preserve">
+    <value>Deixe em branco para detectar o caminho automaticamente</value>
+  </data>
+  <data name="SaveFolderContentHint" xml:space="preserve">
+    <value>Normalmente: C:\XboxGames\GameSave\pgs\u_[número]_16D460</value>
+  </data>
+  <data name="SaveFolderValidationFailed" xml:space="preserve">
+    <value>Dados de salvamento não encontrados</value>
+  </data>
+  <data name="ButtonRetry" xml:space="preserve">
+    <value>Tentar novamente</value>
+  </data>
+  <data name="SaveFolderValidationFailedTitle" xml:space="preserve">
+    <value>Nenhuma pintura encontrada</value>
+  </data>
+  <data name="SavedPathNotFoundNotice" xml:space="preserve">
+    <value>A pasta de salvamento especificada não foi encontrada — a busca será feita automaticamente.</value>
+  </data>
+  <data name="ButtonOk" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

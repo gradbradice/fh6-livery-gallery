@@ -315,4 +315,43 @@
   <data name="Refresh" xml:space="preserve">
     <value>Обновить</value>
   </data>
+  <data name="SettingsToggleTooltip" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="SettingsMenuGamePath" xml:space="preserve">
+    <value>Путь до игры</value>
+  </data>
+  <data name="GamePathPlaceholder" xml:space="preserve">
+    <value>Не удалось определить автоматически — введите путь вручную</value>
+  </data>
+  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+    <value>Выберите папку установки игры</value>
+  </data>
+  <data name="SettingsMenuPaths" xml:space="preserve">
+    <value>Пути</value>
+  </data>
+  <data name="SavePathFieldLabel" xml:space="preserve">
+    <value>Путь до сохранения</value>
+  </data>
+  <data name="PathFieldAutoHint" xml:space="preserve">
+    <value>Оставьте пустым, чтобы путь определялся автоматически</value>
+  </data>
+  <data name="SaveFolderContentHint" xml:space="preserve">
+    <value>Обычно: C:\XboxGames\GameSave\pgs\u_[номер]_16D460</value>
+  </data>
+  <data name="SaveFolderValidationFailed" xml:space="preserve">
+    <value>Данные сохранений не найдены</value>
+  </data>
+  <data name="ButtonRetry" xml:space="preserve">
+    <value>Повторить</value>
+  </data>
+  <data name="SaveFolderValidationFailedTitle" xml:space="preserve">
+    <value>Ливреи не найдены</value>
+  </data>
+  <data name="SavedPathNotFoundNotice" xml:space="preserve">
+    <value>Указанная папка сохранений не найдена — поиск будет выполнен автоматически.</value>
+  </data>
+  <data name="ButtonOk" xml:space="preserve">
+    <value>ОК</value>
+  </data>
 </root>
