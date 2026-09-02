@@ -7,19 +7,16 @@ namespace LiveryGallery.Views;
 
 internal partial class ConfirmDialog : Window
 {
-    public ConfirmDialog(string title, string message)
+    public ConfirmDialog(string title, string message, string? yesText = null, string? noText = null)
     {
         InitializeComponent();
         Title = title;
         TitleBarText.Text = title;
         MessageText.Text = message;
-        YesButton.Content = Strings.ButtonYes;
-        NoButton.Content = Strings.ButtonNo;
+        YesButton.Content = yesText ?? Strings.ButtonYes;
+        NoButton.Content = noText ?? Strings.ButtonNo;
     }
 
-    // Нативного заголовка окна больше нет (WindowDecorations="BorderOnly" +
-    // ExtendClientAreaToDecorationsHint="True" в ConfirmDialog.axaml) — красить
-    // через DWM/WindowChromeHelper тут больше нечего, рисуем свой заголовок.
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
@@ -30,9 +27,9 @@ internal partial class ConfirmDialog : Window
 
     private void NoButton_Click(object? sender, RoutedEventArgs e) => Close(false);
 
-    public static async Task<bool> AskAsync(Window owner, string title, string message)
+    public static async Task<bool> AskAsync(Window owner, string title, string message, string? yesText = null, string? noText = null)
     {
-        var dlg = new ConfirmDialog(title, message);
+        var dlg = new ConfirmDialog(title, message, yesText, noText);
         return await dlg.ShowDialog<bool>(owner);
     }
 }

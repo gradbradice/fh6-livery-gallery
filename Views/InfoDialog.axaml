@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="LiveryGallery.Views.ConfirmDialog"
+        x:Class="LiveryGallery.Views.InfoDialog"
         Width="440"
         SizeToContent="Height"
         WindowStartupLocation="CenterOwner"
@@ -47,7 +47,7 @@
 
 				<Button Grid.Column="1"
                         Classes="titlebar close"
-                        Click="NoButton_Click">
+                        Click="OkButton_Click">
 					<TextBlock Text="&#xE8BB;"
                                FontFamily="Segoe MDL2 Assets"
                                FontSize="10" />
@@ -72,16 +72,10 @@
                         HorizontalAlignment="Right"
                         Margin="0,20,0,0">
 
-				<Button x:Name="NoButton"
-                        Classes="secondary"
-                        Width="100"
-                        Margin="0,0,10,0"
-                        Click="NoButton_Click" />
-
-				<Button x:Name="YesButton"
+				<Button x:Name="OkButton"
                         Classes="primary"
                         Width="100"
-                        Click="YesButton_Click" />
+                        Click="OkButton_Click" />
 			</StackPanel>
 		</Grid>
 	</Grid>

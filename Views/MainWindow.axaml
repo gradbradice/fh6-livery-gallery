@@ -224,10 +224,17 @@
                         <Path x:Name="ThemeIconPath" Width="15" Height="15" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
                     </Button>
-                    <Button x:Name="AboutButton" Grid.Column="6" Classes="icon"
-                            Click="AboutButton_Click">
-                        <Path Data="{StaticResource IconInfo}" Width="16" Height="16" Stretch="Uniform"
+					<Button x:Name="SettingsButton" Grid.Column="6" Classes="icon">
+						<Path Data="{StaticResource IconSettings}" Width="16" Height="16" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
+						<Button.Flyout>
+							<Flyout Placement="BottomEdgeAlignedRight">
+								<StackPanel MinWidth="190">
+									<Button x:Name="PathsMenuItem" Classes="langItem" Click="PathsMenuItem_Click" />
+									<Button x:Name="AboutMenuItem" Classes="langItem" Click="AboutMenuItem_Click" />
+								</StackPanel>
+							</Flyout>
+						</Button.Flyout>
                     </Button>
                 </Grid>
                 <Grid x:Name="TagsFilterRow" Margin="0,12,0,0" ColumnDefinitions="Auto,*" IsVisible="False">
