@@ -2,27 +2,24 @@ using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using ForzaData;
-using LiveryGallery.Configuration;
 using LiveryGallery.Localisation;
 
 namespace LiveryGallery.Views;
 
-internal partial class AboutDialog : Window
+internal partial class ContactsDialog : Window
 {
     private const string GithubUrl = "https://github.com/gradbradice/fh6-livery-gallery";
+    private const string TwitterUrl = "https://x.com/bradice_livery";
 
-    public AboutDialog()
+    public ContactsDialog()
     {
         InitializeComponent();
 
-        Title = Strings.AboutTitle;
-        TitleBarText.Text = Strings.AboutTitle;
-        VersionText.Text = $"{Strings.AboutVersionLabel} {AppSettings.Version}";
-        DescriptionText.Text = Strings.AboutDescription;
-        CloseButton.Content = Strings.ButtonClose;
-        HeaderParserVersionText.Text = string.Format(Strings.HeaderParserVersionFormat, NativeHeaderParser.GetVersion());
+        Title = Strings.ContactsTitle;
+        TitleBarText.Text = Strings.ContactsTitle;
+        TitleText.Text = Strings.ContactsTitle;
         GithubLinkButton.Content = Strings.ContactsGithubLabel;
+        CloseDialogButton.Content = Strings.ButtonClose;
     }
 
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
@@ -31,14 +28,19 @@ internal partial class AboutDialog : Window
             BeginMoveDrag(e);
     }
 
-    private void GithubLink_Click(object? sender, RoutedEventArgs e)
+    private void GithubLink_Click(object? sender, RoutedEventArgs e) => OpenUrl(GithubUrl);
+
+    private void TwitterLink_Click(object? sender, RoutedEventArgs e) => OpenUrl(TwitterUrl);
+
+    private static void OpenUrl(string url)
     {
         try
         {
-            Process.Start(new ProcessStartInfo(GithubUrl) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
         catch
         {
+
         }
     }
 

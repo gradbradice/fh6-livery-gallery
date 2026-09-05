@@ -381,4 +381,13 @@
   <data name="StatsFavoritesCount" xml:space="preserve">
     <value>已收藏</value>
   </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>联系方式</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>联系方式</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>GitHub 仓库</value>
+  </data>
 </root>

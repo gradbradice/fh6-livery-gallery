@@ -381,4 +381,13 @@
   <data name="StatsFavoritesCount" xml:space="preserve">
     <value>En favoritos</value>
   </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>Contactos</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>Contactos</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>Repositorio de GitHub</value>
+  </data>
 </root>

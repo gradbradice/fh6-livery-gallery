@@ -381,4 +381,13 @@
   <data name="StatsFavoritesCount" xml:space="preserve">
     <value>В избранном</value>
   </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>Контакты</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>Контакты</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>Репозиторий на GitHub</value>
+  </data>
 </root>

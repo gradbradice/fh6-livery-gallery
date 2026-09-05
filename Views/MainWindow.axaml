@@ -229,6 +229,7 @@
 									</MenuItem.Items>
 								</MenuItem>
 								<MenuItem x:Name="PathsMenuItem" Click="PathsMenuItem_Click" />
+								<MenuItem x:Name="ContactsMenuItem" Click="ContactsMenuItem_Click" />
 								<MenuItem x:Name="AboutMenuItem" Click="AboutMenuItem_Click" />
 							</MenuFlyout>
 						</Button.Flyout>

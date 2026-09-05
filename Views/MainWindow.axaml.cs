@@ -549,6 +549,13 @@ internal partial class MainWindow : Window
         ApplyFilterAndSort();
     }
 
+    private async void ContactsMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        SettingsButton.Flyout?.Hide();
+        var dlg = new ContactsDialog();
+        await dlg.ShowDialog(this);
+    }
+
     private async void AboutMenuItem_Click(object? sender, RoutedEventArgs e)
     {
         SettingsButton.Flyout?.Hide();
@@ -648,6 +655,7 @@ internal partial class MainWindow : Window
         SettingsButton.SetValue(ToolTip.TipProperty, Strings.SettingsToggleTooltip);
         LanguageMenuItem.Header = Strings.LanguageMenuLabel;
         PathsMenuItem.Header = Strings.SettingsMenuPaths;
+        ContactsMenuItem.Header = Strings.SettingsMenuContacts;
         AboutMenuItem.Header = Strings.AboutTitle;
         SearchBox.PlaceholderText = Strings.SearchPlaceholder;
 

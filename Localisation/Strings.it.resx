@@ -381,4 +381,13 @@ Sceglierla manualmente?
   <data name="StatsFavoritesCount" xml:space="preserve">
     <value>Nei preferiti</value>
   </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>Contatti</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>Contatti</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>Repository su GitHub</value>
+  </data>
 </root>

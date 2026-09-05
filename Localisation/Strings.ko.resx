@@ -381,4 +381,13 @@
   <data name="StatsFavoritesCount" xml:space="preserve">
     <value>즐겨찾기 수</value>
   </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>연락처</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>연락처</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>GitHub 저장소</value>
+  </data>
 </root>
