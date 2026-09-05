@@ -136,7 +136,7 @@
     <value>О программе</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Поиск по машине (производитель, модель, год) или автору…</value>
+    <value>Поиск по машине (производитель, модель, год), названию ливреи или автору…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Сортировка: производитель</value>

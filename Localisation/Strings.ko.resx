@@ -136,7 +136,7 @@
     <value>정보</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>차량(제조사, 모델, 연식) 또는 작성자로 검색…</value>
+    <value>차량(제조사, 모델, 연식),리버리 이름, 또는 작성자로 검색…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>정렬: 제조사</value>

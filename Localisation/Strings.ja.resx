@@ -136,7 +136,7 @@
     <value>アプリについて</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>車(メーカー・車種・年式)または作者で検索…</value>
+    <value>車(メーカー・車種・年式)、ラッピング名または作者で検索…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>並び替え: メーカー</value>

@@ -66,7 +66,7 @@ internal class LiveryEntry
     }
 
     private string SearchHaystack =>
-        $"{CarManufacturer} {CarModelName} {CarYear} {Author}".ToLowerInvariant();
+        $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}".ToLowerInvariant();
 
     public bool MatchesSearch(string term)
     {

@@ -136,7 +136,7 @@
     <value>Sobre</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Pesquisar por veículo (fabricante, modelo, ano) ou autor…</value>
+    <value>Pesquisar por veículo (fabricante, modelo, ano), nome da pintura ou autor…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Ordenar por: fabricante</value>

@@ -136,7 +136,7 @@
     <value>關於</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>依車輛(廠牌、車型、年份)或作者搜尋…</value>
+    <value>依車輛(廠牌、車型、年份)、依塗裝名稱或作者搜尋…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>排序: 廠牌</value>

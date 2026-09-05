@@ -136,7 +136,7 @@
     <value>Über</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Suche nach Fahrzeug (Hersteller, Modell, Baujahr) oder Autor…</value>
+    <value>Suche nach Fahrzeug (Hersteller, Modell, Baujahr), Livree-Name oder Autor…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Sortierung: Hersteller</value>

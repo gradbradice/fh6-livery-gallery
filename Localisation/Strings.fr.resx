@@ -136,7 +136,7 @@
     <value>À propos</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Rechercher par véhicule (marque, modèle, année) ou par auteur…</value>
+    <value>Rechercher par véhicule (marque, modèle, année), nom de livrée ou par auteur…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Trier par : marque</value>

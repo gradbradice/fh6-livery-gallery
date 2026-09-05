@@ -136,7 +136,7 @@
     <value>Informazioni</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Cerca per veicolo (marca, modello, anno) o autore…</value>
+    <value>Cerca per veicolo (marca, modello, anno), nome della livrea o autore…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Ordina per: marca</value>

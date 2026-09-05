@@ -136,7 +136,7 @@
     <value>About</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Search by car (manufacturer, model, year) or author…</value>
+    <value>Search by car (manufacturer, model, year), livery name or author…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Sort: manufacturer</value>
