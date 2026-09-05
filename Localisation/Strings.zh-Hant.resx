@@ -136,7 +136,7 @@
     <value>關於</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>依車輛(廠牌、車型、年份)、依塗裝名稱或作者搜尋…</value>
+    <value>依車輛(廠牌、車型、年份)、塗裝名稱或作者搜尋…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>排序: 廠牌</value>
@@ -353,5 +353,32 @@
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>確定</value>
+  </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>統計</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>統計</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>語言</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>塗裝總數</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>最喜愛的廠牌</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>最喜愛的作者</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>重複總數</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>可能重複總數</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>已收藏</value>
   </data>
 </root>

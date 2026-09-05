@@ -136,7 +136,7 @@
     <value>정보</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>차량(제조사, 모델, 연식),리버리 이름, 또는 작성자로 검색…</value>
+    <value>차량(제조사, 모델, 연식), 리버리 이름 또는 작성자로 검색…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>정렬: 제조사</value>
@@ -353,5 +353,32 @@
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>확인</value>
+  </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>통계</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>통계</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>전체 리버리 수</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>가장 많은 제조사</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>가장 많은 작성자</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>전체 중복 수</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>전체 중복 가능 수</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>즐겨찾기 수</value>
   </data>
 </root>

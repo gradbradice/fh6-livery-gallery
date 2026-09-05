@@ -197,26 +197,10 @@
                         <Path Data="{StaticResource IconRefresh}" Width="16" Height="16" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
                     </Button>
-                    <Button x:Name="LanguageButton" Grid.Column="4" Classes="icon" Margin="0,0,8,0">
-                        <Path Data="{StaticResource IconGlobe}" Width="15" Height="15" Stretch="Uniform"
+					<Button x:Name="StatsButton" Grid.Column="4" Classes="icon" Margin="0,0,8,0"
+                            Click="StatsButton_Click">
+						<Path Data="{StaticResource IconStats}" Width="15" Height="15" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
-                        <Button.Flyout>
-                            <Flyout Placement="BottomEdgeAlignedRight">
-                                <StackPanel MinWidth="190">
-                                    <Button Classes="langItem" Tag="de" Content="DE — Deutsch" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="en" Content="EN — English" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="es" Content="ES — Español" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="fr" Content="FR — Français" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="it" Content="IT — Italiano" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="ja" Content="JA — 日本語" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="ko" Content="KO — 한국어" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="pt" Content="PT — Português" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="ru" Content="RU — Русский" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="zh-Hans" Content="ZH-CN — 中文（简体）" Click="LanguageItem_Click" />
-                                    <Button Classes="langItem" Tag="zh-Hant" Content="ZH-TW — 中文（繁體）" Click="LanguageItem_Click" />
-                                </StackPanel>
-                            </Flyout>
-                        </Button.Flyout>
                     </Button>
 
                     <Button x:Name="ThemeToggleButton" Grid.Column="5" Classes="icon" Margin="0,0,8,0"
@@ -228,12 +212,25 @@
 						<Path Data="{StaticResource IconSettings}" Width="16" Height="16" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
 						<Button.Flyout>
-							<Flyout Placement="BottomEdgeAlignedRight">
-								<StackPanel MinWidth="190">
-									<Button x:Name="PathsMenuItem" Classes="langItem" Click="PathsMenuItem_Click" />
-									<Button x:Name="AboutMenuItem" Classes="langItem" Click="AboutMenuItem_Click" />
-								</StackPanel>
-							</Flyout>
+							<MenuFlyout Placement="BottomEdgeAlignedRight">
+								<MenuItem x:Name="LanguageMenuItem">
+									<MenuItem.Items>
+										<MenuItem Tag="de" Header="Deutsch (DE)" Click="LanguageItem_Click" />
+										<MenuItem Tag="en" Header="English (EN)" Click="LanguageItem_Click" />
+										<MenuItem Tag="es" Header="Español (ES)" Click="LanguageItem_Click" />
+										<MenuItem Tag="fr" Header="Français (FR)" Click="LanguageItem_Click" />
+										<MenuItem Tag="it" Header="Italiano (IT)" Click="LanguageItem_Click" />
+										<MenuItem Tag="ja" Header="日本語 (JA)" Click="LanguageItem_Click" />
+										<MenuItem Tag="ko" Header="한국어 (KO)" Click="LanguageItem_Click" />
+										<MenuItem Tag="pt" Header="Português (PT)" Click="LanguageItem_Click" />
+										<MenuItem Tag="ru" Header="Русский (RU)" Click="LanguageItem_Click" />
+										<MenuItem Tag="zh-Hans" Header="中文（简体） (ZH-CN)" Click="LanguageItem_Click" />
+										<MenuItem Tag="zh-Hant" Header="中文（繁體） (ZH-TW)" Click="LanguageItem_Click" />
+									</MenuItem.Items>
+								</MenuItem>
+								<MenuItem x:Name="PathsMenuItem" Click="PathsMenuItem_Click" />
+								<MenuItem x:Name="AboutMenuItem" Click="AboutMenuItem_Click" />
+							</MenuFlyout>
 						</Button.Flyout>
                     </Button>
                 </Grid>

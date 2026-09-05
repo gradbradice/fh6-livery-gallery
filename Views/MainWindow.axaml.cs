@@ -569,9 +569,47 @@ internal partial class MainWindow : Window
         }
     }
 
+    private async void StatsButton_Click(object? sender, RoutedEventArgs e)
+    {
+        int total = _allEntries.Count;
+        string favoriteManufacturer = "-";
+        string favoriteAuthor = "-";
+
+        if (total > 0)
+        {
+            var topManufacturer = _allEntries
+                .GroupBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
+                .OrderByDescending(g => g.Count())
+                .First();
+            favoriteManufacturer = $"{topManufacturer.Key} ({topManufacturer.Count()})";
+
+            var topAuthor = _allEntries
+                .GroupBy(x => x.Author, StringComparer.OrdinalIgnoreCase)
+                .OrderByDescending(g => g.Count())
+                .First();
+            favoriteAuthor = $"{topAuthor.Key} ({topAuthor.Count()})";
+        }
+
+        int favoritesCount = _allEntries.Count(x => x.IsFavorite);
+
+        string message = string.Join("\n", new[]
+        {
+            $"{Strings.StatsTotalLiveries}: {total}",
+            $"{Strings.StatsFavoritesCount}: {favoritesCount}",
+            "",
+            $"{Strings.StatsFavoriteManufacturer}: {favoriteManufacturer}",
+            $"{Strings.StatsFavoriteAuthor}: {favoriteAuthor}",
+            "",
+            $"{Strings.StatsTotalDuplicates}: -",
+            $"{Strings.StatsPossibleDuplicates}: -",
+        });
+
+        await InfoDialog.ShowAsync(this, Strings.StatsTitle, message);
+    }
+
     private void LanguageItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (sender is not Button item || item.Tag is not string code) return;
+        if (sender is not MenuItem item || item.Tag is not string code) return;
 
         AppLanguage language = code switch
         {
@@ -593,7 +631,7 @@ internal partial class MainWindow : Window
         _settings.Language = language;
         AppSettingsService.Save(_settings);
 
-        LanguageButton.Flyout?.Hide();
+        SettingsButton.Flyout?.Hide();
         OnLanguageChanged();
     }
 
@@ -605,11 +643,12 @@ internal partial class MainWindow : Window
         CloseButtonEl.SetValue(ToolTip.TipProperty, Strings.CloseTooltip);
 
         RefreshButton.SetValue(ToolTip.TipProperty, Strings.RefreshTooltip);
-        LanguageButton.SetValue(ToolTip.TipProperty, Strings.LanguageToggleTooltip);
+        StatsButton.SetValue(ToolTip.TipProperty, Strings.StatsToggleTooltip);
         ThemeToggleButton.SetValue(ToolTip.TipProperty, Strings.ThemeToggleTooltip);
         SettingsButton.SetValue(ToolTip.TipProperty, Strings.SettingsToggleTooltip);
-        PathsMenuItem.Content = Strings.SettingsMenuPaths;
-        AboutMenuItem.Content = Strings.AboutTitle;
+        LanguageMenuItem.Header = Strings.LanguageMenuLabel;
+        PathsMenuItem.Header = Strings.SettingsMenuPaths;
+        AboutMenuItem.Header = Strings.AboutTitle;
         SearchBox.PlaceholderText = Strings.SearchPlaceholder;
 
         SetComboItemText(SortCombo, (int)SortMode.Manufacture, Strings.SortManufacturer);

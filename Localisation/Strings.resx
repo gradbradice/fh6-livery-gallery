@@ -136,7 +136,7 @@
     <value>About</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Search by car (manufacturer, model, year) or author…</value>
+    <value>Search by car (manufacturer, model, year), livery name or author…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Sort: manufacturer</value>
@@ -353,5 +353,32 @@ Choose it manually?
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>Total liveries</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>Favorite manufacturer</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>Favorite author</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>Total duplicates</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>Total possible duplicates</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>In favorites</value>
   </data>
 </root>

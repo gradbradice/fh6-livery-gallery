@@ -354,4 +354,31 @@
   <data name="ButtonOk" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>統計</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>統計</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>リバリー総数</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>お気に入りのメーカー</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>お気に入りの作者</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>重複総数</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>重複の可能性がある総数</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>お気に入り登録数</value>
+  </data>
 </root>

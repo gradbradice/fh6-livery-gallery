@@ -354,4 +354,31 @@ Sceglierla manualmente?
   <data name="ButtonOk" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>Statistiche</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>Statistiche</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>Lingua</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>Totale livree</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>Marca preferita</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>Autore preferito</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>Totale duplicati</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>Totale possibili duplicati</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>Nei preferiti</value>
+  </data>
 </root>

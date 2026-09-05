@@ -354,4 +354,31 @@
   <data name="ButtonOk" xml:space="preserve">
     <value>Aceptar</value>
   </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>Estadísticas</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>Estadísticas</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>Total de libreas</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>Fabricante favorito</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>Autor favorito</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>Total de duplicados</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>Total de posibles duplicados</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>En favoritos</value>
+  </data>
 </root>
