@@ -3,8 +3,8 @@
 ![Preview](https://raw.githubusercontent.com/wiki/gradbradice/fh6-livery-gallery/img/preview.png)
 
 [![Latest Release](https://img.shields.io/github/v/release/gradbradice/fh6-livery-gallery?label=version&color=blue)](https://github.com/gradbradice/fh6-livery-gallery/releases/latest)
-![Downloads](https://img.shields.io/github/downloads/gradbradice/fh6-livery-gallery/total)
-![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D6?logo=windows&logoColor=white)
+[![Downloads](https://img.shields.io/github/downloads/gradbradice/fh6-livery-gallery/total)](https://github.com/gradbradice/fh6-livery-gallery/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D6?logo=windows&logoColor=white)](https://github.com/gradbradice/fh6-livery-gallery/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 ![.NET](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
 ![UI](https://img.shields.io/badge/UI-Avalonia%2012-8A2BE2)
