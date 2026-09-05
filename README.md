@@ -1,6 +1,6 @@
 # FH6 Livery Gallery
 
-
+[Preview](https://raw.githubusercontent.com/wiki/gradbradice/fh6-livery-gallery/img/preview.png)
 
 [![Latest Release](https://img.shields.io/github/v/release/gradbradice/fh6-livery-gallery?label=version&color=blue)](https://github.com/gradbradice/fh6-livery-gallery/releases/latest)
 ![Downloads](https://img.shields.io/github/downloads/gradbradice/fh6-livery-gallery/total)
@@ -10,7 +10,7 @@
 ![UI](https://img.shields.io/badge/UI-Avalonia%2012-8A2BE2)
 ![Localization](https://img.shields.io/badge/localization-11%20languages-informational)
 
-[English](#English) | [日本語](#日本語) | [Deutsch](#Deutsch) | [Español](#Español) | [Français](#Français) | [Italiano](#Italiano) | [한국어](#한국어) | [Português](#Português) | [Русский](#Русский) | [简体中文（ZH-CN）](#简体中文（ZH-CN) | [繁體中文（ZH-TW）](#繁體中文（ZH-TW）)
+[English](#English) | [日本語](#日本語) | [Deutsch](#Deutsch) | [Español](#Español) | [Français](#Français) | [Italiano](#Italiano) | [한국어](#한국어) | [Português](#Português) | [Русский](#Русский) | [ZH-CN](ZH-CN) | [ZH-TW](ZH-TW)
 
 ## English
 
@@ -201,7 +201,7 @@ FH6 Livery Gallery — это удобный способ посмотреть �
 * Гайд по использованию (в разработке)
 * FAQ (в разработке)
 
-## 简体中文（ZH-CN）
+## ZH-CN
 
 ### 描述
 
@@ -222,7 +222,7 @@ FH6 Livery Gallery 是一种便捷的方式，可以在无需启动游戏的情�
 * 使用指南（开发中）
 * 常见问题（开发中）
 
-## 繁體中文（ZH-TW）
+## ZH-TW
 
 ### 描述
 
