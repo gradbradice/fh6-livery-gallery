@@ -30,7 +30,8 @@ internal partial class PathsDialog : Window
         SaveButton.Content = Strings.ButtonSave;
         CloseDialogButton.Content = Strings.ButtonClose;
 
-        _savedGamePath = _settings.GameInstallPath ?? "";
+        //_savedGamePath = _settings.GameInstallPath ?? "";
+        _savedGamePath = _settings.GameInstallPath ?? GameDiscoveryService.TryFindGamePath() ?? "";
         _savedSavePath = _settings.SavePath ?? "";
         GamePathBox.Text = _savedGamePath;
         SavePathBox.Text = _savedSavePath;
