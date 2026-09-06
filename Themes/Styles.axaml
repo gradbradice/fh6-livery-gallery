@@ -241,12 +241,6 @@
 		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
 	</Style>
 
-	<!-- Кликабельная ссылка внутри обычного текста (Views/ContactsDialog) —
-	     тот же проверенный паттерн подсветки при наведении, что и у langItem
-	     выше, просто акцентный цвет текста вместо обычного (сигнализирует
-	     "по этому можно кликнуть"), и отрицательный Margin компенсирует
-	     Padding, чтобы текст визуально начинался на той же позиции, что и
-	     у некликабельных строк рядом. -->
 	<Style Selector="Button.linkText">
 		<Setter Property="Background" Value="Transparent" />
 		<Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
