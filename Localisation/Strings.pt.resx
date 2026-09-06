@@ -390,4 +390,34 @@ Escolher manualmente?
   <data name="ContactsGithubLabel" xml:space="preserve">
     <value>Repositório no GitHub</value>
   </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Duplicata</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>Este autor tem uma pintura idêntica para este carro</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>Todas as pinturas</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Duplicatas e possíveis duplicatas</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Somente duplicatas</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Possível duplicata</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>Este autor tem uma pintura semelhante para este carro (a maioria das seções de decalques coincide, mas não todo o conteúdo)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Exibição (favoritos, duplicatas)</value>
+  </data>
 </root>

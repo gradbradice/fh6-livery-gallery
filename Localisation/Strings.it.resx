@@ -390,4 +390,34 @@ Sceglierla manualmente?
   <data name="ContactsGithubLabel" xml:space="preserve">
     <value>Repository su GitHub</value>
   </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Duplicato</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>Questo autore ha una livrea identica per questa auto</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>Tutte le livree</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Duplicati e possibili duplicati</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Solo duplicati</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Possibile duplicato</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>Questo autore ha una livrea simile per questa auto (la maggior parte delle sezioni degli adesivi corrisponde, ma non tutto il contenuto)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Visualizzazione (preferiti, duplicati)</value>
+  </data>
 </root>

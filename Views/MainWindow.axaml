@@ -39,6 +39,22 @@
                                       Fill="#FFD54F" IsVisible="{Binding IsFavorite}" />
                             </Panel>
                         </Button>
+                        <Border IsVisible="{Binding IsDuplicate}"
+                                Background="{DynamicResource DangerBrush}"
+                                CornerRadius="6" Padding="7,3"
+                                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,8,0,0"
+                                ToolTip.Tip="{x:Static loc:Strings.DuplicateBadgeTooltip}">
+                            <TextBlock Text="{x:Static loc:Strings.DuplicateBadgeLabel}" FontSize="10.5"
+                                       FontWeight="SemiBold" Foreground="White" />
+                        </Border>
+                        <Border IsVisible="{Binding IsPossibleDuplicate}"
+                                Background="{DynamicResource WarningBrush}"
+                                CornerRadius="6" Padding="7,3"
+                                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,8,0,0"
+                                ToolTip.Tip="{x:Static loc:Strings.PossibleDuplicateBadgeTooltip}">
+                            <TextBlock Text="{x:Static loc:Strings.PossibleDuplicateBadgeLabel}" FontSize="10.5"
+                                       FontWeight="SemiBold" Foreground="White" />
+                        </Border>
                     </Grid>
                     <StackPanel Margin="14,12,14,14">
                         <TextBlock Text="{Binding LiveryName}" FontSize="14.5" FontWeight="SemiBold"
@@ -173,42 +189,58 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="SearchBox" Grid.Column="0" Classes="search"
                              Margin="0,0,10,0" TextChanged="SearchBox_TextChanged" />
+                    <Button x:Name="DisplayFilterButton" Grid.Column="1" Classes="icon" Margin="0,0,8,0"
+                            ToolTip.Tip="{x:Static loc:Strings.DisplayFilterTooltip}">
+                        <Path Data="{StaticResource IconFilter}" Width="15" Height="15" Stretch="Uniform"
+                              Fill="{DynamicResource TextPrimaryBrush}" />
+                        <Button.Flyout>
+                            <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                                <MenuItem x:Name="SortManufacturerItem" ToggleType="Radio" GroupName="SortGroup"
+                                          Tag="0" Click="SortModeMenuItem_Click" />
+                                <MenuItem x:Name="SortAuthorItem" ToggleType="Radio" GroupName="SortGroup"
+                                          Tag="1" Click="SortModeMenuItem_Click" />
+                                <MenuItem x:Name="SortDownloadTimeItem" ToggleType="Radio" GroupName="SortGroup"
+                                          Tag="2" Click="SortModeMenuItem_Click" />
+                                <Separator />
+                                <MenuItem x:Name="FavNoneItem" ToggleType="Radio" GroupName="FavGroup"
+                                          Tag="0" Click="FavModeMenuItem_Click" />
+                                <MenuItem x:Name="FavFirstItem" ToggleType="Radio" GroupName="FavGroup"
+                                          Tag="1" Click="FavModeMenuItem_Click" />
+                                <MenuItem x:Name="FavOnlyItem" ToggleType="Radio" GroupName="FavGroup"
+                                          Tag="2" Click="FavModeMenuItem_Click" />
+                                <MenuItem x:Name="FavSeparateItem" ToggleType="Radio" GroupName="FavGroup"
+                                          Tag="3" Click="FavModeMenuItem_Click" />
+                                <Separator />
+                                <MenuItem x:Name="DupAllItem" ToggleType="Radio" GroupName="DupGroup"
+                                          Tag="0" Click="DupModeMenuItem_Click" />
+                                <MenuItem x:Name="DupAndPossibleItem" ToggleType="Radio" GroupName="DupGroup"
+                                          Tag="1" Click="DupModeMenuItem_Click" />
+                                <MenuItem x:Name="DupOnlyItem" ToggleType="Radio" GroupName="DupGroup"
+                                          Tag="2" Click="DupModeMenuItem_Click" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
 
-                    <ComboBox x:Name="SortCombo" Grid.Column="1" Classes="modern" Width="260" Margin="0,0,10,0"
-                              SelectionChanged="SortCombo_SelectionChanged">
-                        <ComboBoxItem />
-                        <ComboBoxItem />
-                        <ComboBoxItem />
-                    </ComboBox>
-                    <ComboBox x:Name="FavoritesModeCombo" Grid.Column="2" Classes="modern" Width="270" Margin="0,0,10,0"
-                              SelectionChanged="FavoritesModeCombo_SelectionChanged">
-                        <ComboBoxItem />
-                        <ComboBoxItem />
-                        <ComboBoxItem />
-                        <ComboBoxItem />
-                    </ComboBox>
-
-                    <Button x:Name="RefreshButton" Grid.Column="3" Classes="icon" Margin="0,0,8,0"
+                    <Button x:Name="RefreshButton" Grid.Column="2" Classes="icon" Margin="0,0,8,0"
                             Click="RefreshButton_Click">
                         <Path Data="{StaticResource IconRefresh}" Width="16" Height="16" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
                     </Button>
-					<Button x:Name="StatsButton" Grid.Column="4" Classes="icon" Margin="0,0,8,0"
+					<Button x:Name="StatsButton" Grid.Column="3" Classes="icon" Margin="0,0,8,0"
                             Click="StatsButton_Click">
 						<Path Data="{StaticResource IconStats}" Width="15" Height="15" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
                     </Button>
 
-                    <Button x:Name="ThemeToggleButton" Grid.Column="5" Classes="icon" Margin="0,0,8,0"
+                    <Button x:Name="ThemeToggleButton" Grid.Column="4" Classes="icon" Margin="0,0,8,0"
                             Click="ThemeToggleButton_Click">
                         <Path x:Name="ThemeIconPath" Width="15" Height="15" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
                     </Button>
-					<Button x:Name="SettingsButton" Grid.Column="6" Classes="icon">
+					<Button x:Name="SettingsButton" Grid.Column="5" Classes="icon">
 						<Path Data="{StaticResource IconSettings}" Width="16" Height="16" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
 						<Button.Flyout>

@@ -390,4 +390,34 @@ Choose it manually?
   <data name="ContactsGithubLabel" xml:space="preserve">
     <value>GitHub repository</value>
   </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>This author has an identical livery for this car</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>All liveries</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Duplicates and possible duplicates</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Duplicates only</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Possible duplicate</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>This author has a similar livery for this car (most decal sections match, but not the full content)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Display (favorites, duplicates)</value>
+  </data>
 </root>

@@ -390,4 +390,34 @@ Le choisir manuellement ?
   <data name="ContactsGithubLabel" xml:space="preserve">
     <value>Dépôt GitHub</value>
   </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Doublon</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>Cet auteur a une livrée identique pour cette voiture</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>Toutes les livrées</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Doublons et doublons possibles</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Doublons uniquement</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Doublon possible</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>Cet auteur a une livrée similaire pour cette voiture (la plupart des sections de décalcomanies correspondent, mais pas tout le contenu)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Affichage (favoris, doublons)</value>
+  </data>
 </root>

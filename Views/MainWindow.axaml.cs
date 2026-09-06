@@ -36,7 +36,6 @@ internal partial class MainWindow : Window
     private string? _updateReleaseBody;
 
     private bool _isLoaded;
-    private bool _suppressComboEvents;
     private readonly DispatcherTimer _searchDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(500) };
     private readonly DispatcherTimer _resizeDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(200) };
 
@@ -47,13 +46,10 @@ internal partial class MainWindow : Window
 
         UpdateThemeIcon();
 
-        SortCombo.SelectedIndex = Enum.IsDefined(_settings.SortMode)
-            ? (int)_settings.SortMode
-            : (int)SortMode.Manufacture;
-
-        FavoritesModeCombo.SelectedIndex = Enum.IsDefined(_settings.FavoriteMode)
-            ? (int)_settings.FavoriteMode
-            : (int)FavoriteMode.None;
+        if (!Enum.IsDefined(_settings.SortMode)) _settings.SortMode = SortMode.Manufacture;
+        if (!Enum.IsDefined(_settings.FavoriteMode)) _settings.FavoriteMode = FavoriteMode.None;
+        if (!Enum.IsDefined(_settings.DuplicatesFilterMode)) _settings.DuplicatesFilterMode = DuplicatesFilterMode.All;
+        UpdateDisplayFilterChecks();
 
         ApplyLocalizedTexts();
 
@@ -288,20 +284,23 @@ internal partial class MainWindow : Window
         _searchDebounceTimer.Start();
     }
 
-    private void SortCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void SortModeMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (!_isLoaded || _suppressComboEvents) return;
-        _settings.SortMode = (SortMode)SortCombo.SelectedIndex;
+        if (sender is not MenuItem item || item.Tag is not string tag || !int.TryParse(tag, out int index)) return;
+        _settings.SortMode = Enum.IsDefined((SortMode)index) ? (SortMode)index : SortMode.Manufacture;
         AppSettingsService.Save(_settings);
+        UpdateDisplayFilterChecks();
         ApplyFilterAndSort();
     }
 
     private void ApplyFilterAndSort()
     {
         string search = SearchBox.Text?.Trim() ?? "";
-        bool onlyFavorites = FavoritesModeCombo.SelectedIndex == (int)FavoriteMode.OnlyFavorites;
-        bool favoritesFirst = FavoritesModeCombo.SelectedIndex == (int)FavoriteMode.FavoritesFirst;
-        bool separateFavorites = FavoritesModeCombo.SelectedIndex == (int)FavoriteMode.FavoritesSeparately;
+        bool onlyFavorites = _settings.FavoriteMode == FavoriteMode.OnlyFavorites;
+        bool favoritesFirst = _settings.FavoriteMode == FavoriteMode.FavoritesFirst;
+        bool separateFavorites = _settings.FavoriteMode == FavoriteMode.FavoritesSeparately;
+
+        var duplicatesFilterMode = _settings.DuplicatesFilterMode;
 
         IEnumerable<LiveryEntry> query = _allEntries;
         if (search.Length > 0)
@@ -312,6 +311,13 @@ internal partial class MainWindow : Window
 
         if (onlyFavorites)
             query = query.Where(x => x.IsFavorite);
+
+        query = duplicatesFilterMode switch
+        {
+            DuplicatesFilterMode.DuplicatesOnly => query.Where(x => x.IsDuplicate),
+            DuplicatesFilterMode.DuplicatesAndPossible => query.Where(x => x.IsDuplicate || x.IsPossibleDuplicate),
+            _ => query
+        };
 
         var filtered = query.ToList();
         double groupWidth = ComputeGroupWidth();
@@ -345,10 +351,14 @@ internal partial class MainWindow : Window
         GalleryScroll.InvalidateMeasure();
 
         int favoritesShown = filtered.Count(x => x.IsFavorite);
+        int duplicatesShown = filtered.Count(x => x.IsDuplicate);
+        int possibleDuplicatesShown = filtered.Count(x => x.IsPossibleDuplicate);
         CountText.Text = _allEntries.Count == 0
             ? ""
             : string.Format(Strings.CountShowing, filtered.Count, _allEntries.Count)
-              + (favoritesShown > 0 ? string.Format(Strings.FavoritesCountFormat, favoritesShown) : "");
+              + (favoritesShown > 0 ? string.Format(Strings.FavoritesCountFormat, favoritesShown) : "")
+              + (duplicatesShown > 0 ? string.Format(Strings.DuplicatesCountFormat, duplicatesShown) : "")
+              + (possibleDuplicatesShown > 0 ? string.Format(Strings.PossibleDuplicatesCountFormat, possibleDuplicatesShown) : "");
 
         if (_allEntries.Count == 0)
         {
@@ -385,7 +395,7 @@ internal partial class MainWindow : Window
 
     private List<LiveryGroup> BuildGroups(List<LiveryEntry> items, bool favoritesFirst, double groupWidth)
     {
-        if (SortCombo.SelectedIndex == (int)SortMode.Author)
+        if (_settings.SortMode == SortMode.Author)
         {
             return [.. items
                 .GroupBy(x => x.Author, StringComparer.OrdinalIgnoreCase)
@@ -399,7 +409,7 @@ internal partial class MainWindow : Window
                 })];
         }
 
-        if (SortCombo.SelectedIndex == (int)SortMode.DownloadTime)
+        if (_settings.SortMode == SortMode.DownloadTime)
         {
             return [.. items
                 .GroupBy(x => x.DownloadYearMonth)
@@ -436,7 +446,7 @@ internal partial class MainWindow : Window
             })];
     }
 
-    private List<LiveryEntry> SortForCurrentMode(List<LiveryEntry> items) => (SortMode)SortCombo.SelectedIndex switch
+    private List<LiveryEntry> SortForCurrentMode(List<LiveryEntry> items) => _settings.SortMode switch
     {
         SortMode.Author =>
             [.. items.OrderBy(x => x.Author, StringComparer.OrdinalIgnoreCase)
@@ -539,14 +549,38 @@ internal partial class MainWindow : Window
         ApplyFilterAndSort();
     }
 
-    private void FavoritesModeCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void FavModeMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (!_isLoaded || _suppressComboEvents) return;
-        _settings.FavoriteMode = Enum.IsDefined((FavoriteMode)FavoritesModeCombo.SelectedIndex)
-            ? (FavoriteMode)FavoritesModeCombo.SelectedIndex
-            : FavoriteMode.None;
+        if (sender is not MenuItem item || item.Tag is not string tag || !int.TryParse(tag, out int index)) return;
+        _settings.FavoriteMode = Enum.IsDefined((FavoriteMode)index) ? (FavoriteMode)index : FavoriteMode.None;
         AppSettingsService.Save(_settings);
+        UpdateDisplayFilterChecks();
         ApplyFilterAndSort();
+    }
+
+    private void DupModeMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem item || item.Tag is not string tag || !int.TryParse(tag, out int index)) return;
+        _settings.DuplicatesFilterMode = Enum.IsDefined((DuplicatesFilterMode)index) ? (DuplicatesFilterMode)index : DuplicatesFilterMode.All;
+        AppSettingsService.Save(_settings);
+        UpdateDisplayFilterChecks();
+        ApplyFilterAndSort();
+    }
+
+    private void UpdateDisplayFilterChecks()
+    {
+        SortManufacturerItem.IsChecked = _settings.SortMode == SortMode.Manufacture;
+        SortAuthorItem.IsChecked = _settings.SortMode == SortMode.Author;
+        SortDownloadTimeItem.IsChecked = _settings.SortMode == SortMode.DownloadTime;
+
+        FavNoneItem.IsChecked = _settings.FavoriteMode == FavoriteMode.None;
+        FavFirstItem.IsChecked = _settings.FavoriteMode == FavoriteMode.FavoritesFirst;
+        FavOnlyItem.IsChecked = _settings.FavoriteMode == FavoriteMode.OnlyFavorites;
+        FavSeparateItem.IsChecked = _settings.FavoriteMode == FavoriteMode.FavoritesSeparately;
+
+        DupAllItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.All;
+        DupAndPossibleItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.DuplicatesAndPossible;
+        DupOnlyItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.DuplicatesOnly;
     }
 
     private async void ContactsMenuItem_Click(object? sender, RoutedEventArgs e)
@@ -598,6 +632,8 @@ internal partial class MainWindow : Window
         }
 
         int favoritesCount = _allEntries.Count(x => x.IsFavorite);
+        int duplicatesCount = _allEntries.Count(x => x.IsDuplicate);
+        int possibleDuplicatesCount = _allEntries.Count(x => x.IsPossibleDuplicate);
 
         string message = string.Join("\n", new[]
         {
@@ -607,8 +643,8 @@ internal partial class MainWindow : Window
             $"{Strings.StatsFavoriteManufacturer}: {favoriteManufacturer}",
             $"{Strings.StatsFavoriteAuthor}: {favoriteAuthor}",
             "",
-            $"{Strings.StatsTotalDuplicates}: -",
-            $"{Strings.StatsPossibleDuplicates}: -",
+            $"{Strings.StatsTotalDuplicates}: {duplicatesCount}",
+            $"{Strings.StatsPossibleDuplicates}: {possibleDuplicatesCount}",
         });
 
         await InfoDialog.ShowAsync(this, Strings.StatsTitle, message);
@@ -659,35 +695,19 @@ internal partial class MainWindow : Window
         AboutMenuItem.Header = Strings.AboutTitle;
         SearchBox.PlaceholderText = Strings.SearchPlaceholder;
 
-        SetComboItemText(SortCombo, (int)SortMode.Manufacture, Strings.SortManufacturer);
-        SetComboItemText(SortCombo, (int)SortMode.Author, Strings.SortAuthor);
-        SetComboItemText(SortCombo, (int)SortMode.DownloadTime, Strings.SortDownloadDate);
-        RefreshComboClosedDisplay(SortCombo);
-
-        SetComboItemText(FavoritesModeCombo, (int)FavoriteMode.None, Strings.NormalOrderToggle);
-        SetComboItemText(FavoritesModeCombo, (int)FavoriteMode.FavoritesFirst, Strings.FavoritesFirstToggle);
-        SetComboItemText(FavoritesModeCombo, (int)FavoriteMode.OnlyFavorites, Strings.OnlyFavoritesToggle);
-        SetComboItemText(FavoritesModeCombo, (int)FavoriteMode.FavoritesSeparately, Strings.SeparateFavoritesToggle);
-        RefreshComboClosedDisplay(FavoritesModeCombo);
+        DisplayFilterButton.SetValue(ToolTip.TipProperty, Strings.DisplayFilterTooltip);
+        SortManufacturerItem.Header = Strings.SortManufacturer;
+        SortAuthorItem.Header = Strings.SortAuthor;
+        SortDownloadTimeItem.Header = Strings.SortDownloadDate;
+        FavNoneItem.Header = Strings.NormalOrderToggle;
+        FavFirstItem.Header = Strings.FavoritesFirstToggle;
+        FavOnlyItem.Header = Strings.OnlyFavoritesToggle;
+        FavSeparateItem.Header = Strings.SeparateFavoritesToggle;
+        DupAllItem.Header = Strings.DuplicatesFilterAll;
+        DupAndPossibleItem.Header = Strings.DuplicatesFilterAndPossible;
+        DupOnlyItem.Header = Strings.DuplicatesFilterOnly;
 
         TagsFilterLabel.Text = Strings.TagsFilterLabel;
-    }
-
-    private static void SetComboItemText(ComboBox combo, int index, string text)
-    {
-        if (combo.Items.Cast<object>().ElementAtOrDefault(index) is ComboBoxItem item)
-            item.Content = text;
-    }
-
-    private void RefreshComboClosedDisplay(ComboBox combo)
-    {
-        int index = combo.SelectedIndex;
-        if (index < 0) return;
-
-        _suppressComboEvents = true;
-        combo.SelectedIndex = -1;
-        combo.SelectedIndex = index;
-        _suppressComboEvents = false;
     }
 
     private void OnLanguageChanged()

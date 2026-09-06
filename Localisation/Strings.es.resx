@@ -390,4 +390,34 @@
   <data name="ContactsGithubLabel" xml:space="preserve">
     <value>Repositorio de GitHub</value>
   </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Duplicado</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>Este autor tiene una librea idéntica para este coche</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>Todas las libreas</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Duplicados y posibles duplicados</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Solo duplicados</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Posible duplicado</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>Este autor tiene una librea similar para este coche (coinciden la mayoría de las secciones de calcomanías, pero no todo el contenido)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Visualización (favoritos, duplicados)</value>
+  </data>
 </root>

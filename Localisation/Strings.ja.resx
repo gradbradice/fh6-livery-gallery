@@ -390,4 +390,34 @@
   <data name="ContactsGithubLabel" xml:space="preserve">
     <value>GitHubリポジトリ</value>
   </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>重複</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>この作者には、この車に対して同じリバリーがあります</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>すべてのリバリー</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>重複と重複の可能性があるもの</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>重複のみ</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>重複の可能性</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>この作者には、この車に似たリバリーがあります(デカールのほとんどのセクションは一致しますが、全体は一致しません)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>表示(お気に入り、重複)</value>
+  </data>
 </root>

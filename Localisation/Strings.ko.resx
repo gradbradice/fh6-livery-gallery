@@ -390,4 +390,34 @@
   <data name="ContactsGithubLabel" xml:space="preserve">
     <value>GitHub 저장소</value>
   </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>중복</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>이 작성자는 이 차량에 대해 동일한 리버리를 가지고 있습니다</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>모든 리버리</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>중복 및 중복 가능</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>중복만</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>중복 가능</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>이 작성자는 이 차량에 대해 비슷한 리버리를 가지고 있습니다(대부분의 데칼 구역이 일치하지만 전체 내용은 아님)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>표시(즐겨찾기, 중복)</value>
+  </data>
 </root>

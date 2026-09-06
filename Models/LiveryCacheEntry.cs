@@ -13,4 +13,6 @@ internal record LiveryCacheEntry
     public string? PreviewFile { get; set; }
     public string? ThumbnailFile { get; set; }
     public DateTime FilesWruteUTC { get; set; }
+    public string? CLiveryHash { get; set; }
+    public uint[]? SectionCounts { get; set; }
 }

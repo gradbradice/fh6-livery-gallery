@@ -390,4 +390,34 @@
   <data name="ContactsGithubLabel" xml:space="preserve">
     <value>GitHub 仓库</value>
   </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>重复</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>此作者对这辆车有完全相同的涂装</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>所有涂装</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>重复与可能重复</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>仅重复</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>可能重复</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>此作者对这辆车有类似的涂装(大部分贴花区块相符，但并非全部内容)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>显示(收藏、重复)</value>
+  </data>
 </root>

@@ -390,4 +390,34 @@
   <data name="ContactsGithubLabel" xml:space="preserve">
     <value>Репозиторий на GitHub</value>
   </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Дубликат</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>У этого автора есть точно такая же ливрея для этой машины</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>Все ливреи</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Дубликаты и возможные дубликаты</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Только дубликаты</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Возможный дубликат</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>У этого автора есть похожая ливрея для этой машины (совпадает большинство секций декалей, но не всё содержимое)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Отображение (избранное, дубликаты)</value>
+  </data>
 </root>
