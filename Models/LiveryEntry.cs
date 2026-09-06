@@ -1,4 +1,5 @@
 using Avalonia.Media.Imaging;
+using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Services;
 
@@ -31,6 +32,12 @@ internal class LiveryEntry
     public bool IsFavorite { get; set; }
     public List<string> Tags { get; set; } = [];
     public DateTime? DownloadYearMonth => DownloadDate is { } d ? new DateTime(d.Year, d.Month, 1) : null;
+
+    public string? CLiveryHash { get; init; }
+    public IReadOnlyList<uint>? SectionCounts { get; init; }
+    public DuplicateStatus DuplicateStatus { get; set; }
+    public bool IsDuplicate => DuplicateStatus == DuplicateStatus.Duplicate;
+    public bool IsPossibleDuplicate => DuplicateStatus == DuplicateStatus.PossibleDuplicate;
 
     public bool HasThumbnail => !string.IsNullOrEmpty(ThumbnailPath) && File.Exists(ThumbnailPath);
 
@@ -66,7 +73,7 @@ internal class LiveryEntry
     }
 
     private string SearchHaystack =>
-        $"{CarManufacturer} {CarModelName} {CarYear} {Author}".ToLowerInvariant();
+        $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}".ToLowerInvariant();
 
     public bool MatchesSearch(string term)
     {

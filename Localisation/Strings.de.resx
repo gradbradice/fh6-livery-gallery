@@ -136,7 +136,7 @@
     <value>Über</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Suche nach Fahrzeug (Hersteller, Modell, Baujahr) oder Autor…</value>
+    <value>Suche nach Fahrzeug (Hersteller, Modell, Baujahr), Livree-Name oder Autor…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Sortierung: Hersteller</value>
@@ -292,7 +292,7 @@ Manuell auswählen?
     <value>Deutsch</value>
   </data>
   <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐ {0}</value>
+    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>Minimieren</value>
@@ -353,5 +353,77 @@ Manuell auswählen?
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>Statistik</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>Statistik</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>Livrees insgesamt</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>Lieblingshersteller</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>Lieblingsautor</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>Duplikate insgesamt</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>Mögliche Duplikate insgesamt</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>In Favoriten</value>
+  </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>Kontakte</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>Kontakte</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>GitHub-Repository</value>
+  </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Duplikat</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>Dieser Autor hat für dieses Auto eine identische Livree</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>Alle Livrees</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Duplikate und mögliche Duplikate</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Nur Duplikate</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Mögliches Duplikat</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>Dieser Autor hat eine ähnliche Livree für dieses Auto (die meisten Aufkleberbereiche stimmen überein, aber nicht der gesamte Inhalt)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Anzeige (Favoriten, Duplikate)</value>
+  </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>Gruppierung</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>Alle Livrees</value>
   </data>
 </root>

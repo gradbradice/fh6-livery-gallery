@@ -1,7 +1,9 @@
 ﻿using ForzaData;
+using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using System.Globalization;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace LiveryGallery.Services;
@@ -71,6 +73,8 @@ internal partial class LiveryScanService
 
         int removed = oldCache.Keys.Except(newCache.Keys).Count();
 
+        MarkDuplicates(entries);
+
         progress?.Report(Strings.LoadingSavingCache);
         _appCacheService.Save(newCache);
 
@@ -100,6 +104,8 @@ internal partial class LiveryScanService
 
         if (oldCache.TryGetValue(folder, out var existing)
             && existing.FilesWruteUTC == headerWrite
+            && existing.CLiveryHash is not null
+            && existing.SectionCounts is not null
             && (existing.ThumbnailFile is null || File.Exists(Path.Combine(_appCacheService.ThumbsDir, existing.ThumbnailFile))))
         {
             wasReused = true;
@@ -114,6 +120,25 @@ internal partial class LiveryScanService
 
         byte[] headerData = File.ReadAllBytes(headerPath);
         var (_, parsedHeader) = NativeHeaderParser.TryParseHeader(headerData);
+
+        string? cLiveryHash = null;
+        uint[]? sectionCounts = null;
+        string cLiveryPath = Path.Combine(folder, "C_livery");
+        if (File.Exists(cLiveryPath))
+        {
+            try
+            {
+                byte[] cLiveryBytes = File.ReadAllBytes(cLiveryPath);
+                cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryBytes));
+                var (liveryResult, livery) = NativeHeaderParser.TryParseCLivery(cLiveryBytes);
+                if (liveryResult == LiveryParseResult.Ok && livery is not null)
+                    sectionCounts = [.. livery.SectionCounts];
+            }
+            catch
+            {
+
+            }
+        }
 
         string liveryName = !string.IsNullOrWhiteSpace(parsedHeader?.LiveryName) ? parsedHeader!.LiveryName : Strings.LiveryNoName;
         string author = !string.IsNullOrWhiteSpace(parsedHeader?.CreatorName) ? parsedHeader!.CreatorName : Strings.UnknownAuthor;
@@ -144,6 +169,8 @@ internal partial class LiveryScanService
             ThumbnailFile = thumbnailFile,
             FilesWruteUTC = headerWrite,
             //SourceThumbWriteUtc = thumbWrite
+            CLiveryHash = cLiveryHash,
+            SectionCounts = sectionCounts,
         };
     }
 
@@ -168,8 +195,63 @@ internal partial class LiveryScanService
                 ? Path.Combine(_appCacheService.ThumbsDir, c.ThumbnailFile) 
                 : null,
             Tags = _tagService.GetTags(c.FolderName),
-            IsFavorite = _favoriteService.IsFavorite(c.FolderName)
+            IsFavorite = _favoriteService.IsFavorite(c.FolderName),
+            CLiveryHash = c.CLiveryHash,
+            SectionCounts = c.SectionCounts
         };
+    }
+
+    private static void MarkDuplicates(List<LiveryEntry> entries)
+    {
+        const int sectionCount = 11;
+
+        var exactGroups = entries
+            .Where(e => e.CLiveryHash is not null)
+            .GroupBy(e => (e.CarId, Author: e.Author.ToLowerInvariant(), e.CLiveryHash));
+
+        foreach (var group in exactGroups)
+        {
+            if (group.Count() <= 1) continue;
+            foreach (var entry in group)
+                entry.DuplicateStatus = DuplicateStatus.Duplicate;
+        }
+
+        var candidateGroups = entries
+            .Where(e => e.DuplicateStatus != DuplicateStatus.Duplicate && e.SectionCounts is { Count: sectionCount })
+            .GroupBy(e => (e.CarId, Author: e.Author.ToLowerInvariant()));
+
+        foreach (var group in candidateGroups)
+        {
+            var items = group.ToList();
+            for (int i = 0; i < items.Count; i++)
+            {
+                for (int j = i + 1; j < items.Count; j++)
+                {
+                    if (AreSectionsSimilar(items[i].SectionCounts!, items[j].SectionCounts!))
+                    {
+                        items[i].DuplicateStatus = DuplicateStatus.PossibleDuplicate;
+                        items[j].DuplicateStatus = DuplicateStatus.PossibleDuplicate;
+                    }
+                }
+            }
+        }
+    }
+
+    private const double MinSectionMatchRatio = 0.6;
+    private const int MinRelevantSections = 3;
+
+    private static bool AreSectionsSimilar(IReadOnlyList<uint> a, IReadOnlyList<uint> b)
+    {
+        int relevant = 0, matches = 0;
+        for (int i = 0; i < a.Count; i++)
+        {
+            if (a[i] == 0 && b[i] == 0) continue;
+            relevant++;
+            if (a[i] == b[i]) matches++;
+        }
+
+        if (relevant < MinRelevantSections) return false;
+        return (double)matches / relevant >= MinSectionMatchRatio;
     }
 
     private static (int CarId, string? Timestamp) ParseFolderName(string folderName)

@@ -136,7 +136,7 @@
     <value>정보</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>차량(제조사, 모델, 연식) 또는 작성자로 검색…</value>
+    <value>차량(제조사, 모델, 연식), 리버리 이름 또는 작성자로 검색…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>정렬: 제조사</value>
@@ -292,7 +292,7 @@
     <value>한국어</value>
   </data>
   <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐ {0}</value>
+    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>최소화</value>
@@ -353,5 +353,77 @@
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>확인</value>
+  </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>통계</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>통계</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>전체 리버리 수</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>가장 많은 제조사</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>가장 많은 작성자</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>전체 중복 수</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>전체 중복 가능 수</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>즐겨찾기 수</value>
+  </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>연락처</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>연락처</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>GitHub 저장소</value>
+  </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>중복</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>이 작성자는 이 차량에 대해 동일한 리버리를 가지고 있습니다</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>모든 리버리</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>중복 및 중복 가능</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>중복만</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>중복 가능</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>이 작성자는 이 차량에 대해 비슷한 리버리를 가지고 있습니다(대부분의 데칼 구역이 일치하지만 전체 내용은 아님)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>표시(즐겨찾기, 중복)</value>
+  </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>그룹화</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>모든 리버리</value>
   </data>
 </root>

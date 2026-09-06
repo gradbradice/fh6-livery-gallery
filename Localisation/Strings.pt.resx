@@ -136,7 +136,7 @@
     <value>Sobre</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Pesquisar por veículo (fabricante, modelo, ano) ou autor…</value>
+    <value>Pesquisar por veículo (fabricante, modelo, ano), nome da pintura ou autor…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Ordenar por: fabricante</value>
@@ -292,7 +292,7 @@ Escolher manualmente?
     <value>Português</value>
   </data>
   <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐ {0}</value>
+    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>Minimizar</value>
@@ -353,5 +353,77 @@ Escolher manualmente?
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>Estatísticas</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>Estatísticas</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>Total de pinturas</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>Fabricante favorito</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>Autor favorito</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>Total de duplicatas</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>Total de possíveis duplicatas</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>Nos favoritos</value>
+  </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>Contatos</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>Contatos</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>Repositório no GitHub</value>
+  </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Duplicata</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>Este autor tem uma pintura idêntica para este carro</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>Todas as pinturas</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Duplicatas e possíveis duplicatas</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Somente duplicatas</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Possível duplicata</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>Este autor tem uma pintura semelhante para este carro (a maioria das seções de decalques coincide, mas não todo o conteúdo)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Exibição (favoritos, duplicatas)</value>
+  </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>Agrupamento</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>Todas as pinturas</value>
   </data>
 </root>

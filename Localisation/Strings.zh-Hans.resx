@@ -136,7 +136,7 @@
     <value>关于</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>按车辆(厂牌、车型、年份)或作者搜索…</value>
+    <value>按车辆(厂牌、车型、年份)、涂装名称或作者搜索…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>排序: 厂牌</value>
@@ -292,7 +292,7 @@
     <value>中文（简体）</value>
   </data>
   <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐ {0}</value>
+    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>最小化</value>
@@ -353,5 +353,77 @@
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>确定</value>
+  </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>统计</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>统计</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>涂装总数</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>最喜爱的厂牌</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>最喜爱的作者</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>重复总数</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>可能重复总数</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>已收藏</value>
+  </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>联系方式</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>联系方式</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>GitHub 仓库</value>
+  </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>重复</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>此作者对这辆车有完全相同的涂装</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>所有涂装</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>重复与可能重复</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>仅重复</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>可能重复</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>此作者对这辆车有类似的涂装(大部分贴花区块相符，但并非全部内容)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>显示(收藏、重复)</value>
+  </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>分组</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>所有涂装</value>
   </data>
 </root>

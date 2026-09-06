@@ -136,7 +136,7 @@
     <value>О программе</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Поиск по машине (производитель, модель, год) или автору…</value>
+    <value>Поиск по машине (производитель, модель, год), названию ливреи или автору…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>Сортировка: производитель</value>
@@ -292,7 +292,7 @@
     <value>Русский</value>
   </data>
   <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐ {0}</value>
+    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>Свернуть</value>
@@ -353,5 +353,77 @@
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>ОК</value>
+  </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>Статистика</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>Статистика</value>
+  </data>
+  <data name="LanguageMenuLabel" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>Всего ливрей</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>Любимый производитель</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>Любимый автор</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>Всего дубликатов</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>Всего возможных дубликатов</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>В избранном</value>
+  </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>Контакты</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>Контакты</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>Репозиторий на GitHub</value>
+  </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Дубликат</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>У этого автора есть точно такая же ливрея для этой машины</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>Все ливреи</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Дубликаты и возможные дубликаты</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Только дубликаты</value>
+  </data>
+  <data name="DuplicatesCountFormat" xml:space="preserve">
+    <value> · ⛔︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
+    <value> · ⚠︎ {0}</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Возможный дубликат</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>У этого автора есть похожая ливрея для этой машины (совпадает большинство секций декалей, но не всё содержимое)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Отображение (избранное, дубликаты)</value>
+  </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>Группировка</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>Все ливреи</value>
   </data>
 </root>
