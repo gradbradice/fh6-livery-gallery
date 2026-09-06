@@ -1,6 +1,6 @@
 # FH6 Livery Gallery
 
-![Preview](https://raw.githubusercontent.com/wiki/gradbradice/fh6-livery-gallery/img/preview_upd.png)
+![Preview](https://raw.githubusercontent.com/wiki/gradbradice/fh6-livery-gallery/img/preview.png)
 
 [![Latest Release](https://img.shields.io/github/v/release/gradbradice/fh6-livery-gallery?label=version&color=blue)](https://github.com/gradbradice/fh6-livery-gallery/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/gradbradice/fh6-livery-gallery/total)](https://github.com/gradbradice/fh6-livery-gallery/releases/latest)
