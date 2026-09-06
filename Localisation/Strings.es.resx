@@ -292,7 +292,7 @@
     <value>Español</value>
   </data>
   <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐ {0}</value>
+    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>Minimizar</value>
@@ -406,10 +406,10 @@
     <value>Solo duplicados</value>
   </data>
   <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔ {0}</value>
+    <value> · ⛔︎ {0}</value>
   </data>
   <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠ {0}</value>
+    <value> · ⚠︎ {0}</value>
   </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Posible duplicado</value>

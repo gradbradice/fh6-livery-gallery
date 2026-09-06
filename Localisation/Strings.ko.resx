@@ -292,7 +292,7 @@
     <value>한국어</value>
   </data>
   <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐ {0}</value>
+    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>최소화</value>
@@ -406,10 +406,10 @@
     <value>중복만</value>
   </data>
   <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔ {0}</value>
+    <value> · ⛔︎ {0}</value>
   </data>
   <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠ {0}</value>
+    <value> · ⚠︎ {0}</value>
   </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>중복 가능</value>

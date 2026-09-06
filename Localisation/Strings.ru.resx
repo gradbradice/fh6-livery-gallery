@@ -292,7 +292,7 @@
     <value>Русский</value>
   </data>
   <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐ {0}</value>
+    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>Свернуть</value>
@@ -406,10 +406,10 @@
     <value>Только дубликаты</value>
   </data>
   <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔ {0}</value>
+    <value> · ⛔︎ {0}</value>
   </data>
   <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠ {0}</value>
+    <value> · ⚠︎ {0}</value>
   </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Возможный дубликат</value>

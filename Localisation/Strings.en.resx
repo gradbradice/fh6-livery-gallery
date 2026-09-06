@@ -292,7 +292,7 @@ Choose it manually?
     <value>English</value>
   </data>
   <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐ {0}</value>
+    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>Minimize</value>
@@ -406,10 +406,10 @@ Choose it manually?
     <value>Duplicates only</value>
   </data>
   <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔ {0}</value>
+    <value> · ⛔︎ {0}</value>
   </data>
   <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠ {0}</value>
+    <value> · ⚠︎ {0}</value>
   </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Possible duplicate</value>
