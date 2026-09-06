@@ -420,4 +420,10 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>표시(즐겨찾기, 중복)</value>
   </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>그룹화</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>모든 리버리</value>
+  </data>
 </root>

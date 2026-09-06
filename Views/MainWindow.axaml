@@ -198,6 +198,9 @@
                               Fill="{DynamicResource TextPrimaryBrush}" />
                         <Button.Flyout>
                             <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                                <MenuItem x:Name="GroupingToggleItem" ToggleType="CheckBox"
+                                          Click="GroupingToggleItem_Click" />
+                                <Separator />
                                 <MenuItem x:Name="SortManufacturerItem" ToggleType="Radio" GroupName="SortGroup"
                                           Tag="0" Click="SortModeMenuItem_Click" />
                                 <MenuItem x:Name="SortAuthorItem" ToggleType="Radio" GroupName="SortGroup"

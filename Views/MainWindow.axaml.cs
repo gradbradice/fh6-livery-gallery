@@ -332,7 +332,17 @@ internal partial class MainWindow : Window
 
         List<LiveryGroup> groups;
 
-        if (separateFavorites)
+        if (!_settings.GroupingEnabled)
+        {
+            var singleGroupItems = SortForCurrentMode(filtered);
+            if (favoritesFirst)
+                singleGroupItems = [.. singleGroupItems.OrderByDescending(x => x.IsFavorite)];
+
+            groups = filtered.Count > 0
+                ? [new LiveryGroup { Key = Strings.AllLiveriesGroupName, Items = singleGroupItems, GroupWidth = groupWidth }]
+                : [];
+        }
+        else if (separateFavorites)
         {
             var favoriteItems = filtered.Where(x => x.IsFavorite).ToList();
             var restItems = onlyFavorites ? new List<LiveryEntry>() : filtered.Where(x => !x.IsFavorite).ToList();
@@ -574,8 +584,18 @@ internal partial class MainWindow : Window
         ApplyFilterAndSort();
     }
 
+    private void GroupingToggleItem_Click(object? sender, RoutedEventArgs e)
+    {
+        _settings.GroupingEnabled = !_settings.GroupingEnabled;
+        AppSettingsService.Save(_settings);
+        UpdateDisplayFilterChecks();
+        ApplyFilterAndSort();
+    }
+
     private void UpdateDisplayFilterChecks()
     {
+        GroupingToggleItem.IsChecked = _settings.GroupingEnabled;
+
         SortManufacturerItem.IsChecked = _settings.SortMode == SortMode.Manufacture;
         SortAuthorItem.IsChecked = _settings.SortMode == SortMode.Author;
         SortDownloadTimeItem.IsChecked = _settings.SortMode == SortMode.DownloadTime;
@@ -584,6 +604,7 @@ internal partial class MainWindow : Window
         FavFirstItem.IsChecked = _settings.FavoriteMode == FavoriteMode.FavoritesFirst;
         FavOnlyItem.IsChecked = _settings.FavoriteMode == FavoriteMode.OnlyFavorites;
         FavSeparateItem.IsChecked = _settings.FavoriteMode == FavoriteMode.FavoritesSeparately;
+        FavSeparateItem.IsEnabled = _settings.GroupingEnabled;
 
         DupAllItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.All;
         DupAndPossibleItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.DuplicatesAndPossible;
@@ -703,6 +724,7 @@ internal partial class MainWindow : Window
         SearchBox.PlaceholderText = Strings.SearchPlaceholder;
 
         DisplayFilterButton.SetValue(ToolTip.TipProperty, Strings.DisplayFilterTooltip);
+        GroupingToggleItem.Header = Strings.GroupingToggleLabel;
         SortManufacturerItem.Header = Strings.SortManufacturer;
         SortAuthorItem.Header = Strings.SortAuthor;
         SortDownloadTimeItem.Header = Strings.SortDownloadDate;

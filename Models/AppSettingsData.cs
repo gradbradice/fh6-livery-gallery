@@ -11,5 +11,6 @@ internal class AppSettingsData
     public FavoriteMode FavoriteMode { get; set; } = FavoriteMode.None;
     public bool SeparateFavorites { get; set; } = false;
     public DuplicatesFilterMode DuplicatesFilterMode { get; set; } = DuplicatesFilterMode.All;
+    public bool GroupingEnabled { get; set; } = true;
     public string? GameInstallPath { get; set; }
 }

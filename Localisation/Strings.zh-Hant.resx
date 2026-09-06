@@ -420,4 +420,10 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>顯示(收藏、重複)</value>
   </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>分組</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>所有塗裝</value>
+  </data>
 </root>

@@ -420,4 +420,10 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Visualización (favoritos, duplicados)</value>
   </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>Agrupación</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>Todas las libreas</value>
+  </data>
 </root>

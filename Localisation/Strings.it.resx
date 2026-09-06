@@ -420,4 +420,10 @@ Sceglierla manualmente?
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Visualizzazione (preferiti, duplicati)</value>
   </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>Raggruppamento</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>Tutte le livree</value>
+  </data>
 </root>

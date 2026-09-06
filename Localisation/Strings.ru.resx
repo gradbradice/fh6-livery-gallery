@@ -420,4 +420,10 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Отображение (избранное, дубликаты)</value>
   </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>Группировка</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>Все ливреи</value>
+  </data>
 </root>

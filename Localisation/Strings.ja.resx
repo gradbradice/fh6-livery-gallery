@@ -420,4 +420,10 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>表示(お気に入り、重複)</value>
   </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>グループ化</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>すべてのリバリー</value>
+  </data>
 </root>

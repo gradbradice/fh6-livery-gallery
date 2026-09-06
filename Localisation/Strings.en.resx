@@ -420,4 +420,10 @@ Choose it manually?
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Display (favorites, duplicates)</value>
   </data>
+  <data name="GroupingToggleLabel" xml:space="preserve">
+    <value>Grouping</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>All liveries</value>
+  </data>
 </root>
