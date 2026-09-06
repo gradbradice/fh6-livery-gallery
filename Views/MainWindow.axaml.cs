@@ -62,7 +62,7 @@ internal partial class MainWindow : Window
         _resizeDebounceTimer.Tick += (_, __) =>
         {
             _resizeDebounceTimer.Stop();
-            if (_isLoaded) ApplyFilterAndSort();
+            if (_isLoaded) UpdateGroupWidthsOnly();
         };
         SizeChanged += (_, __) =>
         {
@@ -71,6 +71,14 @@ internal partial class MainWindow : Window
         };
 
         Loaded += MainWindow_Loaded;
+    }
+
+    private void UpdateGroupWidthsOnly()
+    {
+        if (GroupsHost.ItemsSource is not IEnumerable<LiveryGroup> groups) return;
+        double groupWidth = ComputeGroupWidth();
+        foreach (var group in groups)
+            group.GroupWidth = groupWidth;
     }
 
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
@@ -329,7 +337,7 @@ internal partial class MainWindow : Window
             var favoriteItems = filtered.Where(x => x.IsFavorite).ToList();
             var restItems = onlyFavorites ? new List<LiveryEntry>() : filtered.Where(x => !x.IsFavorite).ToList();
 
-            groups = new List<LiveryGroup>();
+            groups = [];
             if (favoriteItems.Count > 0)
             {
                 groups.Add(new LiveryGroup
@@ -474,10 +482,9 @@ internal partial class MainWindow : Window
             ? items.OrderByDescending(x => x.IsFavorite).ThenBy(key1, StringComparer.OrdinalIgnoreCase)
             : items.OrderBy(key1, StringComparer.OrdinalIgnoreCase);
 
-        return ordered
+        return [.. ordered
             .ThenBy(key2, StringComparer.OrdinalIgnoreCase)
-            .ThenBy(key3, StringComparer.OrdinalIgnoreCase)
-            .ToList();
+            .ThenBy(key3, StringComparer.OrdinalIgnoreCase)];
     }
 
     private void ThemeToggleButton_Click(object? sender, RoutedEventArgs e)
