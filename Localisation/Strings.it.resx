@@ -125,17 +125,7 @@
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
     <value>Aggiorna (rianalizza le modifiche)</value>
-  </data>
-  <data name="ThemeToggleTooltip" xml:space="preserve">
-    <value>Tema chiaro / scuro</value>
-  </data>
-  <data name="LanguageToggleTooltip" xml:space="preserve">
-    <value>Lingua dell'interfaccia</value>
-  </data>
-  <data name="AboutTooltip" xml:space="preserve">
-    <value>Informazioni</value>
-  </data>
-  <data name="SearchPlaceholder" xml:space="preserve">
+  </data>  <data name="SearchPlaceholder" xml:space="preserve">
     <value>Cerca per veicolo (marca, modello, anno), nome della livrea o autore…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
@@ -290,11 +280,7 @@ Sceglierla manualmente?
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>Italiano</value>
-  </data>
-  <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐︎ {0}</value>
-  </data>
-  <data name="MinimizeTooltip" xml:space="preserve">
+  </data>  <data name="MinimizeTooltip" xml:space="preserve">
     <value>Riduci a icona</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
@@ -311,20 +297,12 @@ Sceglierla manualmente?
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>Libreria di analisi dell'header: {0}</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Aggiorna</value>
-  </data>
-  <data name="SettingsToggleTooltip" xml:space="preserve">
+  </data>  <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Impostazioni</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>Percorso del gioco</value>
-  </data>
-  <data name="GamePathPlaceholder" xml:space="preserve">
-    <value>Rilevamento automatico non riuscito: inserisci il percorso manualmente</value>
-  </data>
-  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+  </data>  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>Seleziona la cartella di installazione del gioco</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
@@ -359,11 +337,7 @@ Sceglierla manualmente?
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>Statistiche</value>
-  </data>
-  <data name="LanguageMenuLabel" xml:space="preserve">
-    <value>Lingua</value>
-  </data>
-  <data name="StatsTotalLiveries" xml:space="preserve">
+  </data>  <data name="StatsTotalLiveries" xml:space="preserve">
     <value>Totale livree</value>
   </data>
   <data name="StatsFavoriteManufacturer" xml:space="preserve">
@@ -404,14 +378,7 @@ Sceglierla manualmente?
   </data>
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Solo duplicati</value>
-  </data>
-  <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+  </data>  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Possibile duplicato</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
@@ -425,5 +392,40 @@ Sceglierla manualmente?
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Tutte le livree</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>Impostazioni</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>Lingua</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>Chiaro</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>Scuro</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>Esci</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>Modifiche non salvate</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>Hai apportato modifiche che non sono state salvate. Se esci ora, andranno perse.</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>Indietro</value>
+  </data>  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>Salva ed esci</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>Esci senza salvare</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>Sistema</value>
   </data>
 </root>

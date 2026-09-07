@@ -125,17 +125,7 @@
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
     <value>Обновить (пересканировать изменения)</value>
-  </data>
-  <data name="ThemeToggleTooltip" xml:space="preserve">
-    <value>Светлая / тёмная тема</value>
-  </data>
-  <data name="LanguageToggleTooltip" xml:space="preserve">
-    <value>Язык интерфейса</value>
-  </data>
-  <data name="AboutTooltip" xml:space="preserve">
-    <value>О программе</value>
-  </data>
-  <data name="SearchPlaceholder" xml:space="preserve">
+  </data>  <data name="SearchPlaceholder" xml:space="preserve">
     <value>Поиск по машине (производитель, модель, год), названию ливреи или автору…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
@@ -290,11 +280,7 @@
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>Русский</value>
-  </data>
-  <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐︎ {0}</value>
-  </data>
-  <data name="MinimizeTooltip" xml:space="preserve">
+  </data>  <data name="MinimizeTooltip" xml:space="preserve">
     <value>Свернуть</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
@@ -311,20 +297,12 @@
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>Библиотека разбора header: {0}</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Обновить</value>
-  </data>
-  <data name="SettingsToggleTooltip" xml:space="preserve">
+  </data>  <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Настройки</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>Путь до игры</value>
-  </data>
-  <data name="GamePathPlaceholder" xml:space="preserve">
-    <value>Не удалось определить автоматически — введите путь вручную</value>
-  </data>
-  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+  </data>  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>Выберите папку установки игры</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
@@ -359,11 +337,7 @@
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>Статистика</value>
-  </data>
-  <data name="LanguageMenuLabel" xml:space="preserve">
-    <value>Язык</value>
-  </data>
-  <data name="StatsTotalLiveries" xml:space="preserve">
+  </data>  <data name="StatsTotalLiveries" xml:space="preserve">
     <value>Всего ливрей</value>
   </data>
   <data name="StatsFavoriteManufacturer" xml:space="preserve">
@@ -404,14 +378,7 @@
   </data>
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Только дубликаты</value>
-  </data>
-  <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+  </data>  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Возможный дубликат</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
@@ -425,5 +392,40 @@
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Все ливреи</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>Светлая</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>Тёмная</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>Несохранённые изменения</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>Вы внесли изменения, которые не были сохранены. Если выйти сейчас, они будут потеряны.</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>Назад</value>
+  </data>  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>Сохранить и выйти</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>Выйти без изменений</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>Системная</value>
   </data>
 </root>

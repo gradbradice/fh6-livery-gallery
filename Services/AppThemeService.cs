@@ -1,33 +1,34 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Styling;
+using LiveryGallery.Enums;
 
 namespace LiveryGallery.Services;
 
 internal static class AppThemeService
 {
-    public static bool IsDarkTheme { get; private set; }
-
     public static void Initialise()
     {
         var settings = AppSettingsService.Load();
-        ApplyTheme(settings.DarkTheme, persist: false);
+        ApplyTheme(settings.ThemeMode ?? AppThemeMode.System, persist: false);
     }
 
-    public static void ApplyTheme(bool dark, bool persist = true)
+    public static void ApplyTheme(AppThemeMode mode, bool persist = true)
     {
         var app = Application.Current;
         if (app is null) return;
 
-        app.RequestedThemeVariant = dark ? ThemeVariant.Dark : ThemeVariant.Light;
-        IsDarkTheme = dark;
+        app.RequestedThemeVariant = mode switch
+        {
+            AppThemeMode.Dark => ThemeVariant.Dark,
+            AppThemeMode.Light => ThemeVariant.Light,
+            _ => ThemeVariant.Default,
+        };
 
         if (persist)
         {
             var settings = AppSettingsService.Load();
-            settings.DarkTheme = dark;
+            settings.ThemeMode = mode;
             AppSettingsService.Save(settings);
         }
     }
-
-    public static void ToggleTheme() => ApplyTheme(!IsDarkTheme);
 }

@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using LiveryGallery.Enums;
@@ -43,8 +42,6 @@ internal partial class MainWindow : Window
     {
         InitializeComponent();
         _scanService = new LiveryScanService(_cacheService, _carDb, _favoriteService, _tagService);
-
-        UpdateThemeIcon();
 
         if (!Enum.IsDefined(_settings.SortMode)) _settings.SortMode = SortMode.Manufacture;
         if (!Enum.IsDefined(_settings.FavoriteMode)) _settings.FavoriteMode = FavoriteMode.None;
@@ -301,13 +298,10 @@ internal partial class MainWindow : Window
         ApplyFilterAndSort();
     }
 
-    private void ApplyFilterAndSort()
+    private List<LiveryEntry> GetFilteredEntries()
     {
         string search = SearchBox.Text?.Trim() ?? "";
         bool onlyFavorites = _settings.FavoriteMode == FavoriteMode.OnlyFavorites;
-        bool favoritesFirst = _settings.FavoriteMode == FavoriteMode.FavoritesFirst;
-        bool separateFavorites = _settings.FavoriteMode == FavoriteMode.FavoritesSeparately;
-
         var duplicatesFilterMode = _settings.DuplicatesFilterMode;
 
         IEnumerable<LiveryEntry> query = _allEntries;
@@ -327,7 +321,16 @@ internal partial class MainWindow : Window
             _ => query
         };
 
-        var filtered = query.ToList();
+        return [.. query];
+    }
+
+    private void ApplyFilterAndSort()
+    {
+        bool onlyFavorites = _settings.FavoriteMode == FavoriteMode.OnlyFavorites;
+        bool favoritesFirst = _settings.FavoriteMode == FavoriteMode.FavoritesFirst;
+        bool separateFavorites = _settings.FavoriteMode == FavoriteMode.FavoritesSeparately;
+
+        var filtered = GetFilteredEntries();
         double groupWidth = ComputeGroupWidth();
 
         List<LiveryGroup> groups;
@@ -339,7 +342,7 @@ internal partial class MainWindow : Window
                 singleGroupItems = [.. singleGroupItems.OrderByDescending(x => x.IsFavorite)];
 
             groups = filtered.Count > 0
-                ? [new LiveryGroup { Key = Strings.AllLiveriesGroupName, Items = singleGroupItems, GroupWidth = groupWidth }]
+                ? [new LiveryGroup { Key = Strings.AllLiveriesGroupName, Items = singleGroupItems, GroupWidth = groupWidth, SpecialKind = LiveryGroupSpecialKind.AllLiveries }]
                 : [];
         }
         else if (separateFavorites)
@@ -354,7 +357,8 @@ internal partial class MainWindow : Window
                 {
                     Key = Strings.SeparateFavoritesGroupName,
                     Items = SortForCurrentMode(favoriteItems),
-                    GroupWidth = groupWidth
+                    GroupWidth = groupWidth,
+                    SpecialKind = LiveryGroupSpecialKind.SeparateFavorites
                 });
             }
             groups.AddRange(BuildGroups(restItems, favoritesFirst: false, groupWidth));
@@ -368,15 +372,27 @@ internal partial class MainWindow : Window
         GroupsHost.InvalidateMeasure();
         GalleryScroll.InvalidateMeasure();
 
+        UpdateCountsAndEmptyState(filtered);
+    }
+
+    private void UpdateCountsAndEmptyState(List<LiveryEntry> filtered)
+    {
+        string search = SearchBox.Text?.Trim() ?? "";
+
         int favoritesShown = filtered.Count(x => x.IsFavorite);
         int duplicatesShown = filtered.Count(x => x.IsDuplicate);
         int possibleDuplicatesShown = filtered.Count(x => x.IsPossibleDuplicate);
-        CountText.Text = _allEntries.Count == 0
-            ? ""
-            : string.Format(Strings.CountShowing, filtered.Count, _allEntries.Count)
-              + (favoritesShown > 0 ? string.Format(Strings.FavoritesCountFormat, favoritesShown) : "")
-              + (duplicatesShown > 0 ? string.Format(Strings.DuplicatesCountFormat, duplicatesShown) : "")
-              + (possibleDuplicatesShown > 0 ? string.Format(Strings.PossibleDuplicatesCountFormat, possibleDuplicatesShown) : "");
+
+        CountBaseText.Text = _allEntries.Count == 0 ? "" : string.Format(Strings.CountShowing, filtered.Count, _allEntries.Count);
+
+        FavoritesCountPanel.IsVisible = favoritesShown > 0;
+        FavoritesCountText.Text = favoritesShown.ToString();
+
+        DuplicatesCountPanel.IsVisible = duplicatesShown > 0;
+        DuplicatesCountText.Text = duplicatesShown.ToString();
+
+        PossibleDuplicatesCountPanel.IsVisible = possibleDuplicatesShown > 0;
+        PossibleDuplicatesCountText.Text = possibleDuplicatesShown.ToString();
 
         if (_allEntries.Count == 0)
         {
@@ -437,6 +453,8 @@ internal partial class MainWindow : Window
                     Key = g.Key is { } month
                         ? month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture)
                         : Strings.UnknownDownloadDate,
+                    SpecialKind = g.Key is not null ? LiveryGroupSpecialKind.DownloadMonth : LiveryGroupSpecialKind.UnknownDownloadDate,
+                    SpecialMonth = g.Key,
                     Items = (favoritesFirst
                                 ? g.OrderByDescending(x => x.IsFavorite).ThenByDescending(x => x.DownloadDate ?? DateTime.MinValue)
                                 : g.OrderByDescending(x => x.DownloadDate ?? DateTime.MinValue))
@@ -455,6 +473,9 @@ internal partial class MainWindow : Window
             .Select(g => new LiveryGroup
             {
                 Key = g.Key,
+                SpecialKind = g.Key.Equals(unknownLabel, StringComparison.OrdinalIgnoreCase)
+                    ? LiveryGroupSpecialKind.UnknownManufacturer
+                    : LiveryGroupSpecialKind.None,
                 Items = [.. (favoritesFirst
                             ? g.OrderByDescending(x => x.IsFavorite).ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
                             : g.OrderBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase))
@@ -495,19 +516,6 @@ internal partial class MainWindow : Window
         return [.. ordered
             .ThenBy(key2, StringComparer.OrdinalIgnoreCase)
             .ThenBy(key3, StringComparer.OrdinalIgnoreCase)];
-    }
-
-    private void ThemeToggleButton_Click(object? sender, RoutedEventArgs e)
-    {
-        AppThemeService.ToggleTheme();
-        UpdateThemeIcon();
-    }
-
-    private void UpdateThemeIcon()
-    {
-        string key = AppThemeService.IsDarkTheme ? "IconBrightness" : "IconMoon";
-        if (Application.Current?.TryGetResource(key, ActualThemeVariant, out var res) == true && res is Geometry geometry)
-            ThemeIconPath.Data = geometry;
     }
 
     private void RebuildTagsBar()
@@ -553,7 +561,9 @@ internal partial class MainWindow : Window
             entry.Tags = dialog.ResultTags;
             _tagService.SetTags(entry.FolderName, entry.Tags);
             RebuildTagsBar();
-            ApplyFilterAndSort();
+
+            if (_selectedTags.Count > 0)
+                ApplyFilterAndSort();
         }
     }
 
@@ -563,7 +573,11 @@ internal partial class MainWindow : Window
 
         entry.IsFavorite = !entry.IsFavorite;
         _favoriteService.SetFavorite(entry.FolderName, entry.IsFavorite);
-        ApplyFilterAndSort();
+
+        if (_settings.FavoriteMode != FavoriteMode.None)
+            ApplyFilterAndSort();
+        else
+            UpdateCountsAndEmptyState(GetFilteredEntries());
     }
 
     private void FavModeMenuItem_Click(object? sender, RoutedEventArgs e)
@@ -625,12 +639,11 @@ internal partial class MainWindow : Window
         await dlg.ShowDialog(this);
     }
 
-    private async void PathsMenuItem_Click(object? sender, RoutedEventArgs e)
+    private async void OpenSettingsMenuItem_Click(object? sender, RoutedEventArgs e)
     {
         SettingsButton.Flyout?.Hide();
-        var dlg = new PathsDialog(_settings);
+        var dlg = new SettingsDialog(_settings);
         await dlg.ShowDialog(this);
-
         if (dlg.SavePathChanged)
         {
             _savePath = _settings.SavePath;
@@ -678,34 +691,6 @@ internal partial class MainWindow : Window
         await InfoDialog.ShowAsync(this, Strings.StatsTitle, message);
     }
 
-    private void LanguageItem_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not MenuItem item || item.Tag is not string code) return;
-
-        AppLanguage language = code switch
-        {
-            "ru" => AppLanguage.Russian,
-            "en" => AppLanguage.English,
-            "ja" => AppLanguage.Japanese,
-            "de" => AppLanguage.German,
-            "fr" => AppLanguage.French,
-            "zh-Hant" => AppLanguage.ChineseTraditional,
-            "zh-Hans" => AppLanguage.ChineseSimplified,
-            "ko" => AppLanguage.Korean,
-            "es" => AppLanguage.Spanish,
-            "it" => AppLanguage.Italian,
-            "pt" => AppLanguage.Portuguese,
-            _ => AppLanguage.English,
-        };
-
-        AppLocalisationService.AppLanguage = language;
-        _settings.Language = language;
-        AppSettingsService.Save(_settings);
-
-        SettingsButton.Flyout?.Hide();
-        OnLanguageChanged();
-    }
-
     private void ApplyLocalizedTexts()
     {
         CustomTitleBarText.Text = Strings.AppTitle;
@@ -715,10 +700,8 @@ internal partial class MainWindow : Window
 
         RefreshButton.SetValue(ToolTip.TipProperty, Strings.RefreshTooltip);
         StatsButton.SetValue(ToolTip.TipProperty, Strings.StatsToggleTooltip);
-        ThemeToggleButton.SetValue(ToolTip.TipProperty, Strings.ThemeToggleTooltip);
         SettingsButton.SetValue(ToolTip.TipProperty, Strings.SettingsToggleTooltip);
-        LanguageMenuItem.Header = Strings.LanguageMenuLabel;
-        PathsMenuItem.Header = Strings.SettingsMenuPaths;
+        OpenSettingsMenuItem.Header = Strings.SettingsDialogTitle;
         ContactsMenuItem.Header = Strings.SettingsMenuContacts;
         AboutMenuItem.Header = Strings.AboutTitle;
         SearchBox.PlaceholderText = Strings.SearchPlaceholder;
@@ -739,12 +722,29 @@ internal partial class MainWindow : Window
         TagsFilterLabel.Text = Strings.TagsFilterLabel;
     }
 
-    private void OnLanguageChanged()
+    internal void OnLanguageChanged()
     {
         if (!_isLoaded) return;
         ApplyLocalizedTexts();
         RenderStatus();
-        ApplyFilterAndSort();
+        UpdateCountsAndEmptyState(GetFilteredEntries());
+
+        if (GroupsHost.ItemsSource is IEnumerable<LiveryGroup> currentGroups)
+        {
+            foreach (var group in currentGroups)
+            {
+                group.Key = group.SpecialKind switch
+                {
+                    LiveryGroupSpecialKind.AllLiveries => Strings.AllLiveriesGroupName,
+                    LiveryGroupSpecialKind.SeparateFavorites => Strings.SeparateFavoritesGroupName,
+                    LiveryGroupSpecialKind.UnknownManufacturer => Strings.UnknownManufacturer,
+                    LiveryGroupSpecialKind.DownloadMonth when group.SpecialMonth is { } month =>
+                        month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture),
+                    LiveryGroupSpecialKind.UnknownDownloadDate => Strings.UnknownDownloadDate,
+                    _ => group.Key
+                };
+            }
+        }
 
         if (_latestVersion is not null)
             UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _latestVersion);

@@ -2,10 +2,12 @@ using Avalonia.Media.Imaging;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Services;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.Models;
 
-internal class LiveryEntry
+internal class LiveryEntry : INotifyPropertyChanged
 {
     public required string FolderPath { get; init; }
     public required string FolderName { get; init; }
@@ -29,8 +31,28 @@ internal class LiveryEntry
         ? CarModelNameRaw
         : string.Format(Strings.UnknownCarIdFormat, CarId);
 
-    public bool IsFavorite { get; set; }
-    public List<string> Tags { get; set; } = [];
+    private bool _isFavorite;
+    public bool IsFavorite
+    {
+        get => _isFavorite;
+        set
+        {
+            if (_isFavorite == value) return;
+            _isFavorite = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private List<string> _tags = [];
+    public List<string> Tags
+    {
+        get => _tags;
+        set
+        {
+            _tags = value;
+            OnPropertyChanged();
+        }
+    }
     public DateTime? DownloadYearMonth => DownloadDate is { } d ? new DateTime(d.Year, d.Month, 1) : null;
 
     public string? CLiveryHash { get; init; }
@@ -41,21 +63,27 @@ internal class LiveryEntry
 
     public bool HasThumbnail => !string.IsNullOrEmpty(ThumbnailPath) && File.Exists(ThumbnailPath);
 
+    private Bitmap? _thumbnail;
+    private bool _thumbnailLoaded;
+
     public Bitmap? Thumbnail
     {
         get
         {
+            if (_thumbnailLoaded) return _thumbnail;
+            _thumbnailLoaded = true;
+
             if (string.IsNullOrEmpty(ThumbnailPath) || !File.Exists(ThumbnailPath))
-                return null;
+                return _thumbnail = null;
 
             try
             {
                 using var stream = File.OpenRead(ThumbnailPath);
-                return Bitmap.DecodeToWidth(stream, 280, BitmapInterpolationMode.MediumQuality);
+                return _thumbnail = new Bitmap(stream);
             }
             catch
             {
-                return null;
+                return _thumbnail = null;
             }
         }
     }
@@ -87,4 +115,9 @@ internal class LiveryEntry
         }
         return true;
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

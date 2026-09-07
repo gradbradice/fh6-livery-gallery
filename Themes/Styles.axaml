@@ -38,6 +38,23 @@
 		<Setter Property="Opacity" Value="0.5" />
 	</Style>
 
+	<Style Selector="Button.danger">
+		<Setter Property="Background" Value="{DynamicResource DangerBrush}" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="Padding" Value="16,9" />
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="Cursor" Value="Hand" />
+		<Setter Property="FontWeight" Value="SemiBold" />
+		<Setter Property="CornerRadius" Value="9" />
+		<Setter Property="HorizontalContentAlignment" Value="Center" />
+	</Style>
+	<Style Selector="Button.danger:pointerover /template/ ContentPresenter">
+		<Setter Property="Opacity" Value="0.85" />
+	</Style>
+	<Style Selector="Button.danger:disabled">
+		<Setter Property="Opacity" Value="0.5" />
+	</Style>
+
 	<Style Selector="Button.secondary">
 		<Setter Property="Background" Value="Transparent" />
 		<Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />

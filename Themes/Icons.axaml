@@ -125,5 +125,8 @@
         M3,4 L21,4 L14,12 L14,19 L10,21 L10,12 Z
     </StreamGeometry>
 
-</ResourceDictionary>
+    <StreamGeometry x:Key="IconCircleFilled">
+        M12,0C5.373,0,0,5.373,0,12s5.373,12,12,12,12-5.373,12-12S18.627,0,12,0Z
+    </StreamGeometry>
 
+</ResourceDictionary>

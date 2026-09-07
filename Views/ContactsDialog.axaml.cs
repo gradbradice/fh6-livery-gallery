@@ -22,11 +22,7 @@ internal partial class ContactsDialog : Window
         CloseDialogButton.Content = Strings.ButtonClose;
     }
 
-    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            BeginMoveDrag(e);
-    }
+    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
     private void GithubLink_Click(object? sender, RoutedEventArgs e) => OpenUrl(GithubUrl);
 

@@ -1,35 +1,59 @@
-﻿namespace LiveryGallery.Services;
+namespace LiveryGallery.Services;
 
 internal class SaveService
 {
     private CancellationTokenSource? _cts;
     private readonly Lock _lock = new();
+    private long _generation;
 
     public void ScheduleSave(string json, string path)
     {
+        long myGeneration;
+        CancellationToken token;
         lock (_lock)
         {
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = new CancellationTokenSource();
-            _ = SaveDelayedAsync(_cts.Token, json, path);
+            token = _cts.Token;
+            myGeneration = ++_generation;
         }
+        _ = SaveDelayedAsync(token, json, path, myGeneration);
     }
 
-    private static async Task SaveDelayedAsync(
+    public void SaveImmediate(string json, string path)
+    {
+        lock (_lock)
+        {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = null;
+            _generation++;
+        }
+        Save(json, path);
+    }
+
+    private async Task SaveDelayedAsync(
         CancellationToken cancellationToken,
-        string json, 
-        string path)
+        string json,
+        string path,
+        long myGeneration)
     {
         try
         {
             await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
-            Save(json, path);
         }
-        catch(OperationCanceledException)
+        catch (OperationCanceledException)
         {
-
+            return;
         }
+
+        lock (_lock)
+        {
+            if (myGeneration != _generation) return;
+        }
+
+        Save(json, path);
     }
 
     private static void Save(string json, string path)

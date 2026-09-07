@@ -1,6 +1,5 @@
-﻿using Avalonia;
-using Avalonia.Platform;
-using LiveryGallery.Configuration;
+﻿using LiveryGallery.Configuration;
+using LiveryGallery.Enums;
 using LiveryGallery.Models;
 using System.Text.Json;
 
@@ -24,6 +23,19 @@ internal static class AppSettingsService
         }
     }
 
+    public static void SaveImmediate(AppSettingsData data)
+    {
+        try
+        {
+            string json = JsonSerializer.Serialize(data, JsonSettings.DefaultDeserializeOptions);
+            _saveService.SaveImmediate(json, _path);
+        }
+        catch
+        {
+
+        }
+    }
+
     public static AppSettingsData Load()
     {
         try
@@ -32,7 +44,12 @@ internal static class AppSettingsService
             {
                 string json = File.ReadAllText(_path);
                 var data = JsonSerializer.Deserialize<AppSettingsData>(json);
-                if (data != null ) return data;
+                if (data != null)
+                {
+                    // backward compatibility
+                    data.ThemeMode ??= data.DarkTheme ? AppThemeMode.Dark : AppThemeMode.Light;
+                    return data;
+                }
             }
         }
         catch
@@ -43,21 +60,8 @@ internal static class AppSettingsService
         return new AppSettingsData
         {
             Language = AppLocalisationService.GetSystemLanguage(),
-            DarkTheme = GetSystemDarkTheme()
+            ThemeMode = AppThemeMode.System
         };
     }
 
-    private static bool GetSystemDarkTheme()
-    {
-        try
-        {
-            var theme = Application.Current?.PlatformSettings?.GetColorValues().ThemeVariant;
-            if (theme is null) return true;
-            return theme == PlatformThemeVariant.Dark;
-        }
-        catch
-        {
-            return true;
-        }
-    }
 }

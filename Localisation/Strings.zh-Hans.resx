@@ -125,17 +125,7 @@
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
     <value>刷新(重新扫描更改)</value>
-  </data>
-  <data name="ThemeToggleTooltip" xml:space="preserve">
-    <value>浅色 / 深色主题</value>
-  </data>
-  <data name="LanguageToggleTooltip" xml:space="preserve">
-    <value>界面语言</value>
-  </data>
-  <data name="AboutTooltip" xml:space="preserve">
-    <value>关于</value>
-  </data>
-  <data name="SearchPlaceholder" xml:space="preserve">
+  </data>  <data name="SearchPlaceholder" xml:space="preserve">
     <value>按车辆(厂牌、车型、年份)、涂装名称或作者搜索…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
@@ -290,11 +280,7 @@
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>中文（简体）</value>
-  </data>
-  <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐︎ {0}</value>
-  </data>
-  <data name="MinimizeTooltip" xml:space="preserve">
+  </data>  <data name="MinimizeTooltip" xml:space="preserve">
     <value>最小化</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
@@ -311,20 +297,12 @@
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>标头解析库：{0}</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>刷新</value>
-  </data>
-  <data name="SettingsToggleTooltip" xml:space="preserve">
+  </data>  <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>设置</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>游戏路径</value>
-  </data>
-  <data name="GamePathPlaceholder" xml:space="preserve">
-    <value>无法自动检测，请手动输入路径</value>
-  </data>
-  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+  </data>  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>选择游戏安装文件夹</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
@@ -359,11 +337,7 @@
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>统计</value>
-  </data>
-  <data name="LanguageMenuLabel" xml:space="preserve">
-    <value>语言</value>
-  </data>
-  <data name="StatsTotalLiveries" xml:space="preserve">
+  </data>  <data name="StatsTotalLiveries" xml:space="preserve">
     <value>涂装总数</value>
   </data>
   <data name="StatsFavoriteManufacturer" xml:space="preserve">
@@ -404,14 +378,7 @@
   </data>
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>仅重复</value>
-  </data>
-  <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+  </data>  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>可能重复</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
@@ -425,5 +392,40 @@
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>所有涂装</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>未保存的更改</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>您进行了尚未保存的更改。如果现在退出，这些更改将会丢失。</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>返回</value>
+  </data>  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>保存并退出</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>不保存退出</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>系统</value>
   </data>
 </root>

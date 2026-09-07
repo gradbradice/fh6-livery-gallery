@@ -125,17 +125,7 @@
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
     <value>重新整理(重新掃描變更)</value>
-  </data>
-  <data name="ThemeToggleTooltip" xml:space="preserve">
-    <value>淺色 / 深色主題</value>
-  </data>
-  <data name="LanguageToggleTooltip" xml:space="preserve">
-    <value>介面語言</value>
-  </data>
-  <data name="AboutTooltip" xml:space="preserve">
-    <value>關於</value>
-  </data>
-  <data name="SearchPlaceholder" xml:space="preserve">
+  </data>  <data name="SearchPlaceholder" xml:space="preserve">
     <value>依車輛(廠牌、車型、年份)、塗裝名稱或作者搜尋…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
@@ -290,11 +280,7 @@
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>中文（繁體）</value>
-  </data>
-  <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐︎ {0}</value>
-  </data>
-  <data name="MinimizeTooltip" xml:space="preserve">
+  </data>  <data name="MinimizeTooltip" xml:space="preserve">
     <value>最小化</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
@@ -311,20 +297,12 @@
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>標頭解析函式庫：{0}</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>重新整理</value>
-  </data>
-  <data name="SettingsToggleTooltip" xml:space="preserve">
+  </data>  <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>設定</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>遊戲路徑</value>
-  </data>
-  <data name="GamePathPlaceholder" xml:space="preserve">
-    <value>無法自動偵測，請手動輸入路徑</value>
-  </data>
-  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+  </data>  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>選擇遊戲安裝資料夾</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
@@ -359,11 +337,7 @@
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>統計</value>
-  </data>
-  <data name="LanguageMenuLabel" xml:space="preserve">
-    <value>語言</value>
-  </data>
-  <data name="StatsTotalLiveries" xml:space="preserve">
+  </data>  <data name="StatsTotalLiveries" xml:space="preserve">
     <value>塗裝總數</value>
   </data>
   <data name="StatsFavoriteManufacturer" xml:space="preserve">
@@ -404,14 +378,7 @@
   </data>
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>僅重複</value>
-  </data>
-  <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+  </data>  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>可能重複</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
@@ -425,5 +392,40 @@
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>所有塗裝</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>主題</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>語言</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>淺色</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>離開</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>未儲存的變更</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>您進行了尚未儲存的變更。如果現在離開，這些變更將會遺失。</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>返回</value>
+  </data>  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>儲存並離開</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>不儲存離開</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>系統</value>
   </data>
 </root>

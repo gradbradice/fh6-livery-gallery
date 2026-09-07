@@ -31,7 +31,7 @@
                         </Border>
                         <Button Classes="favoriteStar" Click="ToggleFavorite_Click"
                                 HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,8,0"
-                                ToolTip.Tip="{x:Static loc:Strings.FavoriteToggleTooltip}">
+                                ToolTip.Tip="{DynamicResource Loc_FavoriteToggleTooltip}">
                             <Panel>
                                 <Path Data="{StaticResource IconStarOutline}" Width="13" Height="13" Stretch="Uniform"
                                       Fill="White" IsVisible="{Binding !IsFavorite}" />
@@ -43,16 +43,16 @@
                                 Background="{DynamicResource DangerBrush}"
                                 CornerRadius="6" Padding="7,3"
                                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,8,0,0"
-                                ToolTip.Tip="{x:Static loc:Strings.DuplicateBadgeTooltip}">
-                            <TextBlock Text="{x:Static loc:Strings.DuplicateBadgeLabel}" FontSize="10.5"
+                                ToolTip.Tip="{DynamicResource Loc_DuplicateBadgeTooltip}">
+                            <TextBlock Text="{DynamicResource Loc_DuplicateBadgeLabel}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
                         <Border IsVisible="{Binding IsPossibleDuplicate}"
                                 Background="{DynamicResource WarningBrush}"
                                 CornerRadius="6" Padding="7,3"
                                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,8,0,0"
-                                ToolTip.Tip="{x:Static loc:Strings.PossibleDuplicateBadgeTooltip}">
-                            <TextBlock Text="{x:Static loc:Strings.PossibleDuplicateBadgeLabel}" FontSize="10.5"
+                                ToolTip.Tip="{DynamicResource Loc_PossibleDuplicateBadgeTooltip}">
+                            <TextBlock Text="{DynamicResource Loc_PossibleDuplicateBadgeLabel}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
                     </Grid>
@@ -74,7 +74,7 @@
                         <StackPanel Orientation="Horizontal" Margin="0,9,0,0">
                             <Path Data="{StaticResource IconUser}" Width="11" Height="11" Stretch="Uniform"
                                   Fill="{DynamicResource TextSecondaryBrush}" Margin="2,0,3,0"
-                                  ToolTip.Tip="{x:Static loc:Strings.AuthorLabel}" />
+                                  ToolTip.Tip="{DynamicResource Loc_AuthorLabel}" />
                             <TextBlock Text="{Binding Author}" FontSize="12"
                                        Foreground="{DynamicResource TextSecondaryBrush}"
                                        TextTrimming="CharacterEllipsis" MaxWidth="200" />
@@ -83,18 +83,18 @@
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                             <Path Data="{StaticResource IconCalendarDay}" Width="11" Height="11" Stretch="Uniform"
                                   Fill="{DynamicResource TextSecondaryBrush}" Margin="0,0,5,0"
-                                  ToolTip.Tip="{x:Static loc:Strings.DateLabel}" />
+                                  ToolTip.Tip="{DynamicResource Loc_DateLabel}" />
                             <TextBlock Text="{Binding DateDisplay}" FontSize="12"
                                        Foreground="{DynamicResource TextSecondaryBrush}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                             <Button Classes="tagEdit" Click="EditTags_Click" Width="18" Height="18"
                                     Margin="-3,-3,3,-3"
-                                    ToolTip.Tip="{x:Static loc:Strings.EditTagsTooltip}">
+                                    ToolTip.Tip="{DynamicResource Loc_EditTagsTooltip}">
                                 <Path Data="{StaticResource IconBookmark}" Width="10.5" Height="10.5" Stretch="Uniform"
                                       Fill="{DynamicResource TextSecondaryBrush}" />
                             </Button>
-                            <TextBlock Text="{x:Static loc:Strings.EditTagsTooltip}"
+                            <TextBlock Text="{DynamicResource Loc_EditTagsTooltip}"
                                        FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -188,7 +188,6 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="SearchBox" Grid.Column="0" Classes="search"
                              Margin="0,0,10,0" TextChanged="SearchBox_TextChanged" />
@@ -238,32 +237,13 @@
                               Fill="{DynamicResource TextPrimaryBrush}" />
                     </Button>
 
-                    <Button x:Name="ThemeToggleButton" Grid.Column="4" Classes="icon" Margin="0,0,8,0"
-                            Click="ThemeToggleButton_Click">
-                        <Path x:Name="ThemeIconPath" Width="15" Height="15" Stretch="Uniform"
-                              Fill="{DynamicResource TextPrimaryBrush}" />
-                    </Button>
-					<Button x:Name="SettingsButton" Grid.Column="5" Classes="icon">
+					<Button x:Name="SettingsButton" Grid.Column="4" Classes="icon">
 						<Path Data="{StaticResource IconSettings}" Width="16" Height="16" Stretch="Uniform"
                               Fill="{DynamicResource TextPrimaryBrush}" />
 						<Button.Flyout>
 							<MenuFlyout Placement="BottomEdgeAlignedRight">
-								<MenuItem x:Name="LanguageMenuItem">
-									<MenuItem.Items>
-										<MenuItem Tag="de" Header="Deutsch (DE)" Click="LanguageItem_Click" />
-										<MenuItem Tag="en" Header="English (EN)" Click="LanguageItem_Click" />
-										<MenuItem Tag="es" Header="Español (ES)" Click="LanguageItem_Click" />
-										<MenuItem Tag="fr" Header="Français (FR)" Click="LanguageItem_Click" />
-										<MenuItem Tag="it" Header="Italiano (IT)" Click="LanguageItem_Click" />
-										<MenuItem Tag="ja" Header="日本語 (JA)" Click="LanguageItem_Click" />
-										<MenuItem Tag="ko" Header="한국어 (KO)" Click="LanguageItem_Click" />
-										<MenuItem Tag="pt" Header="Português (PT)" Click="LanguageItem_Click" />
-										<MenuItem Tag="ru" Header="Русский (RU)" Click="LanguageItem_Click" />
-										<MenuItem Tag="zh-Hans" Header="中文（简体） (ZH-CN)" Click="LanguageItem_Click" />
-										<MenuItem Tag="zh-Hant" Header="中文（繁體） (ZH-TW)" Click="LanguageItem_Click" />
-									</MenuItem.Items>
-								</MenuItem>
-								<MenuItem x:Name="PathsMenuItem" Click="PathsMenuItem_Click" />
+								<MenuItem x:Name="OpenSettingsMenuItem" Click="OpenSettingsMenuItem_Click" />
+								<Separator />
 								<MenuItem x:Name="ContactsMenuItem" Click="ContactsMenuItem_Click" />
 								<MenuItem x:Name="AboutMenuItem" Click="AboutMenuItem_Click" />
 							</MenuFlyout>
@@ -291,8 +271,40 @@
                         Click="UpdateBanner_Click">
                     <TextBlock x:Name="UpdateBannerText" />
                 </Button>
-                <TextBlock x:Name="CountText" Grid.Column="2" Text="" FontSize="12"
-                           Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
+                <StackPanel x:Name="CountPanel" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="CountBaseText" FontSize="12"
+                               Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
+
+                    <StackPanel x:Name="FavoritesCountPanel" Orientation="Horizontal" Margin="10,0,0,0"
+                                IsVisible="False" VerticalAlignment="Center">
+                        <TextBlock Text="·" FontSize="12" Margin="0,0,6,0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11" Stretch="Uniform"
+                              Fill="#FFD54F" Margin="0,0,4,0" />
+                        <TextBlock x:Name="FavoritesCountText" FontSize="12"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </StackPanel>
+
+                    <StackPanel x:Name="DuplicatesCountPanel" Orientation="Horizontal" Margin="10,0,0,0"
+                                IsVisible="False" VerticalAlignment="Center">
+                        <TextBlock Text="·" FontSize="12" Margin="0,0,6,0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <Path Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
+                              Fill="{DynamicResource DangerBrush}" Margin="0,0,5,0" />
+                        <TextBlock x:Name="DuplicatesCountText" FontSize="12"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </StackPanel>
+
+                    <StackPanel x:Name="PossibleDuplicatesCountPanel" Orientation="Horizontal" Margin="10,0,0,0"
+                                IsVisible="False" VerticalAlignment="Center">
+                        <TextBlock Text="·" FontSize="12" Margin="0,0,6,0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <Path Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
+                              Fill="{DynamicResource WarningBrush}" Margin="0,0,5,0" />
+                        <TextBlock x:Name="PossibleDuplicatesCountText" FontSize="12"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </StackPanel>
+                </StackPanel>
             </Grid>
         </Border>
         <Grid Grid.Row="3" Background="{DynamicResource BgBrush}">

@@ -6,7 +6,9 @@ internal class AppSettingsData
 {
     public AppLanguage Language { get; set; } = AppLanguage.English;
     public string? SavePath { get; set; }
+    // DarkTheme for backward compatibility (<= 1.1.0)
     public bool DarkTheme { get; set; }
+    public AppThemeMode? ThemeMode { get; set; }
     public SortMode SortMode { get; set; } = SortMode.Manufacture;
     public FavoriteMode FavoriteMode { get; set; } = FavoriteMode.None;
     public bool SeparateFavorites { get; set; } = false;
