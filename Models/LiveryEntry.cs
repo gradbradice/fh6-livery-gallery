@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.Models;
 
-internal class LiveryEntry : INotifyPropertyChanged
+internal class LiveryEntry : INotifyPropertyChanged, IDisposable
 {
     public required string FolderPath { get; init; }
     public required string FolderName { get; init; }
@@ -53,6 +53,7 @@ internal class LiveryEntry : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
     public DateTime? DownloadYearMonth => DownloadDate is { } d ? new DateTime(d.Year, d.Month, 1) : null;
 
     public string? CLiveryHash { get; init; }
@@ -64,28 +65,36 @@ internal class LiveryEntry : INotifyPropertyChanged
     public bool HasThumbnail => !string.IsNullOrEmpty(ThumbnailPath) && File.Exists(ThumbnailPath);
 
     private Bitmap? _thumbnail;
-    private bool _thumbnailLoaded;
-
     public Bitmap? Thumbnail
     {
-        get
+        get => _thumbnail;
+        set
         {
-            if (_thumbnailLoaded) return _thumbnail;
-            _thumbnailLoaded = true;
-
-            if (string.IsNullOrEmpty(ThumbnailPath) || !File.Exists(ThumbnailPath))
-                return _thumbnail = null;
-
-            try
-            {
-                using var stream = File.OpenRead(ThumbnailPath);
-                return _thumbnail = new Bitmap(stream);
-            }
-            catch
-            {
-                return _thumbnail = null;
-            }
+            if (_thumbnail == value) return;
+            _thumbnail = value;
+            OnPropertyChanged();
         }
+    }
+
+    public Bitmap? LoadThumbnailFromDisk()
+    {
+        if (string.IsNullOrEmpty(ThumbnailPath) || !File.Exists(ThumbnailPath))
+            return null;
+
+        try
+        {
+            using var stream = File.OpenRead(ThumbnailPath);
+            return new Bitmap(stream);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public void Dispose()
+    {
+        ThumbnailCacheService.ForceRemove(this);
     }
 
     public string DateDisplay
@@ -100,12 +109,20 @@ internal class LiveryEntry : INotifyPropertyChanged
         }
     }
 
-    private string SearchHaystack =>
-        $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}".ToLowerInvariant();
-
-    public bool MatchesSearch(string term)
+    private string? _searchHaystack;
+    private string SearchHaystack
     {
-        var tokens = term.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        get
+        {
+            if (CarKnown && _searchHaystack is not null) return _searchHaystack;
+            string haystack = $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}".ToLowerInvariant();
+            if (CarKnown) _searchHaystack = haystack;
+            return haystack;
+        }
+    }
+
+    public bool MatchesSearch(string[] tokens)
+    {
         if (tokens.Length == 0) return true;
 
         foreach (var token in tokens)

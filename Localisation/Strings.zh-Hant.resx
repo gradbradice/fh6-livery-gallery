@@ -249,10 +249,10 @@
     <value>標籤:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ 僅顯示最愛</value>
+    <value>僅顯示最愛</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ 最愛優先</value>
+    <value>最愛優先</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>一般順序</value>
@@ -261,10 +261,10 @@
     <value>加入/移除最愛</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ 將最愛獨立顯示</value>
+    <value>將最愛獨立顯示</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ 最愛</value>
+    <value>最愛</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>發現新版本 {0} →</value>

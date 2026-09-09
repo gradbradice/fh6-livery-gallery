@@ -249,10 +249,10 @@
     <value>タグ:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ お気に入りのみ</value>
+    <value>お気に入りのみ</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ お気に入りを先頭に</value>
+    <value>お気に入りを先頭に</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>通常の順序</value>
@@ -261,10 +261,10 @@
     <value>お気に入りに追加/削除</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ お気に入りを別枠で表示</value>
+    <value>お気に入りを別枠で表示</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ お気に入り</value>
+    <value>お気に入り</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>新しいバージョン {0} が利用可能 →</value>

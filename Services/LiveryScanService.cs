@@ -97,13 +97,44 @@ internal partial class LiveryScanService
         out bool wasReused)
     {
         string headerPath = Path.Combine(folder, "header");
-        DateTime headerWrite = File.GetLastWriteTimeUtc(headerPath);
+        byte[] headerData = File.ReadAllBytes(headerPath);
+        string headerHash = Convert.ToHexStringLower(SHA256.HashData(headerData));
 
         string? thumbSource = ThumbnailService.FindSourceThumbnail(folder);
-        //DateTime thumbWrite = thumbSource is not null ? File.GetLastWriteTimeUtc(thumbSource) : DateTime.MinValue;
+        string sourceThumbHash = "";
+        if (thumbSource is not null)
+        {
+            try
+            {
+                sourceThumbHash = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(thumbSource)));
+            }
+            catch
+            {
+
+            }
+        }
+
+        string cLiveryPath = Path.Combine(folder, "C_livery");
+        byte[]? cLiveryBytes = null;
+        string? cLiveryHash = null;
+        if (File.Exists(cLiveryPath))
+        {
+            try
+            {
+                cLiveryBytes = File.ReadAllBytes(cLiveryPath);
+                cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryBytes));
+            }
+            catch
+            {
+
+            }
+        }
+
 
         if (oldCache.TryGetValue(folder, out var existing)
-            && existing.FilesWruteUTC == headerWrite
+            && existing.HeaderHash == headerHash
+            && existing.SourceThumbHash == sourceThumbHash
+            && existing.CLiveryHash == cLiveryHash
             && existing.CLiveryHash is not null
             && existing.SectionCounts is not null
             && (existing.ThumbnailFile is null || File.Exists(Path.Combine(_appCacheService.ThumbsDir, existing.ThumbnailFile))))
@@ -118,18 +149,13 @@ internal partial class LiveryScanService
         string folderName = Path.GetFileName(folder);
         var (carId, tsRaw) = ParseFolderName(folderName);
 
-        byte[] headerData = File.ReadAllBytes(headerPath);
         var (_, parsedHeader) = NativeHeaderParser.TryParseHeader(headerData);
 
-        string? cLiveryHash = null;
         uint[]? sectionCounts = null;
-        string cLiveryPath = Path.Combine(folder, "C_livery");
-        if (File.Exists(cLiveryPath))
+        if (cLiveryBytes is not null)
         {
             try
             {
-                byte[] cLiveryBytes = File.ReadAllBytes(cLiveryPath);
-                cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryBytes));
                 var (liveryResult, livery) = NativeHeaderParser.TryParseCLivery(cLiveryBytes);
                 if (liveryResult == LiveryParseResult.Ok && livery is not null)
                     sectionCounts = [.. livery.SectionCounts];
@@ -167,8 +193,8 @@ internal partial class LiveryScanService
             CreatedMonth = month,
             DownloadDate = downloadDate,
             ThumbnailFile = thumbnailFile,
-            FilesWruteUTC = headerWrite,
-            //SourceThumbWriteUtc = thumbWrite
+            HeaderHash = headerHash,
+            SourceThumbHash = sourceThumbHash,
             CLiveryHash = cLiveryHash,
             SectionCounts = sectionCounts,
         };
@@ -221,17 +247,54 @@ internal partial class LiveryScanService
             .GroupBy(e => (e.CarId, Author: e.Author.ToLowerInvariant()));
 
         foreach (var group in candidateGroups)
+            MarkPossibleDuplicatesInGroup([.. group]);
+    }
+
+    private static void MarkPossibleDuplicatesInGroup(List<LiveryEntry> items)
+    {
+        const int minSharedForCandidate = 2;
+
+        var index = new Dictionary<(int Position, uint Value), List<int>>();
+        for (int i = 0; i < items.Count; i++)
         {
-            var items = group.ToList();
-            for (int i = 0; i < items.Count; i++)
+            var counts = items[i].SectionCounts!;
+            for (int pos = 0; pos < counts.Count; pos++)
             {
-                for (int j = i + 1; j < items.Count; j++)
+                if (counts[pos] == 0) continue;
+                var key = (pos, counts[pos]);
+                if (!index.TryGetValue(key, out var list))
+                    index[key] = list = [];
+                list.Add(i);
+            }
+        }
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var counts = items[i].SectionCounts!;
+            Dictionary<int, int>? sharedCounts = null;
+
+            for (int pos = 0; pos < counts.Count; pos++)
+            {
+                if (counts[pos] == 0) continue;
+                if (!index.TryGetValue((pos, counts[pos]), out var candidates)) continue;
+
+                foreach (int j in candidates)
                 {
-                    if (AreSectionsSimilar(items[i].SectionCounts!, items[j].SectionCounts!))
-                    {
-                        items[i].DuplicateStatus = DuplicateStatus.PossibleDuplicate;
-                        items[j].DuplicateStatus = DuplicateStatus.PossibleDuplicate;
-                    }
+                    if (j <= i) continue;
+                    sharedCounts ??= [];
+                    sharedCounts[j] = sharedCounts.GetValueOrDefault(j) + 1;
+                }
+            }
+
+            if (sharedCounts is null) continue;
+
+            foreach (var (j, shared) in sharedCounts)
+            {
+                if (shared < minSharedForCandidate) continue;
+                if (AreSectionsSimilar(items[i].SectionCounts!, items[j].SectionCounts!))
+                {
+                    items[i].DuplicateStatus = DuplicateStatus.PossibleDuplicate;
+                    items[j].DuplicateStatus = DuplicateStatus.PossibleDuplicate;
                 }
             }
         }

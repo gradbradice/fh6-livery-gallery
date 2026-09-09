@@ -249,10 +249,10 @@
     <value>Etiquetas:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ Solo favoritos</value>
+    <value>Solo favoritos</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ Favoritos primero</value>
+    <value>Favoritos primero</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>Orden normal</value>
@@ -261,10 +261,10 @@
     <value>Añadir/quitar de favoritos</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ Mostrar favoritos por separado</value>
+    <value>Mostrar favoritos por separado</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ Favoritos</value>
+    <value>Favoritos</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>Nueva versión {0} disponible →</value>

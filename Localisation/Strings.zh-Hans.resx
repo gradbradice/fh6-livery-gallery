@@ -249,10 +249,10 @@
     <value>标签:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ 仅显示收藏</value>
+    <value>仅显示收藏</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ 收藏优先</value>
+    <value>收藏优先</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>常规顺序</value>
@@ -261,10 +261,10 @@
     <value>添加/移除收藏</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ 将收藏单独显示</value>
+    <value>将收藏单独显示</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ 收藏</value>
+    <value>收藏</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>发现新版本 {0} →</value>

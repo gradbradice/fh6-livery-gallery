@@ -249,10 +249,10 @@
     <value>태그:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ 즐겨찾기만</value>
+    <value>즐겨찾기만</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ 즐겨찾기 우선</value>
+    <value>즐겨찾기 우선</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>일반 순서</value>
@@ -261,10 +261,10 @@
     <value>즐겨찾기 추가/제거</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ 즐겨찾기 별도 표시</value>
+    <value>즐겨찾기 별도 표시</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ 즐겨찾기</value>
+    <value>즐겨찾기</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>새 버전 {0} 사용 가능 →</value>

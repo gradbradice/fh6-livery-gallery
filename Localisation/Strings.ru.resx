@@ -249,10 +249,10 @@
     <value>Теги:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ Только избранное</value>
+    <value>Только избранное</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ Сначала избранное</value>
+    <value>Сначала избранное</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>Обычный порядок</value>
@@ -261,10 +261,10 @@
     <value>Добавить/убрать из избранного</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ Показывать избранное отдельно</value>
+    <value>Показывать избранное отдельно</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ Избранное</value>
+    <value>Избранное</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>Доступна новая версия {0} →</value>

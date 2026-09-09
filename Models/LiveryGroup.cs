@@ -3,17 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.Models;
 
-internal enum LiveryGroupSpecialKind
-{
-    None,
-    AllLiveries,
-    SeparateFavorites,
-    UnknownManufacturer,
-    DownloadMonth,
-    UnknownDownloadDate
-}
-
-internal class LiveryGroup : INotifyPropertyChanged
+internal class LiveryGroup : INotifyPropertyChanged, IDisposable
 {
     private string _key = "";
     public required string Key
@@ -27,12 +17,41 @@ internal class LiveryGroup : INotifyPropertyChanged
         }
     }
 
-    public required List<LiveryEntry> Items { get; init; }
+    private List<LiveryEntry> _items = [];
+    public required List<LiveryEntry> Items
+    {
+        get => _items;
+        init
+        {
+            _items = value;
+            foreach (var entry in _items)
+                entry.PropertyChanged += OnEntryPropertyChanged;
+        }
+    }
+
     public int Count => Items.Count;
     public int FavoriteCount => Items.Count(x => x.IsFavorite);
+    public int DuplicateCount => Items.Count(x => x.IsDuplicate);
+    public int PossibleDuplicateCount => Items.Count(x => x.IsPossibleDuplicate);
 
-    public LiveryGroupSpecialKind SpecialKind { get; init; } = LiveryGroupSpecialKind.None;
-    public DateTime? SpecialMonth { get; init; }
+    public bool HasFavorites => FavoriteCount > 0;
+    public bool HasDuplicates => DuplicateCount > 0;
+    public bool HasPossibleDuplicates => PossibleDuplicateCount > 0;
+
+    private void OnEntryPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(LiveryEntry.IsFavorite)) return;
+        OnPropertyChanged(nameof(FavoriteCount));
+        OnPropertyChanged(nameof(HasFavorites));
+    }
+
+    public void Dispose()
+    {
+        foreach (var entry in _items)
+            entry.PropertyChanged -= OnEntryPropertyChanged;
+    }
+
+    public bool IsFavoritesGroup { get; init; }
 
     private double _groupWidth = 1200;
     public double GroupWidth
@@ -43,12 +62,33 @@ internal class LiveryGroup : INotifyPropertyChanged
             if (_groupWidth == value) return;
             _groupWidth = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(Rows));
         }
     }
 
-    public string CountText => FavoriteCount > 0 && FavoriteCount < Count
-        ? $"({Count}, ⭐{FavoriteCount})"
-        : $"({Count})";
+    private const double CardStep = 286;
+
+    private List<GalleryRow>? _rows;
+    private double _rowsBuiltForWidth = -1;
+
+    public IReadOnlyList<GalleryRow> Rows
+    {
+        get
+        {
+            if (_rows is not null && _rowsBuiltForWidth == GroupWidth) return _rows;
+
+            int columns = Math.Max(1, (int)(GroupWidth / CardStep));
+            var rows = new List<GalleryRow>(Items.Count / columns + 1);
+            for (int i = 0; i < Items.Count; i += columns)
+                rows.Add(new GalleryRow { Items = Items.GetRange(i, Math.Min(columns, Items.Count - i)) });
+
+            _rows = rows;
+            _rowsBuiltForWidth = GroupWidth;
+            return _rows;
+        }
+    }
+
+    public string CountText => $"({Count})";
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

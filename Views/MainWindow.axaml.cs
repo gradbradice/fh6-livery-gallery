@@ -229,6 +229,7 @@ internal partial class MainWindow : Window
         if (SaveDataPath is null) return;
 
         _scanCts?.Cancel();
+        _scanCts?.Dispose();
         var cts = new CancellationTokenSource();
         _scanCts = cts;
 
@@ -242,7 +243,11 @@ internal partial class MainWindow : Window
             var result = await _scanService.ScanAsync(SaveDataPath, progress, cts.Token);
             if (cts.IsCancellationRequested) return;
 
+            var oldEntries = _allEntries;
             _allEntries = result.Entries;
+            foreach (var entry in oldEntries)
+                entry.Dispose();
+
             _lastScanResult = result;
             RenderStatus();
             RebuildTagsBar();
@@ -263,6 +268,10 @@ internal partial class MainWindow : Window
                 SetLoading(false);
                 RefreshButton.IsEnabled = true;
             }
+
+            if (ReferenceEquals(_scanCts, cts))
+                _scanCts = null;
+            cts.Dispose();
         }
     }
 
@@ -306,7 +315,10 @@ internal partial class MainWindow : Window
 
         IEnumerable<LiveryEntry> query = _allEntries;
         if (search.Length > 0)
-            query = query.Where(x => x.MatchesSearch(search));
+        {
+            var searchTokens = search.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+            query = query.Where(x => x.MatchesSearch(searchTokens));
+        }
 
         if (_selectedTags.Count > 0)
             query = query.Where(x => _selectedTags.All(t => x.Tags.Any(xt => xt.Equals(t, StringComparison.OrdinalIgnoreCase))));
@@ -342,7 +354,7 @@ internal partial class MainWindow : Window
                 singleGroupItems = [.. singleGroupItems.OrderByDescending(x => x.IsFavorite)];
 
             groups = filtered.Count > 0
-                ? [new LiveryGroup { Key = Strings.AllLiveriesGroupName, Items = singleGroupItems, GroupWidth = groupWidth, SpecialKind = LiveryGroupSpecialKind.AllLiveries }]
+                ? [new LiveryGroup { Key = Strings.AllLiveriesGroupName, Items = singleGroupItems, GroupWidth = groupWidth }]
                 : [];
         }
         else if (separateFavorites)
@@ -358,7 +370,7 @@ internal partial class MainWindow : Window
                     Key = Strings.SeparateFavoritesGroupName,
                     Items = SortForCurrentMode(favoriteItems),
                     GroupWidth = groupWidth,
-                    SpecialKind = LiveryGroupSpecialKind.SeparateFavorites
+                    IsFavoritesGroup = true
                 });
             }
             groups.AddRange(BuildGroups(restItems, favoritesFirst: false, groupWidth));
@@ -367,6 +379,10 @@ internal partial class MainWindow : Window
         {
             groups = BuildGroups(filtered, favoritesFirst, groupWidth);
         }
+
+        if (GroupsHost.ItemsSource is IEnumerable<LiveryGroup> oldGroups)
+            foreach (var oldGroup in oldGroups)
+                oldGroup.Dispose();
 
         GroupsHost.ItemsSource = groups;
         GroupsHost.InvalidateMeasure();
@@ -453,8 +469,6 @@ internal partial class MainWindow : Window
                     Key = g.Key is { } month
                         ? month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture)
                         : Strings.UnknownDownloadDate,
-                    SpecialKind = g.Key is not null ? LiveryGroupSpecialKind.DownloadMonth : LiveryGroupSpecialKind.UnknownDownloadDate,
-                    SpecialMonth = g.Key,
                     Items = (favoritesFirst
                                 ? g.OrderByDescending(x => x.IsFavorite).ThenByDescending(x => x.DownloadDate ?? DateTime.MinValue)
                                 : g.OrderByDescending(x => x.DownloadDate ?? DateTime.MinValue))
@@ -473,9 +487,6 @@ internal partial class MainWindow : Window
             .Select(g => new LiveryGroup
             {
                 Key = g.Key,
-                SpecialKind = g.Key.Equals(unknownLabel, StringComparison.OrdinalIgnoreCase)
-                    ? LiveryGroupSpecialKind.UnknownManufacturer
-                    : LiveryGroupSpecialKind.None,
                 Items = [.. (favoritesFirst
                             ? g.OrderByDescending(x => x.IsFavorite).ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
                             : g.OrderBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase))
@@ -565,6 +576,19 @@ internal partial class MainWindow : Window
             if (_selectedTags.Count > 0)
                 ApplyFilterAndSort();
         }
+    }
+
+    private void Card_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
+        entry.Thumbnail = ThumbnailCacheService.Acquire(entry, entry.LoadThumbnailFromDisk);
+    }
+
+    private void Card_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
+        entry.Thumbnail = null;
+        ThumbnailCacheService.Release(entry);
     }
 
     private void ToggleFavorite_Click(object? sender, RoutedEventArgs e)
@@ -712,9 +736,9 @@ internal partial class MainWindow : Window
         SortAuthorItem.Header = Strings.SortAuthor;
         SortDownloadTimeItem.Header = Strings.SortDownloadDate;
         FavNoneItem.Header = Strings.NormalOrderToggle;
-        FavFirstItem.Header = Strings.FavoritesFirstToggle;
-        FavOnlyItem.Header = Strings.OnlyFavoritesToggle;
-        FavSeparateItem.Header = Strings.SeparateFavoritesToggle;
+        FavFirstItemText.Text = Strings.FavoritesFirstToggle;
+        FavOnlyItemText.Text = Strings.OnlyFavoritesToggle;
+        FavSeparateItemText.Text = Strings.SeparateFavoritesToggle;
         DupAllItem.Header = Strings.DuplicatesFilterAll;
         DupAndPossibleItem.Header = Strings.DuplicatesFilterAndPossible;
         DupOnlyItem.Header = Strings.DuplicatesFilterOnly;
@@ -728,23 +752,6 @@ internal partial class MainWindow : Window
         ApplyLocalizedTexts();
         RenderStatus();
         UpdateCountsAndEmptyState(GetFilteredEntries());
-
-        if (GroupsHost.ItemsSource is IEnumerable<LiveryGroup> currentGroups)
-        {
-            foreach (var group in currentGroups)
-            {
-                group.Key = group.SpecialKind switch
-                {
-                    LiveryGroupSpecialKind.AllLiveries => Strings.AllLiveriesGroupName,
-                    LiveryGroupSpecialKind.SeparateFavorites => Strings.SeparateFavoritesGroupName,
-                    LiveryGroupSpecialKind.UnknownManufacturer => Strings.UnknownManufacturer,
-                    LiveryGroupSpecialKind.DownloadMonth when group.SpecialMonth is { } month =>
-                        month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture),
-                    LiveryGroupSpecialKind.UnknownDownloadDate => Strings.UnknownDownloadDate,
-                    _ => group.Key
-                };
-            }
-        }
 
         if (_latestVersion is not null)
             UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _latestVersion);

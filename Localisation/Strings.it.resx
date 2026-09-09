@@ -249,10 +249,10 @@ Sceglierla manualmente?
     <value>Tag:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ Solo preferiti</value>
+    <value>Solo preferiti</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ Prima i preferiti</value>
+    <value>Prima i preferiti</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>Ordine normale</value>
@@ -261,10 +261,10 @@ Sceglierla manualmente?
     <value>Aggiungi/rimuovi dai preferiti</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ Mostra i preferiti separatamente</value>
+    <value>Mostra i preferiti separatamente</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ Preferiti</value>
+    <value>Preferiti</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>Nuova versione {0} disponibile →</value>
