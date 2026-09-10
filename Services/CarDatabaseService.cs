@@ -18,10 +18,9 @@ internal class CarDatabaseService
     public bool HasLocalData { get; private set; }
     public string? LastError { get; private set; }
 
-    public CarDatabaseService()
+    public CarDatabaseService(HttpClient http)
     {
-        _http = new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
-        _http.DefaultRequestHeaders.UserAgent.ParseAdd("FH6-Livery-Gallery/1.0");
+        _http = http;
     }
 
     public CarInfo? Get(int carId) => _byId.TryGetValue(carId, out var c) ? c : null;
@@ -39,9 +38,10 @@ internal class CarDatabaseService
                 HasLocalData = true;
             }
         }
-        catch
+        catch (Exception ex)
         {
-            
+            LastError = ex.Message;
+            AppLogger.LogError("Failed to load the local car database", ex);
         }
     }
 
@@ -49,7 +49,9 @@ internal class CarDatabaseService
     {
         try
         {
-            string json = await _http.GetStringAsync(_dbUrl, ct);
+            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            timeoutCts.CancelAfter(TimeSpan.FromSeconds(20));
+            string json = await _http.GetStringAsync(_dbUrl, timeoutCts.Token);
             var list = ParseJson(json);
             if (list.Count == 0)
             {
@@ -65,15 +67,16 @@ internal class CarDatabaseService
                     string existing = await File.ReadAllTextAsync(_path, ct);
                     changed = !ContentHashEquals(existing, json);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    AppLogger.LogError($"Failed to compare the local car database '{_path}' with the loaded one", ex);
                     changed = true;
                 }
             }
 
             if (changed)
             {
-                await File.WriteAllTextAsync(_path, json, ct);
+                await AtomicFile.WriteAllTextAsync(_path, json, ct);
             }
 
             _byId = BuildIndex(list);
@@ -84,6 +87,7 @@ internal class CarDatabaseService
         catch (Exception ex)
         {
             LastError = ex.Message;
+            AppLogger.LogError("Failed to update the car database from GitHub", ex);
             return false;
         }
     }

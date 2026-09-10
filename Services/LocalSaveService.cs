@@ -14,13 +14,17 @@ internal static class LocalSaveService
         {
             var userDirs = Directory.GetDirectories(_baseDir)
                 .Where(d => Path.GetFileName(d).StartsWith("u_", StringComparison.Ordinal))
-                .OrderByDescending(Directory.GetLastWriteTime)
-                .ToList();
-            if (userDirs.Count == 0) return null;
-            return userDirs.First();
+                .OrderByDescending(Directory.GetLastWriteTime);
+
+            foreach (var dir in userDirs)
+            {
+                if (IsSavePathValid(dir)) return dir;
+            }
+            return null;
         }
-        catch
+        catch (Exception ex)
         {
+            AppLogger.LogError($"Failed to find the save path in '{_baseDir}'", ex);
             return null;
         }
     }
@@ -37,16 +41,26 @@ internal static class LocalSaveService
 
     public static string? GetSaveDataPath(string savePath)
     {
-        if (!Directory.Exists(savePath)) return null;
+        try
+        {
+            if (!Directory.Exists(savePath)) return null;
 
-        var numDirs = Directory.GetDirectories(savePath)
-                .Where(d => Path.GetFileName(d).Length > 0 && Path.GetFileName(d).All(char.IsDigit))
-                .OrderByDescending(Directory.GetLastWriteTime)
-                .ToList();
-        if (numDirs.Count == 0) return null;
+            var numDirs = Directory.GetDirectories(savePath)
+                    .Where(d => Path.GetFileName(d).Length > 0 && Path.GetFileName(d).All(char.IsDigit))
+                    .OrderByDescending(Directory.GetLastWriteTime);
 
-        string path = Path.Combine(numDirs.First(), "ContainersRoot");
-        return Directory.Exists(path) ? path : null;
+            foreach (var dir in numDirs)
+            {
+                string candidate = Path.Combine(dir, "ContainersRoot");
+                if (Directory.Exists(candidate)) return candidate;
+            }
+            return null;
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError($"Failed to determine the save data path in '{savePath}'", ex);
+            return null;
+        }
     }
 
     private static List<string> GetListDataDirs(string path, DataType dataType)
@@ -79,7 +93,8 @@ internal static class LocalSaveService
         }
         catch
         {
-
+            // do not log. this method is called on every automatic scan
+            // once per 5 seconds
         }
         return result;
     }

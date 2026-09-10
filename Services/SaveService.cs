@@ -5,6 +5,8 @@ internal class SaveService
     private CancellationTokenSource? _cts;
     private readonly Lock _lock = new();
     private long _generation;
+    private string? _pendingJson;
+    private string? _pendingPath;
 
     public void ScheduleSave(string json, string path)
     {
@@ -17,6 +19,8 @@ internal class SaveService
             _cts = new CancellationTokenSource();
             token = _cts.Token;
             myGeneration = ++_generation;
+            _pendingJson = json;
+            _pendingPath = path;
         }
         _ = SaveDelayedAsync(token, json, path, myGeneration);
     }
@@ -29,8 +33,28 @@ internal class SaveService
             _cts?.Dispose();
             _cts = null;
             _generation++;
+            _pendingJson = null;
+            _pendingPath = null;
+            Save(json, path);
         }
-        Save(json, path);
+    }
+
+    public void Flush()
+    {
+        lock (_lock)
+        {
+            if (_pendingJson is null || _pendingPath is null) return;
+            string json = _pendingJson;
+            string path = _pendingPath;
+
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = null;
+            _generation++;
+            _pendingJson = null;
+            _pendingPath = null;
+            Save(json, path);
+        }
     }
 
     private async Task SaveDelayedAsync(
@@ -51,9 +75,10 @@ internal class SaveService
         lock (_lock)
         {
             if (myGeneration != _generation) return;
+            _pendingJson = null;
+            _pendingPath = null;
+            Save(json, path);
         }
-
-        Save(json, path);
     }
 
     private static void Save(string json, string path)
@@ -64,13 +89,11 @@ internal class SaveService
                 ?? throw new Exception();
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
-            string tmpPath = path + ".tmp";
-            File.WriteAllText(tmpPath, json);
-            File.Move(tmpPath, path, overwrite: true);
+            AtomicFile.WriteAllText(path, json);
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError($"Failed to save '{path}'", ex);
         }
     }
 }

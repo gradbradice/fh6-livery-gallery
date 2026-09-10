@@ -36,7 +36,7 @@ internal partial class ContactsDialog : Window
         }
         catch
         {
-
+            // do not log
         }
     }
 

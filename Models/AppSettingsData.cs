@@ -11,8 +11,9 @@ internal class AppSettingsData
     public AppThemeMode? ThemeMode { get; set; }
     public SortMode SortMode { get; set; } = SortMode.Manufacture;
     public FavoriteMode FavoriteMode { get; set; } = FavoriteMode.None;
-    public bool SeparateFavorites { get; set; } = false;
     public DuplicatesFilterMode DuplicatesFilterMode { get; set; } = DuplicatesFilterMode.All;
     public bool GroupingEnabled { get; set; } = true;
     public string? GameInstallPath { get; set; }
+    public bool AutoRefreshLiveries { get; set; } = true;
+    public bool RefreshLiveriesOnButtonClick { get; set; } = false;
 }

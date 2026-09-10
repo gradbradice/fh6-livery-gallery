@@ -428,4 +428,13 @@ Manuell auswählen?
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>System</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Scannen</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Liverys automatisch aktualisieren</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Liverys beim Klick auf Aktualisieren neu laden</value>
+  </data>
 </root>

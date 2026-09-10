@@ -428,4 +428,13 @@ Le choisir manuellement ?
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>Système</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Analyse</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Actualiser automatiquement les livrées</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Actualiser les livrées en cliquant sur le bouton</value>
+  </data>
 </root>

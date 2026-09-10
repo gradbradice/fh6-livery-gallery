@@ -14,12 +14,12 @@ internal static class AppSettingsService
     {
         try
         {
-            string json = JsonSerializer.Serialize(data, JsonSettings.DefaultDeserializeOptions);
+            string json = JsonSerializer.Serialize(data, JsonSettings.DefaultOptions);
             _saveService.ScheduleSave(json, _path);
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError("Failed to serialise settings (Save)", ex);
         }
     }
 
@@ -27,14 +27,16 @@ internal static class AppSettingsService
     {
         try
         {
-            string json = JsonSerializer.Serialize(data, JsonSettings.DefaultDeserializeOptions);
+            string json = JsonSerializer.Serialize(data, JsonSettings.DefaultOptions);
             _saveService.SaveImmediate(json, _path);
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError("Failed to serialise settings (SaveImmediate)", ex);
         }
     }
+
+    public static void Flush() => _saveService.Flush();
 
     public static AppSettingsData Load()
     {
@@ -46,15 +48,15 @@ internal static class AppSettingsService
                 var data = JsonSerializer.Deserialize<AppSettingsData>(json);
                 if (data != null)
                 {
-                    // backward compatibility
-                    data.ThemeMode ??= data.DarkTheme ? AppThemeMode.Dark : AppThemeMode.Light;
+                    AppSettingsMigration.Apply(data);
                     return data;
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError("Failed to load settings", ex);
+            AtomicFile.TryBackupCorruptedFile(_path);
         }
 
         return new AppSettingsData
@@ -63,5 +65,4 @@ internal static class AppSettingsService
             ThemeMode = AppThemeMode.System
         };
     }
-
 }

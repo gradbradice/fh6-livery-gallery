@@ -428,4 +428,13 @@
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>システム</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>スキャン</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>ラッピングを自動更新</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>更新ボタンでラッピングも更新する</value>
+  </data>
 </root>

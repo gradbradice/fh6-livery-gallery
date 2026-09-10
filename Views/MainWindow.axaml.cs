@@ -9,25 +9,30 @@ using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
+using System.Collections.ObjectModel;
 
 namespace LiveryGallery.Views;
 
 internal partial class MainWindow : Window
 {
-    private readonly AppCacheService _cacheService = new();
-    private readonly CarDatabaseService _carDb = new();
-    private readonly TagService _tagService = new();
-    private readonly FavoriteService _favoriteService = new();
+    private readonly AppCacheService _cacheService;
+    private readonly CarDatabaseService _carDb;
+    private readonly TagService _tagService;
+    private readonly FavoriteService _favoriteService;
     private readonly LiveryScanService _scanService;
+    private readonly AppUpdateCheckService _updateService;
 
-    private List<LiveryEntry> _allEntries = new();
+    private List<LiveryEntry> _allEntries = [];
+    private readonly ObservableCollection<LiveryGroup> _displayedGroups = [];
     private readonly HashSet<string> _selectedTags = new(StringComparer.OrdinalIgnoreCase);
     private string? _savePath;
     private string? SaveDataPath =>
         _savePath is null ? null : LocalSaveService.GetSaveDataPath(_savePath);
 
     private CancellationTokenSource? _scanCts;
-    private readonly AppSettingsData _settings = AppSettingsService.Load();
+    private readonly AppSettingsData _settings;
+    private bool _isScanning;
+    private readonly DispatcherTimer _autoScanTimer = new() { Interval = TimeSpan.FromSeconds(5) };
 
     private LiveryScanEntry? _lastScanResult;
     private string? _updateReleaseUrl;
@@ -38,10 +43,24 @@ internal partial class MainWindow : Window
     private readonly DispatcherTimer _searchDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(500) };
     private readonly DispatcherTimer _resizeDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(200) };
 
-    public MainWindow()
+    public MainWindow(
+        AppSettingsData settings,
+        AppCacheService cacheService,
+        CarDatabaseService carDatabase,
+        TagService tagService,
+        FavoriteService favoriteService,
+        LiveryScanService scanService,
+        AppUpdateCheckService updateService)
     {
         InitializeComponent();
-        _scanService = new LiveryScanService(_cacheService, _carDb, _favoriteService, _tagService);
+        GroupsHost.ItemsSource = _displayedGroups;
+        _settings = settings;
+        _cacheService = cacheService;
+        _carDb = carDatabase;
+        _tagService = tagService;
+        _favoriteService = favoriteService;
+        _scanService = scanService;
+        _updateService = updateService;
 
         if (!Enum.IsDefined(_settings.SortMode)) _settings.SortMode = SortMode.Manufacture;
         if (!Enum.IsDefined(_settings.FavoriteMode)) _settings.FavoriteMode = FavoriteMode.None;
@@ -53,13 +72,19 @@ internal partial class MainWindow : Window
         _searchDebounceTimer.Tick += (_, __) =>
         {
             _searchDebounceTimer.Stop();
-            ApplyFilterAndSort();
+            RefreshGallery();
         };
 
         _resizeDebounceTimer.Tick += (_, __) =>
         {
             _resizeDebounceTimer.Stop();
             if (_isLoaded) UpdateGroupWidthsOnly();
+        };
+
+        _autoScanTimer.Tick += (_, __) =>
+        {
+            _autoScanTimer.Stop();
+            _ = RunScanAsync(isUserInitiated: false);
         };
         SizeChanged += (_, __) =>
         {
@@ -68,6 +93,32 @@ internal partial class MainWindow : Window
         };
 
         Loaded += MainWindow_Loaded;
+        Closing += MainWindow_Closing;
+    }
+
+    private bool _isClosing;
+
+    private async void MainWindow_Closing(object? sender, WindowClosingEventArgs e)
+    {
+        if (_isClosing) return;
+
+        e.Cancel = true;
+        _isClosing = true;
+
+        _autoScanTimer.Stop();
+        _searchDebounceTimer.Stop();
+        _resizeDebounceTimer.Stop();
+        _scanCts?.Cancel();
+        await Task.Run(() =>
+        {
+            _favoriteService.Flush();
+            _tagService.Flush();
+            _cacheService.Flush();
+            AppSettingsService.Flush();
+            AppLogger.Shutdown();
+        });
+
+        Close();
     }
 
     private void UpdateGroupWidthsOnly()
@@ -92,8 +143,6 @@ internal partial class MainWindow : Window
             ? _settings.SavePath
             : LocalSaveService.FindLocalSavePath();
 
-        await RefreshCarDatabaseAsync();
-
         if (savedPathMissing)
         {
             await InfoDialog.ShowAsync(this, Strings.FolderNotFoundTitle, Strings.SavedPathNotFoundNotice);
@@ -105,12 +154,13 @@ internal partial class MainWindow : Window
             return;
         }
 
-        await RunScanAsync();
+        await RunScanAsync(isUserInitiated: true);
+        _ = RefreshCarDatabaseAsync(showLoadingOverlay: false);
     }
 
     private async Task CheckForUpdatesAsync()
     {
-        var result = await AppUpdateCheckService.CheckAsync();
+        var result = await _updateService.CheckAsync();
         if (!result.IsNewer || result.LatestVersion is null) return;
 
         _latestVersion = result.LatestVersion;
@@ -127,9 +177,9 @@ internal partial class MainWindow : Window
         await dlg.ShowDialog(this);
     }
 
-    private async Task RefreshCarDatabaseAsync()
+    private async Task RefreshCarDatabaseAsync(bool showLoadingOverlay = true)
     {
-        SetLoading(true, Strings.CarDbUpdating);
+        if (showLoadingOverlay) SetLoading(true, Strings.CarDbUpdating);
         try
         {
             bool changed = await _carDb.RefreshAsync();
@@ -149,7 +199,7 @@ internal partial class MainWindow : Window
         }
         finally
         {
-            SetLoading(false);
+            if (showLoadingOverlay) SetLoading(false);
         }
     }
 
@@ -207,7 +257,7 @@ internal partial class MainWindow : Window
             _savePath = path;
             _settings.SavePath = _savePath;
             AppSettingsService.Save(_settings);
-            await RunScanAsync();
+            await RunScanAsync(isUserInitiated: true);
             return;
         }
     }
@@ -215,55 +265,66 @@ internal partial class MainWindow : Window
     private async void RefreshButton_Click(object? sender, RoutedEventArgs e)
     {
         await RefreshCarDatabaseAsync();
+        await CheckForUpdatesAsync();
+
+        if (!_settings.RefreshLiveriesOnButtonClick) return;
 
         if (_savePath is null)
         {
             await PromptForSavePathAsync(initial: true);
             return;
         }
-        await RunScanAsync();
+        await RunScanAsync(isUserInitiated: true);
     }
 
-    private async Task RunScanAsync()
+    private async Task RunScanAsync(bool isUserInitiated)
     {
-        if (SaveDataPath is null) return;
+        string? saveDataPath = SaveDataPath;
+        if (saveDataPath is null) return;
+        if (_isScanning) return;
+        if (!isUserInitiated && !_settings.AutoRefreshLiveries) return;
+
+        _isScanning = true;
+        _autoScanTimer.Stop();
 
         _scanCts?.Cancel();
         _scanCts?.Dispose();
         var cts = new CancellationTokenSource();
         _scanCts = cts;
 
-        SetLoading(true, Strings.LoadingScanning);
-        RefreshButton.IsEnabled = false;
+        if (isUserInitiated)
+        {
+            SetLoading(true, Strings.LoadingScanning);
+            RefreshButton.IsEnabled = false;
+        }
 
-        var progress = new Progress<string>(msg => LoadingText.Text = msg);
+        var progress = isUserInitiated ? new Progress<string>(msg => LoadingText.Text = msg) : null;
 
         try
         {
-            var result = await _scanService.ScanAsync(SaveDataPath, progress, cts.Token);
+            var result = await _scanService.ScanAsync(saveDataPath, progress, cts.Token);
             if (cts.IsCancellationRequested) return;
 
-            var oldEntries = _allEntries;
             _allEntries = result.Entries;
-            foreach (var entry in oldEntries)
-                entry.Dispose();
 
             _lastScanResult = result;
             RenderStatus();
             RebuildTagsBar();
-            ApplyFilterAndSort();
+            RefreshGallery();
         }
         catch (OperationCanceledException)
         {
-
+            // do not log
         }
         catch (Exception ex)
         {
-            StatusText.Text = string.Format(Strings.StatusScanError, ex.Message);
+            AppLogger.LogErrorThrottled(saveDataPath, $"Scan failed: '{saveDataPath}'", ex);
+            if (isUserInitiated)
+                StatusText.Text = string.Format(Strings.StatusScanError, ex.Message);
         }
         finally
         {
-            if (!cts.IsCancellationRequested)
+            if (isUserInitiated && !cts.IsCancellationRequested)
             {
                 SetLoading(false);
                 RefreshButton.IsEnabled = true;
@@ -272,6 +333,12 @@ internal partial class MainWindow : Window
             if (ReferenceEquals(_scanCts, cts))
                 _scanCts = null;
             cts.Dispose();
+            _isScanning = false;
+            if (!_isClosing)
+            {
+                _autoScanTimer.Stop();
+                _autoScanTimer.Start();
+            }
         }
     }
 
@@ -304,111 +371,122 @@ internal partial class MainWindow : Window
         _settings.SortMode = Enum.IsDefined((SortMode)index) ? (SortMode)index : SortMode.Manufacture;
         AppSettingsService.Save(_settings);
         UpdateDisplayFilterChecks();
-        ApplyFilterAndSort();
+        RefreshGallery();
     }
 
-    private List<LiveryEntry> GetFilteredEntries()
+    private List<LiveryEntry> GetFilteredEntries() => GalleryFilterService.Apply(
+        _allEntries,
+        SearchBox.Text,
+        _selectedTags,
+        _settings.FavoriteMode == FavoriteMode.OnlyFavorites,
+        _settings.DuplicatesFilterMode);
+
+    private void RefreshGallery()
     {
-        string search = SearchBox.Text?.Trim() ?? "";
-        bool onlyFavorites = _settings.FavoriteMode == FavoriteMode.OnlyFavorites;
-        var duplicatesFilterMode = _settings.DuplicatesFilterMode;
-
-        IEnumerable<LiveryEntry> query = _allEntries;
-        if (search.Length > 0)
-        {
-            var searchTokens = search.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
-            query = query.Where(x => x.MatchesSearch(searchTokens));
-        }
-
-        if (_selectedTags.Count > 0)
-            query = query.Where(x => _selectedTags.All(t => x.Tags.Any(xt => xt.Equals(t, StringComparison.OrdinalIgnoreCase))));
-
-        if (onlyFavorites)
-            query = query.Where(x => x.IsFavorite);
-
-        query = duplicatesFilterMode switch
-        {
-            DuplicatesFilterMode.DuplicatesOnly => query.Where(x => x.IsDuplicate),
-            DuplicatesFilterMode.DuplicatesAndPossible => query.Where(x => x.IsDuplicate || x.IsPossibleDuplicate),
-            _ => query
-        };
-
-        return [.. query];
-    }
-
-    private void ApplyFilterAndSort()
-    {
-        bool onlyFavorites = _settings.FavoriteMode == FavoriteMode.OnlyFavorites;
-        bool favoritesFirst = _settings.FavoriteMode == FavoriteMode.FavoritesFirst;
-        bool separateFavorites = _settings.FavoriteMode == FavoriteMode.FavoritesSeparately;
-
         var filtered = GetFilteredEntries();
-        double groupWidth = ComputeGroupWidth();
+        var groups = BuildGroups(filtered);
+        ReplaceGroups(groups);
+        UpdateCountsAndEmptyState(filtered);
+    }
 
-        List<LiveryGroup> groups;
+    private List<LiveryGroup> BuildGroups(List<LiveryEntry> filtered) => GalleryGroupingService.Group(
+        filtered,
+        _settings.SortMode,
+        _settings.FavoriteMode,
+        _settings.GroupingEnabled,
+        ComputeGroupWidth());
 
-        if (!_settings.GroupingEnabled)
+    private void ReplaceGroups(List<LiveryGroup> newGroups)
+    {
+        bool samePositionalOrder = _displayedGroups.Count == newGroups.Count;
+        if (samePositionalOrder)
         {
-            var singleGroupItems = SortForCurrentMode(filtered);
-            if (favoritesFirst)
-                singleGroupItems = [.. singleGroupItems.OrderByDescending(x => x.IsFavorite)];
-
-            groups = filtered.Count > 0
-                ? [new LiveryGroup { Key = Strings.AllLiveriesGroupName, Items = singleGroupItems, GroupWidth = groupWidth }]
-                : [];
-        }
-        else if (separateFavorites)
-        {
-            var favoriteItems = filtered.Where(x => x.IsFavorite).ToList();
-            var restItems = onlyFavorites ? new List<LiveryEntry>() : filtered.Where(x => !x.IsFavorite).ToList();
-
-            groups = [];
-            if (favoriteItems.Count > 0)
+            for (int i = 0; i < newGroups.Count; i++)
             {
-                groups.Add(new LiveryGroup
+                if (_displayedGroups[i].Key != newGroups[i].Key)
                 {
-                    Key = Strings.SeparateFavoritesGroupName,
-                    Items = SortForCurrentMode(favoriteItems),
-                    GroupWidth = groupWidth,
-                    IsFavoritesGroup = true
-                });
+                    samePositionalOrder = false;
+                    break;
+                }
             }
-            groups.AddRange(BuildGroups(restItems, favoritesFirst: false, groupWidth));
         }
-        else
+
+        if (!samePositionalOrder)
         {
-            groups = BuildGroups(filtered, favoritesFirst, groupWidth);
+            foreach (var oldGroup in _displayedGroups)
+                oldGroup.Dispose();
+            _displayedGroups.Clear();
+            foreach (var newGroup in newGroups)
+                _displayedGroups.Add(newGroup);
+
+            GroupsHost.InvalidateMeasure();
+            GalleryScroll.InvalidateMeasure();
+            return;
         }
 
-        if (GroupsHost.ItemsSource is IEnumerable<LiveryGroup> oldGroups)
-            foreach (var oldGroup in oldGroups)
-                oldGroup.Dispose();
+        for (int i = 0; i < newGroups.Count; i++)
+        {
+            var oldGroup = _displayedGroups[i];
+            var newGroup = newGroups[i];
 
-        GroupsHost.ItemsSource = groups;
+            if (AreGroupsEquivalent(oldGroup, newGroup))
+            {
+                newGroup.Dispose();
+                continue;
+            }
+
+            oldGroup.Dispose();
+            _displayedGroups[i] = newGroup;
+        }
+
         GroupsHost.InvalidateMeasure();
         GalleryScroll.InvalidateMeasure();
+    }
 
-        UpdateCountsAndEmptyState(filtered);
+    private static bool AreGroupsEquivalent(LiveryGroup oldGroup, LiveryGroup newGroup)
+    {
+        if (oldGroup.Items.Count != newGroup.Items.Count) return false;
+        for (int i = 0; i < oldGroup.Items.Count; i++)
+        {
+            if (!AreEntriesEquivalent(oldGroup.Items[i], newGroup.Items[i])) return false;
+        }
+        return true;
+    }
+
+    private static bool AreEntriesEquivalent(LiveryEntry a, LiveryEntry b)
+    {
+        return a.FolderPath == b.FolderPath
+            && a.LiveryName == b.LiveryName
+            && a.Author == b.Author
+            && a.CarId == b.CarId
+            && a.CarManufacturerRaw == b.CarManufacturerRaw
+            && a.CarModelNameRaw == b.CarModelNameRaw
+            && a.CarYear == b.CarYear
+            && a.CarKnown == b.CarKnown
+            && a.CreatedYear == b.CreatedYear
+            && a.CreatedMonth == b.CreatedMonth
+            && a.DownloadDate == b.DownloadDate
+            && a.ThumbnailPath == b.ThumbnailPath
+            && a.IsFavorite == b.IsFavorite
+            && a.DuplicateStatus == b.DuplicateStatus
+            && a.Tags.SequenceEqual(b.Tags, StringComparer.OrdinalIgnoreCase);
     }
 
     private void UpdateCountsAndEmptyState(List<LiveryEntry> filtered)
     {
         string search = SearchBox.Text?.Trim() ?? "";
-
-        int favoritesShown = filtered.Count(x => x.IsFavorite);
-        int duplicatesShown = filtered.Count(x => x.IsDuplicate);
-        int possibleDuplicatesShown = filtered.Count(x => x.IsPossibleDuplicate);
+        var stats = GalleryStatisticsService.Calculate(filtered);
 
         CountBaseText.Text = _allEntries.Count == 0 ? "" : string.Format(Strings.CountShowing, filtered.Count, _allEntries.Count);
 
-        FavoritesCountPanel.IsVisible = favoritesShown > 0;
-        FavoritesCountText.Text = favoritesShown.ToString();
+        FavoritesCountPanel.IsVisible = stats.FavoritesShown > 0;
+        FavoritesCountText.Text = stats.FavoritesShown.ToString();
 
-        DuplicatesCountPanel.IsVisible = duplicatesShown > 0;
-        DuplicatesCountText.Text = duplicatesShown.ToString();
+        DuplicatesCountPanel.IsVisible = stats.DuplicatesShown > 0;
+        DuplicatesCountText.Text = stats.DuplicatesShown.ToString();
 
-        PossibleDuplicatesCountPanel.IsVisible = possibleDuplicatesShown > 0;
-        PossibleDuplicatesCountText.Text = possibleDuplicatesShown.ToString();
+        PossibleDuplicatesCountPanel.IsVisible = stats.PossibleDuplicatesShown > 0;
+        PossibleDuplicatesCountText.Text = stats.PossibleDuplicatesShown.ToString();
 
         if (_allEntries.Count == 0)
         {
@@ -443,91 +521,7 @@ internal partial class MainWindow : Window
         return Math.Max(columns * CardStep, CardStep);
     }
 
-    private List<LiveryGroup> BuildGroups(List<LiveryEntry> items, bool favoritesFirst, double groupWidth)
-    {
-        if (_settings.SortMode == SortMode.Author)
-        {
-            return [.. items
-                .GroupBy(x => x.Author, StringComparer.OrdinalIgnoreCase)
-                .OrderBy(g => g.Key, StringComparer.OrdinalIgnoreCase)
-                .Select(g => new LiveryGroup
-                {
-                    Key = g.Key,
-                    Items = OrderGroupItems(g, favoritesFirst,
-                            x => x.CarManufacturer, x => x.CarModelName, x => x.LiveryName),
-                    GroupWidth = groupWidth
-                })];
-        }
-
-        if (_settings.SortMode == SortMode.DownloadTime)
-        {
-            return [.. items
-                .GroupBy(x => x.DownloadYearMonth)
-                .OrderByDescending(g => g.Key ?? DateTime.MinValue)
-                .Select(g => new LiveryGroup
-                {
-                    Key = g.Key is { } month
-                        ? month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture)
-                        : Strings.UnknownDownloadDate,
-                    Items = (favoritesFirst
-                                ? g.OrderByDescending(x => x.IsFavorite).ThenByDescending(x => x.DownloadDate ?? DateTime.MinValue)
-                                : g.OrderByDescending(x => x.DownloadDate ?? DateTime.MinValue))
-                            .ThenBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
-                            .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)
-                            .ToList(),
-                    GroupWidth = groupWidth
-                })];
-        }
-
-        string unknownLabel = Strings.UnknownManufacturer;
-        return [.. items
-            .GroupBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
-            .OrderBy(g => g.Key.Equals(unknownLabel, StringComparison.OrdinalIgnoreCase) ? 1 : 0)
-            .ThenBy(g => g.Key, StringComparer.OrdinalIgnoreCase)
-            .Select(g => new LiveryGroup
-            {
-                Key = g.Key,
-                Items = [.. (favoritesFirst
-                            ? g.OrderByDescending(x => x.IsFavorite).ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
-                            : g.OrderBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase))
-                        .ThenBy(x => x.CarYear)
-                        .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
-                GroupWidth = groupWidth
-            })];
-    }
-
-    private List<LiveryEntry> SortForCurrentMode(List<LiveryEntry> items) => _settings.SortMode switch
-    {
-        SortMode.Author =>
-            [.. items.OrderBy(x => x.Author, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
-        SortMode.DownloadTime =>
-            [.. items.OrderByDescending(x => x.DownloadDate ?? DateTime.MinValue)
-                  .ThenBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
-        _ => [.. items.OrderBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.CarYear)
-                  .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
-    };
-
-    private static List<LiveryEntry> OrderGroupItems(
-        IEnumerable<LiveryEntry> items,
-        bool favoritesFirst,
-        Func<LiveryEntry, string> key1,
-        Func<LiveryEntry, string> key2,
-        Func<LiveryEntry, string> key3)
-    {
-        var ordered = favoritesFirst
-            ? items.OrderByDescending(x => x.IsFavorite).ThenBy(key1, StringComparer.OrdinalIgnoreCase)
-            : items.OrderBy(key1, StringComparer.OrdinalIgnoreCase);
-
-        return [.. ordered
-            .ThenBy(key2, StringComparer.OrdinalIgnoreCase)
-            .ThenBy(key3, StringComparer.OrdinalIgnoreCase)];
-    }
+    private HashSet<string>? _lastTagsBarTags;
 
     private void RebuildTagsBar()
     {
@@ -536,6 +530,10 @@ internal partial class MainWindow : Window
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(t => t, StringComparer.OrdinalIgnoreCase)
             .ToList();
+
+        var allTagsSet = new HashSet<string>(allTags, StringComparer.OrdinalIgnoreCase);
+        if (_lastTagsBarTags is not null && _lastTagsBarTags.SetEquals(allTagsSet)) return;
+        _lastTagsBarTags = allTagsSet;
 
         _selectedTags.RemoveWhere(t => !allTags.Contains(t, StringComparer.OrdinalIgnoreCase));
 
@@ -555,7 +553,7 @@ internal partial class MainWindow : Window
             {
                 if (button.IsChecked == true) _selectedTags.Add(tag);
                 else _selectedTags.Remove(tag);
-                ApplyFilterAndSort();
+                RefreshGallery();
             };
             TagsBar.Children.Add(button);
         }
@@ -574,21 +572,21 @@ internal partial class MainWindow : Window
             RebuildTagsBar();
 
             if (_selectedTags.Count > 0)
-                ApplyFilterAndSort();
+                RefreshGallery();
         }
     }
 
     private void Card_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
-        entry.Thumbnail = ThumbnailCacheService.Acquire(entry, entry.LoadThumbnailFromDisk);
+        entry.Thumbnail = ThumbnailCacheService.Acquire(entry.ThumbnailPath);
     }
 
     private void Card_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
         entry.Thumbnail = null;
-        ThumbnailCacheService.Release(entry);
+        ThumbnailCacheService.Release(entry.ThumbnailPath);
     }
 
     private void ToggleFavorite_Click(object? sender, RoutedEventArgs e)
@@ -599,7 +597,7 @@ internal partial class MainWindow : Window
         _favoriteService.SetFavorite(entry.FolderName, entry.IsFavorite);
 
         if (_settings.FavoriteMode != FavoriteMode.None)
-            ApplyFilterAndSort();
+            RefreshGallery();
         else
             UpdateCountsAndEmptyState(GetFilteredEntries());
     }
@@ -610,7 +608,7 @@ internal partial class MainWindow : Window
         _settings.FavoriteMode = Enum.IsDefined((FavoriteMode)index) ? (FavoriteMode)index : FavoriteMode.None;
         AppSettingsService.Save(_settings);
         UpdateDisplayFilterChecks();
-        ApplyFilterAndSort();
+        RefreshGallery();
     }
 
     private void DupModeMenuItem_Click(object? sender, RoutedEventArgs e)
@@ -619,7 +617,7 @@ internal partial class MainWindow : Window
         _settings.DuplicatesFilterMode = Enum.IsDefined((DuplicatesFilterMode)index) ? (DuplicatesFilterMode)index : DuplicatesFilterMode.All;
         AppSettingsService.Save(_settings);
         UpdateDisplayFilterChecks();
-        ApplyFilterAndSort();
+        RefreshGallery();
     }
 
     private void GroupingToggleItem_Click(object? sender, RoutedEventArgs e)
@@ -627,7 +625,7 @@ internal partial class MainWindow : Window
         _settings.GroupingEnabled = !_settings.GroupingEnabled;
         AppSettingsService.Save(_settings);
         UpdateDisplayFilterChecks();
-        ApplyFilterAndSort();
+        RefreshGallery();
     }
 
     private void UpdateDisplayFilterChecks()
@@ -666,50 +664,36 @@ internal partial class MainWindow : Window
     private async void OpenSettingsMenuItem_Click(object? sender, RoutedEventArgs e)
     {
         SettingsButton.Flyout?.Hide();
-        var dlg = new SettingsDialog(_settings);
+        var dlg = new SettingsDialog(_settings, _savePath);
         await dlg.ShowDialog(this);
         if (dlg.SavePathChanged)
         {
             _savePath = _settings.SavePath;
-            if (SaveDataPath is not null) await RunScanAsync();
+            if (SaveDataPath is not null) await RunScanAsync(isUserInitiated: true);
         }
     }
 
     private async void StatsButton_Click(object? sender, RoutedEventArgs e)
     {
-        int total = _allEntries.Count;
-        string favoriteManufacturer = "-";
-        string favoriteAuthor = "-";
+        var stats = GalleryStatisticsService.CalculateOverall(_allEntries);
 
-        if (total > 0)
-        {
-            var topManufacturer = _allEntries
-                .GroupBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
-                .OrderByDescending(g => g.Count())
-                .First();
-            favoriteManufacturer = $"{topManufacturer.Key} ({topManufacturer.Count()})";
-
-            var topAuthor = _allEntries
-                .GroupBy(x => x.Author, StringComparer.OrdinalIgnoreCase)
-                .OrderByDescending(g => g.Count())
-                .First();
-            favoriteAuthor = $"{topAuthor.Key} ({topAuthor.Count()})";
-        }
-
-        int favoritesCount = _allEntries.Count(x => x.IsFavorite);
-        int duplicatesCount = _allEntries.Count(x => x.IsDuplicate);
-        int possibleDuplicatesCount = _allEntries.Count(x => x.IsPossibleDuplicate);
+        string favoriteManufacturer = stats.TopManufacturer is not null
+            ? $"{stats.TopManufacturer} ({stats.TopManufacturerCount})"
+            : "-";
+        string favoriteAuthor = stats.TopAuthor is not null
+            ? $"{stats.TopAuthor} ({stats.TopAuthorCount})"
+            : "-";
 
         string message = string.Join("\n", new[]
         {
-            $"{Strings.StatsTotalLiveries}: {total}",
-            $"{Strings.StatsFavoritesCount}: {favoritesCount}",
+            $"{Strings.StatsTotalLiveries}: {stats.Total}",
+            $"{Strings.StatsFavoritesCount}: {stats.FavoritesCount}",
             "",
             $"{Strings.StatsFavoriteManufacturer}: {favoriteManufacturer}",
             $"{Strings.StatsFavoriteAuthor}: {favoriteAuthor}",
             "",
-            $"{Strings.StatsTotalDuplicates}: {duplicatesCount}",
-            $"{Strings.StatsPossibleDuplicates}: {possibleDuplicatesCount}",
+            $"{Strings.StatsTotalDuplicates}: {stats.DuplicatesCount}",
+            $"{Strings.StatsPossibleDuplicates}: {stats.PossibleDuplicatesCount}",
         });
 
         await InfoDialog.ShowAsync(this, Strings.StatsTitle, message);
@@ -752,6 +736,25 @@ internal partial class MainWindow : Window
         ApplyLocalizedTexts();
         RenderStatus();
         UpdateCountsAndEmptyState(GetFilteredEntries());
+        foreach (var entry in _allEntries)
+            entry.RefreshLocalizedText();
+
+        if (GroupsHost.ItemsSource is IEnumerable<LiveryGroup> currentGroups)
+        {
+            foreach (var group in currentGroups)
+            {
+                group.Key = group.SpecialKind switch
+                {
+                    LiveryGroupSpecialKind.DownloadMonth when group.SpecialMonth is { } month =>
+                        month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture),
+                    LiveryGroupSpecialKind.UnknownDownloadDate => Strings.UnknownDownloadDate,
+                    LiveryGroupSpecialKind.UnknownManufacturer => Strings.UnknownManufacturer,
+                    LiveryGroupSpecialKind.AllLiveries => Strings.AllLiveriesGroupName,
+                    _ when group.IsFavoritesGroup => Strings.SeparateFavoritesGroupName,
+                    _ => group.Key
+                };
+            }
+        }
 
         if (_latestVersion is not null)
             UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _latestVersion);

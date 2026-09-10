@@ -428,4 +428,13 @@ Choose it manually?
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>System</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Scanning</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Automatically refresh liveries</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Refresh liveries when clicking the refresh button</value>
+  </data>
 </root>

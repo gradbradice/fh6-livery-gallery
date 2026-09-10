@@ -4,7 +4,7 @@ namespace LiveryGallery.Configuration;
 
 internal static class JsonSettings
 {
-    public static readonly JsonSerializerOptions DefaultDeserializeOptions = new() 
+    public static readonly JsonSerializerOptions DefaultOptions = new() 
     { 
         WriteIndented = true
     };

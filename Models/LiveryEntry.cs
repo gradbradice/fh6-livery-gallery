@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.Models;
 
-internal class LiveryEntry : INotifyPropertyChanged, IDisposable
+internal class LiveryEntry : INotifyPropertyChanged
 {
     public required string FolderPath { get; init; }
     public required string FolderName { get; init; }
@@ -61,8 +61,7 @@ internal class LiveryEntry : INotifyPropertyChanged, IDisposable
     public DuplicateStatus DuplicateStatus { get; set; }
     public bool IsDuplicate => DuplicateStatus == DuplicateStatus.Duplicate;
     public bool IsPossibleDuplicate => DuplicateStatus == DuplicateStatus.PossibleDuplicate;
-
-    public bool HasThumbnail => !string.IsNullOrEmpty(ThumbnailPath) && File.Exists(ThumbnailPath);
+    public required bool HasThumbnail { get; init; }
 
     private Bitmap? _thumbnail;
     public Bitmap? Thumbnail
@@ -73,29 +72,11 @@ internal class LiveryEntry : INotifyPropertyChanged, IDisposable
             if (_thumbnail == value) return;
             _thumbnail = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(ShowThumbnailImage));
         }
     }
 
-    public Bitmap? LoadThumbnailFromDisk()
-    {
-        if (string.IsNullOrEmpty(ThumbnailPath) || !File.Exists(ThumbnailPath))
-            return null;
-
-        try
-        {
-            using var stream = File.OpenRead(ThumbnailPath);
-            return new Bitmap(stream);
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public void Dispose()
-    {
-        ThumbnailCacheService.ForceRemove(this);
-    }
+    public bool ShowThumbnailImage => HasThumbnail && Thumbnail is not null;
 
     public string DateDisplay
     {
@@ -115,7 +96,7 @@ internal class LiveryEntry : INotifyPropertyChanged, IDisposable
         get
         {
             if (CarKnown && _searchHaystack is not null) return _searchHaystack;
-            string haystack = $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}".ToLowerInvariant();
+            string haystack = $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}";
             if (CarKnown) _searchHaystack = haystack;
             return haystack;
         }
@@ -131,6 +112,13 @@ internal class LiveryEntry : INotifyPropertyChanged, IDisposable
                 return false;
         }
         return true;
+    }
+
+    public void RefreshLocalizedText()
+    {
+        OnPropertyChanged(nameof(CarManufacturer));
+        OnPropertyChanged(nameof(CarModelName));
+        OnPropertyChanged(nameof(DateDisplay));
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

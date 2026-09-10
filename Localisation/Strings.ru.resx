@@ -428,4 +428,13 @@
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>Системная</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Сканирование</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Автоматически обновлять ливреи</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Обновлять ливреи по нажатию кнопки</value>
+  </data>
 </root>

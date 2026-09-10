@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using LiveryGallery.Enums;
 using LiveryGallery.Services;
 using LiveryGallery.Views;
 
@@ -12,12 +13,22 @@ internal partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        AppThemeService.Initialise();
         var settings = AppSettingsService.Load();
+        AppThemeService.ApplyTheme(settings.ThemeMode ?? AppThemeMode.System);
         AppLocalisationService.AppLanguage = settings.Language;
+        GameDiscoveryService.WarmUpInBackground();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            desktop.MainWindow = new MainWindow();
+        {
+            var cacheService = new AppCacheService();
+            var carDatabase = new CarDatabaseService(AppHttpClient.Instance);
+            var tagService = new TagService();
+            var favoriteService = new FavoriteService();
+            var scanService = new LiveryScanService(cacheService, carDatabase, favoriteService, tagService);
+            var updateService = new AppUpdateCheckService(AppHttpClient.Instance);
+            desktop.MainWindow = new MainWindow(
+                settings, cacheService, carDatabase, tagService, favoriteService, scanService, updateService);
+        }
 
         base.OnFrameworkInitializationCompleted();
     }

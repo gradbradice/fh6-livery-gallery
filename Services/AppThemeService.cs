@@ -6,13 +6,7 @@ namespace LiveryGallery.Services;
 
 internal static class AppThemeService
 {
-    public static void Initialise()
-    {
-        var settings = AppSettingsService.Load();
-        ApplyTheme(settings.ThemeMode ?? AppThemeMode.System, persist: false);
-    }
-
-    public static void ApplyTheme(AppThemeMode mode, bool persist = true)
+    public static void ApplyTheme(AppThemeMode mode)
     {
         var app = Application.Current;
         if (app is null) return;
@@ -23,12 +17,5 @@ internal static class AppThemeService
             AppThemeMode.Light => ThemeVariant.Light,
             _ => ThemeVariant.Default,
         };
-
-        if (persist)
-        {
-            var settings = AppSettingsService.Load();
-            settings.ThemeMode = mode;
-            AppSettingsService.Save(settings);
-        }
     }
 }

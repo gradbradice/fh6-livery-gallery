@@ -15,5 +15,12 @@ internal record LiveryCacheEntry
     public string HeaderHash { get; set; } = string.Empty;
     public string SourceThumbHash { get; set; } = string.Empty;
     public string? CLiveryHash { get; set; }
+    public long HeaderLength { get; set; }
+    public DateTime HeaderLastWriteUtc { get; set; }
+    public long SourceThumbLength { get; set; }
+    public DateTime SourceThumbLastWriteUtc { get; set; }
+    public long CLiveryLength { get; set; }
+    public DateTime CLiveryLastWriteUtc { get; set; }
+
     public uint[]? SectionCounts { get; set; }
 }

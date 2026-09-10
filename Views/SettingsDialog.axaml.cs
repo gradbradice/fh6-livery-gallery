@@ -18,11 +18,14 @@ internal partial class SettingsDialog : Window
     private string _savedGamePath;
     private string _savedSavePath;
     private readonly string _initialSavePath;
+    private readonly bool _saveInitialWasAutoDiscovered;
+    private bool _savedAutoRefreshLiveries;
+    private bool _savedRefreshOnButtonClick;
     private bool _forceClose;
 
     public bool SavePathChanged { get; private set; }
 
-    public SettingsDialog(AppSettingsData settings)
+    public SettingsDialog(AppSettingsData settings, string? resolvedSavePath)
     {
         InitializeComponent();
         _settings = settings;
@@ -36,12 +39,18 @@ internal partial class SettingsDialog : Window
         SelectLanguageInCombo(_savedLanguage);
 
         string? gameInitial = _settings.GameInstallPath ?? GameDiscoveryService.TryFindGamePath();
-        string? saveInitial = _settings.SavePath ?? "";
+        string? saveInitial = _settings.SavePath ?? resolvedSavePath ?? "";
+        _saveInitialWasAutoDiscovered = string.IsNullOrEmpty(_settings.SavePath);
         _savedGamePath = gameInitial ?? "";
         _savedSavePath = saveInitial;
         _initialSavePath = saveInitial;
         GamePathBox.Text = _savedGamePath;
         SavePathBox.Text = _savedSavePath;
+
+        _savedAutoRefreshLiveries = _settings.AutoRefreshLiveries;
+        _savedRefreshOnButtonClick = _settings.RefreshLiveriesOnButtonClick;
+        AutoRefreshLiveriesCheckBox.IsChecked = _savedAutoRefreshLiveries;
+        RefreshOnButtonClickCheckBox.IsChecked = _savedRefreshOnButtonClick;
 
         UpdateSaveButtonState();
 
@@ -58,6 +67,9 @@ internal partial class SettingsDialog : Window
         PathsSectionLabel.Text = Strings.SettingsMenuPaths;
         GamePathLabel.Text = Strings.SettingsMenuGamePath;
         SavePathLabel.Text = Strings.SavePathFieldLabel;
+        ScanningSectionLabel.Text = Strings.SettingsSectionScanning;
+        AutoRefreshLiveriesCheckBox.Content = Strings.AutoRefreshLiveriesLabel;
+        RefreshOnButtonClickCheckBox.Content = Strings.RefreshOnButtonClickLabel;
         SystemThemeRadio.Content = Strings.ThemeSystemLabel;
         LightThemeRadio.Content = Strings.ThemeLightLabel;
         DarkThemeRadio.Content = Strings.ThemeDarkLabel;
@@ -106,6 +118,8 @@ internal partial class SettingsDialog : Window
 
     private void LanguageCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e) => UpdateSaveButtonState();
 
+    private void ScanOption_Click(object? sender, RoutedEventArgs e) => UpdateSaveButtonState();
+
     private void PathBox_TextChanged(object? sender, TextChangedEventArgs e)
     {
         ShowNormalHint();
@@ -118,7 +132,9 @@ internal partial class SettingsDialog : Window
         bool languageChanged = GetSelectedLanguage() != _savedLanguage;
         bool gameChanged = (GamePathBox.Text ?? "") != _savedGamePath;
         bool saveChanged = (SavePathBox.Text ?? "") != _savedSavePath;
-        return themeChanged || languageChanged || gameChanged || saveChanged;
+        bool autoRefreshChanged = AutoRefreshLiveriesCheckBox.IsChecked != _savedAutoRefreshLiveries;
+        bool refreshOnClickChanged = RefreshOnButtonClickCheckBox.IsChecked != _savedRefreshOnButtonClick;
+        return themeChanged || languageChanged || gameChanged || saveChanged || autoRefreshChanged || refreshOnClickChanged;
     }
 
     private void UpdateSaveButtonState() => SaveButton.IsEnabled = IsDirty();
@@ -177,7 +193,7 @@ internal partial class SettingsDialog : Window
             return false;
         }
 
-        AppThemeService.ApplyTheme(themeMode, persist: false);
+        AppThemeService.ApplyTheme(themeMode);
         if (languageValue != AppLocalisationService.AppLanguage)
         {
             AppLocalisationService.AppLanguage = languageValue;
@@ -188,7 +204,11 @@ internal partial class SettingsDialog : Window
         _settings.ThemeMode = themeMode;
         _settings.Language = languageValue;
         _settings.GameInstallPath = string.IsNullOrEmpty(gameValue) ? null : gameValue;
-        _settings.SavePath = string.IsNullOrEmpty(saveValue) ? null : saveValue;
+        _settings.SavePath = saveValue == _savedSavePath && _saveInitialWasAutoDiscovered
+            ? null
+            : (string.IsNullOrEmpty(saveValue) ? null : saveValue);
+        _settings.AutoRefreshLiveries = AutoRefreshLiveriesCheckBox.IsChecked == true;
+        _settings.RefreshLiveriesOnButtonClick = RefreshOnButtonClickCheckBox.IsChecked == true;
         AppSettingsService.SaveImmediate(_settings);
 
         if (saveValue != _initialSavePath) SavePathChanged = true;
@@ -197,6 +217,8 @@ internal partial class SettingsDialog : Window
         _savedLanguage = languageValue;
         _savedGamePath = gameValue;
         _savedSavePath = saveValue;
+        _savedAutoRefreshLiveries = _settings.AutoRefreshLiveries;
+        _savedRefreshOnButtonClick = _settings.RefreshLiveriesOnButtonClick;
         UpdateSaveButtonState();
         return true;
     }
@@ -207,32 +229,43 @@ internal partial class SettingsDialog : Window
 
     private void RequestClose(object? sender, RoutedEventArgs e) => _ = TryCloseAsync();
 
+    private bool _isClosing;
+
     private async Task TryCloseAsync()
     {
-        if (!IsDirty())
+        if (_isClosing) return;
+        _isClosing = true;
+        try
         {
+            if (!IsDirty())
+            {
+                _forceClose = true;
+                Close();
+                return;
+            }
+
+            var choice = await UnsavedChangesDialog.AskAsync(this, Strings.UnsavedChangesTitle, Strings.UnsavedChangesMessage);
+            switch (choice)
+            {
+                case UnsavedChangesChoice.Back:
+                    return;
+                case UnsavedChangesChoice.SaveAndExit:
+                    if (!PerformSave()) return;
+                    await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+                    break;
+                case UnsavedChangesChoice.ExitWithoutSaving:
+                    break;
+                default:
+                    return;
+            }
+
             _forceClose = true;
             Close();
-            return;
         }
-
-        var choice = await UnsavedChangesDialog.AskAsync(this, Strings.UnsavedChangesTitle, Strings.UnsavedChangesMessage);
-        switch (choice)
+        finally
         {
-            case UnsavedChangesChoice.Back:
-                return;
-            case UnsavedChangesChoice.SaveAndExit:
-                if (!PerformSave()) return;
-                await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-                break;
-            case UnsavedChangesChoice.ExitWithoutSaving:
-                break;
-            default:
-                return;
+            _isClosing = false;
         }
-
-        _forceClose = true;
-        Close();
     }
 
     private void SettingsDialog_Closing(object? sender, WindowClosingEventArgs e)

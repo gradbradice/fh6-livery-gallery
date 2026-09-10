@@ -35,6 +35,7 @@ internal partial class AboutDialog : Window
         }
         catch
         {
+            // do not log
         }
     }
 

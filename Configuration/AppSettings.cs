@@ -9,10 +9,12 @@ internal static class AppSettings
         "FH6LiveryGallery");
 
     public static string ThumbsPath { get; } = Path.Combine(BaseCachePath, "thumbs");
+    public static string LogsPath { get; } = Path.Combine(BaseCachePath, "logs");
 
     public static void CheckPaths()
     {
         if (!Directory.Exists(BaseCachePath)) Directory.CreateDirectory(BaseCachePath);
         if (!Directory.Exists(ThumbsPath)) Directory.CreateDirectory(ThumbsPath);
+        if (!Directory.Exists(LogsPath)) Directory.CreateDirectory(LogsPath);
     }
 }

@@ -15,6 +15,8 @@ internal class AppCacheService
         _saveService = new();
     }
 
+    public void Flush() => _saveService.Flush();
+
     public Dictionary<string, LiveryCacheEntry> Load()
     {
         try
@@ -26,9 +28,10 @@ internal class AppCacheService
                 if (data is not null) return data;
             }
         }
-        catch
+        catch (Exception ex)
         {
-            
+            AppLogger.LogError("Failed to load scan cache", ex);
+            AtomicFile.TryBackupCorruptedFile(_path);
         }
 
         return [];
@@ -38,12 +41,12 @@ internal class AppCacheService
     {
         try
         {
-            string json = JsonSerializer.Serialize(data, JsonSettings.DefaultDeserializeOptions);
+            string json = JsonSerializer.Serialize(data, JsonSettings.DefaultOptions);
             _saveService.ScheduleSave(json, _path);
         }
-        catch
+        catch (Exception ex)
         {
-            return;
+            AppLogger.LogError("Failed to serialise scan cache", ex);
         }
     }
 }

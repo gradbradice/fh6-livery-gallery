@@ -22,9 +22,9 @@
                         <Border CornerRadius="14,14,0,0" ClipToBounds="True">
                             <Grid>
                                 <Image Source="{Binding Thumbnail}" Stretch="UniformToFill"
-                                       IsVisible="{Binding HasThumbnail}" />
+                                       IsVisible="{Binding ShowThumbnailImage}" />
                                 <Border Background="{DynamicResource ThumbnailPlaceholderBrush}"
-                                        IsVisible="{Binding !HasThumbnail}">
+                                        IsVisible="{Binding !ShowThumbnailImage}">
                                     <Path Data="{StaticResource IconCarSide}" Width="34" Height="34" Stretch="Uniform"
                                           HorizontalAlignment="Center" VerticalAlignment="Center"
                                           Fill="{DynamicResource ThumbnailPlaceholderTextBrush}" />
@@ -378,7 +378,7 @@
                 <ItemsControl x:Name="GroupsHost" ItemTemplate="{StaticResource GroupTemplate}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" />
+							<StackPanel Orientation="Vertical" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

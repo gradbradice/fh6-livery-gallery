@@ -32,6 +32,8 @@ internal static class ThumbnailService
         }
         catch
         {
+            // do not log. this method may be called on every automatic scan,
+            // if the preview cannot be processed, pnce per 5 seconds
             return false;
         }
     }

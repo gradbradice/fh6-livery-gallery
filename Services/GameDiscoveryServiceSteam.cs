@@ -11,12 +11,21 @@ internal class GameDiscoveryServiceSteam
     [SupportedOSPlatform("windows")]
     public static string? TryFindViaSteam()
     {
+        string? steamPath;
         try
         {
-            string? steamPath = FindSteamInstallPath();
-            if (steamPath is null) return null;
+            steamPath = FindSteamInstallPath();
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Steam discovery: Failed to determine the Steam installation path", ex);
+            return null;
+        }
+        if (steamPath is null) return null;
 
-            foreach (string library in EnumerateSteamLibraryFolders(steamPath))
+        foreach (string library in EnumerateSteamLibraryFolders(steamPath))
+        {
+            try
             {
                 string manifestPath = Path.Combine(library, "steamapps", $"appmanifest_{SteamAppId}.acf");
                 if (!File.Exists(manifestPath)) continue;
@@ -31,10 +40,10 @@ internal class GameDiscoveryServiceSteam
                     if (Directory.Exists(gamePath)) return gamePath;
                 }
             }
-        }
-        catch
-        {
-            
+            catch (Exception ex)
+            {
+                AppLogger.LogError($"Steam discovery: Failed to parse the manifest in '{library}'", ex);
+            }
         }
 
         return null;
@@ -76,8 +85,9 @@ internal class GameDiscoveryServiceSteam
         {
             root = ParseVdf(File.ReadAllText(vdfPath));
         }
-        catch
+        catch (Exception ex)
         {
+            AppLogger.LogError($"Steam discovery: Failed to parse '{vdfPath}'", ex);
             yield break;
         }
 
@@ -169,7 +179,8 @@ internal class GameDiscoveryServiceSteam
             }
             pos++;
         }
-        // closing quotation mark
+        if (pos >= s.Length)
+            throw new InvalidDataException("A closing quote was expected, but the end of the VDF file was reached");
         pos++;
         return sb.ToString();
     }

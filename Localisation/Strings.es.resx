@@ -428,4 +428,13 @@
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>Sistema</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Escaneo</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Actualizar automáticamente las librés</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Actualizar librés al pulsar el botón</value>
+  </data>
 </root>

@@ -17,6 +17,8 @@ internal class FavoriteService
 
     public bool IsFavorite(string folderName) => _favorites.Contains(folderName);
 
+    public void Flush() => _saveService.Flush();
+
     public void SetFavorite(string folderName, bool isFavorite)
     {
         _ = isFavorite ? _favorites.Add(folderName) : _favorites.Remove(folderName);
@@ -27,12 +29,12 @@ internal class FavoriteService
     {
         try
         {
-            string json = JsonSerializer.Serialize(_favorites.ToList(), JsonSettings.DefaultDeserializeOptions);
+            string json = JsonSerializer.Serialize(_favorites.ToList(), JsonSettings.DefaultOptions);
             _saveService.ScheduleSave(json, _path);
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError("Failed to serialise favorites", ex);
         }
     }
 
@@ -47,9 +49,10 @@ internal class FavoriteService
                 if (data != null) _favorites = new HashSet<string>(data, StringComparer.OrdinalIgnoreCase);
             }
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError("Failed to load favorites", ex);
+            AtomicFile.TryBackupCorruptedFile(_path);
         }
     }
 }

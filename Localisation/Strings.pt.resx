@@ -428,4 +428,13 @@ Escolher manualmente?
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>Sistema</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Varredura</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Atualizar automaticamente as pinturas</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Atualizar pinturas ao clicar no botão</value>
+  </data>
 </root>

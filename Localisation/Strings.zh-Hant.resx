@@ -428,4 +428,13 @@
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>系統</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>掃描</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>自動刷新塗裝</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>點擊刷新按鈕時也刷新塗裝</value>
+  </data>
 </root>

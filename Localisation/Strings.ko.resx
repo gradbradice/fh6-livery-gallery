@@ -428,4 +428,13 @@
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>시스템</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>스캔</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>리버리 자동 새로고침</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>새로고침 버튼 클릭 시 리버리도 새로고침</value>
+  </data>
 </root>

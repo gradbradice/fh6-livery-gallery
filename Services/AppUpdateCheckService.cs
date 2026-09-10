@@ -4,19 +4,23 @@ using System.Text.Json;
 
 namespace LiveryGallery.Services;
 
-internal static class AppUpdateCheckService
+internal class AppUpdateCheckService
 {
-    public static async Task<AppUpdateCheckResult> CheckAsync(CancellationToken ct = default)
+    private readonly HttpClient _http;
+
+    public AppUpdateCheckService(HttpClient http)
+    {
+        _http = http;
+    }
+
+    public async Task<AppUpdateCheckResult> CheckAsync(CancellationToken ct = default)
     {
         try
         {
-            using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
-            
-            http.DefaultRequestHeaders.UserAgent.ParseAdd("FH6-Livery-Gallery-UpdateCheck/1.0");
-            http.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
-
             string url = $"https://api.github.com/repos/gradbradice/fh6-livery-gallery/releases/latest";
-            string json = await http.GetStringAsync(url, ct);
+            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            timeoutCts.CancelAfter(TimeSpan.FromSeconds(10));
+            string json = await _http.GetStringAsync(url, timeoutCts.Token);
 
             var release = JsonSerializer.Deserialize<AppGitHubReleaseEntry>(json, JsonSettings.GitHubDeserializeOptions);
             if (release?.TagName is null) return new AppUpdateCheckResult(false, null, null, null);
@@ -26,8 +30,9 @@ internal static class AppUpdateCheckService
 
             return new AppUpdateCheckResult(isNewer, latest, release.HtmlUrl, release.Body);
         }
-        catch
+        catch (Exception ex)
         {
+            AppLogger.LogError("Failed to check for updates", ex);
             return new AppUpdateCheckResult(false, null, null, null);
         }
     }

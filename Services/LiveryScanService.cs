@@ -59,9 +59,10 @@ internal partial class LiveryScanService
                 cacheEntry = TryReuseOrParse(folder, oldCache, progress, done, total, out bool wasReused);
                 if (wasReused) reused++; else parsed++;
             }
-            catch
+            catch (Exception ex)
             {
                 errors++;
+                AppLogger.LogErrorThrottled(folder, $"Scan error: {Path.GetFileName(folder)}", ex);
             }
 
             if (cacheEntry is not null)
@@ -75,8 +76,16 @@ internal partial class LiveryScanService
 
         MarkDuplicates(entries);
 
-        progress?.Report(Strings.LoadingSavingCache);
-        _appCacheService.Save(newCache);
+        bool cacheChanged = oldCache.Count != newCache.Count
+            || newCache.Any(kv => !oldCache.TryGetValue(kv.Key, out var old) || !ReferenceEquals(old, kv.Value));
+
+        if (cacheChanged)
+        {
+            progress?.Report(Strings.LoadingSavingCache);
+            _appCacheService.Save(newCache);
+        }
+
+        CleanupOrphanedThumbnails(newCache);
 
         return new LiveryScanEntry
         {
@@ -88,6 +97,49 @@ internal partial class LiveryScanService
         };
     }
 
+    private void CleanupOrphanedThumbnails(Dictionary<string, LiveryCacheEntry> newCache)
+    {
+        try
+        {
+            var referenced = newCache.Values
+                .Select(e => e.ThumbnailFile)
+                .OfType<string>()
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var file in Directory.EnumerateFiles(_appCacheService.ThumbsDir, "*.png"))
+            {
+                if (referenced.Contains(Path.GetFileName(file))) continue;
+
+                try
+                {
+                    File.Delete(file);
+                }
+                catch (Exception ex)
+                {
+                    AppLogger.LogErrorThrottled(file, $"Failed to delete orphaned preview '{file}'", ex);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogErrorThrottled(_appCacheService.ThumbsDir, "Failed to clear unused previews", ex);
+        }
+    }
+
+    private sealed record LiveryFileHashes(
+        string Header,
+        string SourceThumbnail,
+        string? CLivery,
+        byte[] HeaderData,
+        byte[]? CLiveryBytes,
+        string? SourceThumbnailPath,
+        long HeaderLength,
+        DateTime HeaderLastWriteUtc,
+        long SourceThumbLength,
+        DateTime SourceThumbLastWriteUtc,
+        long CLiveryLength,
+        DateTime CLiveryLastWriteUtc);
+
     private LiveryCacheEntry TryReuseOrParse(
         string folder,
         Dictionary<string, LiveryCacheEntry> oldCache,
@@ -96,60 +148,193 @@ internal partial class LiveryScanService
         int total,
         out bool wasReused)
     {
+        bool found = oldCache.TryGetValue(folder, out var existing);
+        if (found && CanReuseCacheByStamp(folder, existing!))
+        {
+            wasReused = true;
+            return existing!;
+        }
+
+        var hashes = CalculateFileHashes(folder, existing?.CLiveryHash);
+
+        if (CanReuseCache(existing, found, hashes))
+        {
+            wasReused = true;
+            return RefreshStampsIfNeeded(existing!, hashes);
+        }
+
+        wasReused = false;
+        progress?.Report(string.Format(Strings.ParsingProgress, done, total, Path.GetFileName(folder)));
+        return ParseLivery(folder, hashes);
+    }
+
+    private static LiveryCacheEntry RefreshStampsIfNeeded(LiveryCacheEntry existing, LiveryFileHashes hashes)
+    {
+        if (existing.HeaderLength == hashes.HeaderLength
+            && existing.HeaderLastWriteUtc == hashes.HeaderLastWriteUtc
+            && existing.SourceThumbLength == hashes.SourceThumbLength
+            && existing.SourceThumbLastWriteUtc == hashes.SourceThumbLastWriteUtc
+            && existing.CLiveryLength == hashes.CLiveryLength
+            && existing.CLiveryLastWriteUtc == hashes.CLiveryLastWriteUtc)
+        {
+            return existing;
+        }
+
+        return existing with
+        {
+            HeaderLength = hashes.HeaderLength,
+            HeaderLastWriteUtc = hashes.HeaderLastWriteUtc,
+            SourceThumbLength = hashes.SourceThumbLength,
+            SourceThumbLastWriteUtc = hashes.SourceThumbLastWriteUtc,
+            CLiveryLength = hashes.CLiveryLength,
+            CLiveryLastWriteUtc = hashes.CLiveryLastWriteUtc,
+        };
+    }
+
+    private bool CanReuseCacheByStamp(string folder, LiveryCacheEntry existing)
+    {
+        if (existing.CLiveryHash is null || existing.SectionCounts is null) return false;
+
+        string headerPath = Path.Combine(folder, "header");
+        if (!TryGetStamp(headerPath, out long headerLen, out DateTime headerMtime)) return false;
+        if (headerLen != existing.HeaderLength || headerMtime != existing.HeaderLastWriteUtc) return false;
+
+        string? thumbSource = ThumbnailService.FindSourceThumbnail(folder);
+        if (thumbSource is null)
+        {
+            if (existing.ThumbnailFile is not null) return false;
+        }
+        else
+        {
+            if (existing.ThumbnailFile is null) return false;
+            if (!TryGetStamp(thumbSource, out long thumbLen, out DateTime thumbMtime)) return false;
+            if (thumbLen != existing.SourceThumbLength || thumbMtime != existing.SourceThumbLastWriteUtc) return false;
+            if (!File.Exists(Path.Combine(_appCacheService.ThumbsDir, existing.ThumbnailFile))) return false;
+        }
+
+        string cLiveryPath = Path.Combine(folder, "C_livery");
+        if (!TryGetStamp(cLiveryPath, out long cLiveryLen, out DateTime cLiveryMtime)) return false;
+        if (cLiveryLen != existing.CLiveryLength || cLiveryMtime != existing.CLiveryLastWriteUtc) return false;
+
+        return true;
+    }
+
+    private static bool TryGetStamp(string path, out long length, out DateTime lastWriteUtc)
+    {
+        try
+        {
+            var info = new FileInfo(path);
+            if (!info.Exists) { length = 0; lastWriteUtc = default; return false; }
+            length = info.Length;
+            lastWriteUtc = info.LastWriteTimeUtc;
+            return true;
+        }
+        catch
+        {
+            length = 0;
+            lastWriteUtc = default;
+            return false;
+        }
+    }
+
+    private LiveryFileHashes CalculateFileHashes(string folder, string? oldCLiveryHash)
+    {
         string headerPath = Path.Combine(folder, "header");
         byte[] headerData = File.ReadAllBytes(headerPath);
         string headerHash = Convert.ToHexStringLower(SHA256.HashData(headerData));
+        var headerInfo = new FileInfo(headerPath);
 
         string? thumbSource = ThumbnailService.FindSourceThumbnail(folder);
         string sourceThumbHash = "";
+        long thumbLength = 0;
+        DateTime thumbLastWriteUtc = default;
         if (thumbSource is not null)
         {
             try
             {
-                sourceThumbHash = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(thumbSource)));
+                using var thumbStream = File.OpenRead(thumbSource);
+                sourceThumbHash = Convert.ToHexStringLower(SHA256.HashData(thumbStream));
+                var thumbInfo = new FileInfo(thumbSource);
+                thumbLength = thumbInfo.Length;
+                thumbLastWriteUtc = thumbInfo.LastWriteTimeUtc;
             }
-            catch
+            catch (Exception ex)
             {
-
+                AppLogger.LogErrorThrottled(thumbSource, $"Failed to read preview '{thumbSource}'", ex);
             }
         }
 
         string cLiveryPath = Path.Combine(folder, "C_livery");
         byte[]? cLiveryBytes = null;
         string? cLiveryHash = null;
+        long cLiveryLength = 0;
+        DateTime cLiveryLastWriteUtc = default;
         if (File.Exists(cLiveryPath))
         {
             try
             {
-                cLiveryBytes = File.ReadAllBytes(cLiveryPath);
-                cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryBytes));
-            }
-            catch
-            {
+                var cLiveryInfo = new FileInfo(cLiveryPath);
+                cLiveryLength = cLiveryInfo.Length;
+                cLiveryLastWriteUtc = cLiveryInfo.LastWriteTimeUtc;
+                using var cLiveryStream = File.OpenRead(cLiveryPath);
+                cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryStream));
 
+                if (cLiveryHash != oldCLiveryHash)
+                {
+                    cLiveryStream.Position = 0;
+                    using var ms = new MemoryStream(checked((int)cLiveryLength));
+                    cLiveryStream.CopyTo(ms);
+                    cLiveryBytes = ms.ToArray();
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogErrorThrottled(cLiveryPath, $"Failed to read '{cLiveryPath}'", ex);
             }
         }
 
+        return new LiveryFileHashes(
+            headerHash, sourceThumbHash, cLiveryHash, headerData, cLiveryBytes, thumbSource,
+            headerInfo.Length, headerInfo.LastWriteTimeUtc,
+            thumbLength, thumbLastWriteUtc,
+            cLiveryLength, cLiveryLastWriteUtc);
+    }
 
-        if (oldCache.TryGetValue(folder, out var existing)
-            && existing.HeaderHash == headerHash
-            && existing.SourceThumbHash == sourceThumbHash
-            && existing.CLiveryHash == cLiveryHash
+    private bool CanReuseCache(LiveryCacheEntry? existing, bool found, LiveryFileHashes hashes)
+    {
+        if (!found || existing is null) return false;
+
+        bool thumbnailValid = hashes.SourceThumbnailPath is null
+            ? existing.ThumbnailFile is null
+            : existing.ThumbnailFile is not null
+                && File.Exists(Path.Combine(_appCacheService.ThumbsDir, existing.ThumbnailFile));
+
+        return existing.HeaderHash == hashes.Header
+            && existing.SourceThumbHash == hashes.SourceThumbnail
+            && existing.CLiveryHash == hashes.CLivery
             && existing.CLiveryHash is not null
             && existing.SectionCounts is not null
-            && (existing.ThumbnailFile is null || File.Exists(Path.Combine(_appCacheService.ThumbsDir, existing.ThumbnailFile))))
-        {
-            wasReused = true;
-            return existing;
-        }
+            && thumbnailValid;
+    }
 
-        wasReused = false;
-        progress?.Report(string.Format(Strings.ParsingProgress, done, total, Path.GetFileName(folder)));
-
+    private LiveryCacheEntry ParseLivery(string folder, LiveryFileHashes hashes)
+    {
         string folderName = Path.GetFileName(folder);
         var (carId, tsRaw) = ParseFolderName(folderName);
 
-        var (_, parsedHeader) = NativeHeaderParser.TryParseHeader(headerData);
+        var (_, parsedHeader) = NativeHeaderParser.TryParseHeader(hashes.HeaderData);
+        byte[]? cLiveryBytes = hashes.CLiveryBytes;
+        if (cLiveryBytes is null && hashes.CLivery is not null)
+        {
+            try
+            {
+                cLiveryBytes = File.ReadAllBytes(Path.Combine(folder, "C_livery"));
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogErrorThrottled(folder, $"Failed to re-read C_livery in '{folder}'", ex);
+            }
+        }
 
         uint[]? sectionCounts = null;
         if (cLiveryBytes is not null)
@@ -160,9 +345,9 @@ internal partial class LiveryScanService
                 if (liveryResult == LiveryParseResult.Ok && livery is not null)
                     sectionCounts = [.. livery.SectionCounts];
             }
-            catch
+            catch (Exception ex)
             {
-
+                AppLogger.LogErrorThrottled(folder, $"Failed to parse C_livery in '{folder}'", ex);
             }
         }
 
@@ -174,11 +359,12 @@ internal partial class LiveryScanService
         DateTime? downloadDate = tsRaw is not null ? TryDecodeTimestamp(tsRaw) : null;
 
         string? thumbnailFile = null;
-        if (thumbSource is not null)
+        if (hashes.SourceThumbnailPath is not null)
         {
-            string candidate = SanitiseFileName(folderName) + "_" + StableHash(folder) + ".png";
+            string hashSuffix = hashes.SourceThumbnail.Length >= 12 ? hashes.SourceThumbnail[..12] : hashes.SourceThumbnail;
+            string candidate = SanitiseFileName(folderName) + "_" + StableHash(folder) + "_" + hashSuffix + ".png";
             string destPath = Path.Combine(_appCacheService.ThumbsDir, candidate);
-            if (ThumbnailService.GenerateAndSave(thumbSource, destPath))
+            if (ThumbnailService.GenerateAndSave(hashes.SourceThumbnailPath, destPath))
                 thumbnailFile = candidate;
         }
 
@@ -193,9 +379,15 @@ internal partial class LiveryScanService
             CreatedMonth = month,
             DownloadDate = downloadDate,
             ThumbnailFile = thumbnailFile,
-            HeaderHash = headerHash,
-            SourceThumbHash = sourceThumbHash,
-            CLiveryHash = cLiveryHash,
+            HeaderHash = hashes.Header,
+            SourceThumbHash = hashes.SourceThumbnail,
+            CLiveryHash = hashes.CLivery,
+            HeaderLength = hashes.HeaderLength,
+            HeaderLastWriteUtc = hashes.HeaderLastWriteUtc,
+            SourceThumbLength = hashes.SourceThumbLength,
+            SourceThumbLastWriteUtc = hashes.SourceThumbLastWriteUtc,
+            CLiveryLength = hashes.CLiveryLength,
+            CLiveryLastWriteUtc = hashes.CLiveryLastWriteUtc,
             SectionCounts = sectionCounts,
         };
     }
@@ -220,6 +412,7 @@ internal partial class LiveryScanService
             ThumbnailPath = c.ThumbnailFile is not null 
                 ? Path.Combine(_appCacheService.ThumbsDir, c.ThumbnailFile) 
                 : null,
+            HasThumbnail = c.ThumbnailFile is not null,
             Tags = _tagService.GetTags(c.FolderName),
             IsFavorite = _favoriteService.IsFavorite(c.FolderName),
             CLiveryHash = c.CLiveryHash,

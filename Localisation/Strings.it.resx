@@ -428,4 +428,13 @@ Sceglierla manualmente?
   <data name="ThemeSystemLabel" xml:space="preserve">
     <value>Sistema</value>
   </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Scansione</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Aggiorna automaticamente le livree</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Aggiorna le livree al clic sul pulsante</value>
+  </data>
 </root>

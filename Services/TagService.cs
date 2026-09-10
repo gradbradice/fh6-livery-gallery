@@ -7,7 +7,7 @@ internal class TagService
 {
     private readonly SaveService _saveService;
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "tags.json");
-    private static Dictionary<string, List<string>> _data = [];
+    private Dictionary<string, List<string>> _data = [];
 
     public TagService()
     {
@@ -17,6 +17,8 @@ internal class TagService
 
     public List<string> GetTags(string folderName) =>
         _data.TryGetValue(folderName, out var tags) ? [.. tags] : [];
+
+    public void Flush() => _saveService.Flush();
 
     public void SetTags(string folderName, List<string> tags)
     {
@@ -35,16 +37,16 @@ internal class TagService
     {
         try
         {
-            string json = JsonSerializer.Serialize(_data, JsonSettings.DefaultDeserializeOptions);
+            string json = JsonSerializer.Serialize(_data, JsonSettings.DefaultOptions);
             _saveService.ScheduleSave(json, _path);
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError("Failed to serialise tags", ex);
         }
     }
 
-    private static void Load()
+    private void Load()
     {
         try
         {
@@ -55,9 +57,10 @@ internal class TagService
                 if (data != null) _data = data;
             }
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError("Failed to load tags", ex);
+            AtomicFile.TryBackupCorruptedFile(_path);
         }
     }
 }

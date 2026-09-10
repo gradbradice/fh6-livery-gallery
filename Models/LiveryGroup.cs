@@ -3,6 +3,15 @@ using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.Models;
 
+internal enum LiveryGroupSpecialKind
+{
+    None,
+    DownloadMonth,
+    UnknownDownloadDate,
+    UnknownManufacturer,
+    AllLiveries
+}
+
 internal class LiveryGroup : INotifyPropertyChanged, IDisposable
 {
     private string _key = "";
@@ -53,6 +62,8 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
 
     public bool IsFavoritesGroup { get; init; }
 
+    public LiveryGroupSpecialKind SpecialKind { get; init; } = LiveryGroupSpecialKind.None;
+    public DateTime? SpecialMonth { get; init; }
     private double _groupWidth = 1200;
     public double GroupWidth
     {
