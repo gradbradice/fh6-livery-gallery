@@ -8,6 +8,7 @@ internal class TagService
     private readonly SaveService _saveService;
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "tags.json");
     private Dictionary<string, List<string>> _data = [];
+    private readonly Lock _lock = new();
 
     public TagService()
     {
@@ -15,20 +16,21 @@ internal class TagService
         Load();
     }
 
-    public List<string> GetTags(string folderName) =>
-        _data.TryGetValue(folderName, out var tags) ? [.. tags] : [];
+    public List<string> GetTags(string folderName)
+    {
+        lock (_lock) return _data.TryGetValue(folderName, out var tags) ? [.. tags] : [];
+    }
 
     public void Flush() => _saveService.Flush();
 
     public void SetTags(string folderName, List<string> tags)
     {
-        if (tags.Count == 0)
+        lock (_lock)
         {
-            _data.Remove(folderName);
-        }
-        else
-        {
-            _data[folderName] = tags;
+            if (tags.Count == 0)
+                _data.Remove(folderName);
+            else
+                _data[folderName] = tags;
         }
         Save();
     }
@@ -37,7 +39,9 @@ internal class TagService
     {
         try
         {
-            string json = JsonSerializer.Serialize(_data, JsonSettings.DefaultOptions);
+            Dictionary<string, List<string>> snapshot;
+            lock (_lock) snapshot = new Dictionary<string, List<string>>(_data);
+            string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
             _saveService.ScheduleSave(json, _path);
         }
         catch (Exception ex)

@@ -305,7 +305,25 @@ internal partial class MainWindow : Window
             var result = await _scanService.ScanAsync(saveDataPath, progress, cts.Token);
             if (cts.IsCancellationRequested) return;
 
-            _allEntries = result.Entries;
+            var previousByPath = _allEntries.ToDictionary(e => e.FolderPath);
+            var mergedEntries = new List<LiveryEntry>(result.Entries.Count);
+            foreach (var newEntry in result.Entries)
+            {
+                if (previousByPath.TryGetValue(newEntry.FolderPath, out var previous))
+                {
+                    newEntry.IsFavorite = previous.IsFavorite;
+                    newEntry.Tags = previous.Tags;
+
+                    if (AreEntriesEquivalent(previous, newEntry))
+                    {
+                        mergedEntries.Add(previous);
+                        continue;
+                    }
+                }
+                mergedEntries.Add(newEntry);
+            }
+
+            _allEntries = mergedEntries;
 
             _lastScanResult = result;
             RenderStatus();

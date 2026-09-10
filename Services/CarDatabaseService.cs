@@ -14,6 +14,7 @@ internal class CarDatabaseService
 
     private readonly HttpClient _http;
     private Dictionary<int, CarInfo> _byId = [];
+    private readonly Lock _lock = new();
     public int Count => _byId.Count;
     public bool HasLocalData { get; private set; }
     public string? LastError { get; private set; }
@@ -23,7 +24,10 @@ internal class CarDatabaseService
         _http = http;
     }
 
-    public CarInfo? Get(int carId) => _byId.TryGetValue(carId, out var c) ? c : null;
+    public CarInfo? Get(int carId)
+    {
+        lock (_lock) return _byId.TryGetValue(carId, out var c) ? c : null;
+    }
 
     public void LoadLocal()
     {
@@ -34,7 +38,7 @@ internal class CarDatabaseService
             var list = ParseJson(json);
             if (list.Count > 0)
             {
-                _byId = BuildIndex(list);
+                lock (_lock) _byId = BuildIndex(list);
                 HasLocalData = true;
             }
         }

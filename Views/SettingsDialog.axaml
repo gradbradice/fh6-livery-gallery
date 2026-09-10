@@ -80,21 +80,21 @@
 
             <TextBlock x:Name="SavePathLabel" FontSize="12" Margin="0,0,0,6"
                        Foreground="{DynamicResource TextSecondaryBrush}" />
-            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+            <Grid ColumnDefinitions="*,Auto">
                 <TextBox x:Name="SavePathBox" Grid.Column="0" Classes="search" FontSize="13"
                          Margin="0,0,8,0" TextChanged="PathBox_TextChanged" />
                 <Button x:Name="SaveBrowseButton" Grid.Column="1" Classes="secondary" Width="44"
                         Content="..." Click="SaveBrowseButton_Click" />
             </Grid>
 
-            <TextBlock x:Name="HintText" FontSize="11" Margin="0,10,0,0"
+            <TextBlock x:Name="HintText" FontSize="11" Margin="0,10,0,20"
                        HorizontalAlignment="Stretch" MaxWidth="500"
                        Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" />
 
-			<TextBlock x:Name="ScanningSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
+            <TextBlock x:Name="ScanningSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
                        Foreground="{DynamicResource TextSecondaryBrush}" />
-			<CheckBox x:Name="AutoRefreshLiveriesCheckBox" Margin="0,0,0,10" Click="ScanOption_Click" />
-			<CheckBox x:Name="RefreshOnButtonClickCheckBox" Click="ScanOption_Click" />
+            <CheckBox x:Name="AutoRefreshLiveriesCheckBox" Margin="0,0,0,10" Click="ScanOption_Click" />
+            <CheckBox x:Name="RefreshOnButtonClickCheckBox" Click="ScanOption_Click" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
                 <Button x:Name="ExitButton" Classes="secondary" MinWidth="120" Margin="0,0,10,0" Click="ExitButton_Click" />

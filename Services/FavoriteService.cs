@@ -7,7 +7,8 @@ internal class FavoriteService
 {
     private readonly SaveService _saveService;
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "favorites.json");
-    private HashSet<string> _favorites = new(StringComparer.OrdinalIgnoreCase); 
+    private HashSet<string> _favorites = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Lock _lock = new();
 
     public FavoriteService()
     {
@@ -15,13 +16,19 @@ internal class FavoriteService
         Load();
     }
 
-    public bool IsFavorite(string folderName) => _favorites.Contains(folderName);
+    public bool IsFavorite(string folderName)
+    {
+        lock (_lock) return _favorites.Contains(folderName);
+    }
 
     public void Flush() => _saveService.Flush();
 
     public void SetFavorite(string folderName, bool isFavorite)
     {
-        _ = isFavorite ? _favorites.Add(folderName) : _favorites.Remove(folderName);
+        lock (_lock)
+        {
+            _ = isFavorite ? _favorites.Add(folderName) : _favorites.Remove(folderName);
+        }
         Save();
     }
 
@@ -29,7 +36,9 @@ internal class FavoriteService
     {
         try
         {
-            string json = JsonSerializer.Serialize(_favorites.ToList(), JsonSettings.DefaultOptions);
+            List<string> snapshot;
+            lock (_lock) snapshot = _favorites.ToList();
+            string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
             _saveService.ScheduleSave(json, _path);
         }
         catch (Exception ex)

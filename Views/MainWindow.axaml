@@ -378,7 +378,7 @@
                 <ItemsControl x:Name="GroupsHost" ItemTemplate="{StaticResource GroupTemplate}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-							<StackPanel Orientation="Vertical" />
+                            <StackPanel Orientation="Vertical" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
