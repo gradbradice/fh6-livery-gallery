@@ -16,4 +16,6 @@ internal class AppSettingsData
     public string? GameInstallPath { get; set; }
     public bool AutoRefreshLiveries { get; set; } = true;
     public bool RefreshLiveriesOnButtonClick { get; set; } = false;
+    public int? LastKnownContainerId { get; set; }
+    public string? LastKnownContainerSavePath { get; set; }
 }

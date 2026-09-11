@@ -125,7 +125,8 @@
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
     <value>刷新(重新扫描更改)</value>
-  </data>  <data name="SearchPlaceholder" xml:space="preserve">
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
     <value>按车辆(厂牌、车型、年份)、涂装名称或作者搜索…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
@@ -280,7 +281,8 @@
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>中文（简体）</value>
-  </data>  <data name="MinimizeTooltip" xml:space="preserve">
+  </data>
+  <data name="MinimizeTooltip" xml:space="preserve">
     <value>最小化</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
@@ -297,12 +299,14 @@
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>标头解析库：{0}</value>
-  </data>  <data name="SettingsToggleTooltip" xml:space="preserve">
+  </data>
+  <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>设置</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>游戏路径</value>
-  </data>  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+  </data>
+  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>选择游戏安装文件夹</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
@@ -337,7 +341,8 @@
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>统计</value>
-  </data>  <data name="StatsTotalLiveries" xml:space="preserve">
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
     <value>涂装总数</value>
   </data>
   <data name="StatsFavoriteManufacturer" xml:space="preserve">
@@ -378,7 +383,8 @@
   </data>
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>仅重复</value>
-  </data>  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>可能重复</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
@@ -419,7 +425,8 @@
   </data>
   <data name="ButtonBack" xml:space="preserve">
     <value>返回</value>
-  </data>  <data name="ButtonSaveAndExit" xml:space="preserve">
+  </data>
+  <data name="ButtonSaveAndExit" xml:space="preserve">
     <value>保存并退出</value>
   </data>
   <data name="ButtonExitWithoutSaving" xml:space="preserve">
@@ -436,5 +443,29 @@
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>点击刷新按钮时也刷新彩绘</value>
+  </data>
+  <data name="SettingsSaveFailedTitle" xml:space="preserve">
+    <value>保存失败</value>
+  </data>
+  <data name="SettingsSaveFailedNotice" xml:space="preserve">
+    <value>无法将设置写入磁盘。更改未生效。请重试保存。</value>
+  </data>
+  <data name="StatsPopularManufacturer" xml:space="preserve">
+    <value>热门制造商</value>
+  </data>
+  <data name="StatsPopularModel" xml:space="preserve">
+    <value>热门车型</value>
+  </data>
+  <data name="StatsPopularCar" xml:space="preserve">
+    <value>热门车辆</value>
+  </data>
+  <data name="StatsPopularAuthor" xml:space="preserve">
+    <value>热门作者</value>
+  </data>
+  <data name="StatsFavoriteModel" xml:space="preserve">
+    <value>最爱车型</value>
+  </data>
+  <data name="StatsFavoriteCar" xml:space="preserve">
+    <value>最爱车辆</value>
   </data>
 </root>

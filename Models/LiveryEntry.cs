@@ -44,12 +44,12 @@ internal class LiveryEntry : INotifyPropertyChanged
     }
 
     private List<string> _tags = [];
-    public List<string> Tags
+    public IReadOnlyList<string> Tags
     {
         get => _tags;
         set
         {
-            _tags = value;
+            _tags = [.. value];
             OnPropertyChanged();
         }
     }
@@ -82,7 +82,7 @@ internal class LiveryEntry : INotifyPropertyChanged
     {
         get
         {
-            if (DownloadDate is { } d) return d.ToString("dd.MM.yyyy", AppLocalisationService.Culture);
+            if (DownloadDate is { } d) return d.ToString("d", AppLocalisationService.Culture);
             if (CreatedYear is > 0 && CreatedMonth is >= 1 and <= 12)
                 return new DateTime(CreatedYear.Value, CreatedMonth.Value, 1)
                     .ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture);
@@ -95,10 +95,9 @@ internal class LiveryEntry : INotifyPropertyChanged
     {
         get
         {
-            if (CarKnown && _searchHaystack is not null) return _searchHaystack;
-            string haystack = $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}";
-            if (CarKnown) _searchHaystack = haystack;
-            return haystack;
+            if (_searchHaystack is not null) return _searchHaystack;
+            _searchHaystack = $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}";
+            return _searchHaystack;
         }
     }
 
@@ -116,6 +115,7 @@ internal class LiveryEntry : INotifyPropertyChanged
 
     public void RefreshLocalizedText()
     {
+        _searchHaystack = null;
         OnPropertyChanged(nameof(CarManufacturer));
         OnPropertyChanged(nameof(CarModelName));
         OnPropertyChanged(nameof(DateDisplay));

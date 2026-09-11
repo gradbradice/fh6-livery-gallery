@@ -39,27 +39,37 @@ internal static class LocalSaveService
         return GetListDataDirs(path, DataType.Livery);
     }
 
-    public static string? GetSaveDataPath(string savePath)
+    public static string? GetSaveDataPath(string savePath) => GetSaveDataPathWithId(savePath, null).Path;
+
+    public static (string? Path, int? ContainerId) GetSaveDataPathWithId(string savePath, int? lastKnownContainerId)
     {
         try
         {
-            if (!Directory.Exists(savePath)) return null;
+            if (!Directory.Exists(savePath)) return (null, null);
 
-            var numDirs = Directory.GetDirectories(savePath)
-                    .Where(d => Path.GetFileName(d).Length > 0 && Path.GetFileName(d).All(char.IsDigit))
-                    .OrderByDescending(Directory.GetLastWriteTime);
-
-            foreach (var dir in numDirs)
+            if (lastKnownContainerId is { } lastId)
             {
-                string candidate = Path.Combine(dir, "ContainersRoot");
-                if (Directory.Exists(candidate)) return candidate;
+                string candidateDir = Path.Combine(savePath, (lastId + 1).ToString());
+                string candidate = Path.Combine(candidateDir, "ContainersRoot");
+                if (Directory.Exists(candidate)) return (candidate, lastId + 1);
             }
-            return null;
+
+            var candidates = Directory.GetDirectories(savePath)
+                .Where(d => Path.GetFileName(d).Length > 0 && Path.GetFileName(d).All(char.IsDigit))
+                .Select(d => (Dir: d, Root: Path.Combine(d, "ContainersRoot")))
+                .Where(x => Directory.Exists(x.Root))
+                .OrderByDescending(x => Directory.GetLastWriteTime(x.Root));
+
+            var best = candidates.FirstOrDefault();
+            if (best.Root is null) return (null, null);
+
+            int? foundId = int.TryParse(Path.GetFileName(best.Dir), out int id) ? id : null;
+            return (best.Root, foundId);
         }
         catch (Exception ex)
         {
             AppLogger.LogError($"Failed to determine the save data path in '{savePath}'", ex);
-            return null;
+            return (null, null);
         }
     }
 
@@ -80,21 +90,13 @@ internal static class LocalSaveService
             return result;
         }
 
-        try
+        foreach (var dir in Directory.GetDirectories(path))
         {
-            foreach(var dir in Directory.GetDirectories(path))
-            {
-                string name = Path.GetFileName(dir);
-                if (!name.StartsWith(dataDirName, StringComparison.Ordinal)) continue;
-                if (!File.Exists(Path.Combine(dir, "header"))) continue;
-                if (!File.Exists(Path.Combine(dir, dataFileName))) continue;
-                result.Add(name);
-            }
-        }
-        catch
-        {
-            // do not log. this method is called on every automatic scan
-            // once per 5 seconds
+            string name = Path.GetFileName(dir);
+            if (!name.StartsWith(dataDirName, StringComparison.Ordinal)) continue;
+            if (!File.Exists(Path.Combine(dir, "header"))) continue;
+            if (!File.Exists(Path.Combine(dir, dataFileName))) continue;
+            result.Add(name);
         }
         return result;
     }

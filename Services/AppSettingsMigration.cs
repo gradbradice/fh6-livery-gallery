@@ -5,9 +5,17 @@ namespace LiveryGallery.Services;
 
 internal static class AppSettingsMigration
 {
-    public static void Apply(AppSettingsData data)
+    public static bool Apply(AppSettingsData data)
     {
+        bool changed = false;
+
         // DarkTheme (<= 1.1.0) → ThemeMode
-        data.ThemeMode ??= data.DarkTheme ? AppThemeMode.Dark : AppThemeMode.Light;
+        if (data.ThemeMode is null)
+        {
+            data.ThemeMode = data.DarkTheme ? AppThemeMode.Dark : AppThemeMode.Light;
+            changed = true;
+        }
+
+        return changed;
     }
 }

@@ -125,7 +125,8 @@
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
     <value>Aggiorna (rianalizza le modifiche)</value>
-  </data>  <data name="SearchPlaceholder" xml:space="preserve">
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
     <value>Cerca per veicolo (marca, modello, anno), nome della livrea o autore…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
@@ -280,7 +281,8 @@ Sceglierla manualmente?
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>Italiano</value>
-  </data>  <data name="MinimizeTooltip" xml:space="preserve">
+  </data>
+  <data name="MinimizeTooltip" xml:space="preserve">
     <value>Riduci a icona</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
@@ -297,12 +299,14 @@ Sceglierla manualmente?
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>Libreria di analisi dell'header: {0}</value>
-  </data>  <data name="SettingsToggleTooltip" xml:space="preserve">
+  </data>
+  <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Impostazioni</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>Percorso del gioco</value>
-  </data>  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+  </data>
+  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>Seleziona la cartella di installazione del gioco</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
@@ -337,7 +341,8 @@ Sceglierla manualmente?
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>Statistiche</value>
-  </data>  <data name="StatsTotalLiveries" xml:space="preserve">
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
     <value>Totale livree</value>
   </data>
   <data name="StatsFavoriteManufacturer" xml:space="preserve">
@@ -378,7 +383,8 @@ Sceglierla manualmente?
   </data>
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Solo duplicati</value>
-  </data>  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Possibile duplicato</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
@@ -419,7 +425,8 @@ Sceglierla manualmente?
   </data>
   <data name="ButtonBack" xml:space="preserve">
     <value>Indietro</value>
-  </data>  <data name="ButtonSaveAndExit" xml:space="preserve">
+  </data>
+  <data name="ButtonSaveAndExit" xml:space="preserve">
     <value>Salva ed esci</value>
   </data>
   <data name="ButtonExitWithoutSaving" xml:space="preserve">
@@ -436,5 +443,29 @@ Sceglierla manualmente?
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>Aggiorna le livree al clic sul pulsante</value>
+  </data>
+  <data name="SettingsSaveFailedTitle" xml:space="preserve">
+    <value>Salvataggio non riuscito</value>
+  </data>
+  <data name="SettingsSaveFailedNotice" xml:space="preserve">
+    <value>Impossibile scrivere le impostazioni su disco. Le modifiche non sono state applicate. Riprova a salvare.</value>
+  </data>
+  <data name="StatsPopularManufacturer" xml:space="preserve">
+    <value>Produttore popolare</value>
+  </data>
+  <data name="StatsPopularModel" xml:space="preserve">
+    <value>Modello popolare</value>
+  </data>
+  <data name="StatsPopularCar" xml:space="preserve">
+    <value>Auto popolare</value>
+  </data>
+  <data name="StatsPopularAuthor" xml:space="preserve">
+    <value>Autore popolare</value>
+  </data>
+  <data name="StatsFavoriteModel" xml:space="preserve">
+    <value>Modello preferito</value>
+  </data>
+  <data name="StatsFavoriteCar" xml:space="preserve">
+    <value>Auto preferita</value>
   </data>
 </root>

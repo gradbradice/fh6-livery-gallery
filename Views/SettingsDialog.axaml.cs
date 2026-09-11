@@ -38,7 +38,7 @@ internal partial class SettingsDialog : Window
         SelectThemeRadio(_savedThemeMode);
         SelectLanguageInCombo(_savedLanguage);
 
-        string? gameInitial = _settings.GameInstallPath ?? GameDiscoveryService.TryFindGamePath();
+        string? gameInitial = _settings.GameInstallPath;
         string? saveInitial = _settings.SavePath ?? resolvedSavePath ?? "";
         _saveInitialWasAutoDiscovered = string.IsNullOrEmpty(_settings.SavePath);
         _savedGamePath = gameInitial ?? "";
@@ -55,6 +55,18 @@ internal partial class SettingsDialog : Window
         UpdateSaveButtonState();
 
         Closing += SettingsDialog_Closing;
+        if (gameInitial is null)
+            _ = PopulateDiscoveredGamePathAsync();
+    }
+
+    private async Task PopulateDiscoveredGamePathAsync()
+    {
+        string? discovered = await GameDiscoveryService.TryFindGamePathAsync();
+        if (discovered is null) return;
+        if (!string.IsNullOrEmpty(GamePathBox.Text)) return;
+
+        _savedGamePath = discovered;
+        GamePathBox.Text = discovered;
     }
 
     private void ApplyLocalizedTexts()
@@ -179,7 +191,7 @@ internal partial class SettingsDialog : Window
         return folder?.TryGetLocalPath();
     }
 
-    private bool PerformSave()
+    private async Task<bool> PerformSaveAsync()
     {
         AppThemeMode themeMode = GetSelectedThemeMode();
         AppLanguage languageValue = GetSelectedLanguage();
@@ -193,14 +205,6 @@ internal partial class SettingsDialog : Window
             return false;
         }
 
-        AppThemeService.ApplyTheme(themeMode);
-        if (languageValue != AppLocalisationService.AppLanguage)
-        {
-            AppLocalisationService.AppLanguage = languageValue;
-            ApplyLocalizedTexts();
-            (Owner as MainWindow)?.OnLanguageChanged();
-        }
-
         _settings.ThemeMode = themeMode;
         _settings.Language = languageValue;
         _settings.GameInstallPath = string.IsNullOrEmpty(gameValue) ? null : gameValue;
@@ -209,7 +213,21 @@ internal partial class SettingsDialog : Window
             : (string.IsNullOrEmpty(saveValue) ? null : saveValue);
         _settings.AutoRefreshLiveries = AutoRefreshLiveriesCheckBox.IsChecked == true;
         _settings.RefreshLiveriesOnButtonClick = RefreshOnButtonClickCheckBox.IsChecked == true;
-        AppSettingsService.SaveImmediate(_settings);
+
+        bool saved = await AppSettingsService.SaveImmediateAsync(_settings);
+        if (!saved)
+        {
+            await InfoDialog.ShowAsync(this, Strings.SettingsSaveFailedTitle, Strings.SettingsSaveFailedNotice);
+            return false;
+        }
+
+        AppThemeService.ApplyTheme(themeMode);
+        if (languageValue != AppLocalisationService.AppLanguage)
+        {
+            AppLocalisationService.AppLanguage = languageValue;
+            ApplyLocalizedTexts();
+            (Owner as MainWindow)?.OnLanguageChanged();
+        }
 
         if (saveValue != _initialSavePath) SavePathChanged = true;
 
@@ -223,11 +241,23 @@ internal partial class SettingsDialog : Window
         return true;
     }
 
-    private void SaveButton_Click(object? sender, RoutedEventArgs e) => PerformSave();
+    private async void SaveButton_Click(object? sender, RoutedEventArgs e) => await PerformSaveAsync();
 
     private async void ExitButton_Click(object? sender, RoutedEventArgs e) => await TryCloseAsync();
 
-    private void RequestClose(object? sender, RoutedEventArgs e) => _ = TryCloseAsync();
+    private void RequestClose(object? sender, RoutedEventArgs e) => _ = RunCloseSafelyAsync();
+
+    private async Task RunCloseSafelyAsync()
+    {
+        try
+        {
+            await TryCloseAsync();
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Unhandled exception while closing settings dialog", ex);
+        }
+    }
 
     private bool _isClosing;
 
@@ -250,7 +280,7 @@ internal partial class SettingsDialog : Window
                 case UnsavedChangesChoice.Back:
                     return;
                 case UnsavedChangesChoice.SaveAndExit:
-                    if (!PerformSave()) return;
+                    if (!await PerformSaveAsync()) return;
                     await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
                     break;
                 case UnsavedChangesChoice.ExitWithoutSaving:
@@ -273,6 +303,6 @@ internal partial class SettingsDialog : Window
         if (_forceClose) return;
 
         e.Cancel = true;
-        _ = TryCloseAsync();
+        _ = RunCloseSafelyAsync();
     }
 }

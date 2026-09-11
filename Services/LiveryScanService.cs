@@ -2,6 +2,7 @@
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
@@ -33,6 +34,20 @@ internal partial class LiveryScanService
     public Task<LiveryScanEntry> ScanAsync(string savePath, IProgress<string>? progress = null, CancellationToken ct = default) =>
         Task.Run(() => Scan(savePath, progress, ct), ct);
 
+    public Task<List<LiveryEntry>> RegenerateEntriesAsync(CancellationToken ct = default) =>
+        Task.Run(() =>
+        {
+            var cache = _appCacheService.Load();
+            var entries = new List<LiveryEntry>(cache.Count);
+            foreach (var cacheEntry in cache.Values)
+            {
+                ct.ThrowIfCancellationRequested();
+                entries.Add(ToEntry(cacheEntry));
+            }
+            MarkDuplicates(entries);
+            return entries;
+        }, ct);
+
     private LiveryScanEntry Scan(string savePath, IProgress<string>? progress, CancellationToken ct)
     {
         var oldCache = _appCacheService.Load();
@@ -41,28 +56,28 @@ internal partial class LiveryScanService
             .Select(name => Path.Combine(savePath, name))
             .ToList();
 
-        var newCache = new Dictionary<string, LiveryCacheEntry>(folders.Count);
-        var entries = new List<LiveryEntry>(folders.Count);
+        var newCache = new ConcurrentDictionary<string, LiveryCacheEntry>();
+        var entries = new ConcurrentBag<LiveryEntry>();
 
-        int reused = 0, parsed = 0, errors = 0;
+        int reused = 0, parsed = 0, errors = 0, done = 0;
         int total = folders.Count;
-        int done = 0;
 
-        foreach (var folder in folders)
+        Parallel.ForEach(folders, new ParallelOptions { CancellationToken = ct }, folder =>
         {
-            ct.ThrowIfCancellationRequested();
-            done++;
+            int myDone = Interlocked.Increment(ref done);
 
             LiveryCacheEntry? cacheEntry = null;
             try
             {
-                cacheEntry = TryReuseOrParse(folder, oldCache, progress, done, total, out bool wasReused);
-                if (wasReused) reused++; else parsed++;
+                cacheEntry = TryReuseOrParse(folder, oldCache, progress, myDone, total, out bool wasReused);
+                if (wasReused) Interlocked.Increment(ref reused); else Interlocked.Increment(ref parsed);
             }
             catch (Exception ex)
             {
-                errors++;
+                Interlocked.Increment(ref errors);
                 AppLogger.LogErrorThrottled(folder, $"Scan error: {Path.GetFileName(folder)}", ex);
+                if (oldCache.TryGetValue(folder, out var fallback))
+                    cacheEntry = fallback;
             }
 
             if (cacheEntry is not null)
@@ -70,26 +85,29 @@ internal partial class LiveryScanService
                 newCache[folder] = cacheEntry;
                 entries.Add(ToEntry(cacheEntry));
             }
-        }
+        });
 
-        int removed = oldCache.Keys.Except(newCache.Keys).Count();
+        var finalCache = new Dictionary<string, LiveryCacheEntry>(newCache);
 
-        MarkDuplicates(entries);
+        int removed = oldCache.Keys.Except(finalCache.Keys).Count();
 
-        bool cacheChanged = oldCache.Count != newCache.Count
-            || newCache.Any(kv => !oldCache.TryGetValue(kv.Key, out var old) || !ReferenceEquals(old, kv.Value));
+        var entriesList = entries.ToList();
+        MarkDuplicates(entriesList);
+
+        bool cacheChanged = oldCache.Count != finalCache.Count
+            || finalCache.Any(kv => !oldCache.TryGetValue(kv.Key, out var old) || !ReferenceEquals(old, kv.Value));
 
         if (cacheChanged)
         {
             progress?.Report(Strings.LoadingSavingCache);
-            _appCacheService.Save(newCache);
+            _appCacheService.Save(finalCache);
         }
 
-        CleanupOrphanedThumbnails(newCache);
+        CleanupOrphanedThumbnails(finalCache);
 
         return new LiveryScanEntry
         {
-            Entries = entries,
+            Entries = entriesList,
             ReusedFromCache = reused,
             Parsed = parsed,
             Errors = errors,
@@ -165,7 +183,7 @@ internal partial class LiveryScanService
 
         wasReused = false;
         progress?.Report(string.Format(Strings.ParsingProgress, done, total, Path.GetFileName(folder)));
-        return ParseLivery(folder, hashes);
+        return ParseLivery(folder, hashes, existing);
     }
 
     private static LiveryCacheEntry RefreshStampsIfNeeded(LiveryCacheEntry existing, LiveryFileHashes hashes)
@@ -317,7 +335,7 @@ internal partial class LiveryScanService
             && thumbnailValid;
     }
 
-    private LiveryCacheEntry ParseLivery(string folder, LiveryFileHashes hashes)
+    private LiveryCacheEntry ParseLivery(string folder, LiveryFileHashes hashes, LiveryCacheEntry? previous)
     {
         string folderName = Path.GetFileName(folder);
         var (carId, tsRaw) = ParseFolderName(folderName);
@@ -365,7 +383,14 @@ internal partial class LiveryScanService
             string candidate = SanitiseFileName(folderName) + "_" + StableHash(folder) + "_" + hashSuffix + ".png";
             string destPath = Path.Combine(_appCacheService.ThumbsDir, candidate);
             if (ThumbnailService.GenerateAndSave(hashes.SourceThumbnailPath, destPath))
+            {
                 thumbnailFile = candidate;
+            }
+            else if (previous?.ThumbnailFile is not null
+                && File.Exists(Path.Combine(_appCacheService.ThumbsDir, previous.ThumbnailFile)))
+            {
+                thumbnailFile = previous.ThumbnailFile;
+            }
         }
 
         return new LiveryCacheEntry
@@ -423,10 +448,9 @@ internal partial class LiveryScanService
     private static void MarkDuplicates(List<LiveryEntry> entries)
     {
         const int sectionCount = 11;
-
         var exactGroups = entries
             .Where(e => e.CLiveryHash is not null)
-            .GroupBy(e => (e.CarId, Author: e.Author.ToLowerInvariant(), e.CLiveryHash));
+            .GroupBy(e => (e.CarId, e.Author, e.CLiveryHash), CarIdAuthorHashComparer.Instance);
 
         foreach (var group in exactGroups)
         {
@@ -437,10 +461,34 @@ internal partial class LiveryScanService
 
         var candidateGroups = entries
             .Where(e => e.DuplicateStatus != DuplicateStatus.Duplicate && e.SectionCounts is { Count: sectionCount })
-            .GroupBy(e => (e.CarId, Author: e.Author.ToLowerInvariant()));
+            .GroupBy(e => (e.CarId, e.Author), CarIdAuthorComparer.Instance);
 
         foreach (var group in candidateGroups)
             MarkPossibleDuplicatesInGroup([.. group]);
+    }
+
+    private sealed class CarIdAuthorHashComparer : IEqualityComparer<(int CarId, string Author, string? CLiveryHash)>
+    {
+        public static readonly CarIdAuthorHashComparer Instance = new();
+
+        public bool Equals((int CarId, string Author, string? CLiveryHash) x, (int CarId, string Author, string? CLiveryHash) y) =>
+            x.CarId == y.CarId
+            && string.Equals(x.Author, y.Author, StringComparison.OrdinalIgnoreCase)
+            && x.CLiveryHash == y.CLiveryHash;
+
+        public int GetHashCode((int CarId, string Author, string? CLiveryHash) obj) =>
+            HashCode.Combine(obj.CarId, StringComparer.OrdinalIgnoreCase.GetHashCode(obj.Author), obj.CLiveryHash);
+    }
+
+    private sealed class CarIdAuthorComparer : IEqualityComparer<(int CarId, string Author)>
+    {
+        public static readonly CarIdAuthorComparer Instance = new();
+
+        public bool Equals((int CarId, string Author) x, (int CarId, string Author) y) =>
+            x.CarId == y.CarId && string.Equals(x.Author, y.Author, StringComparison.OrdinalIgnoreCase);
+
+        public int GetHashCode((int CarId, string Author) obj) =>
+            HashCode.Combine(obj.CarId, StringComparer.OrdinalIgnoreCase.GetHashCode(obj.Author));
     }
 
     private static void MarkPossibleDuplicatesInGroup(List<LiveryEntry> items)
@@ -542,13 +590,13 @@ internal partial class LiveryScanService
     {
         unchecked
         {
-            uint hash = 2166136261;
+            ulong hash = 14695981039346656037;
             foreach (char c in input)
             {
                 hash ^= c;
-                hash *= 16777619;
+                hash *= 1099511628211;
             }
-            return hash.ToString("x8");
+            return hash.ToString("x16");
         }
     }
 }

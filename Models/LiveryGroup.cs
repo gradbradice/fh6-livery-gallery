@@ -79,7 +79,7 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
 
     private const double CardStep = 286;
 
-    private List<GalleryRow>? _rows;
+    private LazyRowList? _rows;
     private double _rowsBuiltForWidth = -1;
 
     public IReadOnlyList<GalleryRow> Rows
@@ -89,11 +89,7 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
             if (_rows is not null && _rowsBuiltForWidth == GroupWidth) return _rows;
 
             int columns = Math.Max(1, (int)(GroupWidth / CardStep));
-            var rows = new List<GalleryRow>(Items.Count / columns + 1);
-            for (int i = 0; i < Items.Count; i += columns)
-                rows.Add(new GalleryRow { Items = Items.GetRange(i, Math.Min(columns, Items.Count - i)) });
-
-            _rows = rows;
+            _rows = new LazyRowList(Items, columns);
             _rowsBuiltForWidth = GroupWidth;
             return _rows;
         }

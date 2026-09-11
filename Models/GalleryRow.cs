@@ -2,5 +2,5 @@ namespace LiveryGallery.Models;
 
 internal sealed class GalleryRow
 {
-    public required List<LiveryEntry> Items { get; init; }
+    public required IReadOnlyList<LiveryEntry> Items { get; init; }
 }

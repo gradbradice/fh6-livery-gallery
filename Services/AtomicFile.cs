@@ -4,7 +4,7 @@ internal static class AtomicFile
 {
     public static void WriteAllText(string path, string content)
     {
-        string tmpPath = path + ".tmp";
+        string tmpPath = TempPath(path);
         try
         {
             File.WriteAllText(tmpPath, content);
@@ -18,7 +18,7 @@ internal static class AtomicFile
 
     public static async Task WriteAllTextAsync(string path, string content, CancellationToken ct = default)
     {
-        string tmpPath = path + ".tmp";
+        string tmpPath = TempPath(path);
         try
         {
             await File.WriteAllTextAsync(tmpPath, content, ct);
@@ -29,6 +29,23 @@ internal static class AtomicFile
             TryDeleteTempFile(tmpPath);
         }
     }
+
+    public static void WriteViaStream(string path, Action<Stream> writeAction)
+    {
+        string tmpPath = TempPath(path);
+        try
+        {
+            using (var stream = File.Create(tmpPath))
+                writeAction(stream);
+            Replace(tmpPath, path);
+        }
+        finally
+        {
+            TryDeleteTempFile(tmpPath);
+        }
+    }
+
+    private static string TempPath(string path) => $"{path}.{Environment.ProcessId}.tmp";
 
     private static void TryDeleteTempFile(string tmpPath)
     {

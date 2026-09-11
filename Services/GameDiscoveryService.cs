@@ -8,5 +8,8 @@ internal static class GameDiscoveryService
             : null);
 
     public static string? TryFindGamePath() => _cachedPath.Value;
+
+    public static Task<string?> TryFindGamePathAsync() => Task.Run(() => _cachedPath.Value);
+
     public static void WarmUpInBackground() => _ = Task.Run(() => _cachedPath.Value);
 }

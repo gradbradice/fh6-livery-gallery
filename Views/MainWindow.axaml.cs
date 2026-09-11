@@ -26,14 +26,34 @@ internal partial class MainWindow : Window
     private readonly ObservableCollection<LiveryGroup> _displayedGroups = [];
     private readonly HashSet<string> _selectedTags = new(StringComparer.OrdinalIgnoreCase);
     private string? _savePath;
-    private string? SaveDataPath =>
-        _savePath is null ? null : LocalSaveService.GetSaveDataPath(_savePath);
+    private bool _savePathLostNotified;
+
+    private string? SaveDataPath
+    {
+        get
+        {
+            if (_savePath is null) return null;
+            int? hint = _settings.LastKnownContainerSavePath == _savePath
+                ? _settings.LastKnownContainerId
+                : null;
+
+            var (path, containerId) = LocalSaveService.GetSaveDataPathWithId(_savePath, hint);
+            if (containerId is not null
+                && (containerId != _settings.LastKnownContainerId || _settings.LastKnownContainerSavePath != _savePath))
+            {
+                _settings.LastKnownContainerId = containerId;
+                _settings.LastKnownContainerSavePath = _savePath;
+                AppSettingsService.Save(_settings);
+            }
+            return path;
+        }
+    }
 
     private CancellationTokenSource? _scanCts;
+    private readonly CancellationTokenSource _shutdownCts = new();
     private readonly AppSettingsData _settings;
     private bool _isScanning;
-    private readonly DispatcherTimer _autoScanTimer = new() { Interval = TimeSpan.FromSeconds(5) };
-
+    private readonly DispatcherTimer _autoScanTimer = new() { Interval = TimeSpan.FromSeconds(30) };
     private LiveryScanEntry? _lastScanResult;
     private string? _updateReleaseUrl;
     private string? _latestVersion;
@@ -62,11 +82,7 @@ internal partial class MainWindow : Window
         _scanService = scanService;
         _updateService = updateService;
 
-        if (!Enum.IsDefined(_settings.SortMode)) _settings.SortMode = SortMode.Manufacture;
-        if (!Enum.IsDefined(_settings.FavoriteMode)) _settings.FavoriteMode = FavoriteMode.None;
-        if (!Enum.IsDefined(_settings.DuplicatesFilterMode)) _settings.DuplicatesFilterMode = DuplicatesFilterMode.All;
         UpdateDisplayFilterChecks();
-
         ApplyLocalizedTexts();
 
         _searchDebounceTimer.Tick += (_, __) =>
@@ -109,6 +125,7 @@ internal partial class MainWindow : Window
         _searchDebounceTimer.Stop();
         _resizeDebounceTimer.Stop();
         _scanCts?.Cancel();
+        _shutdownCts.Cancel();
         await Task.Run(() =>
         {
             _favoriteService.Flush();
@@ -129,10 +146,28 @@ internal partial class MainWindow : Window
             group.GroupWidth = groupWidth;
     }
 
+    private static void FireAndForget(Func<Task> action, string context) => _ = RunSafelyAsync(action, context);
+
+    private static async Task RunSafelyAsync(Func<Task> action, string context)
+    {
+        try
+        {
+            await action();
+        }
+        catch (OperationCanceledException)
+        {
+            
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError($"Unhandled exception in background task: {context}", ex);
+        }
+    }
+
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
         _isLoaded = true;
-        _ = CheckForUpdatesAsync();
+        FireAndForget(CheckForUpdatesAsync, nameof(CheckForUpdatesAsync));
 
         _carDb.LoadLocal();
 
@@ -155,12 +190,12 @@ internal partial class MainWindow : Window
         }
 
         await RunScanAsync(isUserInitiated: true);
-        _ = RefreshCarDatabaseAsync(showLoadingOverlay: false);
+        FireAndForget(() => RefreshCarDatabaseAsync(showLoadingOverlay: false), nameof(RefreshCarDatabaseAsync));
     }
 
     private async Task CheckForUpdatesAsync()
     {
-        var result = await _updateService.CheckAsync();
+        var result = await _updateService.CheckAsync(_shutdownCts.Token);
         if (!result.IsNewer || result.LatestVersion is null) return;
 
         _latestVersion = result.LatestVersion;
@@ -182,7 +217,7 @@ internal partial class MainWindow : Window
         if (showLoadingOverlay) SetLoading(true, Strings.CarDbUpdating);
         try
         {
-            bool changed = await _carDb.RefreshAsync();
+            var outcome = await _carDb.RefreshAsync(_shutdownCts.Token);
             string countText = $"{_carDb.Count} {Strings.CarDbCarsWord}";
             if (_carDb.LastError is not null)
             {
@@ -192,10 +227,22 @@ internal partial class MainWindow : Window
             }
             else
             {
-                StatusText.Text = changed
+                StatusText.Text = outcome == CarDatabaseRefreshOutcome.Updated
                     ? string.Format(Strings.CarDbUpdated, countText)
                     : string.Format(Strings.CarDbUpToDate, countText);
             }
+
+            if (outcome == CarDatabaseRefreshOutcome.Updated && !_isScanning && SaveDataPath is not null)
+            {
+                var freshEntries = await _scanService.RegenerateEntriesAsync(_shutdownCts.Token);
+                _allEntries = MergeWithLocalState(freshEntries);
+                RebuildTagsBar();
+                RefreshGallery();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            
         }
         finally
         {
@@ -264,8 +311,7 @@ internal partial class MainWindow : Window
 
     private async void RefreshButton_Click(object? sender, RoutedEventArgs e)
     {
-        await RefreshCarDatabaseAsync();
-        await CheckForUpdatesAsync();
+        await Task.WhenAll(RefreshCarDatabaseAsync(), CheckForUpdatesAsync());
 
         if (!_settings.RefreshLiveriesOnButtonClick) return;
 
@@ -280,7 +326,22 @@ internal partial class MainWindow : Window
     private async Task RunScanAsync(bool isUserInitiated)
     {
         string? saveDataPath = SaveDataPath;
-        if (saveDataPath is null) return;
+        if (saveDataPath is null)
+        {
+            if (!_savePathLostNotified)
+            {
+                _savePathLostNotified = true;
+                await PromptForSavePathAsync(initial: true);
+            }
+            if (!_isClosing)
+            {
+                _autoScanTimer.Stop();
+                _autoScanTimer.Start();
+            }
+            return;
+        }
+        _savePathLostNotified = false;
+
         if (_isScanning) return;
         if (!isUserInitiated && !_settings.AutoRefreshLiveries) return;
 
@@ -305,28 +366,10 @@ internal partial class MainWindow : Window
             var result = await _scanService.ScanAsync(saveDataPath, progress, cts.Token);
             if (cts.IsCancellationRequested) return;
 
-            var previousByPath = _allEntries.ToDictionary(e => e.FolderPath);
-            var mergedEntries = new List<LiveryEntry>(result.Entries.Count);
-            foreach (var newEntry in result.Entries)
-            {
-                if (previousByPath.TryGetValue(newEntry.FolderPath, out var previous))
-                {
-                    newEntry.IsFavorite = previous.IsFavorite;
-                    newEntry.Tags = previous.Tags;
-
-                    if (AreEntriesEquivalent(previous, newEntry))
-                    {
-                        mergedEntries.Add(previous);
-                        continue;
-                    }
-                }
-                mergedEntries.Add(newEntry);
-            }
-
-            _allEntries = mergedEntries;
+            _allEntries = MergeWithLocalState(result.Entries);
 
             _lastScanResult = result;
-            RenderStatus();
+            if (isUserInitiated) RenderStatus();
             RebuildTagsBar();
             RefreshGallery();
         }
@@ -342,21 +385,25 @@ internal partial class MainWindow : Window
         }
         finally
         {
-            if (isUserInitiated && !cts.IsCancellationRequested)
+            bool isCurrentScan = ReferenceEquals(_scanCts, cts);
+
+            if (isUserInitiated && isCurrentScan)
             {
                 SetLoading(false);
                 RefreshButton.IsEnabled = true;
             }
 
-            if (ReferenceEquals(_scanCts, cts))
-                _scanCts = null;
-            cts.Dispose();
-            _isScanning = false;
-            if (!_isClosing)
+            if (isCurrentScan)
             {
-                _autoScanTimer.Stop();
-                _autoScanTimer.Start();
+                _scanCts = null;
+                _isScanning = false;
+                if (!_isClosing)
+                {
+                    _autoScanTimer.Stop();
+                    _autoScanTimer.Start();
+                }
             }
+            cts.Dispose();
         }
     }
 
@@ -471,6 +518,28 @@ internal partial class MainWindow : Window
         return true;
     }
 
+    private List<LiveryEntry> MergeWithLocalState(List<LiveryEntry> freshEntries)
+    {
+        var previousByPath = _allEntries.ToDictionary(e => e.FolderPath);
+        var mergedEntries = new List<LiveryEntry>(freshEntries.Count);
+        foreach (var newEntry in freshEntries)
+        {
+            if (previousByPath.TryGetValue(newEntry.FolderPath, out var previous))
+            {
+                newEntry.IsFavorite = previous.IsFavorite;
+                newEntry.Tags = previous.Tags;
+
+                if (AreEntriesEquivalent(previous, newEntry))
+                {
+                    mergedEntries.Add(previous);
+                    continue;
+                }
+            }
+            mergedEntries.Add(newEntry);
+        }
+        return mergedEntries;
+    }
+
     private static bool AreEntriesEquivalent(LiveryEntry a, LiveryEntry b)
     {
         return a.FolderPath == b.FolderPath
@@ -487,6 +556,8 @@ internal partial class MainWindow : Window
             && a.ThumbnailPath == b.ThumbnailPath
             && a.IsFavorite == b.IsFavorite
             && a.DuplicateStatus == b.DuplicateStatus
+            && a.CLiveryHash == b.CLiveryHash
+            && (a.SectionCounts ?? []).SequenceEqual(b.SectionCounts ?? [])
             && a.Tags.SequenceEqual(b.Tags, StringComparer.OrdinalIgnoreCase);
     }
 
@@ -594,17 +665,32 @@ internal partial class MainWindow : Window
         }
     }
 
-    private void Card_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    private async void Card_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
-        entry.Thumbnail = ThumbnailCacheService.Acquire(entry.ThumbnailPath);
+        var bitmap = await ThumbnailCacheService.AcquireForAsync(control, entry.ThumbnailPath);
+        if (ReferenceEquals(control.DataContext, entry))
+            entry.Thumbnail = bitmap;
     }
 
     private void Card_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
-        entry.Thumbnail = null;
-        ThumbnailCacheService.Release(entry.ThumbnailPath);
+        if (sender is not Control control) return;
+        if (control.DataContext is LiveryEntry entry) entry.Thumbnail = null;
+        ThumbnailCacheService.ReleaseFor(control);
+    }
+
+    private async void Card_DataContextChanged(object? sender, EventArgs e)
+    {
+        if (sender is not Control control) return;
+        if (control.DataContext is not LiveryEntry entry)
+        {
+            ThumbnailCacheService.ReleaseFor(control);
+            return;
+        }
+        var bitmap = await ThumbnailCacheService.AcquireForAsync(control, entry.ThumbnailPath);
+        if (ReferenceEquals(control.DataContext, entry))
+            entry.Thumbnail = bitmap;
     }
 
     private void ToggleFavorite_Click(object? sender, RoutedEventArgs e)
@@ -695,20 +781,22 @@ internal partial class MainWindow : Window
     {
         var stats = GalleryStatisticsService.CalculateOverall(_allEntries);
 
-        string favoriteManufacturer = stats.TopManufacturer is not null
-            ? $"{stats.TopManufacturer} ({stats.TopManufacturerCount})"
-            : "-";
-        string favoriteAuthor = stats.TopAuthor is not null
-            ? $"{stats.TopAuthor} ({stats.TopAuthorCount})"
-            : "-";
+        static string Format(string? label, int count) => label is not null ? $"{label} ({count})" : "-";
 
         string message = string.Join("\n", new[]
         {
             $"{Strings.StatsTotalLiveries}: {stats.Total}",
             $"{Strings.StatsFavoritesCount}: {stats.FavoritesCount}",
             "",
-            $"{Strings.StatsFavoriteManufacturer}: {favoriteManufacturer}",
-            $"{Strings.StatsFavoriteAuthor}: {favoriteAuthor}",
+            $"{Strings.StatsPopularManufacturer}: {Format(stats.PopularManufacturer, stats.PopularManufacturerCount)}",
+            $"{Strings.StatsPopularModel}: {Format(stats.PopularModel, stats.PopularModelCount)}",
+            $"{Strings.StatsPopularCar}: {Format(stats.PopularCar, stats.PopularCarCount)}",
+            $"{Strings.StatsPopularAuthor}: {Format(stats.PopularAuthor, stats.PopularAuthorCount)}",
+            "",
+            $"{Strings.StatsFavoriteManufacturer}: {Format(stats.FavoriteManufacturer, stats.FavoriteManufacturerCount)}",
+            $"{Strings.StatsFavoriteModel}: {Format(stats.FavoriteModel, stats.FavoriteModelCount)}",
+            $"{Strings.StatsFavoriteCar}: {Format(stats.FavoriteCar, stats.FavoriteCarCount)}",
+            $"{Strings.StatsFavoriteAuthor}: {Format(stats.FavoriteAuthor, stats.FavoriteAuthorCount)}",
             "",
             $"{Strings.StatsTotalDuplicates}: {stats.DuplicatesCount}",
             $"{Strings.StatsPossibleDuplicates}: {stats.PossibleDuplicatesCount}",

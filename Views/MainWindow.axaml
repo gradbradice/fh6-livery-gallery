@@ -16,7 +16,8 @@
         <DataTemplate x:Key="LiveryCardTemplate" x:DataType="models:LiveryEntry">
             <Border Classes="liveryCard" Width="270" Margin="8" ToolTip.Tip="{Binding FolderName}"
                     AttachedToVisualTree="Card_AttachedToVisualTree"
-                    DetachedFromVisualTree="Card_DetachedFromVisualTree">
+                    DetachedFromVisualTree="Card_DetachedFromVisualTree"
+                    DataContextChanged="Card_DataContextChanged">
                 <StackPanel>
                     <Grid Height="150" ClipToBounds="True">
                         <Border CornerRadius="14,14,0,0" ClipToBounds="True">

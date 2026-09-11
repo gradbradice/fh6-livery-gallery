@@ -25,15 +25,12 @@ internal static class ThumbnailService
 
             string? dir = Path.GetDirectoryName(destPngPath);
             if (dir is not null) Directory.CreateDirectory(dir);
-
-            using var destStream = File.Create(destPngPath);
-            bitmap.Save(destStream, PngBitmapEncoderOptions.Default);
+            AtomicFile.WriteViaStream(destPngPath, stream => bitmap.Save(stream, PngBitmapEncoderOptions.Default));
             return true;
         }
-        catch
+        catch (Exception ex)
         {
-            // do not log. this method may be called on every automatic scan,
-            // if the preview cannot be processed, pnce per 5 seconds
+            AppLogger.LogErrorThrottled(sourceWebpPath, $"Failed to generate thumbnail from '{sourceWebpPath}'", ex);
             return false;
         }
     }

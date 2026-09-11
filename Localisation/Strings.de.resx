@@ -125,7 +125,8 @@
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
     <value>Aktualisieren (Änderungen neu scannen)</value>
-  </data>  <data name="SearchPlaceholder" xml:space="preserve">
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
     <value>Suche nach Fahrzeug (Hersteller, Modell, Baujahr), Livree-Name oder Autor…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
@@ -280,7 +281,8 @@ Manuell auswählen?
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>Deutsch</value>
-  </data>  <data name="MinimizeTooltip" xml:space="preserve">
+  </data>
+  <data name="MinimizeTooltip" xml:space="preserve">
     <value>Minimieren</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
@@ -297,12 +299,14 @@ Manuell auswählen?
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>Header-Parser-Bibliothek: {0}</value>
-  </data>  <data name="SettingsToggleTooltip" xml:space="preserve">
+  </data>
+  <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>Spielpfad</value>
-  </data>  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+  </data>
+  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>Spiel-Installationsordner auswählen</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
@@ -337,7 +341,8 @@ Manuell auswählen?
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>Statistik</value>
-  </data>  <data name="StatsTotalLiveries" xml:space="preserve">
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
     <value>Livrees insgesamt</value>
   </data>
   <data name="StatsFavoriteManufacturer" xml:space="preserve">
@@ -378,7 +383,8 @@ Manuell auswählen?
   </data>
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Nur Duplikate</value>
-  </data>  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Mögliches Duplikat</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
@@ -419,7 +425,8 @@ Manuell auswählen?
   </data>
   <data name="ButtonBack" xml:space="preserve">
     <value>Zurück</value>
-  </data>  <data name="ButtonSaveAndExit" xml:space="preserve">
+  </data>
+  <data name="ButtonSaveAndExit" xml:space="preserve">
     <value>Speichern und beenden</value>
   </data>
   <data name="ButtonExitWithoutSaving" xml:space="preserve">
@@ -436,5 +443,29 @@ Manuell auswählen?
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>Liverys beim Klick auf Aktualisieren neu laden</value>
+  </data>
+  <data name="SettingsSaveFailedTitle" xml:space="preserve">
+    <value>Speichern fehlgeschlagen</value>
+  </data>
+  <data name="SettingsSaveFailedNotice" xml:space="preserve">
+    <value>Einstellungen konnten nicht auf die Festplatte geschrieben werden. Änderungen wurden nicht übernommen. Bitte erneut speichern.</value>
+  </data>
+  <data name="StatsPopularManufacturer" xml:space="preserve">
+    <value>Beliebter Hersteller</value>
+  </data>
+  <data name="StatsPopularModel" xml:space="preserve">
+    <value>Beliebtes Modell</value>
+  </data>
+  <data name="StatsPopularCar" xml:space="preserve">
+    <value>Beliebtes Auto</value>
+  </data>
+  <data name="StatsPopularAuthor" xml:space="preserve">
+    <value>Beliebter Autor</value>
+  </data>
+  <data name="StatsFavoriteModel" xml:space="preserve">
+    <value>Lieblingsmodell</value>
+  </data>
+  <data name="StatsFavoriteCar" xml:space="preserve">
+    <value>Lieblingsauto</value>
   </data>
 </root>

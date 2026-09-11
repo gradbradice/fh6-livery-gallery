@@ -15,8 +15,20 @@ internal static class AppLogger
             shared: true)
         .CreateLogger();
 
-    public static void LogError(string context, Exception ex) =>
-        _logger.Error(ex, "{Context}", context);
+    private static volatile bool _isShutdown;
+
+    public static void LogError(string context, Exception ex)
+    {
+        if (_isShutdown) return;
+        try
+        {
+            _logger.Error(ex, "{Context}", context);
+        }
+        catch
+        {
+            
+        }
+    }
 
     private static readonly Dictionary<string, DateTime> _lastLoggedAt = [];
     private static readonly Lock _throttleLock = new();
@@ -43,5 +55,9 @@ internal static class AppLogger
         if (shouldLog) LogError(context, ex);
     }
 
-    public static void Shutdown() => _logger.Dispose();
+    public static void Shutdown()
+    {
+        _isShutdown = true;
+        _logger.Dispose();
+    }
 }

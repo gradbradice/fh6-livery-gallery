@@ -23,14 +23,14 @@ internal class TagService
 
     public void Flush() => _saveService.Flush();
 
-    public void SetTags(string folderName, List<string> tags)
+    public void SetTags(string folderName, IReadOnlyList<string> tags)
     {
         lock (_lock)
         {
             if (tags.Count == 0)
                 _data.Remove(folderName);
             else
-                _data[folderName] = tags;
+                _data[folderName] = [.. tags];
         }
         Save();
     }

@@ -23,20 +23,31 @@ internal static class AppSettingsService
         }
     }
 
-    public static void SaveImmediate(AppSettingsData data)
+    public static async Task<bool> SaveImmediateAsync(AppSettingsData data)
     {
         try
         {
             string json = JsonSerializer.Serialize(data, JsonSettings.DefaultOptions);
-            _saveService.SaveImmediate(json, _path);
+            return await _saveService.SaveImmediateAsync(json, _path);
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to serialise settings (SaveImmediate)", ex);
+            AppLogger.LogError("Failed to serialise settings (SaveImmediateAsync)", ex);
+            return false;
         }
     }
 
     public static void Flush() => _saveService.Flush();
+
+    private static bool NormalizeEnums(AppSettingsData data)
+    {
+        bool changed = false;
+        if (!Enum.IsDefined(data.SortMode)) { data.SortMode = SortMode.Manufacture; changed = true; }
+        if (!Enum.IsDefined(data.FavoriteMode)) { data.FavoriteMode = FavoriteMode.None; changed = true; }
+        if (!Enum.IsDefined(data.DuplicatesFilterMode)) { data.DuplicatesFilterMode = DuplicatesFilterMode.All; changed = true; }
+        if (data.ThemeMode is { } theme && !Enum.IsDefined(theme)) { data.ThemeMode = AppThemeMode.System; changed = true; }
+        return changed;
+    }
 
     public static AppSettingsData Load()
     {
@@ -48,7 +59,9 @@ internal static class AppSettingsService
                 var data = JsonSerializer.Deserialize<AppSettingsData>(json);
                 if (data != null)
                 {
-                    AppSettingsMigration.Apply(data);
+                    bool changed = AppSettingsMigration.Apply(data);
+                    changed |= NormalizeEnums(data);
+                    if (changed) Save(data);
                     return data;
                 }
             }
