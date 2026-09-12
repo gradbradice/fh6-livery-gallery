@@ -126,15 +126,6 @@
   <data name="RefreshTooltip" xml:space="preserve">
     <value>Refresh (rescan changes)</value>
   </data>
-  <data name="ThemeToggleTooltip" xml:space="preserve">
-    <value>Light / dark theme</value>
-  </data>
-  <data name="LanguageToggleTooltip" xml:space="preserve">
-    <value>Interface language</value>
-  </data>
-  <data name="AboutTooltip" xml:space="preserve">
-    <value>About</value>
-  </data>
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Search by car (manufacturer, model, year), livery name or author…</value>
   </data>
@@ -259,10 +250,10 @@ Choose it manually?
     <value>Tags:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ Favorites only</value>
+    <value>Favorites only</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ Favorites first</value>
+    <value>Favorites first</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>Normal order</value>
@@ -271,10 +262,10 @@ Choose it manually?
     <value>Add/remove from favorites</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ Show favorites separately</value>
+    <value>Show favorites separately</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ Favorites</value>
+    <value>Favorites</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>New version {0} available →</value>
@@ -290,9 +281,6 @@ Choose it manually?
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>English</value>
-  </data>
-  <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>Minimize</value>
@@ -312,17 +300,11 @@ Choose it manually?
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>Header parser library: {0}</value>
   </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Refresh</value>
-  </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>Game path</value>
-  </data>
-  <data name="GamePathPlaceholder" xml:space="preserve">
-    <value>Could not detect automatically — enter the path manually</value>
   </data>
   <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>Select the game installation folder</value>
@@ -359,9 +341,6 @@ Choose it manually?
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>Statistics</value>
-  </data>
-  <data name="LanguageMenuLabel" xml:space="preserve">
-    <value>Language</value>
   </data>
   <data name="StatsTotalLiveries" xml:space="preserve">
     <value>Total liveries</value>
@@ -405,12 +384,6 @@ Choose it manually?
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Duplicates only</value>
   </data>
-  <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠︎ {0}</value>
-  </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Possible duplicate</value>
   </data>
@@ -425,5 +398,171 @@ Choose it manually?
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>All liveries</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>You have made changes that have not been saved. If you exit now, they will be lost.</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>Save and exit</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>Exit without saving</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Scanning</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Automatically refresh liveries</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Refresh liveries when clicking the refresh button</value>
+  </data>
+  <data name="SettingsSaveFailedTitle" xml:space="preserve">
+    <value>Save failed</value>
+  </data>
+  <data name="SettingsSaveFailedNotice" xml:space="preserve">
+    <value>Failed to write settings to disk. Changes were not applied. Please try saving again.</value>
+  </data>
+  <data name="StatsPopularManufacturer" xml:space="preserve">
+    <value>Popular manufacturer</value>
+  </data>
+  <data name="StatsPopularModel" xml:space="preserve">
+    <value>Popular model</value>
+  </data>
+  <data name="StatsPopularCar" xml:space="preserve">
+    <value>Popular car</value>
+  </data>
+  <data name="StatsPopularAuthor" xml:space="preserve">
+    <value>Popular author</value>
+  </data>
+  <data name="StatsFavoriteModel" xml:space="preserve">
+    <value>Favorite model</value>
+  </data>
+  <data name="StatsFavoriteCar" xml:space="preserve">
+    <value>Favorite car</value>
+  </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>Authors</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>Author cards</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ New card</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>No author cards yet.
+Create one to merge one author's nicknames under a single name.</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>New author card</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>Edit author card</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>Nicknames</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>Select one or more nicknames — one person may publish liveries from different accounts.</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>Display name</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>Optional — defaults to the first selected nickname</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>Select at least one nickname</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>Nickname '{0}' already belongs to another card</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>Nicknames: {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>Liveries: {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>Favorites: {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>Duplicates: {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>Possible duplicates: {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>Delete card?</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>Delete card '{0}'? Its nicknames will become available for a new card again.</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>Search by name or nickname...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>No results found</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>Display name '{0}' is already used by another card</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>Search nicknames...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>Needs a link to a profile specifically (e.g. x.com/username), not a specific tweet or other page</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>Needs a link to a YouTube channel specifically (e.g. youtube.com/@username), not a video</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>No card created</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>No card has been created for the author '{0}'</value>
   </data>
 </root>

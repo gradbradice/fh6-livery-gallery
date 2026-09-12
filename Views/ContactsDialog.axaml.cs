@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 
 namespace LiveryGallery.Views;
@@ -22,11 +23,7 @@ internal partial class ContactsDialog : Window
         CloseDialogButton.Content = Strings.ButtonClose;
     }
 
-    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            BeginMoveDrag(e);
-    }
+    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
     private void GithubLink_Click(object? sender, RoutedEventArgs e) => OpenUrl(GithubUrl);
 
@@ -40,7 +37,7 @@ internal partial class ContactsDialog : Window
         }
         catch
         {
-
+            // do not log
         }
     }
 

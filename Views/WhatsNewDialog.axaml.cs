@@ -64,7 +64,7 @@ internal partial class WhatsNewDialog : Window
         }
         catch
         {
-
+            // do not log
         }
     }
 }

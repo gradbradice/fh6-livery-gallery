@@ -1,32 +1,29 @@
-﻿using LiveryGallery.Configuration;
+using LiveryGallery.Configuration;
 using System.Text.Json;
 
 namespace LiveryGallery.Services;
 
 internal class TagService
 {
-    private readonly SaveService _saveService;
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "tags.json");
-    private static Dictionary<string, List<string>> _data = [];
+    private Dictionary<string, List<string>> _data = [];
+    private readonly Lock _lock = new();
 
-    public TagService()
+    public TagService() => Load();
+
+    public List<string> GetTags(string folderName)
     {
-        _saveService = new();
-        Load();
+        lock (_lock) return _data.TryGetValue(folderName, out var tags) ? [.. tags] : [];
     }
 
-    public List<string> GetTags(string folderName) =>
-        _data.TryGetValue(folderName, out var tags) ? [.. tags] : [];
-
-    public void SetTags(string folderName, List<string> tags)
+    public void SetTags(string folderName, IReadOnlyList<string> tags)
     {
-        if (tags.Count == 0)
+        lock (_lock)
         {
-            _data.Remove(folderName);
-        }
-        else
-        {
-            _data[folderName] = tags;
+            if (tags.Count == 0)
+                _data.Remove(folderName);
+            else
+                _data[folderName] = [.. tags];
         }
         Save();
     }
@@ -35,16 +32,18 @@ internal class TagService
     {
         try
         {
-            string json = JsonSerializer.Serialize(_data, JsonSettings.DefaultDeserializeOptions);
-            _saveService.ScheduleSave(json, _path);
+            Dictionary<string, List<string>> snapshot;
+            lock (_lock) snapshot = new Dictionary<string, List<string>>(_data);
+            string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
+            PersistenceManager.Schedule(_path, json);
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError("Failed to serialise tags", ex);
         }
     }
 
-    private static void Load()
+    private void Load()
     {
         try
         {
@@ -55,9 +54,10 @@ internal class TagService
                 if (data != null) _data = data;
             }
         }
-        catch
+        catch (Exception ex)
         {
-
+            AppLogger.LogError("Failed to load tags", ex);
+            AtomicFile.TryBackupCorruptedFile(_path);
         }
     }
 }

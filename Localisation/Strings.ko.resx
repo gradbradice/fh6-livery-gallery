@@ -126,15 +126,6 @@
   <data name="RefreshTooltip" xml:space="preserve">
     <value>새로고침 (변경 사항 다시 스캔)</value>
   </data>
-  <data name="ThemeToggleTooltip" xml:space="preserve">
-    <value>라이트 / 다크 테마</value>
-  </data>
-  <data name="LanguageToggleTooltip" xml:space="preserve">
-    <value>인터페이스 언어</value>
-  </data>
-  <data name="AboutTooltip" xml:space="preserve">
-    <value>정보</value>
-  </data>
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>차량(제조사, 모델, 연식), 리버리 이름 또는 작성자로 검색…</value>
   </data>
@@ -259,10 +250,10 @@
     <value>태그:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ 즐겨찾기만</value>
+    <value>즐겨찾기만</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ 즐겨찾기 우선</value>
+    <value>즐겨찾기 우선</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>일반 순서</value>
@@ -271,10 +262,10 @@
     <value>즐겨찾기 추가/제거</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ 즐겨찾기 별도 표시</value>
+    <value>즐겨찾기 별도 표시</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ 즐겨찾기</value>
+    <value>즐겨찾기</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>새 버전 {0} 사용 가능 →</value>
@@ -290,9 +281,6 @@
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>한국어</value>
-  </data>
-  <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>최소화</value>
@@ -312,17 +300,11 @@
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>헤더 파서 라이브러리: {0}</value>
   </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>새로고침</value>
-  </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>설정</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>게임 경로</value>
-  </data>
-  <data name="GamePathPlaceholder" xml:space="preserve">
-    <value>자동으로 감지할 수 없습니다. 경로를 직접 입력하세요</value>
   </data>
   <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>게임 설치 폴더 선택</value>
@@ -359,9 +341,6 @@
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>통계</value>
-  </data>
-  <data name="LanguageMenuLabel" xml:space="preserve">
-    <value>언어</value>
   </data>
   <data name="StatsTotalLiveries" xml:space="preserve">
     <value>전체 리버리 수</value>
@@ -405,12 +384,6 @@
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>중복만</value>
   </data>
-  <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠︎ {0}</value>
-  </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>중복 가능</value>
   </data>
@@ -425,5 +398,171 @@
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>모든 리버리</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>설정</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>테마</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>라이트</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>다크</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>나가기</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>저장되지 않은 변경 사항</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>저장되지 않은 변경 사항이 있습니다. 지금 종료하면 변경 내용이 사라집니다.</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>뒤로</value>
+  </data>
+  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>저장하고 종료</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>저장하지 않고 종료</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>시스템</value>
+  </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>스캔</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>리버리 자동 새로고침</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>새로고침 버튼 클릭 시 리버리도 새로고침</value>
+  </data>
+  <data name="SettingsSaveFailedTitle" xml:space="preserve">
+    <value>저장 실패</value>
+  </data>
+  <data name="SettingsSaveFailedNotice" xml:space="preserve">
+    <value>설정을 디스크에 쓰지 못했습니다. 변경 사항이 적용되지 않았습니다.다시 저장해 주세요.</value>
+  </data>
+  <data name="StatsPopularManufacturer" xml:space="preserve">
+    <value>인기 제조사</value>
+  </data>
+  <data name="StatsPopularModel" xml:space="preserve">
+    <value>인기 모델</value>
+  </data>
+  <data name="StatsPopularCar" xml:space="preserve">
+    <value>인기 차량</value>
+  </data>
+  <data name="StatsPopularAuthor" xml:space="preserve">
+    <value>인기 작성자</value>
+  </data>
+  <data name="StatsFavoriteModel" xml:space="preserve">
+    <value>즐겨찾는 모델</value>
+  </data>
+  <data name="StatsFavoriteCar" xml:space="preserve">
+    <value>즐겨찾는 차량</value>
+  </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>작성자</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>작성자 카드</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ 새 카드</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>아직 작성자 카드가 없습니다.
+한 작성자의 여러 닉네임을 하나의 이름으로 합치려면 카드를 만드세요.</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>새 작성자 카드</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>작성자 카드 편집</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>닉네임</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>하나 이상의 닉네임을 선택하세요 — 한 사람이 여러 계정으로 리버리를 게시할 수 있습니다.</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>표시 이름</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>선택 사항 — 기본적으로 첫 번째로 선택한 닉네임</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>설명</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>닉네임을 하나 이상 선택하세요</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>닉네임 '{0}'은 이미 다른 카드에 등록되어 있습니다</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>닉네임: {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>리버리: {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>즐겨찾기: {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>중복: {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>중복 가능성: {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>카드를 삭제하시겠습니까?</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>카드 '{0}'을 삭제하시겠습니까? 해당 닉네임은 다시 새 카드에서 사용할 수 있게 됩니다.</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>편집</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>이름 또는 닉네임으로 검색...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>결과를 찾을 수 없습니다</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>표시 이름 '{0}'은 이미 다른 카드에서 사용 중입니다</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>닉네임 검색...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>특정 트윗이나 다른 페이지가 아닌 프로필 링크(예: x.com/username)가 필요합니다</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>동영상이 아닌 YouTube 채널 링크(예: youtube.com/@username)가 필요합니다</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>생성된 카드가 없습니다</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>작성자 '{0}'에 대한 카드가 생성되지 않았습니다</value>
   </data>
 </root>

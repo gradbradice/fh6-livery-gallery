@@ -126,15 +126,6 @@
   <data name="RefreshTooltip" xml:space="preserve">
     <value>Обновить (пересканировать изменения)</value>
   </data>
-  <data name="ThemeToggleTooltip" xml:space="preserve">
-    <value>Светлая / тёмная тема</value>
-  </data>
-  <data name="LanguageToggleTooltip" xml:space="preserve">
-    <value>Язык интерфейса</value>
-  </data>
-  <data name="AboutTooltip" xml:space="preserve">
-    <value>О программе</value>
-  </data>
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Поиск по машине (производитель, модель, год), названию ливреи или автору…</value>
   </data>
@@ -259,10 +250,10 @@
     <value>Теги:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ Только избранное</value>
+    <value>Только избранное</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ Сначала избранное</value>
+    <value>Сначала избранное</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>Обычный порядок</value>
@@ -271,10 +262,10 @@
     <value>Добавить/убрать из избранного</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ Показывать избранное отдельно</value>
+    <value>Показывать избранное отдельно</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ Избранное</value>
+    <value>Избранное</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>Доступна новая версия {0} →</value>
@@ -290,9 +281,6 @@
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>Русский</value>
-  </data>
-  <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>Свернуть</value>
@@ -312,17 +300,11 @@
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>Библиотека разбора header: {0}</value>
   </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Обновить</value>
-  </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Настройки</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>Путь до игры</value>
-  </data>
-  <data name="GamePathPlaceholder" xml:space="preserve">
-    <value>Не удалось определить автоматически — введите путь вручную</value>
   </data>
   <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>Выберите папку установки игры</value>
@@ -359,9 +341,6 @@
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>Статистика</value>
-  </data>
-  <data name="LanguageMenuLabel" xml:space="preserve">
-    <value>Язык</value>
   </data>
   <data name="StatsTotalLiveries" xml:space="preserve">
     <value>Всего ливрей</value>
@@ -405,12 +384,6 @@
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Только дубликаты</value>
   </data>
-  <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠︎ {0}</value>
-  </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Возможный дубликат</value>
   </data>
@@ -425,5 +398,171 @@
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Все ливреи</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>Светлая</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>Тёмная</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>Несохранённые изменения</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>Вы внесли изменения, которые не были сохранены. Если выйти сейчас, они будут потеряны.</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>Сохранить и выйти</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>Выйти без изменений</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>Системная</value>
+  </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Сканирование</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Автоматически обновлять ливреи</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Обновлять ливреи по нажатию кнопки</value>
+  </data>
+  <data name="SettingsSaveFailedTitle" xml:space="preserve">
+    <value>Не удалось сохранить</value>
+  </data>
+  <data name="SettingsSaveFailedNotice" xml:space="preserve">
+    <value>Не удалось записать настройки на диск. Изменения не были применены. Попробуйте сохранить снова.</value>
+  </data>
+  <data name="StatsPopularManufacturer" xml:space="preserve">
+    <value>Популярный производитель</value>
+  </data>
+  <data name="StatsPopularModel" xml:space="preserve">
+    <value>Популярная модель</value>
+  </data>
+  <data name="StatsPopularCar" xml:space="preserve">
+    <value>Популярная машина</value>
+  </data>
+  <data name="StatsPopularAuthor" xml:space="preserve">
+    <value>Популярный автор</value>
+  </data>
+  <data name="StatsFavoriteModel" xml:space="preserve">
+    <value>Любимая модель</value>
+  </data>
+  <data name="StatsFavoriteCar" xml:space="preserve">
+    <value>Любимая машина</value>
+  </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>Художники</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>Карточки художников</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ Новая карточка</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>Пока нет ни одной карточки художника.
+Создайте первую, чтобы объединить ники одного автора под одним именем.</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>Новая карточка художника</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>Редактирование карточки</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>Ники</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>Выберите один или несколько ников — один человек может публиковать ливреи с разных аккаунтов.</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>Отображаемое имя</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>Необязательно — по умолчанию первый выбранный ник</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>Выберите хотя бы один ник</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>Ник «{0}» уже добавлен в другую карточку</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>Ники: {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>Ливрей: {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>В избранном: {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>Дубликатов: {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>Возможных дубликатов: {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>Удалить карточку?</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>Удалить карточку «{0}»? Её ники снова станут доступны для новой карточки.</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>Изменить</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>Поиск по имени или нику...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>Отображаемое имя «{0}» уже используется другой карточкой</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>Поиск по никам...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>Нужна ссылка именно на профиль (например x.com/username), а не на конкретный твит или другую страницу</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>Нужна ссылка именно на канал YouTube (например youtube.com/@username), а не на видео</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>Карточка не создана</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>Для художника «{0}» карточка не была создана</value>
   </data>
 </root>

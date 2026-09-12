@@ -8,6 +8,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 ![.NET](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
 ![UI](https://img.shields.io/badge/UI-Avalonia%2012-8A2BE2)
+![Serilog](https://img.shields.io/badge/Serilog-4.4.0-21C55D)
 ![Localization](https://img.shields.io/badge/localization-11%20languages-informational)
 
 [English](#English) | [日本語](#日本語) | [Deutsch](#Deutsch) | [Español](#Español) | [Français](#Français) | [Italiano](#Italiano) | [한국어](#한국어) | [Português](#Português) | [Русский](#Русский) | [ZH-CN](ZH-CN) | [ZH-TW](ZH-TW)

@@ -1,6 +1,7 @@
-﻿using Microsoft.Win32;
+using Gameloop.Vdf;
+using Gameloop.Vdf.Linq;
+using Microsoft.Win32;
 using System.Runtime.Versioning;
-using System.Text;
 
 namespace LiveryGallery.Services;
 
@@ -11,30 +12,36 @@ internal class GameDiscoveryServiceSteam
     [SupportedOSPlatform("windows")]
     public static string? TryFindViaSteam()
     {
+        string? steamPath;
         try
         {
-            string? steamPath = FindSteamInstallPath();
-            if (steamPath is null) return null;
+            steamPath = FindSteamInstallPath();
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Steam discovery: Failed to determine the Steam installation path", ex);
+            return null;
+        }
+        if (steamPath is null) return null;
 
-            foreach (string library in EnumerateSteamLibraryFolders(steamPath))
+        foreach (string library in EnumerateSteamLibraryFolders(steamPath))
+        {
+            try
             {
                 string manifestPath = Path.Combine(library, "steamapps", $"appmanifest_{SteamAppId}.acf");
                 if (!File.Exists(manifestPath)) continue;
-
-                var manifest = ParseVdf(File.ReadAllText(manifestPath));
-                if (manifest.TryGetValue("AppState", out var appStateObj)
-                    && appStateObj is Dictionary<string, object> appState
-                    && appState.TryGetValue("installdir", out var installDirObj)
-                    && installDirObj is string installDir)
+                VProperty manifest = VdfConvert.Deserialize(File.ReadAllText(manifestPath));
+                if (manifest.Value is VObject appState
+                    && appState.TryGetValue("installdir", out var installDirToken))
                 {
-                    string gamePath = Path.Combine(library, "steamapps", "common", installDir);
+                    string gamePath = Path.Combine(library, "steamapps", "common", installDirToken.ToString());
                     if (Directory.Exists(gamePath)) return gamePath;
                 }
             }
-        }
-        catch
-        {
-            
+            catch (Exception ex)
+            {
+                AppLogger.LogError($"Steam discovery: Failed to parse the manifest in '{library}'", ex);
+            }
         }
 
         return null;
@@ -71,106 +78,28 @@ internal class GameDiscoveryServiceSteam
         string vdfPath = Path.Combine(steamPath, "config", "libraryfolders.vdf");
         if (!File.Exists(vdfPath)) yield break;
 
-        Dictionary<string, object> root;
+        VProperty root;
         try
         {
-            root = ParseVdf(File.ReadAllText(vdfPath));
+            root = VdfConvert.Deserialize(File.ReadAllText(vdfPath));
         }
-        catch
+        catch (Exception ex)
         {
+            AppLogger.LogError($"Steam discovery: Failed to parse '{vdfPath}'", ex);
             yield break;
         }
 
-        if (!root.TryGetValue("libraryfolders", out var foldersObj) || foldersObj is not Dictionary<string, object> folders)
-            yield break;
+        if (root.Value is not VObject folders) yield break;
 
-        foreach (var entry in folders.Values)
+        foreach (var entry in folders)
         {
-            if (entry is Dictionary<string, object> folderInfo
-                && folderInfo.TryGetValue("path", out var pathObj)
-                && pathObj is string path
-                && !string.Equals(path, steamPath, StringComparison.OrdinalIgnoreCase))
+            if (entry.Value is VObject folderInfo
+                && folderInfo.TryGetValue("path", out var pathToken))
             {
-                yield return path;
+                string path = pathToken.ToString();
+                if (!string.Equals(path, steamPath, StringComparison.OrdinalIgnoreCase))
+                    yield return path;
             }
         }
-    }
-
-    private static Dictionary<string, object> ParseVdf(string content)
-    {
-        int pos = 0;
-        return ParseVdfObject(content, ref pos);
-    }
-
-    private static Dictionary<string, object> ParseVdfObject(string s, ref int pos)
-    {
-        var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        while (true)
-        {
-            SkipWhitespaceAndComments(s, ref pos);
-            if (pos >= s.Length) break;
-            if (s[pos] == '}') { pos++; break; }
-
-            string key = ReadQuotedString(s, ref pos);
-            SkipWhitespaceAndComments(s, ref pos);
-
-            if (pos < s.Length && s[pos] == '{')
-            {
-                pos++;
-                result[key] = ParseVdfObject(s, ref pos);
-            }
-            else
-            {
-                result[key] = ReadQuotedString(s, ref pos);
-            }
-        }
-        return result;
-    }
-
-    private static void SkipWhitespaceAndComments(string s, ref int pos)
-    {
-        while (pos < s.Length)
-        {
-            if (char.IsWhiteSpace(s[pos])) { pos++; continue; }
-            if (pos + 1 < s.Length && s[pos] == '/' && s[pos + 1] == '/')
-            {
-                while (pos < s.Length && s[pos] != '\n') pos++;
-                continue;
-            }
-            break;
-        }
-    }
-
-    private static string ReadQuotedString(string s, ref int pos)
-    {
-        SkipWhitespaceAndComments(s, ref pos);
-        if (pos >= s.Length || s[pos] != '"')
-            throw new InvalidDataException($"An opening quote was expected at position {pos} in a VDF file");
-        pos++;
-
-        var sb = new StringBuilder();
-        while (pos < s.Length && s[pos] != '"')
-        {
-            if (s[pos] == '\\' && pos + 1 < s.Length)
-            {
-                pos++;
-                sb.Append(s[pos] switch
-                {
-                    'n' => '\n',
-                    't' => '\t',
-                    '"' => '"',
-                    '\\' => '\\',
-                    var other => other,
-                });
-            }
-            else
-            {
-                sb.Append(s[pos]);
-            }
-            pos++;
-        }
-        // closing quotation mark
-        pos++;
-        return sb.ToString();
     }
 }

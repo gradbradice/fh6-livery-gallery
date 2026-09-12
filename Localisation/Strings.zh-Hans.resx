@@ -126,15 +126,6 @@
   <data name="RefreshTooltip" xml:space="preserve">
     <value>刷新(重新扫描更改)</value>
   </data>
-  <data name="ThemeToggleTooltip" xml:space="preserve">
-    <value>浅色 / 深色主题</value>
-  </data>
-  <data name="LanguageToggleTooltip" xml:space="preserve">
-    <value>界面语言</value>
-  </data>
-  <data name="AboutTooltip" xml:space="preserve">
-    <value>关于</value>
-  </data>
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>按车辆(厂牌、车型、年份)、涂装名称或作者搜索…</value>
   </data>
@@ -259,10 +250,10 @@
     <value>标签:</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ 仅显示收藏</value>
+    <value>仅显示收藏</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ 收藏优先</value>
+    <value>收藏优先</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>常规顺序</value>
@@ -271,10 +262,10 @@
     <value>添加/移除收藏</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ 将收藏单独显示</value>
+    <value>将收藏单独显示</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ 收藏</value>
+    <value>收藏</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>发现新版本 {0} →</value>
@@ -290,9 +281,6 @@
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>中文（简体）</value>
-  </data>
-  <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>最小化</value>
@@ -312,17 +300,11 @@
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>标头解析库：{0}</value>
   </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>刷新</value>
-  </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>设置</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>游戏路径</value>
-  </data>
-  <data name="GamePathPlaceholder" xml:space="preserve">
-    <value>无法自动检测，请手动输入路径</value>
   </data>
   <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>选择游戏安装文件夹</value>
@@ -359,9 +341,6 @@
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>统计</value>
-  </data>
-  <data name="LanguageMenuLabel" xml:space="preserve">
-    <value>语言</value>
   </data>
   <data name="StatsTotalLiveries" xml:space="preserve">
     <value>涂装总数</value>
@@ -405,12 +384,6 @@
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>仅重复</value>
   </data>
-  <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠︎ {0}</value>
-  </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>可能重复</value>
   </data>
@@ -425,5 +398,171 @@
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>所有涂装</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>未保存的更改</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>您进行了尚未保存的更改。如果现在退出，这些更改将会丢失。</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>保存并退出</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>不保存退出</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>扫描</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>自动刷新彩绘</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>点击刷新按钮时也刷新彩绘</value>
+  </data>
+  <data name="SettingsSaveFailedTitle" xml:space="preserve">
+    <value>保存失败</value>
+  </data>
+  <data name="SettingsSaveFailedNotice" xml:space="preserve">
+    <value>无法将设置写入磁盘。更改未生效。请重试保存。</value>
+  </data>
+  <data name="StatsPopularManufacturer" xml:space="preserve">
+    <value>热门制造商</value>
+  </data>
+  <data name="StatsPopularModel" xml:space="preserve">
+    <value>热门车型</value>
+  </data>
+  <data name="StatsPopularCar" xml:space="preserve">
+    <value>热门车辆</value>
+  </data>
+  <data name="StatsPopularAuthor" xml:space="preserve">
+    <value>热门作者</value>
+  </data>
+  <data name="StatsFavoriteModel" xml:space="preserve">
+    <value>最爱车型</value>
+  </data>
+  <data name="StatsFavoriteCar" xml:space="preserve">
+    <value>最爱车辆</value>
+  </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>作者卡片</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ 新建卡片</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>还没有作者卡片。
+创建一张卡片，将同一作者的多个昵称合并为一个名字。</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>新建作者卡片</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>编辑作者卡片</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>昵称</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>选择一个或多个昵称——同一个人可能用不同账号发布彩绘。</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>显示名称</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>可选——默认为第一个选中的昵称</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>请至少选择一个昵称</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>昵称《{0}》已属于另一张卡片</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>昵称：{0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>彩绘：{0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>收藏：{0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>重复：{0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>可能重复：{0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>删除卡片？</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>删除卡片《{0}》？其昵称将再次可用于新卡片。</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>按名称或昵称搜索...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>未找到结果</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>显示名称《{0}》已被另一张卡片使用</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>搜索昵称...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>需要的是个人资料链接（例如 x.com/username），而不是具体推文或其他页面</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>需要的是 YouTube 频道链接（例如 youtube.com/@username），而不是视频链接</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>尚未创建卡片</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>尚未为作者《{0}》创建卡片</value>
   </data>
 </root>

@@ -126,15 +126,6 @@
   <data name="RefreshTooltip" xml:space="preserve">
     <value>Actualiser (rescanner les modifications)</value>
   </data>
-  <data name="ThemeToggleTooltip" xml:space="preserve">
-    <value>Thème clair / sombre</value>
-  </data>
-  <data name="LanguageToggleTooltip" xml:space="preserve">
-    <value>Langue de l'interface</value>
-  </data>
-  <data name="AboutTooltip" xml:space="preserve">
-    <value>À propos</value>
-  </data>
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Rechercher par véhicule (marque, modèle, année), nom de livrée ou par auteur…</value>
   </data>
@@ -259,10 +250,10 @@ Le choisir manuellement ?
     <value>Tags :</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>⭐ Favoris uniquement</value>
+    <value>Favoris uniquement</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
-    <value>⭐ Favoris en premier</value>
+    <value>Favoris en premier</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
     <value>Ordre normal</value>
@@ -271,10 +262,10 @@ Le choisir manuellement ?
     <value>Ajouter/retirer des favoris</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>⭐ Afficher les favoris séparément</value>
+    <value>Afficher les favoris séparément</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
-    <value>⭐ Favoris</value>
+    <value>Favoris</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>Nouvelle version {0} disponible →</value>
@@ -290,9 +281,6 @@ Le choisir manuellement ?
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>Français</value>
-  </data>
-  <data name="FavoritesCountFormat" xml:space="preserve">
-    <value> · ⭐︎ {0}</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>Réduire</value>
@@ -312,17 +300,11 @@ Le choisir manuellement ?
   <data name="HeaderParserVersionFormat" xml:space="preserve">
     <value>Bibliothèque d'analyse d'en-tête : {0}</value>
   </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Actualiser</value>
-  </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Paramètres</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
     <value>Chemin du jeu</value>
-  </data>
-  <data name="GamePathPlaceholder" xml:space="preserve">
-    <value>Détection automatique impossible — saisissez le chemin manuellement</value>
   </data>
   <data name="SelectGameFolderDialogTitle" xml:space="preserve">
     <value>Sélectionnez le dossier d'installation du jeu</value>
@@ -359,9 +341,6 @@ Le choisir manuellement ?
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>Statistiques</value>
-  </data>
-  <data name="LanguageMenuLabel" xml:space="preserve">
-    <value>Langue</value>
   </data>
   <data name="StatsTotalLiveries" xml:space="preserve">
     <value>Total des livrées</value>
@@ -405,12 +384,6 @@ Le choisir manuellement ?
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Doublons uniquement</value>
   </data>
-  <data name="DuplicatesCountFormat" xml:space="preserve">
-    <value> · ⛔︎ {0}</value>
-  </data>
-  <data name="PossibleDuplicatesCountFormat" xml:space="preserve">
-    <value> · ⚠︎ {0}</value>
-  </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Doublon possible</value>
   </data>
@@ -425,5 +398,171 @@ Le choisir manuellement ?
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Toutes les livrées</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>Thème</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>Claire</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>Modifications non enregistrées</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>Vous avez apporté des modifications qui n'ont pas été enregistrées. Si vous quittez maintenant, elles seront perdues.</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>Enregistrer et quitter</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>Quitter sans enregistrer</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>Système</value>
+  </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Analyse</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Actualiser automatiquement les livrées</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Actualiser les livrées en cliquant sur le bouton</value>
+  </data>
+  <data name="SettingsSaveFailedTitle" xml:space="preserve">
+    <value>Échec de l'enregistrement</value>
+  </data>
+  <data name="SettingsSaveFailedNotice" xml:space="preserve">
+    <value>Impossible d'écrire les paramètres sur le disque. Les modifications n'ont pas été appliquées. Veuillez réessayer.</value>
+  </data>
+  <data name="StatsPopularManufacturer" xml:space="preserve">
+    <value>Fabricant populaire</value>
+  </data>
+  <data name="StatsPopularModel" xml:space="preserve">
+    <value>Modèle populaire</value>
+  </data>
+  <data name="StatsPopularCar" xml:space="preserve">
+    <value>Voiture populaire</value>
+  </data>
+  <data name="StatsPopularAuthor" xml:space="preserve">
+    <value>Auteur populaire</value>
+  </data>
+  <data name="StatsFavoriteModel" xml:space="preserve">
+    <value>Modèle préféré</value>
+  </data>
+  <data name="StatsFavoriteCar" xml:space="preserve">
+    <value>Voiture préférée</value>
+  </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>Auteurs</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>Fiches des auteurs</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ Nouvelle fiche</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>Aucune fiche d'auteur pour l'instant.
+Créez-en une pour regrouper les pseudos d'un même auteur sous un seul nom.</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>Nouvelle fiche d'auteur</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>Modifier la fiche d'auteur</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>Pseudos</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>Sélectionnez un ou plusieurs pseudos — une même personne peut publier des livrées depuis différents comptes.</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>Nom affiché</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>Facultatif — par défaut, le premier pseudo sélectionné</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>Sélectionnez au moins un pseudo</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>Le pseudo « {0} » appartient déjà à une autre fiche</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>Pseudos : {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>Livrées : {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>Favoris : {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>Doublons : {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>Doublons possibles : {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>Supprimer la fiche ?</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>Supprimer la fiche « {0} » ? Ses pseudos redeviendront disponibles pour une nouvelle fiche.</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>Rechercher par nom ou pseudo...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>Aucun résultat trouvé</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>Le nom affiché « {0} » est déjà utilisé par une autre fiche</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>Rechercher des pseudos...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>Il faut un lien vers un profil (par ex. x.com/username), pas vers un tweet précis ou une autre page</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>Il faut un lien vers une chaîne YouTube (par ex. youtube.com/@username), pas vers une vidéo</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>Aucune fiche créée</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>Aucune fiche n'a été créée pour l'auteur « {0} »</value>
   </data>
 </root>

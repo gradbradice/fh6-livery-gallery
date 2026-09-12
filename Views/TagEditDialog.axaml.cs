@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 
 namespace LiveryGallery.Views;
@@ -28,11 +29,7 @@ internal partial class TagEditDialog : Window
         };
     }
 
-    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            BeginMoveDrag(e);
-    }
+    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
     private void SaveButton_Click(object? sender, RoutedEventArgs e)
     {

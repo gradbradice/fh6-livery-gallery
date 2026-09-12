@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using ForzaData;
 using LiveryGallery.Configuration;
+using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 
 namespace LiveryGallery.Views;
@@ -25,11 +26,7 @@ internal partial class AboutDialog : Window
         GithubLinkButton.Content = Strings.ContactsGithubLabel;
     }
 
-    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            BeginMoveDrag(e);
-    }
+    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
     private void GithubLink_Click(object? sender, RoutedEventArgs e)
     {
@@ -39,6 +36,7 @@ internal partial class AboutDialog : Window
         }
         catch
         {
+            // do not log
         }
     }
 

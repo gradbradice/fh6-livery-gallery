@@ -2,15 +2,17 @@ using Avalonia.Media.Imaging;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Services;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.Models;
 
-internal class LiveryEntry
+internal class LiveryEntry : INotifyPropertyChanged
 {
     public required string FolderPath { get; init; }
     public required string FolderName { get; init; }
     public required string LiveryName { get; init; }
-    public required string Author { get; init; }
+    public required string AuthorRaw { get; init; }
     public required int CarId { get; init; }
     public required string CarManufacturerRaw { get; init; }
     public required string CarModelNameRaw { get; init; }
@@ -28,9 +30,47 @@ internal class LiveryEntry
     public string CarModelName => CarKnown
         ? CarModelNameRaw
         : string.Format(Strings.UnknownCarIdFormat, CarId);
+    private string _author = string.Empty;
+    public string Author
+    {
+        get => _author;
+        set
+        {
+            if (_author == value) return;
+            _author = value;
+            _searchHaystack = null;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(AuthorDisplayText));
+        }
+    }
+    public string AuthorDisplayText => string.Equals(Author, AuthorRaw, StringComparison.OrdinalIgnoreCase)
+        ? Author
+        : $"{Author} ({AuthorRaw})";
+    private bool _isFavorite;
+    public bool IsFavorite
+    {
+        get => _isFavorite;
+        set
+        {
+            if (_isFavorite == value) return;
+            _isFavorite = value;
+            OnPropertyChanged();
+        }
+    }
 
-    public bool IsFavorite { get; set; }
-    public List<string> Tags { get; set; } = [];
+    private List<string> _tags = [];
+    private System.Collections.ObjectModel.ReadOnlyCollection<string> _tagsReadOnly = new([]);
+    public IReadOnlyList<string> Tags
+    {
+        get => _tagsReadOnly;
+        set
+        {
+            _tags = [.. value];
+            _tagsReadOnly = _tags.AsReadOnly();
+            OnPropertyChanged();
+        }
+    }
+
     public DateTime? DownloadYearMonth => DownloadDate is { } d ? new DateTime(d.Year, d.Month, 1) : null;
 
     public string? CLiveryHash { get; init; }
@@ -38,33 +78,28 @@ internal class LiveryEntry
     public DuplicateStatus DuplicateStatus { get; set; }
     public bool IsDuplicate => DuplicateStatus == DuplicateStatus.Duplicate;
     public bool IsPossibleDuplicate => DuplicateStatus == DuplicateStatus.PossibleDuplicate;
+    public required bool HasThumbnail { get; init; }
 
-    public bool HasThumbnail => !string.IsNullOrEmpty(ThumbnailPath) && File.Exists(ThumbnailPath);
-
+    private Bitmap? _thumbnail;
     public Bitmap? Thumbnail
     {
-        get
+        get => _thumbnail;
+        set
         {
-            if (string.IsNullOrEmpty(ThumbnailPath) || !File.Exists(ThumbnailPath))
-                return null;
-
-            try
-            {
-                using var stream = File.OpenRead(ThumbnailPath);
-                return Bitmap.DecodeToWidth(stream, 280, BitmapInterpolationMode.MediumQuality);
-            }
-            catch
-            {
-                return null;
-            }
+            if (_thumbnail == value) return;
+            _thumbnail = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ShowThumbnailImage));
         }
     }
+
+    public bool ShowThumbnailImage => HasThumbnail && Thumbnail is not null;
 
     public string DateDisplay
     {
         get
         {
-            if (DownloadDate is { } d) return d.ToString("dd.MM.yyyy", AppLocalisationService.Culture);
+            if (DownloadDate is { } d) return d.ToString("d", AppLocalisationService.Culture);
             if (CreatedYear is > 0 && CreatedMonth is >= 1 and <= 12)
                 return new DateTime(CreatedYear.Value, CreatedMonth.Value, 1)
                     .ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture);
@@ -72,12 +107,19 @@ internal class LiveryEntry
         }
     }
 
-    private string SearchHaystack =>
-        $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}".ToLowerInvariant();
-
-    public bool MatchesSearch(string term)
+    private string? _searchHaystack;
+    private string SearchHaystack
     {
-        var tokens = term.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        get
+        {
+            if (_searchHaystack is not null) return _searchHaystack;
+            _searchHaystack = $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}";
+            return _searchHaystack;
+        }
+    }
+
+    public bool MatchesSearch(string[] tokens)
+    {
         if (tokens.Length == 0) return true;
 
         foreach (var token in tokens)
@@ -87,4 +129,17 @@ internal class LiveryEntry
         }
         return true;
     }
+
+    public void RefreshLocalizedText()
+    {
+        _searchHaystack = null;
+        OnPropertyChanged(nameof(CarManufacturer));
+        OnPropertyChanged(nameof(CarModelName));
+        OnPropertyChanged(nameof(DateDisplay));
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

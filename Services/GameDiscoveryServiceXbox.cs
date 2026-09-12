@@ -49,8 +49,9 @@ internal class GameDiscoveryServiceXbox
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
+            AppLogger.LogError("Xbox discovery: Failed to search for the installed game", ex);
         }
 
         return null;
@@ -75,8 +76,9 @@ internal class GameDiscoveryServiceXbox
             {
                 extra = ParseGamingRootFile(gamingRootFile, root);
             }
-            catch
+            catch (Exception ex)
             {
+                AppLogger.LogError($"Xbox discovery: Failed to parse '{gamingRootFile}'", ex);
                 continue;
             }
 
@@ -136,6 +138,8 @@ internal class GameDiscoveryServiceXbox
         }
         catch
         {
+            // do not log. this method is called for every installed
+            // Xbox game/app on the computer, not just for FH6
             return (null, null);
         }
     }

@@ -1,4 +1,6 @@
+using Avalonia;
 using LiveryGallery.Enums;
+using LiveryGallery.Localisation;
 using System.Globalization;
 
 namespace LiveryGallery.Services;
@@ -29,8 +31,31 @@ internal static class AppLocalisationService
     private static void ApplyCulture(AppLanguage language)
     {
         string culture = AppLanguageToString(language);
-        CultureInfo.CurrentCulture = new CultureInfo(culture);
-        CultureInfo.CurrentUICulture = new CultureInfo(culture);
+        var cultureInfo = new CultureInfo(culture);
+
+        // try to fix language change
+        CultureInfo.CurrentCulture = cultureInfo;
+        CultureInfo.CurrentUICulture = cultureInfo;
+        CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+        CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+        Strings.Culture = cultureInfo;
+
+        UpdateCardResourceStrings();
+    }
+
+    private static void UpdateCardResourceStrings()
+    {
+        var app = Application.Current;
+        if (app is null) return;
+
+        app.Resources["Loc_FavoriteToggleTooltip"] = Strings.FavoriteToggleTooltip;
+        app.Resources["Loc_DuplicateBadgeTooltip"] = Strings.DuplicateBadgeTooltip;
+        app.Resources["Loc_DuplicateBadgeLabel"] = Strings.DuplicateBadgeLabel;
+        app.Resources["Loc_PossibleDuplicateBadgeTooltip"] = Strings.PossibleDuplicateBadgeTooltip;
+        app.Resources["Loc_PossibleDuplicateBadgeLabel"] = Strings.PossibleDuplicateBadgeLabel;
+        app.Resources["Loc_AuthorLabel"] = Strings.AuthorLabel;
+        app.Resources["Loc_DateLabel"] = Strings.DateLabel;
+        app.Resources["Loc_EditTagsTooltip"] = Strings.EditTagsTooltip;
     }
 
     public static AppLanguage GetSystemLanguage()
@@ -51,7 +76,7 @@ internal static class AppLocalisationService
         return StringToAppLanguage(iso);
     }
 
-    private static AppLanguage StringToAppLanguage(string language)
+    public static AppLanguage StringToAppLanguage(string language)
     {
         return language switch
         {
@@ -60,6 +85,8 @@ internal static class AppLocalisationService
             "ja" => AppLanguage.Japanese,
             "de" => AppLanguage.German,
             "fr" => AppLanguage.French,
+            "zh-Hant" => AppLanguage.ChineseTraditional,
+            "zh-Hans" => AppLanguage.ChineseSimplified,
             "ko" => AppLanguage.Korean,
             "es" => AppLanguage.Spanish,
             "it" => AppLanguage.Italian,
@@ -68,7 +95,7 @@ internal static class AppLocalisationService
         };
     }
 
-    private static string AppLanguageToString(AppLanguage language)
+    public static string AppLanguageToString(AppLanguage language)
     {
         return language switch
         {

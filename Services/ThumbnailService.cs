@@ -1,9 +1,11 @@
-﻿using Avalonia.Media.Imaging;
+using Avalonia.Media.Imaging;
 
 namespace LiveryGallery.Services;
 
 internal static class ThumbnailService
 {
+    private static readonly SemaphoreSlim _generationLimiter = new(Math.Max(2, Environment.ProcessorCount / 2));
+
     public static string? FindSourceThumbnail(string folderPath)
     {
         string big = Path.Combine(folderPath, "bigThumb.webp");
@@ -15,24 +17,28 @@ internal static class ThumbnailService
 
     public static bool GenerateAndSave(string sourceWebpPath, string destPngPath, int maxWidth = 360)
     {
+        _generationLimiter.Wait();
         try
         {
             using var srcStream = File.OpenRead(sourceWebpPath);
             using var bitmap = Bitmap.DecodeToWidth(
-                srcStream, 
-                maxWidth, 
+                srcStream,
+                maxWidth,
                 BitmapInterpolationMode.MediumQuality);
 
             string? dir = Path.GetDirectoryName(destPngPath);
             if (dir is not null) Directory.CreateDirectory(dir);
-
-            using var destStream = File.Create(destPngPath);
-            bitmap.Save(destStream, PngBitmapEncoderOptions.Default);
+            AtomicFile.WriteViaStream(destPngPath, stream => bitmap.Save(stream, PngBitmapEncoderOptions.Default));
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            AppLogger.LogErrorThrottled(sourceWebpPath, $"Failed to generate thumbnail from '{sourceWebpPath}'", ex);
             return false;
+        }
+        finally
+        {
+            _generationLimiter.Release();
         }
     }
 }

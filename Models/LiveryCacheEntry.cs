@@ -1,18 +1,25 @@
-﻿namespace LiveryGallery.Models;
+namespace LiveryGallery.Models;
 
 internal record LiveryCacheEntry
 {
-    public string FolderPath { get; set; } = string.Empty;
-    public string FolderName { get; set; } = string.Empty;
-    public string LiveryName { get; set; } = string.Empty;
-    public string Author { get; set; } = string.Empty;
-    public int CarId { get; set; }
-    public int CreatedYear { get; set; }
-    public int CreatedMonth { get; set; }
-    public DateTime? DownloadDate { get; set; }
-    public string? PreviewFile { get; set; }
-    public string? ThumbnailFile { get; set; }
-    public DateTime FilesWruteUTC { get; set; }
-    public string? CLiveryHash { get; set; }
-    public uint[]? SectionCounts { get; set; }
+    public string FolderPath { get; init; } = string.Empty;
+    public string FolderName { get; init; } = string.Empty;
+    public string LiveryName { get; init; } = string.Empty;
+    public string Author { get; init; } = string.Empty;
+    public int CarId { get; init; }
+    public int CreatedYear { get; init; }
+    public int CreatedMonth { get; init; }
+    public DateTime? DownloadDate { get; init; }
+    public string? ThumbnailFile { get; init; }
+    public string HeaderHash { get; init; } = string.Empty;
+    public string? SourceThumbHash { get; init; }
+    public string? CLiveryHash { get; init; }
+    public long HeaderLength { get; init; }
+    public DateTime HeaderLastWriteUtc { get; init; }
+    public long SourceThumbLength { get; init; }
+    public DateTime SourceThumbLastWriteUtc { get; init; }
+    public long CLiveryLength { get; init; }
+    public DateTime CLiveryLastWriteUtc { get; init; }
+
+    public uint[]? SectionCounts { get; init; }
 }

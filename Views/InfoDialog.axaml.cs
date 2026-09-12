@@ -1,9 +1,8 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
+using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 
 namespace LiveryGallery.Views;
@@ -35,24 +34,14 @@ internal partial class InfoDialog : Window
 
             var run = new Run(lines[i].Text);
             if (lines[i].ColorResourceKey is { } key)
-                run.Foreground = GetBrush(key);
+                run.Foreground = this.GetThemeBrush(key);
             inlines.Add(run);
         }
         MessageText.Inlines = inlines;
     }
 
-    private IBrush GetBrush(string key)
-    {
-        if (Application.Current?.TryGetResource(key, ActualThemeVariant, out var res) == true && res is IBrush brush)
-            return brush;
-        return Brushes.Gray;
-    }
 
-    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            BeginMoveDrag(e);
-    }
+    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
     private void OkButton_Click(object? sender, RoutedEventArgs e) => Close();
 
