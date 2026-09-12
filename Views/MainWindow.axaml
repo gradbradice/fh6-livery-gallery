@@ -233,10 +233,10 @@
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="SearchBox" Grid.Column="0" Classes="search"
                              Margin="0,0,10,0" TextChanged="SearchBox_TextChanged" />
-                    <Button x:Name="DisplayFilterButton" Grid.Column="1" Classes="icon" Margin="0,0,8,0"
+					<Button x:Name="DisplayFilterButton" Grid.Column="1" Classes="icon" Margin="0,0,8,0"
                             ToolTip.Tip="{x:Static loc:Strings.DisplayFilterTooltip}">
-                        <Path Data="{StaticResource IconFilter}" Width="15" Height="15" Stretch="Uniform"
-                              Fill="{DynamicResource TextPrimaryBrush}" />
+						    <PathIcon Data="{StaticResource IconFilter}" Width="16" Height="16"
+								      Foreground="{DynamicResource TextPrimaryBrush}" />
                         <Button.Flyout>
                             <MenuFlyout Placement="BottomEdgeAlignedLeft">
                                 <MenuItem x:Name="GroupingToggleItem" ToggleType="CheckBox"
@@ -295,27 +295,27 @@
                         </Button.Flyout>
                     </Button>
 
-                    <Button x:Name="RefreshButton" Grid.Column="2" Classes="icon" Margin="0,0,8,0"
+					<Button x:Name="RefreshButton" Grid.Column="2" Classes="icon" Margin="0,0,8,0"
                             Click="RefreshButton_Click">
-                        <Path Data="{StaticResource IconRefresh}" Width="16" Height="16" Stretch="Uniform"
-                              Fill="{DynamicResource TextPrimaryBrush}" />
-                    </Button>
+						<PathIcon Data="{StaticResource IconRefresh}" Width="16" Height="16"
+								  Foreground="{DynamicResource TextPrimaryBrush}" />
+					</Button>
 
-                    <Button x:Name="AuthorsButton" Grid.Column="3" Classes="icon" Margin="0,0,8,0"
+					<Button x:Name="AuthorsButton" Grid.Column="3" Classes="icon" Margin="0,0,8,0"
                             Click="AuthorsButton_Click" ToolTip.Tip="{x:Static loc:Strings.AuthorsButtonTooltip}">
-                        <Path Data="{StaticResource IconUser}" Width="15" Height="15" Stretch="Uniform"
-                              Margin="0,1,0,0" Fill="{DynamicResource TextPrimaryBrush}" />
-                    </Button>
+						<PathIcon Data="{StaticResource IconUser}" Width="16" Height="16"
+								  Foreground="{DynamicResource TextPrimaryBrush}" />
+					</Button>
 
-                    <Button x:Name="StatsButton" Grid.Column="4" Classes="icon" Margin="0,0,8,0"
-                            Click="StatsButton_Click">
-                        <Path Data="{StaticResource IconStats}" Width="15" Height="15" Stretch="Uniform"
-                              Fill="{DynamicResource TextPrimaryBrush}" />
-                    </Button>
+					<Button x:Name="StatsButton" Grid.Column="4" Classes="icon" Margin="0,0,8,0"
+							Click="StatsButton_Click">
+						<PathIcon Data="{StaticResource IconStats}" Width="16" Height="16"
+								  Foreground="{DynamicResource TextPrimaryBrush}" />
+					</Button>
 
-                    <Button x:Name="SettingsButton" Grid.Column="5" Classes="icon">
-						<Path Data="{StaticResource IconSettings}" Width="16" Height="16" Stretch="Uniform"
-                              Fill="{DynamicResource TextPrimaryBrush}" />
+					<Button x:Name="SettingsButton" Grid.Column="5" Classes="icon">
+						<PathIcon Data="{StaticResource IconSettings}" Width="16" Height="16"
+								  Foreground="{DynamicResource TextPrimaryBrush}" />
 						<Button.Flyout>
 							<MenuFlyout Placement="BottomEdgeAlignedRight">
 								<MenuItem x:Name="OpenSettingsMenuItem" Click="OpenSettingsMenuItem_Click" />
