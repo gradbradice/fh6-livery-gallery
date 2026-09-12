@@ -12,7 +12,7 @@ internal class LiveryEntry : INotifyPropertyChanged
     public required string FolderPath { get; init; }
     public required string FolderName { get; init; }
     public required string LiveryName { get; init; }
-    public required string Author { get; init; }
+    public required string AuthorRaw { get; init; }
     public required int CarId { get; init; }
     public required string CarManufacturerRaw { get; init; }
     public required string CarModelNameRaw { get; init; }
@@ -30,7 +30,20 @@ internal class LiveryEntry : INotifyPropertyChanged
     public string CarModelName => CarKnown
         ? CarModelNameRaw
         : string.Format(Strings.UnknownCarIdFormat, CarId);
-
+    private string _author = string.Empty;
+    public string Author
+    {
+        get => _author;
+        set
+        {
+            if (_author == value) return;
+            _author = value;
+            _searchHaystack = null;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(AuthorDisplayText));
+        }
+    }
+    public string AuthorDisplayText => Author == AuthorRaw ? Author : $"{Author} ({AuthorRaw})";
     private bool _isFavorite;
     public bool IsFavorite
     {

@@ -19,7 +19,6 @@ internal class CarDatabaseService
     private readonly Lock _lock = new();
     private Dictionary<int, CarInfo> _byId = [];
     private CarDatabaseMetadata _metadata = new();
-
     private Task<CarDatabaseRefreshOutcome>? _inFlightRefresh;
     private readonly object _refreshGate = new();
 
@@ -48,9 +47,18 @@ internal class CarDatabaseService
         try
         {
             string json = File.ReadAllText(_path);
-            var (list, _) = ParseJson(json);
+            var (list, rejectedCount) = ParseJson(json);
             if (list.Count > 0)
             {
+                string? validationError = Validate(list, rejectedCount);
+                if (validationError is not null)
+                {
+                    LastError = validationError;
+                    AppLogger.LogError($"Local car database failed validation: {validationError}",
+                        new InvalidDataException(validationError));
+                    return;
+                }
+
                 string actualHash = ComputeSemanticHash(list);
                 lock (_lock)
                 {
@@ -78,11 +86,24 @@ internal class CarDatabaseService
 
     public Task<CarDatabaseRefreshOutcome> RefreshAsync(CancellationToken ct = default)
     {
+        Task<CarDatabaseRefreshOutcome> inFlight;
         lock (_refreshGate)
         {
             _inFlightRefresh ??= RefreshCoreAsync(ct);
-            return _inFlightRefresh;
+            inFlight = _inFlightRefresh;
         }
+
+        return ct.CanBeCanceled ? WaitWithOwnCancellation(inFlight, ct) : inFlight;
+    }
+
+    private static async Task<CarDatabaseRefreshOutcome> WaitWithOwnCancellation(
+        Task<CarDatabaseRefreshOutcome> inFlight, CancellationToken ct)
+    {
+        var cancellationTask = Task.Delay(Timeout.Infinite, ct);
+        var completed = await Task.WhenAny(inFlight, cancellationTask);
+        if (completed == cancellationTask)
+            ct.ThrowIfCancellationRequested();
+        return await inFlight;
     }
 
     private async Task<CarDatabaseRefreshOutcome> RefreshCoreAsync(CancellationToken ct)
@@ -151,12 +172,12 @@ internal class CarDatabaseService
                 };
                 _byId = BuildIndex(list);
             }
-
+            
             bool metadataSaved = await SaveMetadataAsync();
             if (!metadataSaved)
             {
                 AppLogger.LogError(
-                    "Car database was updated, but failed to persist refresh metadata. ETag will be re-fetched next time",
+                    "Car database was updated, but failed to persist refresh metadata (ETag will be re-fetched next time)",
                     new IOException("SaveMetadataAsync failed after a successful database update"));
             }
 
@@ -181,7 +202,7 @@ internal class CarDatabaseService
         int totalSeen = list.Count + rejectedCount;
         if (totalSeen > 0 && rejectedCount > totalSeen * 0.1)
             return $"too many invalid entries while parsing: {rejectedCount} of {totalSeen}";
-
+        
         var duplicateIds = list
             .GroupBy(c => c.Id)
             .Where(g => g.Count() > 1)

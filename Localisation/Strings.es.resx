@@ -468,4 +468,101 @@
   <data name="StatsFavoriteCar" xml:space="preserve">
     <value>Coche favorito</value>
   </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>Autores</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>Tarjetas de autor</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ Nueva tarjeta</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>Aún no hay tarjetas de autor.
+Cree una para unificar los apodos de un autor bajo un solo nombre.</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>Nueva tarjeta de autor</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>Editar tarjeta de autor</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>Apodos</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>Seleccione uno o más apodos — una persona puede publicar librés desde varias cuentas.</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>Nombre a mostrar</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>Opcional — por defecto, el primer apodo seleccionado</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>Seleccione al menos un apodo</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>El apodo «{0}» ya pertenece a otra tarjeta</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>Apodos: {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>Librés: {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>Favoritos: {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>Duplicados: {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>Posibles duplicados: {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>¿Eliminar tarjeta?</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>¿Eliminar la tarjeta «{0}»? Sus apodos volverán a estar disponibles para una nueva tarjeta.</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>Buscar por nombre o apodo...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>No se encontraron resultados</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>El nombre a mostrar «{0}» ya lo usa otra tarjeta</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>Buscar apodos...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>Se necesita un enlace a un perfil (p. ej. x.com/username), no a un tuit concreto u otra página</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>Se necesita un enlace a un canal de YouTube (p. ej. youtube.com/@username), no a un vídeo</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>No se creó ninguna tarjeta</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>No se ha creado ninguna tarjeta para el autor «{0}»</value>
+  </data>
 </root>

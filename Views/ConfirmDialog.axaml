@@ -1,8 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="LiveryGallery.Views.ConfirmDialog"
-        Width="440"
-        SizeToContent="Height"
+        MinWidth="440"
+        SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner"
         CanResize="False"
         ShowInTaskbar="False"
@@ -65,6 +65,7 @@
 			<TextBlock x:Name="MessageText"
                        Grid.Row="0"
                        TextWrapping="Wrap"
+                       MaxWidth="392"
                        FontSize="13.5"
                        Foreground="{DynamicResource TextPrimaryBrush}" />
 

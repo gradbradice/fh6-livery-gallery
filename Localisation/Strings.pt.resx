@@ -468,4 +468,101 @@ Escolher manualmente?
   <data name="StatsFavoriteCar" xml:space="preserve">
     <value>Carro favorito</value>
   </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>Autores</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>Cartões de autor</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ Novo cartão</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>Ainda não há cartões de autor.
+Crie um para unir os apelidos de um autor sob um único nome.</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>Novo cartão de autor</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>Editar cartão de autor</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>Apelidos</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>Selecione um ou mais apelidos — uma pessoa pode publicar pinturas de contas diferentes.</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>Nome exibido</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>Opcional — por padrão, o primeiro apelido selecionado</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>Selecione pelo menos um apelido</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>O apelido «{0}» já pertence a outro cartão</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>Apelidos: {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>Pinturas: {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>Favoritos: {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>Duplicados: {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>Possíveis duplicados: {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>Excluir cartão?</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>Excluir o cartão «{0}»? Seus apelidos voltarão a ficar disponíveis para um novo cartão.</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>Buscar por nome ou apelido...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>Nenhum resultado encontrado</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>O nome exibido «{0}» já está sendo usado por outro cartão</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>Buscar apelidos...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>É necessário um link para um perfil (ex. x.com/username), não para um tweet específico ou outra página</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>É necessário um link para um canal do YouTube (ex. youtube.com/@username), não para um vídeo</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>Nenhum cartão criado</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>Nenhum cartão foi criado para o autor «{0}»</value>
+  </data>
 </root>

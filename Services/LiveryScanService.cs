@@ -12,23 +12,26 @@ namespace LiveryGallery.Services;
 internal partial class LiveryScanService
 {
     private static readonly Regex FolderNameRegex =
-        new(@"Livery_(?<carId>\d+)_(?<ts>\d+)", RegexOptions.Compiled);
+        new(@"^Livery_(?<carId>\d+)_(?<ts>\d+)$", RegexOptions.Compiled);
 
     private readonly AppCacheService _appCacheService;
     private readonly CarDatabaseService _carDatabaseService;
     private readonly FavoriteService _favoriteService;
     private readonly TagService _tagService;
+    private readonly AuthorCardService _authorCardService;
 
     public LiveryScanService(
         AppCacheService appCacheService,
         CarDatabaseService carDatabaseService,
         FavoriteService favoriteService,
-        TagService tagService)
+        TagService tagService,
+        AuthorCardService authorCardService)
     {
         _appCacheService = appCacheService;
         _carDatabaseService = carDatabaseService;
         _favoriteService = favoriteService;
         _tagService = tagService;
+        _authorCardService = authorCardService;
     }
 
     public Task<LiveryScanEntry> ScanAsync(string savePath, IProgress<string>? progress = null, CancellationToken ct = default) =>
@@ -299,10 +302,7 @@ internal partial class LiveryScanService
 
                 if (cLiveryHash != oldCLiveryHash)
                 {
-                    cLiveryStream.Position = 0;
-                    using var ms = new MemoryStream(checked((int)cLiveryLength));
-                    cLiveryStream.CopyTo(ms);
-                    cLiveryBytes = ms.ToArray();
+                    cLiveryBytes = File.ReadAllBytes(cLiveryPath);
                 }
             }
             catch (Exception ex)
@@ -425,7 +425,8 @@ internal partial class LiveryScanService
             FolderPath = c.FolderPath,
             FolderName = c.FolderName,
             LiveryName = c.LiveryName,
-            Author = c.Author,
+            AuthorRaw = c.Author,
+            Author = _authorCardService.ResolveDisplayName(c.Author),
             CarId = c.CarId,
             CarManufacturerRaw = car?.Manufacturer ?? string.Empty,
             CarModelNameRaw = car?.Name ?? string.Empty,
@@ -494,6 +495,7 @@ internal partial class LiveryScanService
     private static void MarkPossibleDuplicatesInGroup(List<LiveryEntry> items)
     {
         const int minSharedForCandidate = 2;
+        const int maxCandidatesPerKey = 300;
 
         var index = new Dictionary<(int Position, uint Value), List<int>>();
         for (int i = 0; i < items.Count; i++)
@@ -505,14 +507,18 @@ internal partial class LiveryScanService
                 var key = (pos, counts[pos]);
                 if (!index.TryGetValue(key, out var list))
                     index[key] = list = [];
-                list.Add(i);
+                if (list.Count < maxCandidatesPerKey)
+                    list.Add(i);
             }
         }
+
+        var sharedCounts = new Dictionary<int, int>();
 
         for (int i = 0; i < items.Count; i++)
         {
             var counts = items[i].SectionCounts!;
-            Dictionary<int, int>? sharedCounts = null;
+            sharedCounts.Clear();
+            bool hasAnyShared = false;
 
             for (int pos = 0; pos < counts.Count; pos++)
             {
@@ -522,12 +528,12 @@ internal partial class LiveryScanService
                 foreach (int j in candidates)
                 {
                     if (j <= i) continue;
-                    sharedCounts ??= [];
+                    hasAnyShared = true;
                     sharedCounts[j] = sharedCounts.GetValueOrDefault(j) + 1;
                 }
             }
 
-            if (sharedCounts is null) continue;
+            if (!hasAnyShared) continue;
 
             foreach (var (j, shared) in sharedCounts)
             {

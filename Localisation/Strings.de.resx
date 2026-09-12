@@ -468,4 +468,101 @@ Manuell auswählen?
   <data name="StatsFavoriteCar" xml:space="preserve">
     <value>Lieblingsauto</value>
   </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>Künstler</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>Künstlerkarten</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ Neue Karte</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>Noch keine Künstlerkarten.
+Erstellen Sie eine, um die Spitznamen eines Autors unter einem Namen zusammenzuführen.</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>Neue Künstlerkarte</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>Künstlerkarte bearbeiten</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>Spitznamen</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>Wählen Sie einen oder mehrere Spitznamen aus — eine Person kann Liverys von verschiedenen Konten veröffentlichen.</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>Anzeigename</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>Optional — Standard ist der erste ausgewählte Spitzname</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>Wählen Sie mindestens einen Spitznamen aus</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>Der Spitzname "{0}" gehört bereits zu einer anderen Karte</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>Spitznamen: {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>Liverys: {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>Favoriten: {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>Duplikate: {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>Mögliche Duplikate: {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>Karte löschen?</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>Karte "{0}" löschen? Ihre Spitznamen werden wieder für eine neue Karte verfügbar.</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>Suche nach Name oder Spitzname...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>Keine Ergebnisse gefunden</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>Der Anzeigename "{0}" wird bereits von einer anderen Karte verwendet</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>Spitznamen suchen...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>Erforderlich ist ein Link zu einem Profil (z. B. x.com/username), nicht zu einem bestimmten Tweet oder einer anderen Seite</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>Erforderlich ist ein Link zu einem YouTube-Kanal (z. B. youtube.com/@username), nicht zu einem Video</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>Keine Karte erstellt</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>Für den Künstler "{0}" wurde keine Karte erstellt</value>
+  </data>
 </root>

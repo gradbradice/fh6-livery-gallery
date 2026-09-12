@@ -468,4 +468,101 @@
   <data name="StatsFavoriteCar" xml:space="preserve">
     <value>最爱车辆</value>
   </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>作者卡片</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ 新建卡片</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>还没有作者卡片。
+创建一张卡片，将同一作者的多个昵称合并为一个名字。</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>新建作者卡片</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>编辑作者卡片</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>昵称</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>选择一个或多个昵称——同一个人可能用不同账号发布彩绘。</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>显示名称</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>可选——默认为第一个选中的昵称</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>请至少选择一个昵称</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>昵称《{0}》已属于另一张卡片</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>昵称：{0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>彩绘：{0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>收藏：{0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>重复：{0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>可能重复：{0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>删除卡片？</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>删除卡片《{0}》？其昵称将再次可用于新卡片。</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>按名称或昵称搜索...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>未找到结果</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>显示名称《{0}》已被另一张卡片使用</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>搜索昵称...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>需要的是个人资料链接（例如 x.com/username），而不是具体推文或其他页面</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>需要的是 YouTube 频道链接（例如 youtube.com/@username），而不是视频链接</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>尚未创建卡片</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>尚未为作者《{0}》创建卡片</value>
+  </data>
 </root>

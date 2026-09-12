@@ -22,11 +22,24 @@ internal class AppUpdateCheckService
 
     public Task<AppUpdateCheckResult> CheckAsync(CancellationToken ct = default)
     {
+        Task<AppUpdateCheckResult> inFlight;
         lock (_checkGate)
         {
             _inFlightCheck ??= CheckCoreAsync(ct);
-            return _inFlightCheck;
+            inFlight = _inFlightCheck;
         }
+
+        return ct.CanBeCanceled ? WaitWithOwnCancellation(inFlight, ct) : inFlight;
+    }
+
+    private static async Task<AppUpdateCheckResult> WaitWithOwnCancellation(
+        Task<AppUpdateCheckResult> inFlight, CancellationToken ct)
+    {
+        var cancellationTask = Task.Delay(Timeout.Infinite, ct);
+        var completed = await Task.WhenAny(inFlight, cancellationTask);
+        if (completed == cancellationTask)
+            ct.ThrowIfCancellationRequested();
+        return await inFlight;
     }
 
     private async Task<AppUpdateCheckResult> CheckCoreAsync(CancellationToken ct)

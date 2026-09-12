@@ -24,10 +24,11 @@ internal partial class App : Application
             var carDatabase = new CarDatabaseService(AppHttpClient.Instance);
             var tagService = new TagService();
             var favoriteService = new FavoriteService();
-            var scanService = new LiveryScanService(cacheService, carDatabase, favoriteService, tagService);
+            var authorCardService = new AuthorCardService();
+            var scanService = new LiveryScanService(cacheService, carDatabase, favoriteService, tagService, authorCardService);
             var updateService = new AppUpdateCheckService(AppHttpClient.Instance);
             desktop.MainWindow = new MainWindow(
-                settings, cacheService, carDatabase, tagService, favoriteService, scanService, updateService);
+                settings, cacheService, carDatabase, tagService, favoriteService, authorCardService, scanService, updateService);
         }
 
         base.OnFrameworkInitializationCompleted();

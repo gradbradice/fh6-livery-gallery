@@ -28,33 +28,43 @@ internal class SaveService
 
     public void SaveImmediate(string json, string path)
     {
+        long myGeneration;
         lock (_lock)
         {
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
-            _generation++;
+            myGeneration = ++_generation;
             _pendingJson = null;
             _pendingPath = null;
         }
         _writeSemaphore.Wait();
-        try { Save(json, path); }
+        try
+        {
+            if (!IsCurrent(myGeneration)) return;
+            Save(json, path);
+        }
         finally { _writeSemaphore.Release(); }
     }
 
     public async Task<bool> SaveImmediateAsync(string json, string path)
     {
+        long myGeneration;
         lock (_lock)
         {
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
-            _generation++;
+            myGeneration = ++_generation;
             _pendingJson = null;
             _pendingPath = null;
         }
         await _writeSemaphore.WaitAsync();
-        try { return await SaveAsync(json, path); }
+        try
+        {
+            if (!IsCurrent(myGeneration)) return true;
+            return await SaveAsync(json, path);
+        }
         finally { _writeSemaphore.Release(); }
     }
 
@@ -62,6 +72,7 @@ internal class SaveService
     {
         string? json;
         string? path;
+        long myGeneration;
         lock (_lock)
         {
             if (_pendingJson is null || _pendingPath is null) return;
@@ -71,12 +82,16 @@ internal class SaveService
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
-            _generation++;
+            myGeneration = ++_generation;
             _pendingJson = null;
             _pendingPath = null;
         }
         _writeSemaphore.Wait();
-        try { Save(json, path); }
+        try
+        {
+            if (!IsCurrent(myGeneration)) return;
+            Save(json, path);
+        }
         finally { _writeSemaphore.Release(); }
     }
 
@@ -109,8 +124,17 @@ internal class SaveService
         if (!shouldWrite) return;
 
         await _writeSemaphore.WaitAsync();
-        try { await SaveAsync(json, path); }
+        try
+        {
+            if (!IsCurrent(myGeneration)) return;
+            await SaveAsync(json, path);
+        }
         finally { _writeSemaphore.Release(); }
+    }
+
+    private bool IsCurrent(long myGeneration)
+    {
+        lock (_lock) return myGeneration == _generation;
     }
 
     private static void Save(string json, string path)

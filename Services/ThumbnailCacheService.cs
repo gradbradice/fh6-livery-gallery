@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 
 namespace LiveryGallery.Services;
+
 internal static class ThumbnailCacheService
 {
     private static readonly Dictionary<string, (Bitmap Bitmap, int RefCount)> _cache = [];

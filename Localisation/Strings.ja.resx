@@ -468,4 +468,101 @@
   <data name="StatsFavoriteCar" xml:space="preserve">
     <value>お気に入りの車</value>
   </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>作者カード</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ 新しいカード</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>作者カードはまだありません。
+複数のニックネームを1つの名前にまとめるには、カードを作成してください。</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>新しい作者カード</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>作者カードを編集</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>ニックネーム</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>1つ以上のニックネームを選択してください — 同じ人物が別のアカウントからラッピングを公開することがあります。</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>表示名</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>任意 — 既定では最初に選択したニックネーム</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>少なくとも1つのニックネームを選択してください</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>ニックネーム「{0}」は既に別のカードに登録されています</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>ニックネーム: {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>ラッピング: {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>お気に入り: {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>重複: {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>重複の可能性: {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>カードを削除しますか？</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>カード「{0}」を削除しますか？そのニックネームは再び新しいカードで使用できるようになります。</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>名前またはニックネームで検索...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>見つかりませんでした</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>表示名「{0}」は既に別のカードで使用されています</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>ニックネームを検索...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>特定のツイートや他のページではなく、プロフィールへのリンク（例：x.com/username）が必要です</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>動画へのリンクではなく、YouTubeチャンネルへのリンク（例：youtube.com/@username）が必要です</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>カードは作成されていません</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>作者「{0}」のカードはまだ作成されていません</value>
+  </data>
 </root>

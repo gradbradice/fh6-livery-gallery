@@ -468,4 +468,101 @@ Le choisir manuellement ?
   <data name="StatsFavoriteCar" xml:space="preserve">
     <value>Voiture préférée</value>
   </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>Auteurs</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>Fiches des auteurs</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ Nouvelle fiche</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>Aucune fiche d'auteur pour l'instant.
+Créez-en une pour regrouper les pseudos d'un même auteur sous un seul nom.</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>Nouvelle fiche d'auteur</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>Modifier la fiche d'auteur</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>Pseudos</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>Sélectionnez un ou plusieurs pseudos — une même personne peut publier des livrées depuis différents comptes.</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>Nom affiché</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>Facultatif — par défaut, le premier pseudo sélectionné</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>Sélectionnez au moins un pseudo</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>Le pseudo « {0} » appartient déjà à une autre fiche</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>Pseudos : {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>Livrées : {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>Favoris : {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>Doublons : {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>Doublons possibles : {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>Supprimer la fiche ?</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>Supprimer la fiche « {0} » ? Ses pseudos redeviendront disponibles pour une nouvelle fiche.</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>Rechercher par nom ou pseudo...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>Aucun résultat trouvé</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>Le nom affiché « {0} » est déjà utilisé par une autre fiche</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>Rechercher des pseudos...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>Il faut un lien vers un profil (par ex. x.com/username), pas vers un tweet précis ou une autre page</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>Il faut un lien vers une chaîne YouTube (par ex. youtube.com/@username), pas vers une vidéo</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>Aucune fiche créée</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>Aucune fiche n'a été créée pour l'auteur « {0} »</value>
+  </data>
 </root>

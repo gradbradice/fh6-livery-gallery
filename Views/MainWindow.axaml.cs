@@ -19,15 +19,14 @@ internal partial class MainWindow : Window
     private readonly CarDatabaseService _carDb;
     private readonly TagService _tagService;
     private readonly FavoriteService _favoriteService;
+    private readonly AuthorCardService _authorCardService;
     private readonly LiveryScanService _scanService;
     private readonly AppUpdateCheckService _updateService;
-
     private List<LiveryEntry> _allEntries = [];
     private readonly ObservableCollection<LiveryGroup> _displayedGroups = [];
     private readonly HashSet<string> _selectedTags = new(StringComparer.OrdinalIgnoreCase);
     private string? _savePath;
     private bool _savePathLostNotified;
-
     private string? SaveDataPath
     {
         get
@@ -58,7 +57,6 @@ internal partial class MainWindow : Window
     private string? _updateReleaseUrl;
     private string? _latestVersion;
     private string? _updateReleaseBody;
-
     private bool _isLoaded;
     private readonly DispatcherTimer _searchDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(500) };
     private readonly DispatcherTimer _resizeDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(200) };
@@ -69,6 +67,7 @@ internal partial class MainWindow : Window
         CarDatabaseService carDatabase,
         TagService tagService,
         FavoriteService favoriteService,
+        AuthorCardService authorCardService,
         LiveryScanService scanService,
         AppUpdateCheckService updateService)
     {
@@ -79,10 +78,11 @@ internal partial class MainWindow : Window
         _carDb = carDatabase;
         _tagService = tagService;
         _favoriteService = favoriteService;
+        _authorCardService = authorCardService;
         _scanService = scanService;
         _updateService = updateService;
-
         UpdateDisplayFilterChecks();
+
         ApplyLocalizedTexts();
 
         _searchDebounceTimer.Tick += (_, __) =>
@@ -130,6 +130,7 @@ internal partial class MainWindow : Window
         {
             _favoriteService.Flush();
             _tagService.Flush();
+            _authorCardService.Flush();
             _cacheService.Flush();
             AppSettingsService.Flush();
             AppLogger.Shutdown();
@@ -210,6 +211,22 @@ internal partial class MainWindow : Window
         if (_latestVersion is null) return;
         var dlg = new WhatsNewDialog(_latestVersion, _updateReleaseBody, _updateReleaseUrl);
         await dlg.ShowDialog(this);
+    }
+
+    private bool _pendingAuthorRefresh;
+
+    private async Task RefreshAuthorDisplayNamesAsync()
+    {
+        if (_isScanning || SaveDataPath is null)
+        {
+            _pendingAuthorRefresh = true;
+            return;
+        }
+
+        var freshEntries = await _scanService.RegenerateEntriesAsync(_shutdownCts.Token);
+        _allEntries = MergeWithLocalState(freshEntries);
+        RebuildTagsBar();
+        RefreshGallery();
     }
 
     private async Task RefreshCarDatabaseAsync(bool showLoadingOverlay = true)
@@ -401,6 +418,11 @@ internal partial class MainWindow : Window
                 {
                     _autoScanTimer.Stop();
                     _autoScanTimer.Start();
+                }
+                if (_pendingAuthorRefresh)
+                {
+                    _pendingAuthorRefresh = false;
+                    await RefreshAuthorDisplayNamesAsync();
                 }
             }
             cts.Dispose();
@@ -648,6 +670,22 @@ internal partial class MainWindow : Window
         }
     }
 
+    private async void AuthorRow_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
+
+        var card = _authorCardService.FindCardForAlias(entry.AuthorRaw);
+        if (card is null)
+        {
+            await InfoDialog.ShowAsync(this, Strings.AuthorCardViewNoCardTitle,
+                string.Format(Strings.AuthorCardViewNoCardMessage, entry.AuthorRaw));
+            return;
+        }
+
+        var dialog = new AuthorCardViewDialog(card, _allEntries);
+        await dialog.ShowDialog(this);
+    }
+
     private async void EditTags_Click(object? sender, RoutedEventArgs e)
     {
         if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
@@ -777,6 +815,16 @@ internal partial class MainWindow : Window
         }
     }
 
+    private async void AuthorsButton_Click(object? sender, RoutedEventArgs e)
+    {
+        var dialog = new AuthorsDialog(_authorCardService, _allEntries, async () =>
+        {
+            await RefreshAuthorDisplayNamesAsync();
+            return _allEntries;
+        });
+        await dialog.ShowDialog(this);
+    }
+
     private async void StatsButton_Click(object? sender, RoutedEventArgs e)
     {
         var stats = GalleryStatisticsService.CalculateOverall(_allEntries);
@@ -821,6 +869,7 @@ internal partial class MainWindow : Window
         SearchBox.PlaceholderText = Strings.SearchPlaceholder;
 
         DisplayFilterButton.SetValue(ToolTip.TipProperty, Strings.DisplayFilterTooltip);
+        AuthorsButton.SetValue(ToolTip.TipProperty, Strings.AuthorsButtonTooltip);
         GroupingToggleItem.Header = Strings.GroupingToggleLabel;
         SortManufacturerItem.Header = Strings.SortManufacturer;
         SortAuthorItem.Header = Strings.SortAuthor;

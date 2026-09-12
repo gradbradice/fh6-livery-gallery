@@ -19,4 +19,9 @@ internal static class WindowExtensions
             return brush;
         return Brushes.Gray;
     }
+
+    public static Geometry? GetThemeGeometry(this Window window, string key) =>
+        Application.Current?.TryGetResource(key, window.ActualThemeVariant, out var res) == true && res is Geometry geometry
+            ? geometry
+            : null;
 }
