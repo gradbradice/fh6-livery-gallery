@@ -1,27 +1,20 @@
-﻿using LiveryGallery.Configuration;
+using LiveryGallery.Configuration;
 using System.Text.Json;
 
 namespace LiveryGallery.Services;
 
 internal class TagService
 {
-    private readonly SaveService _saveService;
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "tags.json");
     private Dictionary<string, List<string>> _data = [];
     private readonly Lock _lock = new();
 
-    public TagService()
-    {
-        _saveService = new();
-        Load();
-    }
+    public TagService() => Load();
 
     public List<string> GetTags(string folderName)
     {
         lock (_lock) return _data.TryGetValue(folderName, out var tags) ? [.. tags] : [];
     }
-
-    public void Flush() => _saveService.Flush();
 
     public void SetTags(string folderName, IReadOnlyList<string> tags)
     {
@@ -42,7 +35,7 @@ internal class TagService
             Dictionary<string, List<string>> snapshot;
             lock (_lock) snapshot = new Dictionary<string, List<string>>(_data);
             string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
-            _saveService.ScheduleSave(json, _path);
+            PersistenceManager.Schedule(_path, json);
         }
         catch (Exception ex)
         {

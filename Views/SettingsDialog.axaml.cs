@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using LiveryGallery.Controller;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
@@ -205,21 +206,23 @@ internal partial class SettingsDialog : Window
             return false;
         }
 
-        _settings.ThemeMode = themeMode;
-        _settings.Language = languageValue;
-        _settings.GameInstallPath = string.IsNullOrEmpty(gameValue) ? null : gameValue;
-        _settings.SavePath = saveValue == _savedSavePath && _saveInitialWasAutoDiscovered
+        var candidate = _settings.Clone();
+        candidate.ThemeMode = themeMode;
+        candidate.Language = languageValue;
+        candidate.GameInstallPath = string.IsNullOrEmpty(gameValue) ? null : gameValue;
+        candidate.SavePath = saveValue == _savedSavePath && _saveInitialWasAutoDiscovered
             ? null
             : (string.IsNullOrEmpty(saveValue) ? null : saveValue);
-        _settings.AutoRefreshLiveries = AutoRefreshLiveriesCheckBox.IsChecked == true;
-        _settings.RefreshLiveriesOnButtonClick = RefreshOnButtonClickCheckBox.IsChecked == true;
-
-        bool saved = await AppSettingsService.SaveImmediateAsync(_settings);
+        candidate.AutoRefreshLiveries = AutoRefreshLiveriesCheckBox.IsChecked == true;
+        candidate.RefreshLiveriesOnButtonClick = RefreshOnButtonClickCheckBox.IsChecked == true;
+        bool saved = await AppSettingsService.SaveImmediateAsync(candidate);
         if (!saved)
         {
             await InfoDialog.ShowAsync(this, Strings.SettingsSaveFailedTitle, Strings.SettingsSaveFailedNotice);
             return false;
         }
+
+        _settings.CopyFrom(candidate);
 
         AppThemeService.ApplyTheme(themeMode);
         if (languageValue != AppLocalisationService.AppLanguage)

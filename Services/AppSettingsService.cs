@@ -1,4 +1,4 @@
-﻿using LiveryGallery.Configuration;
+using LiveryGallery.Configuration;
 using LiveryGallery.Enums;
 using LiveryGallery.Models;
 using System.Text.Json;
@@ -7,7 +7,6 @@ namespace LiveryGallery.Services;
 
 internal static class AppSettingsService
 {
-    private static readonly SaveService _saveService = new();
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "settings.json");
 
     public static void Save(AppSettingsData data)
@@ -15,7 +14,7 @@ internal static class AppSettingsService
         try
         {
             string json = JsonSerializer.Serialize(data, JsonSettings.DefaultOptions);
-            _saveService.ScheduleSave(json, _path);
+            PersistenceManager.Schedule(_path, json);
         }
         catch (Exception ex)
         {
@@ -28,7 +27,7 @@ internal static class AppSettingsService
         try
         {
             string json = JsonSerializer.Serialize(data, JsonSettings.DefaultOptions);
-            return await _saveService.SaveImmediateAsync(json, _path);
+            return await PersistenceManager.SaveNowAsync(_path, json);
         }
         catch (Exception ex)
         {
@@ -36,8 +35,6 @@ internal static class AppSettingsService
             return false;
         }
     }
-
-    public static void Flush() => _saveService.Flush();
 
     private static bool NormalizeEnums(AppSettingsData data)
     {

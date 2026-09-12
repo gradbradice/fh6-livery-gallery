@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 
 namespace LiveryGallery.Views;

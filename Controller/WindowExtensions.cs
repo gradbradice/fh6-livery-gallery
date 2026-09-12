@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 
-namespace LiveryGallery.Views;
+namespace LiveryGallery.Controller;
 
 internal static class WindowExtensions
 {

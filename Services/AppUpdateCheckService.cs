@@ -1,6 +1,5 @@
 using LiveryGallery.Configuration;
 using LiveryGallery.Models;
-using System.Net;
 using System.Text.Json;
 
 namespace LiveryGallery.Services;
@@ -11,8 +10,7 @@ internal class AppUpdateCheckService
     private readonly HttpClient _http;
     private readonly Lock _lock = new();
     private AppUpdateCheckMetadata _metadata;
-    private Task<AppUpdateCheckResult>? _inFlightCheck;
-    private readonly object _checkGate = new();
+    private readonly CoalescedAsyncOperation<AppUpdateCheckResult> _coalescedCheck = new();
 
     public AppUpdateCheckService(HttpClient http)
     {
@@ -20,55 +18,29 @@ internal class AppUpdateCheckService
         _metadata = LoadMetadata();
     }
 
-    public Task<AppUpdateCheckResult> CheckAsync(CancellationToken ct = default)
-    {
-        Task<AppUpdateCheckResult> inFlight;
-        lock (_checkGate)
-        {
-            _inFlightCheck ??= CheckCoreAsync(ct);
-            inFlight = _inFlightCheck;
-        }
-
-        return ct.CanBeCanceled ? WaitWithOwnCancellation(inFlight, ct) : inFlight;
-    }
-
-    private static async Task<AppUpdateCheckResult> WaitWithOwnCancellation(
-        Task<AppUpdateCheckResult> inFlight, CancellationToken ct)
-    {
-        var cancellationTask = Task.Delay(Timeout.Infinite, ct);
-        var completed = await Task.WhenAny(inFlight, cancellationTask);
-        if (completed == cancellationTask)
-            ct.ThrowIfCancellationRequested();
-        return await inFlight;
-    }
+    public Task<AppUpdateCheckResult> CheckAsync(CancellationToken ct = default) =>
+        _coalescedCheck.RunAsync(CheckCoreAsync, ct);
 
     private async Task<AppUpdateCheckResult> CheckCoreAsync(CancellationToken ct)
     {
         try
         {
-            string url = "https://api.github.com/repos/gradbradice/fh6-livery-gallery/releases/latest";
-            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
-            timeoutCts.CancelAfter(TimeSpan.FromSeconds(10));
+            const string url = "https://api.github.com/repos/gradbradice/fh6-livery-gallery/releases/latest";
 
             string? currentETag;
             lock (_lock) currentETag = _metadata.ETag;
 
-            using var request = new HttpRequestMessage(HttpMethod.Get, url);
-            if (!string.IsNullOrEmpty(currentETag))
-                request.Headers.TryAddWithoutValidation("If-None-Match", currentETag);
+            var result = await ConditionalHttpFetcher.FetchAsync(_http, url, currentETag, TimeSpan.FromSeconds(10), ct);
 
-            using var response = await _http.SendAsync(request, timeoutCts.Token);
-
-            if (response.StatusCode == HttpStatusCode.NotModified)
+            if (result.NotModified)
             {
                 AppUpdateCheckMetadata snapshot;
                 lock (_lock) snapshot = _metadata;
                 return BuildResult(snapshot.LatestVersion, snapshot.ReleaseUrl, snapshot.ReleaseBody);
             }
 
-            response.EnsureSuccessStatusCode();
-            string json = await response.Content.ReadAsStringAsync(timeoutCts.Token);
-            string? newETag = response.Headers.ETag?.Tag;
+            string json = result.Json!;
+            string? newETag = result.ETag;
 
             var release = JsonSerializer.Deserialize<AppGitHubReleaseEntry>(json, JsonSettings.GitHubDeserializeOptions);
             if (release?.TagName is null) return new AppUpdateCheckResult(false, null, null, null);
@@ -91,10 +63,6 @@ internal class AppUpdateCheckService
         {
             AppLogger.LogError("Failed to check for updates", ex);
             return new AppUpdateCheckResult(false, null, null, null);
-        }
-        finally
-        {
-            lock (_checkGate) _inFlightCheck = null;
         }
     }
 

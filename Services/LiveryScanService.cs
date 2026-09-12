@@ -1,5 +1,4 @@
 ﻿using ForzaData;
-using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using System.Collections.Concurrent;
@@ -12,13 +11,10 @@ namespace LiveryGallery.Services;
 internal partial class LiveryScanService
 {
     private static readonly Regex FolderNameRegex =
-        new(@"^Livery_(?<carId>\d+)_(?<ts>\d+)$", RegexOptions.Compiled);
+        new(@"Livery_(?<carId>\d+)_(?<ts>\d+)", RegexOptions.Compiled);
 
     private readonly AppCacheService _appCacheService;
-    private readonly CarDatabaseService _carDatabaseService;
-    private readonly FavoriteService _favoriteService;
-    private readonly TagService _tagService;
-    private readonly AuthorCardService _authorCardService;
+    private readonly LiveryEntryFactory _entryFactory;
 
     public LiveryScanService(
         AppCacheService appCacheService,
@@ -28,10 +24,7 @@ internal partial class LiveryScanService
         AuthorCardService authorCardService)
     {
         _appCacheService = appCacheService;
-        _carDatabaseService = carDatabaseService;
-        _favoriteService = favoriteService;
-        _tagService = tagService;
-        _authorCardService = authorCardService;
+        _entryFactory = new LiveryEntryFactory(appCacheService, carDatabaseService, favoriteService, tagService, authorCardService);
     }
 
     public Task<LiveryScanEntry> ScanAsync(string savePath, IProgress<string>? progress = null, CancellationToken ct = default) =>
@@ -40,20 +33,13 @@ internal partial class LiveryScanService
     public Task<List<LiveryEntry>> RegenerateEntriesAsync(CancellationToken ct = default) =>
         Task.Run(() =>
         {
-            var cache = _appCacheService.Load();
-            var entries = new List<LiveryEntry>(cache.Count);
-            foreach (var cacheEntry in cache.Values)
-            {
-                ct.ThrowIfCancellationRequested();
-                entries.Add(ToEntry(cacheEntry));
-            }
-            MarkDuplicates(entries);
-            return entries;
+            var (cache, _) = _appCacheService.Load();
+            return _entryFactory.BuildEntries(cache.Values, ct);
         }, ct);
 
     private LiveryScanEntry Scan(string savePath, IProgress<string>? progress, CancellationToken ct)
     {
-        var oldCache = _appCacheService.Load();
+        var (oldCache, oldCacheLoadFailed) = _appCacheService.Load();
 
         var folders = LocalSaveService.GetListLiveryDirs(savePath)
             .Select(name => Path.Combine(savePath, name))
@@ -65,7 +51,11 @@ internal partial class LiveryScanService
         int reused = 0, parsed = 0, errors = 0, done = 0;
         int total = folders.Count;
 
-        Parallel.ForEach(folders, new ParallelOptions { CancellationToken = ct }, folder =>
+        Parallel.ForEach(folders, new ParallelOptions
+        {
+            CancellationToken = ct,
+            MaxDegreeOfParallelism = Math.Max(2, Environment.ProcessorCount / 2),
+        }, folder =>
         {
             int myDone = Interlocked.Increment(ref done);
 
@@ -86,7 +76,7 @@ internal partial class LiveryScanService
             if (cacheEntry is not null)
             {
                 newCache[folder] = cacheEntry;
-                entries.Add(ToEntry(cacheEntry));
+                entries.Add(_entryFactory.ToEntry(cacheEntry));
             }
         });
 
@@ -95,7 +85,7 @@ internal partial class LiveryScanService
         int removed = oldCache.Keys.Except(finalCache.Keys).Count();
 
         var entriesList = entries.ToList();
-        MarkDuplicates(entriesList);
+        LiveryDuplicateService.MarkDuplicates(entriesList);
 
         bool cacheChanged = oldCache.Count != finalCache.Count
             || finalCache.Any(kv => !oldCache.TryGetValue(kv.Key, out var old) || !ReferenceEquals(old, kv.Value));
@@ -106,7 +96,17 @@ internal partial class LiveryScanService
             _appCacheService.Save(finalCache);
         }
 
-        CleanupOrphanedThumbnails(finalCache);
+        bool suspiciousDrop = oldCache.Count > 0 && removed > oldCache.Count * 0.2;
+        if (errors == 0 && !suspiciousDrop && !oldCacheLoadFailed)
+        {
+            CleanupOrphanedThumbnails(finalCache);
+        }
+        else
+        {
+            AppLogger.LogErrorThrottled(savePath,
+                $"Skipped orphaned thumbnail cleanup: {errors} scan errors, {removed} of {oldCache.Count} previously known liveries missing, cache load failed: {oldCacheLoadFailed}",
+                new InvalidOperationException("Unreliable scan snapshot"));
+        }
 
         return new LiveryScanEntry
         {
@@ -149,7 +149,7 @@ internal partial class LiveryScanService
 
     private sealed record LiveryFileHashes(
         string Header,
-        string SourceThumbnail,
+        string? SourceThumbnail,
         string? CLivery,
         byte[] HeaderData,
         byte[]? CLiveryBytes,
@@ -159,7 +159,8 @@ internal partial class LiveryScanService
         long SourceThumbLength,
         DateTime SourceThumbLastWriteUtc,
         long CLiveryLength,
-        DateTime CLiveryLastWriteUtc);
+        DateTime CLiveryLastWriteUtc,
+        bool ThumbHashFailed);
 
     private LiveryCacheEntry TryReuseOrParse(
         string folder,
@@ -176,7 +177,7 @@ internal partial class LiveryScanService
             return existing!;
         }
 
-        var hashes = CalculateFileHashes(folder, existing?.CLiveryHash);
+        var hashes = CalculateFileHashes(folder, existing);
 
         if (CanReuseCache(existing, found, hashes))
         {
@@ -258,7 +259,7 @@ internal partial class LiveryScanService
         }
     }
 
-    private LiveryFileHashes CalculateFileHashes(string folder, string? oldCLiveryHash)
+    private LiveryFileHashes CalculateFileHashes(string folder, LiveryCacheEntry? existing)
     {
         string headerPath = Path.Combine(folder, "header");
         byte[] headerData = File.ReadAllBytes(headerPath);
@@ -266,21 +267,32 @@ internal partial class LiveryScanService
         var headerInfo = new FileInfo(headerPath);
 
         string? thumbSource = ThumbnailService.FindSourceThumbnail(folder);
-        string sourceThumbHash = "";
+        string? sourceThumbHash = null;
         long thumbLength = 0;
         DateTime thumbLastWriteUtc = default;
+        bool thumbHashFailed = false;
         if (thumbSource is not null)
         {
             try
             {
-                using var thumbStream = File.OpenRead(thumbSource);
-                sourceThumbHash = Convert.ToHexStringLower(SHA256.HashData(thumbStream));
                 var thumbInfo = new FileInfo(thumbSource);
                 thumbLength = thumbInfo.Length;
                 thumbLastWriteUtc = thumbInfo.LastWriteTimeUtc;
+                if (existing?.SourceThumbHash is not null
+                    && existing.SourceThumbLength == thumbLength
+                    && existing.SourceThumbLastWriteUtc == thumbLastWriteUtc)
+                {
+                    sourceThumbHash = existing.SourceThumbHash;
+                }
+                else
+                {
+                    using var thumbStream = File.OpenRead(thumbSource);
+                    sourceThumbHash = Convert.ToHexStringLower(SHA256.HashData(thumbStream));
+                }
             }
             catch (Exception ex)
             {
+                thumbHashFailed = true;
                 AppLogger.LogErrorThrottled(thumbSource, $"Failed to read preview '{thumbSource}'", ex);
             }
         }
@@ -297,12 +309,24 @@ internal partial class LiveryScanService
                 var cLiveryInfo = new FileInfo(cLiveryPath);
                 cLiveryLength = cLiveryInfo.Length;
                 cLiveryLastWriteUtc = cLiveryInfo.LastWriteTimeUtc;
-                using var cLiveryStream = File.OpenRead(cLiveryPath);
-                cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryStream));
-
-                if (cLiveryHash != oldCLiveryHash)
+                if (existing?.CLiveryHash is not null
+                    && existing.CLiveryLength == cLiveryLength
+                    && existing.CLiveryLastWriteUtc == cLiveryLastWriteUtc)
+                {
+                    cLiveryHash = existing.CLiveryHash;
+                }
+                else if (existing?.CLiveryHash is null)
                 {
                     cLiveryBytes = File.ReadAllBytes(cLiveryPath);
+                    cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryBytes));
+                }
+                else
+                {
+                    using var cLiveryStream = File.OpenRead(cLiveryPath);
+                    cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryStream));
+
+                    if (cLiveryHash != existing.CLiveryHash)
+                        cLiveryBytes = File.ReadAllBytes(cLiveryPath);
                 }
             }
             catch (Exception ex)
@@ -310,12 +334,18 @@ internal partial class LiveryScanService
                 AppLogger.LogErrorThrottled(cLiveryPath, $"Failed to read '{cLiveryPath}'", ex);
             }
         }
+        else
+        {
+            AppLogger.LogErrorThrottled(cLiveryPath,
+                $"'{cLiveryPath}' disappeared between folder listing and processing",
+                new FileNotFoundException(null, cLiveryPath));
+        }
 
         return new LiveryFileHashes(
             headerHash, sourceThumbHash, cLiveryHash, headerData, cLiveryBytes, thumbSource,
             headerInfo.Length, headerInfo.LastWriteTimeUtc,
             thumbLength, thumbLastWriteUtc,
-            cLiveryLength, cLiveryLastWriteUtc);
+            cLiveryLength, cLiveryLastWriteUtc, thumbHashFailed);
     }
 
     private bool CanReuseCache(LiveryCacheEntry? existing, bool found, LiveryFileHashes hashes)
@@ -327,7 +357,8 @@ internal partial class LiveryScanService
             : existing.ThumbnailFile is not null
                 && File.Exists(Path.Combine(_appCacheService.ThumbsDir, existing.ThumbnailFile));
 
-        return existing.HeaderHash == hashes.Header
+        return !hashes.ThumbHashFailed
+            && existing.HeaderHash == hashes.Header
             && existing.SourceThumbHash == hashes.SourceThumbnail
             && existing.CLiveryHash == hashes.CLivery
             && existing.CLiveryHash is not null
@@ -379,7 +410,9 @@ internal partial class LiveryScanService
         string? thumbnailFile = null;
         if (hashes.SourceThumbnailPath is not null)
         {
-            string hashSuffix = hashes.SourceThumbnail.Length >= 12 ? hashes.SourceThumbnail[..12] : hashes.SourceThumbnail;
+            string hashSuffix = hashes.SourceThumbnail is { Length: >= 12 } hash
+                ? hash[..12]
+                : hashes.SourceThumbnail ?? Guid.NewGuid().ToString("N")[..12];
             string candidate = SanitiseFileName(folderName) + "_" + StableHash(folder) + "_" + hashSuffix + ".png";
             string destPath = Path.Combine(_appCacheService.ThumbsDir, candidate);
             if (ThumbnailService.GenerateAndSave(hashes.SourceThumbnailPath, destPath))
@@ -415,153 +448,6 @@ internal partial class LiveryScanService
             CLiveryLastWriteUtc = hashes.CLiveryLastWriteUtc,
             SectionCounts = sectionCounts,
         };
-    }
-
-    private LiveryEntry ToEntry(LiveryCacheEntry c)
-    {
-        var car = _carDatabaseService.Get(c.CarId);
-        return new LiveryEntry
-        {
-            FolderPath = c.FolderPath,
-            FolderName = c.FolderName,
-            LiveryName = c.LiveryName,
-            AuthorRaw = c.Author,
-            Author = _authorCardService.ResolveDisplayName(c.Author),
-            CarId = c.CarId,
-            CarManufacturerRaw = car?.Manufacturer ?? string.Empty,
-            CarModelNameRaw = car?.Name ?? string.Empty,
-            CarYear = car?.Year,
-            CarKnown = car is not null,
-            CreatedYear = c.CreatedYear,
-            CreatedMonth = c.CreatedMonth,
-            DownloadDate = c.DownloadDate,
-            ThumbnailPath = c.ThumbnailFile is not null 
-                ? Path.Combine(_appCacheService.ThumbsDir, c.ThumbnailFile) 
-                : null,
-            HasThumbnail = c.ThumbnailFile is not null,
-            Tags = _tagService.GetTags(c.FolderName),
-            IsFavorite = _favoriteService.IsFavorite(c.FolderName),
-            CLiveryHash = c.CLiveryHash,
-            SectionCounts = c.SectionCounts
-        };
-    }
-
-    private static void MarkDuplicates(List<LiveryEntry> entries)
-    {
-        const int sectionCount = 11;
-        var exactGroups = entries
-            .Where(e => e.CLiveryHash is not null)
-            .GroupBy(e => (e.CarId, e.Author, e.CLiveryHash), CarIdAuthorHashComparer.Instance);
-
-        foreach (var group in exactGroups)
-        {
-            if (group.Count() <= 1) continue;
-            foreach (var entry in group)
-                entry.DuplicateStatus = DuplicateStatus.Duplicate;
-        }
-
-        var candidateGroups = entries
-            .Where(e => e.DuplicateStatus != DuplicateStatus.Duplicate && e.SectionCounts is { Count: sectionCount })
-            .GroupBy(e => (e.CarId, e.Author), CarIdAuthorComparer.Instance);
-
-        foreach (var group in candidateGroups)
-            MarkPossibleDuplicatesInGroup([.. group]);
-    }
-
-    private sealed class CarIdAuthorHashComparer : IEqualityComparer<(int CarId, string Author, string? CLiveryHash)>
-    {
-        public static readonly CarIdAuthorHashComparer Instance = new();
-
-        public bool Equals((int CarId, string Author, string? CLiveryHash) x, (int CarId, string Author, string? CLiveryHash) y) =>
-            x.CarId == y.CarId
-            && string.Equals(x.Author, y.Author, StringComparison.OrdinalIgnoreCase)
-            && x.CLiveryHash == y.CLiveryHash;
-
-        public int GetHashCode((int CarId, string Author, string? CLiveryHash) obj) =>
-            HashCode.Combine(obj.CarId, StringComparer.OrdinalIgnoreCase.GetHashCode(obj.Author), obj.CLiveryHash);
-    }
-
-    private sealed class CarIdAuthorComparer : IEqualityComparer<(int CarId, string Author)>
-    {
-        public static readonly CarIdAuthorComparer Instance = new();
-
-        public bool Equals((int CarId, string Author) x, (int CarId, string Author) y) =>
-            x.CarId == y.CarId && string.Equals(x.Author, y.Author, StringComparison.OrdinalIgnoreCase);
-
-        public int GetHashCode((int CarId, string Author) obj) =>
-            HashCode.Combine(obj.CarId, StringComparer.OrdinalIgnoreCase.GetHashCode(obj.Author));
-    }
-
-    private static void MarkPossibleDuplicatesInGroup(List<LiveryEntry> items)
-    {
-        const int minSharedForCandidate = 2;
-        const int maxCandidatesPerKey = 300;
-
-        var index = new Dictionary<(int Position, uint Value), List<int>>();
-        for (int i = 0; i < items.Count; i++)
-        {
-            var counts = items[i].SectionCounts!;
-            for (int pos = 0; pos < counts.Count; pos++)
-            {
-                if (counts[pos] == 0) continue;
-                var key = (pos, counts[pos]);
-                if (!index.TryGetValue(key, out var list))
-                    index[key] = list = [];
-                if (list.Count < maxCandidatesPerKey)
-                    list.Add(i);
-            }
-        }
-
-        var sharedCounts = new Dictionary<int, int>();
-
-        for (int i = 0; i < items.Count; i++)
-        {
-            var counts = items[i].SectionCounts!;
-            sharedCounts.Clear();
-            bool hasAnyShared = false;
-
-            for (int pos = 0; pos < counts.Count; pos++)
-            {
-                if (counts[pos] == 0) continue;
-                if (!index.TryGetValue((pos, counts[pos]), out var candidates)) continue;
-
-                foreach (int j in candidates)
-                {
-                    if (j <= i) continue;
-                    hasAnyShared = true;
-                    sharedCounts[j] = sharedCounts.GetValueOrDefault(j) + 1;
-                }
-            }
-
-            if (!hasAnyShared) continue;
-
-            foreach (var (j, shared) in sharedCounts)
-            {
-                if (shared < minSharedForCandidate) continue;
-                if (AreSectionsSimilar(items[i].SectionCounts!, items[j].SectionCounts!))
-                {
-                    items[i].DuplicateStatus = DuplicateStatus.PossibleDuplicate;
-                    items[j].DuplicateStatus = DuplicateStatus.PossibleDuplicate;
-                }
-            }
-        }
-    }
-
-    private const double MinSectionMatchRatio = 0.6;
-    private const int MinRelevantSections = 3;
-
-    private static bool AreSectionsSimilar(IReadOnlyList<uint> a, IReadOnlyList<uint> b)
-    {
-        int relevant = 0, matches = 0;
-        for (int i = 0; i < a.Count; i++)
-        {
-            if (a[i] == 0 && b[i] == 0) continue;
-            relevant++;
-            if (a[i] == b[i]) matches++;
-        }
-
-        if (relevant < MinRelevantSections) return false;
-        return (double)matches / relevant >= MinSectionMatchRatio;
     }
 
     private static (int CarId, string? Timestamp) ParseFolderName(string folderName)

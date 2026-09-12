@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
@@ -189,17 +190,7 @@ internal partial class AuthorsDialog : Window
         Foreground = this.GetThemeBrush("TextSecondaryBrush"),
     };
 
-    private static void OpenUrl(string url)
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-        }
-        catch
-        {
-            
-        }
-    }
+    private static void OpenUrl(string url) => TrustedUrlLauncher.TryOpen(url);
 
     private void AddCardButton_Click(object? sender, RoutedEventArgs e) => EditCard(null);
 
@@ -220,7 +211,7 @@ internal partial class AuthorsDialog : Window
         bool saved = await dialog.ShowDialog<bool>(this);
         if (!saved || dialog.Result is null) return;
 
-        if (_authorCardService.TrySave(dialog.Result))
+        if (await _authorCardService.TrySave(dialog.Result))
         {
             _allEntries = await _refreshEntries();
             RebuildList();
@@ -233,7 +224,7 @@ internal partial class AuthorsDialog : Window
             this, Strings.AuthorCardDeleteTitle, string.Format(Strings.AuthorCardDeleteMessage, card.DisplayName));
         if (!confirmed) return;
 
-        _authorCardService.Delete(card.Id);
+        await _authorCardService.Delete(card.Id);
         _allEntries = await _refreshEntries();
         RebuildList();
     }

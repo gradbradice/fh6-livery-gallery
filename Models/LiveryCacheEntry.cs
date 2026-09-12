@@ -12,7 +12,7 @@ internal record LiveryCacheEntry
     public DateTime? DownloadDate { get; init; }
     public string? ThumbnailFile { get; init; }
     public string HeaderHash { get; init; } = string.Empty;
-    public string SourceThumbHash { get; init; } = string.Empty;
+    public string? SourceThumbHash { get; init; }
     public string? CLiveryHash { get; init; }
     public long HeaderLength { get; init; }
     public DateTime HeaderLastWriteUtc { get; init; }

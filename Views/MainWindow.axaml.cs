@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using LiveryGallery.Controller;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
@@ -20,43 +21,16 @@ internal partial class MainWindow : Window
     private readonly TagService _tagService;
     private readonly FavoriteService _favoriteService;
     private readonly AuthorCardService _authorCardService;
-    private readonly LiveryScanService _scanService;
-    private readonly AppUpdateCheckService _updateService;
+    private readonly UpdateController _updateController;
     private List<LiveryEntry> _allEntries = [];
     private readonly ObservableCollection<LiveryGroup> _displayedGroups = [];
     private readonly HashSet<string> _selectedTags = new(StringComparer.OrdinalIgnoreCase);
-    private string? _savePath;
-    private bool _savePathLostNotified;
-    private string? SaveDataPath
-    {
-        get
-        {
-            if (_savePath is null) return null;
-            int? hint = _settings.LastKnownContainerSavePath == _savePath
-                ? _settings.LastKnownContainerId
-                : null;
-
-            var (path, containerId) = LocalSaveService.GetSaveDataPathWithId(_savePath, hint);
-            if (containerId is not null
-                && (containerId != _settings.LastKnownContainerId || _settings.LastKnownContainerSavePath != _savePath))
-            {
-                _settings.LastKnownContainerId = containerId;
-                _settings.LastKnownContainerSavePath = _savePath;
-                AppSettingsService.Save(_settings);
-            }
-            return path;
-        }
-    }
-
-    private CancellationTokenSource? _scanCts;
+    private SavePathController _savePathController = null!;
+    private string? SaveDataPath => _savePathController.ResolveSaveDataPath();
+    private readonly ScanController _scanController;
     private readonly CancellationTokenSource _shutdownCts = new();
     private readonly AppSettingsData _settings;
-    private bool _isScanning;
     private readonly DispatcherTimer _autoScanTimer = new() { Interval = TimeSpan.FromSeconds(30) };
-    private LiveryScanEntry? _lastScanResult;
-    private string? _updateReleaseUrl;
-    private string? _latestVersion;
-    private string? _updateReleaseBody;
     private bool _isLoaded;
     private readonly DispatcherTimer _searchDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(500) };
     private readonly DispatcherTimer _resizeDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(200) };
@@ -79,8 +53,9 @@ internal partial class MainWindow : Window
         _tagService = tagService;
         _favoriteService = favoriteService;
         _authorCardService = authorCardService;
-        _scanService = scanService;
-        _updateService = updateService;
+        _scanController = new ScanController(scanService);
+        _updateController = new UpdateController(updateService);
+        _savePathController = new SavePathController(this, settings);
         UpdateDisplayFilterChecks();
 
         ApplyLocalizedTexts();
@@ -97,11 +72,7 @@ internal partial class MainWindow : Window
             if (_isLoaded) UpdateGroupWidthsOnly();
         };
 
-        _autoScanTimer.Tick += (_, __) =>
-        {
-            _autoScanTimer.Stop();
-            _ = RunScanAsync(isUserInitiated: false);
-        };
+        _autoScanTimer.Tick += (_, __) => _ = RunScanAsyncTracked(isUserInitiated: false);
         SizeChanged += (_, __) =>
         {
             _resizeDebounceTimer.Stop();
@@ -109,6 +80,7 @@ internal partial class MainWindow : Window
         };
 
         Loaded += MainWindow_Loaded;
+        _autoScanTimer.Start();
         Closing += MainWindow_Closing;
     }
 
@@ -124,17 +96,20 @@ internal partial class MainWindow : Window
         _autoScanTimer.Stop();
         _searchDebounceTimer.Stop();
         _resizeDebounceTimer.Stop();
-        _scanCts?.Cancel();
+        _scanController.Cancel();
         _shutdownCts.Cancel();
-        await Task.Run(() =>
+
+        try { await _scanController.WaitAsync(); }
+        catch { }
+
+        bool allOk = await PersistenceManager.FlushAsync();
+        if (!allOk)
         {
-            _favoriteService.Flush();
-            _tagService.Flush();
-            _authorCardService.Flush();
-            _cacheService.Flush();
-            AppSettingsService.Flush();
-            AppLogger.Shutdown();
-        });
+            AppLogger.LogError(
+                "Failed to flush one or more files on shutdown",
+                new IOException("PersistenceManager.FlushAsync reported at least one failed write"));
+        }
+        AppLogger.Shutdown();
 
         Close();
     }
@@ -172,61 +147,45 @@ internal partial class MainWindow : Window
 
         _carDb.LoadLocal();
 
-        bool savedPathMissing = !string.IsNullOrWhiteSpace(_settings.SavePath)
-            && !Directory.Exists(_settings.SavePath);
-
-        _savePath = !string.IsNullOrWhiteSpace(_settings.SavePath) && Directory.Exists(_settings.SavePath)
-            ? _settings.SavePath
-            : LocalSaveService.FindLocalSavePath();
+        bool savedPathMissing = _savePathController.WasSavedPathMissing;
+        _savePathController.InitializeFromSettings();
 
         if (savedPathMissing)
         {
             await InfoDialog.ShowAsync(this, Strings.FolderNotFoundTitle, Strings.SavedPathNotFoundNotice);
         }
 
-        if (_savePath is null)
+        if (_savePathController.SavePath is null)
         {
             await PromptForSavePathAsync(initial: true);
             return;
         }
 
-        await RunScanAsync(isUserInitiated: true);
+        await RunScanAsyncTracked(isUserInitiated: true);
         FireAndForget(() => RefreshCarDatabaseAsync(showLoadingOverlay: false), nameof(RefreshCarDatabaseAsync));
     }
 
     private async Task CheckForUpdatesAsync()
     {
-        var result = await _updateService.CheckAsync(_shutdownCts.Token);
-        if (!result.IsNewer || result.LatestVersion is null) return;
+        bool hasUpdate = await _updateController.CheckAsync(_shutdownCts.Token);
+        if (!hasUpdate) return;
 
-        _latestVersion = result.LatestVersion;
-        _updateReleaseUrl = result.ReleaseUrl;
-        _updateReleaseBody = result.ReleaseBody;
-        UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _latestVersion);
+        UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _updateController.LatestVersion);
         UpdateBanner.IsVisible = true;
     }
 
-    private async void UpdateBanner_Click(object? sender, RoutedEventArgs e)
-    {
-        if (_latestVersion is null) return;
-        var dlg = new WhatsNewDialog(_latestVersion, _updateReleaseBody, _updateReleaseUrl);
-        await dlg.ShowDialog(this);
-    }
+    private async void UpdateBanner_Click(object? sender, RoutedEventArgs e) => await _updateController.ShowDetailsAsync(this);
 
-    private bool _pendingAuthorRefresh;
-
-    private async Task RefreshAuthorDisplayNamesAsync()
+    private async Task RefreshEntriesFromCacheAsync()
     {
-        if (_isScanning || SaveDataPath is null)
+        if (SaveDataPath is null) return;
+
+        await _scanController.RegenerateEntriesAsync(freshEntries =>
         {
-            _pendingAuthorRefresh = true;
-            return;
-        }
-
-        var freshEntries = await _scanService.RegenerateEntriesAsync(_shutdownCts.Token);
-        _allEntries = MergeWithLocalState(freshEntries);
-        RebuildTagsBar();
-        RefreshGallery();
+            _allEntries = MergeWithLocalState(freshEntries);
+            RebuildTagsBar();
+            RefreshGallery();
+        });
     }
 
     private async Task RefreshCarDatabaseAsync(bool showLoadingOverlay = true)
@@ -249,13 +208,8 @@ internal partial class MainWindow : Window
                     : string.Format(Strings.CarDbUpToDate, countText);
             }
 
-            if (outcome == CarDatabaseRefreshOutcome.Updated && !_isScanning && SaveDataPath is not null)
-            {
-                var freshEntries = await _scanService.RegenerateEntriesAsync(_shutdownCts.Token);
-                _allEntries = MergeWithLocalState(freshEntries);
-                RebuildTagsBar();
-                RefreshGallery();
-            }
+            if (outcome == CarDatabaseRefreshOutcome.Updated)
+                await RefreshEntriesFromCacheAsync();
         }
         catch (OperationCanceledException)
         {
@@ -269,61 +223,14 @@ internal partial class MainWindow : Window
 
     private async Task PromptForSavePathAsync(bool initial)
     {
-        if (initial)
+        bool selected = await _savePathController.PromptAsync(initial, onDeclined: () =>
         {
-            bool yes = await ConfirmDialog.AskAsync(
-                this,
-                Strings.FolderNotFoundTitle,
-                Strings.FolderNotFoundMessage);
+            StatusText.Text = Strings.SavePathNotChosen;
+            EmptyStateText.Text = Strings.SavePathNotChosen;
+            EmptyState.IsVisible = true;
+        });
 
-            if (!yes)
-            {
-                StatusText.Text = Strings.SavePathNotChosen;
-                EmptyStateText.Text = Strings.SavePathNotChosen;
-                EmptyState.IsVisible = true;
-                return;
-            }
-        }
-
-        await BrowseForFolderAsync();
-    }
-
-    private async Task BrowseForFolderAsync()
-    {
-        var provider = StorageProvider;
-        if (provider is null) return;
-
-        while (true)
-        {
-            var result = await provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-            {
-                Title = Strings.SelectFolderDialogTitle,
-                AllowMultiple = false
-            });
-
-            var folder = result.Count > 0 ? result[0] : null;
-            string? path = folder?.TryGetLocalPath();
-            if (string.IsNullOrEmpty(path)) return;
-
-            if (!LocalSaveService.IsSavePathValid(path))
-            {
-                bool retry = await ConfirmDialog.AskAsync(
-                    this,
-                    Strings.SaveFolderValidationFailedTitle,
-                    Strings.SaveFolderValidationFailed,
-                    yesText: Strings.ButtonRetry,
-                    noText: Strings.ButtonCancel);
-
-                if (!retry) return;
-                continue;
-            }
-
-            _savePath = path;
-            _settings.SavePath = _savePath;
-            AppSettingsService.Save(_settings);
-            await RunScanAsync(isUserInitiated: true);
-            return;
-        }
+        if (selected) await RunScanAsyncTracked(isUserInitiated: true);
     }
 
     private async void RefreshButton_Click(object? sender, RoutedEventArgs e)
@@ -332,43 +239,49 @@ internal partial class MainWindow : Window
 
         if (!_settings.RefreshLiveriesOnButtonClick) return;
 
-        if (_savePath is null)
+        if (_savePathController.SavePath is null)
         {
             await PromptForSavePathAsync(initial: true);
             return;
         }
-        await RunScanAsync(isUserInitiated: true);
+        await RunScanAsyncTracked(isUserInitiated: true);
     }
 
-    private async Task RunScanAsync(bool isUserInitiated)
+    private async Task RunScanAsyncTracked(bool isUserInitiated)
     {
         string? saveDataPath = SaveDataPath;
         if (saveDataPath is null)
         {
-            if (!_savePathLostNotified)
+            if (_savePathController.ShouldNotifyLost())
             {
-                _savePathLostNotified = true;
                 await PromptForSavePathAsync(initial: true);
-            }
-            if (!_isClosing)
-            {
-                _autoScanTimer.Stop();
-                _autoScanTimer.Start();
             }
             return;
         }
-        _savePathLostNotified = false;
+        _savePathController.ResetLostNotification();
 
-        if (_isScanning) return;
         if (!isUserInitiated && !_settings.AutoRefreshLiveries) return;
 
-        _isScanning = true;
-        _autoScanTimer.Stop();
+        var progress = isUserInitiated ? new Progress<string>(msg => LoadingText.Text = msg) : null;
+        Exception? scanError = null;
 
-        _scanCts?.Cancel();
-        _scanCts?.Dispose();
-        var cts = new CancellationTokenSource();
-        _scanCts = cts;
+        bool started = _scanController.TryRunScan(
+            saveDataPath,
+            progress,
+            onEntriesReady: entries =>
+            {
+                _allEntries = MergeWithLocalState(entries);
+                if (isUserInitiated) RenderStatus();
+                RebuildTagsBar();
+                RefreshGallery();
+            },
+            onError: ex => scanError = ex);
+
+        if (!started)
+        {
+            await _scanController.WaitAsync();
+            return;
+        }
 
         if (isUserInitiated)
         {
@@ -376,63 +289,26 @@ internal partial class MainWindow : Window
             RefreshButton.IsEnabled = false;
         }
 
-        var progress = isUserInitiated ? new Progress<string>(msg => LoadingText.Text = msg) : null;
+        await _scanController.WaitAsync();
 
-        try
+        if (isUserInitiated)
         {
-            var result = await _scanService.ScanAsync(saveDataPath, progress, cts.Token);
-            if (cts.IsCancellationRequested) return;
-
-            _allEntries = MergeWithLocalState(result.Entries);
-
-            _lastScanResult = result;
-            if (isUserInitiated) RenderStatus();
-            RebuildTagsBar();
-            RefreshGallery();
+            SetLoading(false);
+            RefreshButton.IsEnabled = true;
         }
-        catch (OperationCanceledException)
+
+        if (scanError is not null)
         {
-            // do not log
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogErrorThrottled(saveDataPath, $"Scan failed: '{saveDataPath}'", ex);
+            AppLogger.LogErrorThrottled(saveDataPath, $"Scan failed: '{saveDataPath}'", scanError);
             if (isUserInitiated)
-                StatusText.Text = string.Format(Strings.StatusScanError, ex.Message);
-        }
-        finally
-        {
-            bool isCurrentScan = ReferenceEquals(_scanCts, cts);
-
-            if (isUserInitiated && isCurrentScan)
-            {
-                SetLoading(false);
-                RefreshButton.IsEnabled = true;
-            }
-
-            if (isCurrentScan)
-            {
-                _scanCts = null;
-                _isScanning = false;
-                if (!_isClosing)
-                {
-                    _autoScanTimer.Stop();
-                    _autoScanTimer.Start();
-                }
-                if (_pendingAuthorRefresh)
-                {
-                    _pendingAuthorRefresh = false;
-                    await RefreshAuthorDisplayNamesAsync();
-                }
-            }
-            cts.Dispose();
+                StatusText.Text = string.Format(Strings.StatusScanError, scanError.Message);
         }
     }
 
     private void RenderStatus()
     {
-        if (_lastScanResult is null) return;
-        var r = _lastScanResult;
+        if (_scanController.LastScanResult is null) return;
+        var r = _scanController.LastScanResult;
 
         string text = string.Format(Strings.StatusProcessed, r.Parsed, r.ReusedFromCache);
         if (r.Errors > 0) text += string.Format(Strings.StatusErrors, r.Errors);
@@ -576,11 +452,16 @@ internal partial class MainWindow : Window
             && a.CreatedMonth == b.CreatedMonth
             && a.DownloadDate == b.DownloadDate
             && a.ThumbnailPath == b.ThumbnailPath
-            && a.IsFavorite == b.IsFavorite
             && a.DuplicateStatus == b.DuplicateStatus
             && a.CLiveryHash == b.CLiveryHash
-            && (a.SectionCounts ?? []).SequenceEqual(b.SectionCounts ?? [])
-            && a.Tags.SequenceEqual(b.Tags, StringComparer.OrdinalIgnoreCase);
+            && SectionCountsEqual(a.SectionCounts, b.SectionCounts);
+    }
+
+    private static bool SectionCountsEqual(IReadOnlyList<uint>? a, IReadOnlyList<uint>? b)
+    {
+        if (a is null && b is null) return true;
+        if (a is null || b is null) return false;
+        return a.SequenceEqual(b);
     }
 
     private void UpdateCountsAndEmptyState(List<LiveryEntry> filtered)
@@ -706,8 +587,8 @@ internal partial class MainWindow : Window
     private async void Card_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
-        var bitmap = await ThumbnailCacheService.AcquireForAsync(control, entry.ThumbnailPath);
-        if (ReferenceEquals(control.DataContext, entry))
+        var (wasSuperseded, bitmap) = await ThumbnailCacheService.AcquireForAsync(control, entry.ThumbnailPath);
+        if (!wasSuperseded && ReferenceEquals(control.DataContext, entry))
             entry.Thumbnail = bitmap;
     }
 
@@ -726,8 +607,8 @@ internal partial class MainWindow : Window
             ThumbnailCacheService.ReleaseFor(control);
             return;
         }
-        var bitmap = await ThumbnailCacheService.AcquireForAsync(control, entry.ThumbnailPath);
-        if (ReferenceEquals(control.DataContext, entry))
+        var (wasSuperseded, bitmap) = await ThumbnailCacheService.AcquireForAsync(control, entry.ThumbnailPath);
+        if (!wasSuperseded && ReferenceEquals(control.DataContext, entry))
             entry.Thumbnail = bitmap;
     }
 
@@ -806,12 +687,12 @@ internal partial class MainWindow : Window
     private async void OpenSettingsMenuItem_Click(object? sender, RoutedEventArgs e)
     {
         SettingsButton.Flyout?.Hide();
-        var dlg = new SettingsDialog(_settings, _savePath);
+        var dlg = new SettingsDialog(_settings, _savePathController.SavePath);
         await dlg.ShowDialog(this);
         if (dlg.SavePathChanged)
         {
-            _savePath = _settings.SavePath;
-            if (SaveDataPath is not null) await RunScanAsync(isUserInitiated: true);
+            _savePathController.SyncFromSettings();
+            if (SaveDataPath is not null) await RunScanAsyncTracked(isUserInitiated: true);
         }
     }
 
@@ -819,7 +700,7 @@ internal partial class MainWindow : Window
     {
         var dialog = new AuthorsDialog(_authorCardService, _allEntries, async () =>
         {
-            await RefreshAuthorDisplayNamesAsync();
+            await RefreshEntriesFromCacheAsync();
             return _allEntries;
         });
         await dialog.ShowDialog(this);
@@ -911,8 +792,8 @@ internal partial class MainWindow : Window
             }
         }
 
-        if (_latestVersion is not null)
-            UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _latestVersion);
+        if (_updateController.LatestVersion is not null)
+            UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _updateController.LatestVersion);
     }
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
     {

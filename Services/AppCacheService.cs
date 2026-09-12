@@ -1,4 +1,4 @@
-﻿using LiveryGallery.Configuration;
+using LiveryGallery.Configuration;
 using LiveryGallery.Models;
 using System.Text.Json;
 
@@ -6,18 +6,10 @@ namespace LiveryGallery.Services;
 
 internal class AppCacheService
 {
-    private readonly SaveService _saveService;
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "cache.json");
     public string ThumbsDir { get; } = AppSettings.ThumbsPath;
 
-    public AppCacheService()
-    {
-        _saveService = new();
-    }
-
-    public void Flush() => _saveService.Flush();
-
-    public Dictionary<string, LiveryCacheEntry> Load()
+    public (Dictionary<string, LiveryCacheEntry> Cache, bool LoadFailed) Load()
     {
         try
         {
@@ -25,16 +17,17 @@ internal class AppCacheService
             {
                 string json = File.ReadAllText(_path);
                 var data = JsonSerializer.Deserialize<Dictionary<string, LiveryCacheEntry>>(json);
-                if (data is not null) return data;
+                if (data is not null) return (data, false);
             }
         }
         catch (Exception ex)
         {
             AppLogger.LogError("Failed to load scan cache", ex);
             AtomicFile.TryBackupCorruptedFile(_path);
+            return ([], true);
         }
 
-        return [];
+        return ([], false);
     }
 
     public void Save(Dictionary<string, LiveryCacheEntry> data)
@@ -42,7 +35,7 @@ internal class AppCacheService
         try
         {
             string json = JsonSerializer.Serialize(data, JsonSettings.DefaultOptions);
-            _saveService.ScheduleSave(json, _path);
+            PersistenceManager.Schedule(_path, json);
         }
         catch (Exception ex)
         {

@@ -1,7 +1,6 @@
 using LiveryGallery.Configuration;
 using LiveryGallery.Enums;
 using LiveryGallery.Models;
-using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -14,14 +13,11 @@ internal class CarDatabaseService
     private static readonly string _metaPath = Path.Combine(AppSettings.BaseCachePath, "fh6_car_id.meta.json");
     private const string _dbUrl =
         "https://raw.githubusercontent.com/gradbradice/forza-car-id/main/fh6_car_id.json";
-
     private readonly HttpClient _http;
     private readonly Lock _lock = new();
     private Dictionary<int, CarInfo> _byId = [];
     private CarDatabaseMetadata _metadata = new();
-    private Task<CarDatabaseRefreshOutcome>? _inFlightRefresh;
-    private readonly object _refreshGate = new();
-
+    private readonly CoalescedAsyncOperation<CarDatabaseRefreshOutcome> _coalescedRefresh = new();
     private bool _hasLocalData;
     private string? _lastError;
 
@@ -84,45 +80,19 @@ internal class CarDatabaseService
         }
     }
 
-    public Task<CarDatabaseRefreshOutcome> RefreshAsync(CancellationToken ct = default)
-    {
-        Task<CarDatabaseRefreshOutcome> inFlight;
-        lock (_refreshGate)
-        {
-            _inFlightRefresh ??= RefreshCoreAsync(ct);
-            inFlight = _inFlightRefresh;
-        }
-
-        return ct.CanBeCanceled ? WaitWithOwnCancellation(inFlight, ct) : inFlight;
-    }
-
-    private static async Task<CarDatabaseRefreshOutcome> WaitWithOwnCancellation(
-        Task<CarDatabaseRefreshOutcome> inFlight, CancellationToken ct)
-    {
-        var cancellationTask = Task.Delay(Timeout.Infinite, ct);
-        var completed = await Task.WhenAny(inFlight, cancellationTask);
-        if (completed == cancellationTask)
-            ct.ThrowIfCancellationRequested();
-        return await inFlight;
-    }
+    public Task<CarDatabaseRefreshOutcome> RefreshAsync(CancellationToken ct = default) =>
+        _coalescedRefresh.RunAsync(RefreshCoreAsync, ct);
 
     private async Task<CarDatabaseRefreshOutcome> RefreshCoreAsync(CancellationToken ct)
     {
         try
         {
-            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
-            timeoutCts.CancelAfter(TimeSpan.FromSeconds(20));
-
             string? currentETag;
             lock (_lock) currentETag = _metadata.ETag;
+            string? etagToSend = HasLocalData ? currentETag : null;
+            var result = await ConditionalHttpFetcher.FetchAsync(_http, _dbUrl, etagToSend, TimeSpan.FromSeconds(20), ct);
 
-            using var request = new HttpRequestMessage(HttpMethod.Get, _dbUrl);
-            if (!string.IsNullOrEmpty(currentETag) && File.Exists(_path))
-                request.Headers.TryAddWithoutValidation("If-None-Match", currentETag);
-
-            using var response = await _http.SendAsync(request, timeoutCts.Token);
-
-            if (response.StatusCode == HttpStatusCode.NotModified)
+            if (result.NotModified)
             {
                 lock (_lock) _metadata.LastCheckedUtc = DateTime.UtcNow;
                 await SaveMetadataAsync();
@@ -130,9 +100,8 @@ internal class CarDatabaseService
                 return CarDatabaseRefreshOutcome.NotModified;
             }
 
-            response.EnsureSuccessStatusCode();
-            string json = await response.Content.ReadAsStringAsync(timeoutCts.Token);
-            string? newETag = response.Headers.ETag?.Tag;
+            string json = result.Json!;
+            string? newETag = result.ETag;
 
             var (list, rejectedCount) = ParseJson(json);
             if (list.Count == 0)
@@ -191,10 +160,6 @@ internal class CarDatabaseService
             AppLogger.LogError("Failed to update the car database from GitHub", ex);
             return CarDatabaseRefreshOutcome.Failed;
         }
-        finally
-        {
-            lock (_refreshGate) _inFlightRefresh = null;
-        }
     }
 
     private string? Validate(List<CarInfo> list, int rejectedCount)
@@ -213,14 +178,6 @@ internal class CarDatabaseService
             string ids = string.Join(", ", duplicateIds.Take(5));
             if (duplicateIds.Count > 5) ids += ", ...";
             return $"duplicate car IDs: {ids}";
-        }
-
-        var invalidIds = list.Where(c => c.Id <= 0).Select(c => c.Id).ToList();
-        if (invalidIds.Count > 0)
-        {
-            string ids = string.Join(", ", invalidIds.Take(5));
-            if (invalidIds.Count > 5) ids += ", ...";
-            return $"invalid car IDs (<= 0): {ids}";
         }
 
         int oldCount;
@@ -292,7 +249,8 @@ internal class CarDatabaseService
         {
             if (string.IsNullOrWhiteSpace(r.Manufacturer)
                 || string.IsNullOrWhiteSpace(r.Name)
-                || r.Year == null)
+                || r.Year == null
+                || r.Id <= 0)
             {
                 rejected++;
                 continue;

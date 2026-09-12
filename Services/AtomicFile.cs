@@ -45,7 +45,7 @@ internal static class AtomicFile
         }
     }
 
-    private static string TempPath(string path) => $"{path}.{Environment.ProcessId}.tmp";
+    private static string TempPath(string path) => $"{path}.{Guid.NewGuid():N}.tmp";
 
     private static void TryDeleteTempFile(string tmpPath)
     {
@@ -67,16 +67,18 @@ internal static class AtomicFile
             File.Move(tmpPath, path, overwrite: true);
     }
 
-    public static void TryBackupCorruptedFile(string path)
+    public static void TryBackupCorruptedFile(string path) => TryBackupFile(path, ".corrupted");
+
+    public static void TryBackupFile(string path, string suffix)
     {
         try
         {
             if (!File.Exists(path)) return;
-            File.Copy(path, path + ".corrupted", overwrite: true);
+            File.Copy(path, path + suffix, overwrite: true);
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"Failed to create a backup copy of the corrupted file '{path}'", ex);
+            AppLogger.LogError($"Failed to create a backup copy of '{path}'", ex);
         }
     }
 }

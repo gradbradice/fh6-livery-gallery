@@ -3,8 +3,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
+using LiveryGallery.Services;
 using System.Diagnostics;
 using Path = Avalonia.Controls.Shapes.Path;
 
@@ -126,17 +128,7 @@ internal partial class AuthorCardViewDialog : Window
         Foreground = this.GetThemeBrush("TextSecondaryBrush"),
     };
 
-    private static void OpenUrl(string url)
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-        }
-        catch
-        {
-            
-        }
-    }
+    private static void OpenUrl(string url) => TrustedUrlLauncher.TryOpen(url);
 
     private void CloseButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
 }

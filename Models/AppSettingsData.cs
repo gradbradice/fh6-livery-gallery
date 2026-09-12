@@ -18,4 +18,38 @@ internal class AppSettingsData
     public bool RefreshLiveriesOnButtonClick { get; set; } = false;
     public int? LastKnownContainerId { get; set; }
     public string? LastKnownContainerSavePath { get; set; }
+
+    public AppSettingsData Clone() => new()
+    {
+        Language = Language,
+        SavePath = SavePath,
+        DarkTheme = DarkTheme,
+        ThemeMode = ThemeMode,
+        SortMode = SortMode,
+        FavoriteMode = FavoriteMode,
+        DuplicatesFilterMode = DuplicatesFilterMode,
+        GroupingEnabled = GroupingEnabled,
+        GameInstallPath = GameInstallPath,
+        AutoRefreshLiveries = AutoRefreshLiveries,
+        RefreshLiveriesOnButtonClick = RefreshLiveriesOnButtonClick,
+        LastKnownContainerId = LastKnownContainerId,
+        LastKnownContainerSavePath = LastKnownContainerSavePath,
+    };
+
+    public void CopyFrom(AppSettingsData other)
+    {
+        Language = other.Language;
+        SavePath = other.SavePath;
+        DarkTheme = other.DarkTheme;
+        ThemeMode = other.ThemeMode;
+        SortMode = other.SortMode;
+        FavoriteMode = other.FavoriteMode;
+        DuplicatesFilterMode = other.DuplicatesFilterMode;
+        GroupingEnabled = other.GroupingEnabled;
+        GameInstallPath = other.GameInstallPath;
+        AutoRefreshLiveries = other.AutoRefreshLiveries;
+        RefreshLiveriesOnButtonClick = other.RefreshLiveriesOnButtonClick;
+        LastKnownContainerId = other.LastKnownContainerId;
+        LastKnownContainerSavePath = other.LastKnownContainerSavePath;
+    }
 }

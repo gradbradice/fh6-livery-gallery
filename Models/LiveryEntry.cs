@@ -43,7 +43,9 @@ internal class LiveryEntry : INotifyPropertyChanged
             OnPropertyChanged(nameof(AuthorDisplayText));
         }
     }
-    public string AuthorDisplayText => Author == AuthorRaw ? Author : $"{Author} ({AuthorRaw})";
+    public string AuthorDisplayText => string.Equals(Author, AuthorRaw, StringComparison.OrdinalIgnoreCase)
+        ? Author
+        : $"{Author} ({AuthorRaw})";
     private bool _isFavorite;
     public bool IsFavorite
     {
@@ -57,12 +59,14 @@ internal class LiveryEntry : INotifyPropertyChanged
     }
 
     private List<string> _tags = [];
+    private System.Collections.ObjectModel.ReadOnlyCollection<string> _tagsReadOnly = new([]);
     public IReadOnlyList<string> Tags
     {
-        get => _tags;
+        get => _tagsReadOnly;
         set
         {
             _tags = [.. value];
+            _tagsReadOnly = _tags.AsReadOnly();
             OnPropertyChanged();
         }
     }

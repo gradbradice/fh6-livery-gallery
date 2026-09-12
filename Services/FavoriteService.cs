@@ -1,27 +1,20 @@
-﻿using LiveryGallery.Configuration;
+using LiveryGallery.Configuration;
 using System.Text.Json;
 
 namespace LiveryGallery.Services;
 
 internal class FavoriteService
 {
-    private readonly SaveService _saveService;
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "favorites.json");
     private HashSet<string> _favorites = new(StringComparer.OrdinalIgnoreCase);
     private readonly Lock _lock = new();
 
-    public FavoriteService()
-    {
-        _saveService = new();
-        Load();
-    }
+    public FavoriteService() => Load();
 
     public bool IsFavorite(string folderName)
     {
         lock (_lock) return _favorites.Contains(folderName);
     }
-
-    public void Flush() => _saveService.Flush();
 
     public void SetFavorite(string folderName, bool isFavorite)
     {
@@ -39,7 +32,7 @@ internal class FavoriteService
             List<string> snapshot;
             lock (_lock) snapshot = _favorites.ToList();
             string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
-            _saveService.ScheduleSave(json, _path);
+            PersistenceManager.Schedule(_path, json);
         }
         catch (Exception ex)
         {
@@ -51,7 +44,7 @@ internal class FavoriteService
     {
         try
         {
-            if(File.Exists(_path))
+            if (File.Exists(_path))
             {
                 string json = File.ReadAllText(_path);
                 var data = JsonSerializer.Deserialize<List<string>>(json);

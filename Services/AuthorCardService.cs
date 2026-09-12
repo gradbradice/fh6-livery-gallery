@@ -6,19 +6,12 @@ namespace LiveryGallery.Services;
 
 internal class AuthorCardService
 {
-    private readonly SaveService _saveService;
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "author_cards.json");
     private readonly Lock _lock = new();
     private List<AuthorCard> _cards = [];
     private Dictionary<string, AuthorCard> _aliasIndex = new(StringComparer.OrdinalIgnoreCase);
 
-    public AuthorCardService()
-    {
-        _saveService = new();
-        Load();
-    }
-
-    public void Flush() => _saveService.Flush();
+    public AuthorCardService() => Load();
 
     public IReadOnlyList<AuthorCard> GetAll()
     {
@@ -57,7 +50,7 @@ internal class AuthorCardService
                 c.Id != excludeCardId && string.Equals(c.DisplayName, displayName, StringComparison.OrdinalIgnoreCase));
     }
 
-    public bool TrySave(AuthorCard card)
+    public async Task<bool> TrySave(AuthorCard card)
     {
         lock (_lock)
         {
@@ -71,18 +64,17 @@ internal class AuthorCardService
             _cards.Add(card);
             RebuildIndexNoLock();
         }
-        Save();
-        return true;
+        return await SaveAsync();
     }
 
-    public void Delete(string cardId)
+    public async Task Delete(string cardId)
     {
         lock (_lock)
         {
             _cards.RemoveAll(c => c.Id == cardId);
             RebuildIndexNoLock();
         }
-        Save();
+        await SaveAsync();
     }
 
     private string? FindConflictingAliasNoLock(string? excludeCardId, IEnumerable<string> aliases)
@@ -141,6 +133,7 @@ internal class AuthorCardService
             AppLogger.LogError(
                 "Author cards file had conflicting nicknames across cards, auto-resolved on load",
                 new InvalidDataException("Duplicate alias across author cards"));
+            AtomicFile.TryBackupFile(_path, ".before-auto-fix");
             _cards = validCards;
             Save();
         }
@@ -157,13 +150,29 @@ internal class AuthorCardService
         try
         {
             List<AuthorCard> snapshot;
-            lock (_lock) snapshot = _cards;
+            lock (_lock) snapshot = [.. _cards];
             string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
-            _saveService.ScheduleSave(json, _path);
+            PersistenceManager.Schedule(_path, json);
         }
         catch (Exception ex)
         {
             AppLogger.LogError("Failed to serialise author cards", ex);
+        }
+    }
+
+    private async Task<bool> SaveAsync()
+    {
+        try
+        {
+            List<AuthorCard> snapshot;
+            lock (_lock) snapshot = [.. _cards];
+            string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
+            return await PersistenceManager.SaveNowAsync(_path, json);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to serialise author cards", ex);
+            return false;
         }
     }
 
