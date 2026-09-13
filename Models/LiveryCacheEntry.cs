@@ -1,3 +1,5 @@
+using LiveryGallery.Enums;
+
 namespace LiveryGallery.Models;
 
 internal record LiveryCacheEntry
@@ -7,6 +9,7 @@ internal record LiveryCacheEntry
     public string LiveryName { get; init; } = string.Empty;
     public string Author { get; init; } = string.Empty;
     public int CarId { get; init; }
+    public LiveryConsistency CarIdConsistency { get; init; } = LiveryConsistency.Consistent;
     public int CreatedYear { get; init; }
     public int CreatedMonth { get; init; }
     public DateTime? DownloadDate { get; init; }
@@ -20,6 +23,5 @@ internal record LiveryCacheEntry
     public DateTime SourceThumbLastWriteUtc { get; init; }
     public long CLiveryLength { get; init; }
     public DateTime CLiveryLastWriteUtc { get; init; }
-
     public uint[]? SectionCounts { get; init; }
 }

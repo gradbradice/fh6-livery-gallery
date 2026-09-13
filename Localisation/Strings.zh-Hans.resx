@@ -298,7 +298,7 @@
     <value>未知</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>标头解析库：{0}</value>
+    <value>FH6 数据解析库：{0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>设置</value>

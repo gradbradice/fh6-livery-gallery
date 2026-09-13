@@ -298,7 +298,7 @@
     <value>Неизвестен</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Библиотека разбора header: {0}</value>
+    <value>Библиотека разбора данных FH6: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Настройки</value>

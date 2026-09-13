@@ -298,7 +298,7 @@ Escolher manualmente?
     <value>Desconhecido</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Biblioteca de análise de cabeçalho: {0}</value>
+    <value>Biblioteca de análise de dados do FH6: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Configurações</value>

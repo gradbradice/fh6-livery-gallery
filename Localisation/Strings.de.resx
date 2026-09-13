@@ -298,7 +298,7 @@ Manuell auswählen?
     <value>Unbekannt</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Header-Parser-Bibliothek: {0}</value>
+    <value>FH6-Datenparser-Bibliothek: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Einstellungen</value>

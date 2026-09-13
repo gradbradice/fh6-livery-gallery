@@ -298,7 +298,7 @@
     <value>Desconocido</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Librería de análisis de encabezado: {0}</value>
+    <value>Librería de análisis de datos de FH6: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Configuración</value>

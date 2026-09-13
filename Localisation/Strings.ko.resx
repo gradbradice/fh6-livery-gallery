@@ -298,7 +298,7 @@
     <value>알 수 없음</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>헤더 파서 라이브러리: {0}</value>
+    <value>FH6 데이터 파서 라이브러리: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>설정</value>

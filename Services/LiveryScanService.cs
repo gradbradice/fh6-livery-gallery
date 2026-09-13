@@ -1,4 +1,5 @@
 ﻿using ForzaData;
+using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using System.Collections.Concurrent;
@@ -15,6 +16,7 @@ internal partial class LiveryScanService
 
     private readonly AppCacheService _appCacheService;
     private readonly LiveryEntryFactory _entryFactory;
+    private int _carIdMismatchLogged;
 
     public LiveryScanService(
         AppCacheService appCacheService,
@@ -369,9 +371,12 @@ internal partial class LiveryScanService
     private LiveryCacheEntry ParseLivery(string folder, LiveryFileHashes hashes, LiveryCacheEntry? previous)
     {
         string folderName = Path.GetFileName(folder);
-        var (carId, tsRaw) = ParseFolderName(folderName);
+        var (folderCarId, tsRaw) = ParseFolderName(folderName);
 
         var (_, parsedHeader) = NativeHeaderParser.TryParseHeader(hashes.HeaderData);
+        var (_, headerWithId) = NativeHeaderParser.TryParseHeaderWithId(hashes.HeaderData);
+        uint? headerCarId = headerWithId?.TargetCarId;
+
         byte[]? cLiveryBytes = hashes.CLiveryBytes;
         if (cLiveryBytes is null && hashes.CLivery is not null)
         {
@@ -386,19 +391,25 @@ internal partial class LiveryScanService
         }
 
         uint[]? sectionCounts = null;
+        uint? cLiveryCarId = null;
         if (cLiveryBytes is not null)
         {
             try
             {
                 var (liveryResult, livery) = NativeHeaderParser.TryParseCLivery(cLiveryBytes);
                 if (liveryResult == LiveryParseResult.Ok && livery is not null)
+                {
                     sectionCounts = [.. livery.SectionCounts];
+                    cLiveryCarId = livery.TargetCarId;
+                }
             }
             catch (Exception ex)
             {
                 AppLogger.LogErrorThrottled(folder, $"Failed to parse C_livery in '{folder}'", ex);
             }
         }
+
+        var (carId, carIdConsistency) = ResolveCarId(folderName, folderCarId, headerCarId, cLiveryCarId);
 
         string liveryName = !string.IsNullOrWhiteSpace(parsedHeader?.LiveryName) ? parsedHeader!.LiveryName : Strings.LiveryNoName;
         string author = !string.IsNullOrWhiteSpace(parsedHeader?.CreatorName) ? parsedHeader!.CreatorName : Strings.UnknownAuthor;
@@ -433,6 +444,7 @@ internal partial class LiveryScanService
             LiveryName = liveryName,
             Author = author,
             CarId = carId,
+            CarIdConsistency = carIdConsistency,
             CreatedYear = year,
             CreatedMonth = month,
             DownloadDate = downloadDate,
@@ -448,6 +460,33 @@ internal partial class LiveryScanService
             CLiveryLastWriteUtc = hashes.CLiveryLastWriteUtc,
             SectionCounts = sectionCounts,
         };
+    }
+    
+    private (int CarId, LiveryConsistency Consistency) ResolveCarId(
+        string folderName, int folderCarId, uint? headerCarId, uint? cLiveryCarId)
+    {
+        int resolved = headerCarId.HasValue ? (int)headerCarId.Value
+            : cLiveryCarId.HasValue ? (int)cLiveryCarId.Value
+            : folderCarId;
+
+        var available = new List<int> { folderCarId };
+        if (headerCarId.HasValue) available.Add((int)headerCarId.Value);
+        if (cLiveryCarId.HasValue) available.Add((int)cLiveryCarId.Value);
+
+        var consistency = available.Distinct().Count() > 1 ? LiveryConsistency.Mismatched : LiveryConsistency.Consistent;
+
+        if (consistency == LiveryConsistency.Mismatched && Interlocked.CompareExchange(ref _carIdMismatchLogged, 1, 0) == 0)
+        {
+            AppLogger.LogError(
+                $"CarId mismatch between sources for '{folderName}': folder={folderCarId}, " +
+                $"header={(headerCarId.HasValue ? headerCarId.Value.ToString() : "n/a")}, " +
+                $"C_livery={(cLiveryCarId.HasValue ? cLiveryCarId.Value.ToString() : "n/a")}. " +
+                $"Using {resolved} (header, falling back to C_livery then folder name). " +
+                "Further occurrences this session are not logged.",
+                new InvalidOperationException("CarId source mismatch"));
+        }
+
+        return (resolved, consistency);
     }
 
     private static (int CarId, string? Timestamp) ParseFolderName(string folderName)
