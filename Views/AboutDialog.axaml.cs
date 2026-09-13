@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -6,6 +5,7 @@ using ForzaData;
 using LiveryGallery.Configuration;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
+using LiveryGallery.Services;
 
 namespace LiveryGallery.Views;
 
@@ -28,17 +28,7 @@ internal partial class AboutDialog : Window
 
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
-    private void GithubLink_Click(object? sender, RoutedEventArgs e)
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo(GithubUrl) { UseShellExecute = true });
-        }
-        catch
-        {
-            // do not log
-        }
-    }
+    private void GithubLink_Click(object? sender, RoutedEventArgs e) => TrustedUrlLauncher.TryOpen(GithubUrl);
 
     private void CloseButton_Click(object? sender, RoutedEventArgs e) => Close();
 }

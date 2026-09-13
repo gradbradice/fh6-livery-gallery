@@ -23,6 +23,7 @@ internal partial class MainWindow : Window
     private readonly UpdateController _updateController;
     private GalleryController _galleryController = null!;
     private SavePathController _savePathController = null!;
+    private TagsBarController _tagsBarController = null!;
     private string? SaveDataPath => _savePathController.ResolveSaveDataPath();
     private readonly ScanController _scanController;
     private readonly CancellationTokenSource _shutdownCts = new();
@@ -45,6 +46,7 @@ internal partial class MainWindow : Window
         InitializeComponent();
         _galleryController = new GalleryController(GroupsHost, GalleryScroll);
         GroupsHost.ItemsSource = _galleryController.DisplayedGroups;
+        _tagsBarController = new TagsBarController(TagsBar, TagsFilterRow, _galleryController.SelectedTags);
         _settings = settings;
         _cacheService = cacheService;
         _carDb = carDatabase;
@@ -326,14 +328,18 @@ internal partial class MainWindow : Window
         _searchDebounceTimer.Start();
     }
 
-    private void SortModeMenuItem_Click(object? sender, RoutedEventArgs e)
+    private void HandleEnumMenuClick<TEnum>(object? sender, TEnum fallback, Action<TEnum> apply)
+        where TEnum : struct, Enum
     {
         if (sender is not MenuItem item || item.Tag is not string tag || !int.TryParse(tag, out int index)) return;
-        _settings.SortMode = Enum.IsDefined((SortMode)index) ? (SortMode)index : SortMode.Manufacture;
+        apply(Enum.IsDefined((TEnum)(object)index) ? (TEnum)(object)index : fallback);
         AppSettingsService.Save(_settings);
         UpdateDisplayFilterChecks();
         RefreshGallery();
     }
+
+    private void SortModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
+        HandleEnumMenuClick(sender, SortMode.Manufacture, mode => _settings.SortMode = mode);
 
     private List<LiveryEntry> GetFilteredEntries() => _galleryController.GetFilteredEntries(
         SearchBox.Text, _settings.FavoriteMode, _settings.DuplicatesFilterMode);
@@ -398,43 +404,7 @@ internal partial class MainWindow : Window
         return Math.Max(columns * CardStep, CardStep);
     }
 
-    private HashSet<string>? _lastTagsBarTags;
-
-    private void RebuildTagsBar()
-    {
-        var allTags = _galleryController.AllEntries
-            .SelectMany(x => x.Tags)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(t => t, StringComparer.OrdinalIgnoreCase)
-            .ToList();
-
-        var allTagsSet = new HashSet<string>(allTags, StringComparer.OrdinalIgnoreCase);
-        if (_lastTagsBarTags is not null && _lastTagsBarTags.SetEquals(allTagsSet)) return;
-        _lastTagsBarTags = allTagsSet;
-
-        _galleryController.SelectedTags.RemoveWhere(t => !allTags.Contains(t, StringComparer.OrdinalIgnoreCase));
-
-        TagsBar.Children.Clear();
-        TagsFilterRow.IsVisible = allTags.Count > 0;
-
-        foreach (var tag in allTags)
-        {
-            var button = new ToggleButton
-            {
-                Content = tag,
-                IsChecked = _galleryController.SelectedTags.Contains(tag),
-                Margin = new Thickness(0, 0, 8, 8)
-            };
-            button.Classes.Add("tagChip");
-            button.IsCheckedChanged += (_, _) =>
-            {
-                if (button.IsChecked == true) _galleryController.SelectedTags.Add(tag);
-                else _galleryController.SelectedTags.Remove(tag);
-                RefreshGallery();
-            };
-            TagsBar.Children.Add(button);
-        }
-    }
+    private void RebuildTagsBar() => _tagsBarController.Rebuild(_galleryController.AllEntries, RefreshGallery);
 
     private async void AuthorRow_Click(object? sender, RoutedEventArgs e)
     {
@@ -471,30 +441,17 @@ internal partial class MainWindow : Window
 
     private async void Card_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
-        var (wasSuperseded, bitmap) = await ThumbnailCacheService.AcquireForAsync(control, entry.ThumbnailPath);
-        if (!wasSuperseded && ReferenceEquals(control.DataContext, entry))
-            entry.Thumbnail = bitmap;
+        if (sender is Control control) await ThumbnailLifecycleController.OnAttachedAsync(control);
     }
 
     private void Card_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is not Control control) return;
-        if (control.DataContext is LiveryEntry entry) entry.Thumbnail = null;
-        ThumbnailCacheService.ReleaseFor(control);
+        if (sender is Control control) ThumbnailLifecycleController.OnDetached(control);
     }
 
     private async void Card_DataContextChanged(object? sender, EventArgs e)
     {
-        if (sender is not Control control) return;
-        if (control.DataContext is not LiveryEntry entry)
-        {
-            ThumbnailCacheService.ReleaseFor(control);
-            return;
-        }
-        var (wasSuperseded, bitmap) = await ThumbnailCacheService.AcquireForAsync(control, entry.ThumbnailPath);
-        if (!wasSuperseded && ReferenceEquals(control.DataContext, entry))
-            entry.Thumbnail = bitmap;
+        if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
     }
 
     private void ToggleFavorite_Click(object? sender, RoutedEventArgs e)
@@ -510,23 +467,11 @@ internal partial class MainWindow : Window
             UpdateCountsAndEmptyState(GetFilteredEntries());
     }
 
-    private void FavModeMenuItem_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not MenuItem item || item.Tag is not string tag || !int.TryParse(tag, out int index)) return;
-        _settings.FavoriteMode = Enum.IsDefined((FavoriteMode)index) ? (FavoriteMode)index : FavoriteMode.None;
-        AppSettingsService.Save(_settings);
-        UpdateDisplayFilterChecks();
-        RefreshGallery();
-    }
+    private void FavModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
+        HandleEnumMenuClick(sender, FavoriteMode.None, mode => _settings.FavoriteMode = mode);
 
-    private void DupModeMenuItem_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not MenuItem item || item.Tag is not string tag || !int.TryParse(tag, out int index)) return;
-        _settings.DuplicatesFilterMode = Enum.IsDefined((DuplicatesFilterMode)index) ? (DuplicatesFilterMode)index : DuplicatesFilterMode.All;
-        AppSettingsService.Save(_settings);
-        UpdateDisplayFilterChecks();
-        RefreshGallery();
-    }
+    private void DupModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
+        HandleEnumMenuClick(sender, DuplicatesFilterMode.All, mode => _settings.DuplicatesFilterMode = mode);
 
     private void GroupingToggleItem_Click(object? sender, RoutedEventArgs e)
     {
@@ -594,115 +539,16 @@ internal partial class MainWindow : Window
     private async void StatsButton_Click(object? sender, RoutedEventArgs e)
     {
         var stats = GalleryStatisticsService.CalculateOverall(_galleryController.AllEntries);
-
-        static string Format(string? label, int count) => label is not null ? $"{label} ({count})" : "-";
-
-        string message = string.Join("\n", new[]
-        {
-            $"{Strings.StatsTotalLiveries}: {stats.Total}",
-            $"{Strings.StatsFavoritesCount}: {stats.FavoritesCount}",
-            "",
-            $"{Strings.StatsPopularManufacturer}: {Format(stats.PopularManufacturer, stats.PopularManufacturerCount)}",
-            $"{Strings.StatsPopularModel}: {Format(stats.PopularModel, stats.PopularModelCount)}",
-            $"{Strings.StatsPopularCar}: {Format(stats.PopularCar, stats.PopularCarCount)}",
-            $"{Strings.StatsPopularAuthor}: {Format(stats.PopularAuthor, stats.PopularAuthorCount)}",
-            "",
-            $"{Strings.StatsFavoriteManufacturer}: {Format(stats.FavoriteManufacturer, stats.FavoriteManufacturerCount)}",
-            $"{Strings.StatsFavoriteModel}: {Format(stats.FavoriteModel, stats.FavoriteModelCount)}",
-            $"{Strings.StatsFavoriteCar}: {Format(stats.FavoriteCar, stats.FavoriteCarCount)}",
-            $"{Strings.StatsFavoriteAuthor}: {Format(stats.FavoriteAuthor, stats.FavoriteAuthorCount)}",
-            "",
-            $"{Strings.StatsTotalDuplicates}: {stats.DuplicatesCount}",
-            $"{Strings.StatsPossibleDuplicates}: {stats.PossibleDuplicatesCount}",
-        });
-
+        string message = GalleryStatisticsService.FormatOverallMessage(stats);
         await InfoDialog.ShowAsync(this, Strings.StatsTitle, message);
     }
 
-    private void ApplyLocalizedTexts()
-    {
-        CustomTitleBarText.Text = Strings.AppTitle;
-        MinimizeButtonEl.SetValue(ToolTip.TipProperty, Strings.MinimizeTooltip);
-        MaximizeButtonEl.SetValue(ToolTip.TipProperty, Strings.MaximizeTooltip);
-        CloseButtonEl.SetValue(ToolTip.TipProperty, Strings.CloseTooltip);
-
-        RefreshButton.SetValue(ToolTip.TipProperty, Strings.RefreshTooltip);
-        StatsButton.SetValue(ToolTip.TipProperty, Strings.StatsToggleTooltip);
-        SettingsButton.SetValue(ToolTip.TipProperty, Strings.SettingsToggleTooltip);
-        OpenSettingsMenuItem.Header = Strings.SettingsDialogTitle;
-        ContactsMenuItem.Header = Strings.SettingsMenuContacts;
-        AboutMenuItem.Header = Strings.AboutTitle;
-        SearchBox.PlaceholderText = Strings.SearchPlaceholder;
-
-        DisplayFilterButton.SetValue(ToolTip.TipProperty, Strings.DisplayFilterTooltip);
-        AuthorsButton.SetValue(ToolTip.TipProperty, Strings.AuthorsButtonTooltip);
-        GroupingToggleItem.Header = Strings.GroupingToggleLabel;
-        SortManufacturerItem.Header = Strings.SortManufacturer;
-        SortAuthorItem.Header = Strings.SortAuthor;
-        SortDownloadTimeItem.Header = Strings.SortDownloadDate;
-        FavNoneItem.Header = Strings.NormalOrderToggle;
-        FavFirstItemText.Text = Strings.FavoritesFirstToggle;
-        FavOnlyItemText.Text = Strings.OnlyFavoritesToggle;
-        FavSeparateItemText.Text = Strings.SeparateFavoritesToggle;
-        DupAllItem.Header = Strings.DuplicatesFilterAll;
-        DupAndPossibleItem.Header = Strings.DuplicatesFilterAndPossible;
-        DupOnlyItem.Header = Strings.DuplicatesFilterOnly;
-
-        TagsFilterLabel.Text = Strings.TagsFilterLabel;
-    }
-
-    internal void OnLanguageChanged()
-    {
-        if (!_isLoaded) return;
-        ApplyLocalizedTexts();
-        RenderStatus();
-        UpdateCountsAndEmptyState(GetFilteredEntries());
-        foreach (var entry in _galleryController.AllEntries)
-            entry.RefreshLocalizedText();
-
-        if (GroupsHost.ItemsSource is IEnumerable<LiveryGroup> currentGroups)
-        {
-            foreach (var group in currentGroups)
-            {
-                group.Key = group.SpecialKind switch
-                {
-                    LiveryGroupSpecialKind.DownloadMonth when group.SpecialMonth is { } month =>
-                        month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture),
-                    LiveryGroupSpecialKind.UnknownDownloadDate => Strings.UnknownDownloadDate,
-                    LiveryGroupSpecialKind.UnknownManufacturer => Strings.UnknownManufacturer,
-                    LiveryGroupSpecialKind.AllLiveries => Strings.AllLiveriesGroupName,
-                    _ when group.IsFavoritesGroup => Strings.SeparateFavoritesGroupName,
-                    _ => group.Key
-                };
-            }
-        }
-
-        if (_updateController.LatestVersion is not null)
-            UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _updateController.LatestVersion);
-    }
-    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed) return;
-
-        if (e.ClickCount == 2)
-        {
-            ToggleMaximize();
-        }
-        else
-        {
-            BeginMoveDrag(e);
-        }
-    }
+    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) =>
+        this.HandleTitleBarDragOrMaximize(e, MaximizeIcon);
 
     private void MinimizeButton_Click(object? sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
 
-    private void MaximizeButton_Click(object? sender, RoutedEventArgs e) => ToggleMaximize();
+    private void MaximizeButton_Click(object? sender, RoutedEventArgs e) => this.ToggleMaximize(MaximizeIcon);
 
     private void CloseButton_Click(object? sender, RoutedEventArgs e) => Close();
-
-    private void ToggleMaximize()
-    {
-        WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        MaximizeIcon.Text = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
-    }
 }

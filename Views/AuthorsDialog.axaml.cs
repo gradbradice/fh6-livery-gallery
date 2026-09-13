@@ -8,8 +8,6 @@ using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
-using System.Diagnostics;
-using Path = Avalonia.Controls.Shapes.Path;
 
 namespace LiveryGallery.Views;
 
@@ -145,8 +143,10 @@ internal partial class AuthorsDialog : Window
         if (card.TwitterUrl is not null || card.YouTubeUrl is not null)
         {
             var linksPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Margin = new Thickness(0, 10, 0, 0) };
-            if (card.TwitterUrl is { } twitterUrl) linksPanel.Children.Add(BuildLinkCircle(twitterUrl, "IconTwitter", Strings.AuthorCardTwitterLabel));
-            if (card.YouTubeUrl is { } youTubeUrl) linksPanel.Children.Add(BuildLinkCircle(youTubeUrl, "IconYoutube", Strings.AuthorCardYouTubeLabel));
+            if (card.TwitterUrl is { } twitterUrl) linksPanel.Children.Add(
+                AuthorLinkButtonFactory.Build(this, twitterUrl, "IconTwitter", Strings.AuthorCardTwitterLabel, diameter: 28, iconSize: 14));
+            if (card.YouTubeUrl is { } youTubeUrl) linksPanel.Children.Add(
+                AuthorLinkButtonFactory.Build(this, youTubeUrl, "IconYoutube", Strings.AuthorCardYouTubeLabel, diameter: 28, iconSize: 14));
             mainStack.Children.Add(linksPanel);
         }
 
@@ -160,37 +160,12 @@ internal partial class AuthorsDialog : Window
         return root;
     }
 
-    private Button BuildLinkCircle(string url, string iconKey, string tooltip)
-    {
-        var button = new Button
-        {
-            Width = 28,
-            Height = 28,
-            CornerRadius = new CornerRadius(14),
-            Padding = new Thickness(0),
-        };
-        button.Classes.Add("icon");
-        ToolTip.SetTip(button, tooltip);
-        button.Content = new Path
-        {
-            Data = this.GetThemeGeometry(iconKey),
-            Width = 14,
-            Height = 14,
-            Stretch = Stretch.Uniform,
-            Fill = this.GetThemeBrush("AccentBrush"),
-        };
-        button.Click += (_, _) => OpenUrl(url);
-        return button;
-    }
-
     private TextBlock BuildStatChip(string format, int count) => new()
     {
         Text = string.Format(format, count),
         FontSize = 11.5,
         Foreground = this.GetThemeBrush("TextSecondaryBrush"),
     };
-
-    private static void OpenUrl(string url) => TrustedUrlLauncher.TryOpen(url);
 
     private void AddCardButton_Click(object? sender, RoutedEventArgs e) => EditCard(null);
 

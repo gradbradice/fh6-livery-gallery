@@ -6,9 +6,6 @@ using Avalonia.Media;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
-using LiveryGallery.Services;
-using System.Diagnostics;
-using Path = Avalonia.Controls.Shapes.Path;
 
 namespace LiveryGallery.Views;
 
@@ -59,8 +56,10 @@ internal partial class AuthorCardViewDialog : Window
         if (card.TwitterUrl is not null || card.YouTubeUrl is not null)
         {
             var linksPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, Margin = new Thickness(0, 16, 0, 0) };
-            if (card.TwitterUrl is { } twitterUrl) linksPanel.Children.Add(BuildLinkCircle(twitterUrl, "IconTwitter", Strings.AuthorCardTwitterLabel));
-            if (card.YouTubeUrl is { } youTubeUrl) linksPanel.Children.Add(BuildLinkCircle(youTubeUrl, "IconYoutube", Strings.AuthorCardYouTubeLabel));
+            if (card.TwitterUrl is { } twitterUrl) linksPanel.Children.Add(
+                AuthorLinkButtonFactory.Build(this, twitterUrl, "IconTwitter", Strings.AuthorCardTwitterLabel, diameter: 30, iconSize: 15));
+            if (card.YouTubeUrl is { } youTubeUrl) linksPanel.Children.Add(
+                AuthorLinkButtonFactory.Build(this, youTubeUrl, "IconYoutube", Strings.AuthorCardYouTubeLabel, diameter: 30, iconSize: 15));
             ContentPanel.Children.Add(linksPanel);
         }
 
@@ -97,29 +96,6 @@ internal partial class AuthorCardViewDialog : Window
 
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
-    private Button BuildLinkCircle(string url, string iconKey, string tooltip)
-    {
-        var button = new Button
-        {
-            Width = 30,
-            Height = 30,
-            CornerRadius = new CornerRadius(15),
-            Padding = new Thickness(0),
-        };
-        button.Classes.Add("icon");
-        ToolTip.SetTip(button, tooltip);
-        button.Content = new Path
-        {
-            Data = this.GetThemeGeometry(iconKey),
-            Width = 15,
-            Height = 15,
-            Stretch = Stretch.Uniform,
-            Fill = this.GetThemeBrush("AccentBrush"),
-        };
-        button.Click += (_, _) => OpenUrl(url);
-        return button;
-    }
-
     private TextBlock BuildStatLine(string format, int count) => new()
     {
         Text = string.Format(format, count),
@@ -127,8 +103,6 @@ internal partial class AuthorCardViewDialog : Window
         Margin = new Thickness(0, 0, 16, 0),
         Foreground = this.GetThemeBrush("TextSecondaryBrush"),
     };
-
-    private static void OpenUrl(string url) => TrustedUrlLauncher.TryOpen(url);
 
     private void CloseButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
 }

@@ -1,3 +1,4 @@
+using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 
 namespace LiveryGallery.Services;
@@ -36,6 +37,30 @@ internal static class GalleryStatisticsService
             favModel, favModelCount,
             favCar, favCarCount,
             favAuthor, favAuthorCount);
+    }
+
+    public static string FormatOverallMessage(GalleryOverallStatistics stats)
+    {
+        static string Format(string? label, int count) => label is not null ? $"{label} ({count})" : "-";
+
+        return string.Join("\n", new[]
+        {
+            $"{Strings.StatsTotalLiveries}: {stats.Total}",
+            $"{Strings.StatsFavoritesCount}: {stats.FavoritesCount}",
+            "",
+            $"{Strings.StatsPopularManufacturer}: {Format(stats.PopularManufacturer, stats.PopularManufacturerCount)}",
+            $"{Strings.StatsPopularModel}: {Format(stats.PopularModel, stats.PopularModelCount)}",
+            $"{Strings.StatsPopularCar}: {Format(stats.PopularCar, stats.PopularCarCount)}",
+            $"{Strings.StatsPopularAuthor}: {Format(stats.PopularAuthor, stats.PopularAuthorCount)}",
+            "",
+            $"{Strings.StatsFavoriteManufacturer}: {Format(stats.FavoriteManufacturer, stats.FavoriteManufacturerCount)}",
+            $"{Strings.StatsFavoriteModel}: {Format(stats.FavoriteModel, stats.FavoriteModelCount)}",
+            $"{Strings.StatsFavoriteCar}: {Format(stats.FavoriteCar, stats.FavoriteCarCount)}",
+            $"{Strings.StatsFavoriteAuthor}: {Format(stats.FavoriteAuthor, stats.FavoriteAuthorCount)}",
+            "",
+            $"{Strings.StatsTotalDuplicates}: {stats.DuplicatesCount}",
+            $"{Strings.StatsPossibleDuplicates}: {stats.PossibleDuplicatesCount}",
+        });
     }
 
     private static (string? Label, int Count) TopString(List<LiveryEntry> entries, Func<LiveryEntry, string> selector)

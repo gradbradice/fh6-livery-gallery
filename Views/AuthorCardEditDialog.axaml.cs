@@ -156,7 +156,7 @@ internal partial class AuthorCardEditDialog : Window
     {
         if (!Uri.TryCreate(url, UriKind.Absolute, out var uri)) return false;
         string host = uri.Host.ToLowerInvariant();
-        if (host is not ("twitter.com" or "www.twitter.com" or "x.com" or "www.x.com" or "mobile.twitter.com"))
+        if (!TrustedUrlLauncher.TwitterHosts.Contains(host, StringComparer.OrdinalIgnoreCase))
             return false;
 
         string[] segments = uri.AbsolutePath.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries);
@@ -172,7 +172,7 @@ internal partial class AuthorCardEditDialog : Window
     {
         if (!Uri.TryCreate(url, UriKind.Absolute, out var uri)) return false;
         string host = uri.Host.ToLowerInvariant();
-        if (host is not ("youtube.com" or "www.youtube.com" or "m.youtube.com")) return false;
+        if (!TrustedUrlLauncher.YouTubeHosts.Contains(host, StringComparer.OrdinalIgnoreCase)) return false;
 
         string path = uri.AbsolutePath.TrimStart('/');
         return (path.StartsWith('@') && path.Length > 1)
