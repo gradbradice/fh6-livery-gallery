@@ -10,7 +10,6 @@ using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
-using System.Collections.ObjectModel;
 
 namespace LiveryGallery.Views;
 
@@ -22,9 +21,7 @@ internal partial class MainWindow : Window
     private readonly FavoriteService _favoriteService;
     private readonly AuthorCardService _authorCardService;
     private readonly UpdateController _updateController;
-    private List<LiveryEntry> _allEntries = [];
-    private readonly ObservableCollection<LiveryGroup> _displayedGroups = [];
-    private readonly HashSet<string> _selectedTags = new(StringComparer.OrdinalIgnoreCase);
+    private GalleryController _galleryController = null!;
     private SavePathController _savePathController = null!;
     private string? SaveDataPath => _savePathController.ResolveSaveDataPath();
     private readonly ScanController _scanController;
@@ -46,7 +43,8 @@ internal partial class MainWindow : Window
         AppUpdateCheckService updateService)
     {
         InitializeComponent();
-        GroupsHost.ItemsSource = _displayedGroups;
+        _galleryController = new GalleryController(GroupsHost, GalleryScroll);
+        GroupsHost.ItemsSource = _galleryController.DisplayedGroups;
         _settings = settings;
         _cacheService = cacheService;
         _carDb = carDatabase;
@@ -182,7 +180,7 @@ internal partial class MainWindow : Window
 
         await _scanController.RegenerateEntriesAsync(freshEntries =>
         {
-            _allEntries = MergeWithLocalState(freshEntries);
+            _galleryController.AllEntries = _galleryController.MergeWithLocalState(freshEntries);
             RebuildTagsBar();
             RefreshGallery();
         });
@@ -270,7 +268,7 @@ internal partial class MainWindow : Window
             progress,
             onEntriesReady: entries =>
             {
-                _allEntries = MergeWithLocalState(entries);
+                _galleryController.AllEntries = _galleryController.MergeWithLocalState(entries);
                 if (isUserInitiated) RenderStatus();
                 RebuildTagsBar();
                 RefreshGallery();
@@ -337,139 +335,26 @@ internal partial class MainWindow : Window
         RefreshGallery();
     }
 
-    private List<LiveryEntry> GetFilteredEntries() => GalleryFilterService.Apply(
-        _allEntries,
-        SearchBox.Text,
-        _selectedTags,
-        _settings.FavoriteMode == FavoriteMode.OnlyFavorites,
-        _settings.DuplicatesFilterMode);
+    private List<LiveryEntry> GetFilteredEntries() => _galleryController.GetFilteredEntries(
+        SearchBox.Text, _settings.FavoriteMode, _settings.DuplicatesFilterMode);
 
     private void RefreshGallery()
     {
         var filtered = GetFilteredEntries();
         var groups = BuildGroups(filtered);
-        ReplaceGroups(groups);
+        _galleryController.ReplaceGroups(groups);
         UpdateCountsAndEmptyState(filtered);
     }
 
-    private List<LiveryGroup> BuildGroups(List<LiveryEntry> filtered) => GalleryGroupingService.Group(
-        filtered,
-        _settings.SortMode,
-        _settings.FavoriteMode,
-        _settings.GroupingEnabled,
-        ComputeGroupWidth());
-
-    private void ReplaceGroups(List<LiveryGroup> newGroups)
-    {
-        bool samePositionalOrder = _displayedGroups.Count == newGroups.Count;
-        if (samePositionalOrder)
-        {
-            for (int i = 0; i < newGroups.Count; i++)
-            {
-                if (_displayedGroups[i].Key != newGroups[i].Key)
-                {
-                    samePositionalOrder = false;
-                    break;
-                }
-            }
-        }
-
-        if (!samePositionalOrder)
-        {
-            foreach (var oldGroup in _displayedGroups)
-                oldGroup.Dispose();
-            _displayedGroups.Clear();
-            foreach (var newGroup in newGroups)
-                _displayedGroups.Add(newGroup);
-
-            GroupsHost.InvalidateMeasure();
-            GalleryScroll.InvalidateMeasure();
-            return;
-        }
-
-        for (int i = 0; i < newGroups.Count; i++)
-        {
-            var oldGroup = _displayedGroups[i];
-            var newGroup = newGroups[i];
-
-            if (AreGroupsEquivalent(oldGroup, newGroup))
-            {
-                newGroup.Dispose();
-                continue;
-            }
-
-            oldGroup.Dispose();
-            _displayedGroups[i] = newGroup;
-        }
-
-        GroupsHost.InvalidateMeasure();
-        GalleryScroll.InvalidateMeasure();
-    }
-
-    private static bool AreGroupsEquivalent(LiveryGroup oldGroup, LiveryGroup newGroup)
-    {
-        if (oldGroup.Items.Count != newGroup.Items.Count) return false;
-        for (int i = 0; i < oldGroup.Items.Count; i++)
-        {
-            if (!AreEntriesEquivalent(oldGroup.Items[i], newGroup.Items[i])) return false;
-        }
-        return true;
-    }
-
-    private List<LiveryEntry> MergeWithLocalState(List<LiveryEntry> freshEntries)
-    {
-        var previousByPath = _allEntries.ToDictionary(e => e.FolderPath);
-        var mergedEntries = new List<LiveryEntry>(freshEntries.Count);
-        foreach (var newEntry in freshEntries)
-        {
-            if (previousByPath.TryGetValue(newEntry.FolderPath, out var previous))
-            {
-                newEntry.IsFavorite = previous.IsFavorite;
-                newEntry.Tags = previous.Tags;
-
-                if (AreEntriesEquivalent(previous, newEntry))
-                {
-                    mergedEntries.Add(previous);
-                    continue;
-                }
-            }
-            mergedEntries.Add(newEntry);
-        }
-        return mergedEntries;
-    }
-
-    private static bool AreEntriesEquivalent(LiveryEntry a, LiveryEntry b)
-    {
-        return a.FolderPath == b.FolderPath
-            && a.LiveryName == b.LiveryName
-            && a.Author == b.Author
-            && a.CarId == b.CarId
-            && a.CarManufacturerRaw == b.CarManufacturerRaw
-            && a.CarModelNameRaw == b.CarModelNameRaw
-            && a.CarYear == b.CarYear
-            && a.CarKnown == b.CarKnown
-            && a.CreatedYear == b.CreatedYear
-            && a.CreatedMonth == b.CreatedMonth
-            && a.DownloadDate == b.DownloadDate
-            && a.ThumbnailPath == b.ThumbnailPath
-            && a.DuplicateStatus == b.DuplicateStatus
-            && a.CLiveryHash == b.CLiveryHash
-            && SectionCountsEqual(a.SectionCounts, b.SectionCounts);
-    }
-
-    private static bool SectionCountsEqual(IReadOnlyList<uint>? a, IReadOnlyList<uint>? b)
-    {
-        if (a is null && b is null) return true;
-        if (a is null || b is null) return false;
-        return a.SequenceEqual(b);
-    }
+    private List<LiveryGroup> BuildGroups(List<LiveryEntry> filtered) => _galleryController.BuildGroups(
+        filtered, _settings.SortMode, _settings.FavoriteMode, _settings.GroupingEnabled, ComputeGroupWidth());
 
     private void UpdateCountsAndEmptyState(List<LiveryEntry> filtered)
     {
         string search = SearchBox.Text?.Trim() ?? "";
         var stats = GalleryStatisticsService.Calculate(filtered);
 
-        CountBaseText.Text = _allEntries.Count == 0 ? "" : string.Format(Strings.CountShowing, filtered.Count, _allEntries.Count);
+        CountBaseText.Text = _galleryController.AllEntries.Count == 0 ? "" : string.Format(Strings.CountShowing, filtered.Count, _galleryController.AllEntries.Count);
 
         FavoritesCountPanel.IsVisible = stats.FavoritesShown > 0;
         FavoritesCountText.Text = stats.FavoritesShown.ToString();
@@ -480,7 +365,7 @@ internal partial class MainWindow : Window
         PossibleDuplicatesCountPanel.IsVisible = stats.PossibleDuplicatesShown > 0;
         PossibleDuplicatesCountText.Text = stats.PossibleDuplicatesShown.ToString();
 
-        if (_allEntries.Count == 0)
+        if (_galleryController.AllEntries.Count == 0)
         {
             EmptyStateText.Text = Strings.EmptyNoLiveries;
             EmptyState.IsVisible = true;
@@ -517,7 +402,7 @@ internal partial class MainWindow : Window
 
     private void RebuildTagsBar()
     {
-        var allTags = _allEntries
+        var allTags = _galleryController.AllEntries
             .SelectMany(x => x.Tags)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(t => t, StringComparer.OrdinalIgnoreCase)
@@ -527,7 +412,7 @@ internal partial class MainWindow : Window
         if (_lastTagsBarTags is not null && _lastTagsBarTags.SetEquals(allTagsSet)) return;
         _lastTagsBarTags = allTagsSet;
 
-        _selectedTags.RemoveWhere(t => !allTags.Contains(t, StringComparer.OrdinalIgnoreCase));
+        _galleryController.SelectedTags.RemoveWhere(t => !allTags.Contains(t, StringComparer.OrdinalIgnoreCase));
 
         TagsBar.Children.Clear();
         TagsFilterRow.IsVisible = allTags.Count > 0;
@@ -537,14 +422,14 @@ internal partial class MainWindow : Window
             var button = new ToggleButton
             {
                 Content = tag,
-                IsChecked = _selectedTags.Contains(tag),
+                IsChecked = _galleryController.SelectedTags.Contains(tag),
                 Margin = new Thickness(0, 0, 8, 8)
             };
             button.Classes.Add("tagChip");
             button.IsCheckedChanged += (_, _) =>
             {
-                if (button.IsChecked == true) _selectedTags.Add(tag);
-                else _selectedTags.Remove(tag);
+                if (button.IsChecked == true) _galleryController.SelectedTags.Add(tag);
+                else _galleryController.SelectedTags.Remove(tag);
                 RefreshGallery();
             };
             TagsBar.Children.Add(button);
@@ -563,7 +448,7 @@ internal partial class MainWindow : Window
             return;
         }
 
-        var dialog = new AuthorCardViewDialog(card, _allEntries);
+        var dialog = new AuthorCardViewDialog(card, _galleryController.AllEntries);
         await dialog.ShowDialog(this);
     }
 
@@ -579,7 +464,7 @@ internal partial class MainWindow : Window
             _tagService.SetTags(entry.FolderName, entry.Tags);
             RebuildTagsBar();
 
-            if (_selectedTags.Count > 0)
+            if (_galleryController.SelectedTags.Count > 0)
                 RefreshGallery();
         }
     }
@@ -698,17 +583,17 @@ internal partial class MainWindow : Window
 
     private async void AuthorsButton_Click(object? sender, RoutedEventArgs e)
     {
-        var dialog = new AuthorsDialog(_authorCardService, _allEntries, async () =>
+        var dialog = new AuthorsDialog(_authorCardService, _galleryController.AllEntries, async () =>
         {
             await RefreshEntriesFromCacheAsync();
-            return _allEntries;
+            return _galleryController.AllEntries;
         });
         await dialog.ShowDialog(this);
     }
 
     private async void StatsButton_Click(object? sender, RoutedEventArgs e)
     {
-        var stats = GalleryStatisticsService.CalculateOverall(_allEntries);
+        var stats = GalleryStatisticsService.CalculateOverall(_galleryController.AllEntries);
 
         static string Format(string? label, int count) => label is not null ? $"{label} ({count})" : "-";
 
@@ -772,7 +657,7 @@ internal partial class MainWindow : Window
         ApplyLocalizedTexts();
         RenderStatus();
         UpdateCountsAndEmptyState(GetFilteredEntries());
-        foreach (var entry in _allEntries)
+        foreach (var entry in _galleryController.AllEntries)
             entry.RefreshLocalizedText();
 
         if (GroupsHost.ItemsSource is IEnumerable<LiveryGroup> currentGroups)
