@@ -25,7 +25,7 @@ internal partial class App : Application
             var tagService = new TagService();
             var favoriteService = new FavoriteService();
             var authorCardService = new AuthorCardService();
-            var scanService = new LiveryScanService(cacheService, carDatabase, favoriteService, tagService, authorCardService);
+            var scanService = new LiveryScanner(cacheService, carDatabase, favoriteService, tagService, authorCardService);
             var updateService = new AppUpdateCheckService(AppHttpClient.Instance);
             desktop.MainWindow = new MainWindow(
                 settings, cacheService, carDatabase, tagService, favoriteService, authorCardService, scanService, updateService);

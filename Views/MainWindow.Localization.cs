@@ -33,9 +33,15 @@ internal partial class MainWindow
         FavFirstItemText.Text = Strings.FavoritesFirstToggle;
         FavOnlyItemText.Text = Strings.OnlyFavoritesToggle;
         FavSeparateItemText.Text = Strings.SeparateFavoritesToggle;
+        MineNoneItem.Header = Strings.NormalOrderToggle;
+        MineFirstItemText.Text = Strings.MineFirstToggle;
+        MineOnlyItemText.Text = Strings.OnlyMineToggle;
+        MineSeparateItemText.Text = Strings.SeparateMineToggle;
         DupAllItem.Header = Strings.DuplicatesFilterAll;
         DupAndPossibleItem.Header = Strings.DuplicatesFilterAndPossible;
         DupOnlyItem.Header = Strings.DuplicatesFilterOnly;
+        GenAllItem.Header = Strings.GeneratedFilterAll;
+        GenOnlyItem.Header = Strings.GeneratedFilterOnly;
 
         TagsFilterLabel.Text = Strings.TagsFilterLabel;
     }
@@ -61,6 +67,7 @@ internal partial class MainWindow
                     LiveryGroupSpecialKind.UnknownManufacturer => Strings.UnknownManufacturer,
                     LiveryGroupSpecialKind.AllLiveries => Strings.AllLiveriesGroupName,
                     _ when group.IsFavoritesGroup => Strings.SeparateFavoritesGroupName,
+                    _ when group.IsMineGroup => Strings.SeparateMineGroupName,
                     _ => group.Key
                 };
             }

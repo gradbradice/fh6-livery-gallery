@@ -1,10 +1,73 @@
 ﻿using LiveryGallery.Enums;
+using LiveryGallery.Models;
+using LiveryGallery.Configuration;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace LiveryGallery.Services;
 
-internal static class LocalSaveService
+internal static partial class LocalSaveService
 {
     private const string _baseDir = @"C:\XboxGames\GameSave\pgs";
+
+    [GeneratedRegex(@"^u_(?<userId>\d+)_(?<gameId>[0-9a-fA-F]+)$")]
+    private static partial Regex UserFolderRegex();
+
+    public static (ulong UserId, string GameId)? TryParseFolderName(string folderPathOrName)
+    {
+        string name = Path.GetFileName(folderPathOrName.TrimEnd('\\', '/'));
+        var match = UserFolderRegex().Match(name);
+        if (!match.Success || !ulong.TryParse(match.Groups["userId"].Value, out ulong id)) return null;
+        return (id, match.Groups["gameId"].Value.ToUpperInvariant());
+    }
+
+    public static ulong? TryParseUserId(string folderPathOrName) => TryParseFolderName(folderPathOrName)?.UserId;
+
+    public static (ulong UserId, string GameId)? TryReadManifestIdentity(string uFolderPath, int containerId)
+    {
+        string manifestPath = Path.Combine(uFolderPath, $"{containerId}.json");
+        try
+        {
+            if (!File.Exists(manifestPath)) return null;
+            string json = File.ReadAllText(manifestPath);
+            var manifest = JsonSerializer.Deserialize<SaveManifestFile>(json, JsonSettings.GitHubDeserializeOptions);
+            string? userIdStr = manifest?.Manifest?.UserId;
+            string? gameId = manifest?.Manifest?.GameId;
+            if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(gameId)) return null;
+            if (!ulong.TryParse(userIdStr, out ulong userId)) return null;
+            return (userId, gameId.ToUpperInvariant());
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError($"Failed to read/parse save manifest '{manifestPath}'", ex);
+            return null;
+        }
+    }
+
+    public static bool HasIdentityConfirmationFile(string uFolderPath, ulong userId, string gameId) =>
+        File.Exists(Path.Combine(uFolderPath, $"{userId}_{gameId.ToUpperInvariant()}.json"));
+
+    public static SaveIdentity? ResolveSaveIdentity(string uFolderPath, int? containerId)
+    {
+        var fromFolder = TryParseFolderName(uFolderPath);
+        var fromManifest = containerId is { } id ? TryReadManifestIdentity(uFolderPath, id) : null;
+
+        (ulong UserId, string GameId)? resolved = fromManifest ?? fromFolder;
+        if (resolved is null) return null;
+
+        bool agree = fromFolder is not null && fromManifest is not null
+            && fromFolder.Value.UserId == fromManifest.Value.UserId
+            && string.Equals(fromFolder.Value.GameId, fromManifest.Value.GameId, StringComparison.Ordinal);
+
+        return new SaveIdentity
+        {
+            UserId = resolved.Value.UserId,
+            GameId = resolved.Value.GameId,
+            Source = fromManifest is not null ? SaveIdentitySource.ManifestJson : SaveIdentitySource.FolderNameFallback,
+            ConfirmationFileFound = HasIdentityConfirmationFile(uFolderPath, resolved.Value.UserId, resolved.Value.GameId),
+            FolderNameAgreesWithManifest = agree,
+        };
+    }
 
     public static string? FindLocalSavePath()
     {

@@ -13,13 +13,17 @@ internal sealed class GalleryController(Control groupsHost, Control galleryScrol
     public HashSet<string> SelectedTags { get; } = new(StringComparer.OrdinalIgnoreCase);
 
     public List<LiveryEntry> GetFilteredEntries(
-        string? searchText, FavoriteMode favoriteMode, DuplicatesFilterMode duplicatesFilterMode) =>
+        string? searchText, FavoriteMode favoriteMode, MineMode mineMode,
+        DuplicatesFilterMode duplicatesFilterMode, GeneratedFilterMode generatedFilterMode) =>
         GalleryFilterService.Apply(
-            AllEntries, searchText, SelectedTags, favoriteMode == FavoriteMode.OnlyFavorites, duplicatesFilterMode);
+            AllEntries, searchText, SelectedTags,
+            favoriteMode == FavoriteMode.OnlyFavorites, mineMode == MineMode.OnlyMine,
+            duplicatesFilterMode, generatedFilterMode);
 
     public List<LiveryGroup> BuildGroups(
-        List<LiveryEntry> filtered, SortMode sortMode, FavoriteMode favoriteMode, bool groupingEnabled, double groupWidth) =>
-        GalleryGroupingService.Group(filtered, sortMode, favoriteMode, groupingEnabled, groupWidth);
+        List<LiveryEntry> filtered, SortMode sortMode, FavoriteMode favoriteMode, MineMode mineMode,
+        bool groupingEnabled, double groupWidth) =>
+        GalleryGroupingService.Group(filtered, sortMode, favoriteMode, mineMode, groupingEnabled, groupWidth);
 
     public void ReplaceGroups(List<LiveryGroup> newGroups)
     {
@@ -80,11 +84,11 @@ internal sealed class GalleryController(Control groupsHost, Control galleryScrol
 
     public List<LiveryEntry> MergeWithLocalState(List<LiveryEntry> freshEntries)
     {
-        var previousByPath = AllEntries.ToDictionary(e => e.FolderPath);
+        var previousByName = AllEntries.ToDictionary(e => e.FolderName);
         var mergedEntries = new List<LiveryEntry>(freshEntries.Count);
         foreach (var newEntry in freshEntries)
         {
-            if (previousByPath.TryGetValue(newEntry.FolderPath, out var previous))
+            if (previousByName.TryGetValue(newEntry.FolderName, out var previous))
             {
                 newEntry.IsFavorite = previous.IsFavorite;
                 newEntry.Tags = previous.Tags;
@@ -102,7 +106,7 @@ internal sealed class GalleryController(Control groupsHost, Control galleryScrol
 
     private static bool AreEntriesEquivalent(LiveryEntry a, LiveryEntry b)
     {
-        return a.FolderPath == b.FolderPath
+        return a.FolderName == b.FolderName
             && a.LiveryName == b.LiveryName
             && a.Author == b.Author
             && a.CarId == b.CarId
@@ -115,14 +119,16 @@ internal sealed class GalleryController(Control groupsHost, Control galleryScrol
             && a.DownloadDate == b.DownloadDate
             && a.ThumbnailPath == b.ThumbnailPath
             && a.DuplicateStatus == b.DuplicateStatus
-            && a.CLiveryHash == b.CLiveryHash
-            && SectionCountsEqual(a.SectionCounts, b.SectionCounts);
+            && PossibleDuplicateOfEqual(a.PossibleDuplicateOf, b.PossibleDuplicateOf)
+            && a.IsMine == b.IsMine
+            && a.IsPossiblyGenerated == b.IsPossiblyGenerated
+            && a.CLiveryHash == b.CLiveryHash;
     }
 
-    private static bool SectionCountsEqual(IReadOnlyList<uint>? a, IReadOnlyList<uint>? b)
+    private static bool PossibleDuplicateOfEqual(IReadOnlyList<string>? a, IReadOnlyList<string>? b)
     {
-        if (a is null && b is null) return true;
-        if (a is null || b is null) return false;
-        return a.SequenceEqual(b);
+        if (a is null || a.Count == 0) return b is null || b.Count == 0;
+        if (b is null || a.Count != b.Count) return false;
+        return a.ToHashSet(StringComparer.Ordinal).SetEquals(b);
     }
 }

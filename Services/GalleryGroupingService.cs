@@ -10,18 +10,19 @@ internal static class GalleryGroupingService
         List<LiveryEntry> filtered,
         SortMode sortMode,
         FavoriteMode favoriteMode,
+        MineMode mineMode,
         bool groupingEnabled,
         double groupWidth)
     {
-        bool onlyFavorites = favoriteMode == FavoriteMode.OnlyFavorites;
         bool favoritesFirst = favoriteMode == FavoriteMode.FavoritesFirst;
         bool separateFavorites = favoriteMode == FavoriteMode.FavoritesSeparately;
 
+        bool mineFirst = mineMode == MineMode.MineFirst;
+        bool separateMine = mineMode == MineMode.MineSeparately;
+        
         if (!groupingEnabled)
         {
-            var singleGroupItems = SortForCurrentMode(filtered, sortMode);
-            if (favoritesFirst)
-                singleGroupItems = [.. singleGroupItems.OrderByDescending(x => x.IsFavorite)];
+            var singleGroupItems = SortForCurrentMode(filtered, sortMode, favoritesFirst, mineFirst);
 
             return filtered.Count > 0
                 ? [new LiveryGroup
@@ -34,10 +35,17 @@ internal static class GalleryGroupingService
                 : [];
         }
 
-        if (separateFavorites)
+        if (separateFavorites || separateMine)
         {
-            var favoriteItems = filtered.Where(x => x.IsFavorite).ToList();
-            var restItems = onlyFavorites ? new List<LiveryEntry>() : filtered.Where(x => !x.IsFavorite).ToList();
+            var favoriteItems = new List<LiveryEntry>();
+            var mineItems = new List<LiveryEntry>();
+            var restItems = new List<LiveryEntry>();
+            foreach (var item in filtered)
+            {
+                if (separateFavorites && item.IsFavorite) favoriteItems.Add(item);
+                else if (separateMine && item.IsMine) mineItems.Add(item);
+                else restItems.Add(item);
+            }
 
             var groups = new List<LiveryGroup>();
             if (favoriteItems.Count > 0)
@@ -45,19 +53,30 @@ internal static class GalleryGroupingService
                 groups.Add(new LiveryGroup
                 {
                     Key = Strings.SeparateFavoritesGroupName,
-                    Items = SortForCurrentMode(favoriteItems, sortMode),
+                    Items = SortForCurrentMode(favoriteItems, sortMode, favoritesFirst: false, mineFirst),
                     GroupWidth = groupWidth,
                     IsFavoritesGroup = true
                 });
             }
-            groups.AddRange(BuildGroups(restItems, sortMode, favoritesFirst: false, groupWidth));
+            if (mineItems.Count > 0)
+            {
+                groups.Add(new LiveryGroup
+                {
+                    Key = Strings.SeparateMineGroupName,
+                    Items = SortForCurrentMode(mineItems, sortMode, favoritesFirst: false, mineFirst: false),
+                    GroupWidth = groupWidth,
+                    IsMineGroup = true
+                });
+            }
+            groups.AddRange(BuildGroups(restItems, sortMode, favoritesFirst: false, mineFirst: false, groupWidth));
             return groups;
         }
 
-        return BuildGroups(filtered, sortMode, favoritesFirst, groupWidth);
+        return BuildGroups(filtered, sortMode, favoritesFirst, mineFirst, groupWidth);
     }
 
-    private static List<LiveryGroup> BuildGroups(List<LiveryEntry> items, SortMode sortMode, bool favoritesFirst, double groupWidth)
+    private static List<LiveryGroup> BuildGroups(
+        List<LiveryEntry> items, SortMode sortMode, bool favoritesFirst, bool mineFirst, double groupWidth)
     {
         if (sortMode == SortMode.Author)
         {
@@ -67,9 +86,10 @@ internal static class GalleryGroupingService
                 .Select(g => new LiveryGroup
                 {
                     Key = g.Key,
-                    Items = OrderGroupItems(g, favoritesFirst,
+                    Items = OrderGroupItems(g, favoritesFirst, mineFirst,
                             x => x.CarManufacturer, x => x.CarModelName, x => x.LiveryName),
-                    GroupWidth = groupWidth
+                    GroupWidth = groupWidth,
+                    IsMineGroup = g.All(x => x.IsMine)
                 })];
         }
 
@@ -85,9 +105,7 @@ internal static class GalleryGroupingService
                         : Strings.UnknownDownloadDate,
                     SpecialKind = g.Key is not null ? LiveryGroupSpecialKind.DownloadMonth : LiveryGroupSpecialKind.UnknownDownloadDate,
                     SpecialMonth = g.Key,
-                    Items = [.. (favoritesFirst
-                                ? g.OrderByDescending(x => x.IsFavorite).ThenByDescending(x => x.DownloadDate ?? DateTime.MinValue)
-                                : g.OrderByDescending(x => x.DownloadDate ?? DateTime.MinValue))
+                    Items = [.. OrderByFavoriteThenMine(g, favoritesFirst, mineFirst, x => x.DownloadDate ?? DateTime.MinValue, descending: true)
                             .ThenBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
                             .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
                     GroupWidth = groupWidth
@@ -105,45 +123,54 @@ internal static class GalleryGroupingService
                 SpecialKind = g.Key.Equals(unknownLabel, StringComparison.OrdinalIgnoreCase)
                     ? LiveryGroupSpecialKind.UnknownManufacturer
                     : LiveryGroupSpecialKind.None,
-                Items = [.. (favoritesFirst
-                            ? g.OrderByDescending(x => x.IsFavorite).ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
-                            : g.OrderBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase))
+                Items = [.. OrderByFavoriteThenMine(g, favoritesFirst, mineFirst, x => x.CarModelName, descending: false, StringComparer.OrdinalIgnoreCase)
                         .ThenBy(x => x.CarYear)
                         .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
                 GroupWidth = groupWidth
             })];
     }
 
-    private static List<LiveryEntry> SortForCurrentMode(List<LiveryEntry> items, SortMode sortMode) => sortMode switch
+    private static List<LiveryEntry> SortForCurrentMode(List<LiveryEntry> items, SortMode sortMode, bool favoritesFirst = false, bool mineFirst = false)
     {
-        SortMode.Author =>
-            [.. items.OrderBy(x => x.Author, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
-        SortMode.DownloadTime =>
-            [.. items.OrderByDescending(x => x.DownloadDate ?? DateTime.MinValue)
-                  .ThenBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
-        _ => [.. items.OrderBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
-                  .ThenBy(x => x.CarYear)
-                  .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
-    };
+        return sortMode switch
+        {
+            SortMode.Author => [.. OrderByFavoriteThenMine(items, favoritesFirst, mineFirst, x => x.Author, descending: false, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
+            SortMode.DownloadTime => [.. OrderByFavoriteThenMine(items, favoritesFirst, mineFirst, x => x.DownloadDate ?? DateTime.MinValue, descending: true)
+                    .ThenBy(x => x.CarManufacturer, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
+            _ => [.. OrderByFavoriteThenMine(items, favoritesFirst, mineFirst, x => x.CarManufacturer, descending: false, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(x => x.CarModelName, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(x => x.CarYear)
+                    .ThenBy(x => x.LiveryName, StringComparer.OrdinalIgnoreCase)],
+        };
+    }
 
     private static List<LiveryEntry> OrderGroupItems(
         IEnumerable<LiveryEntry> items,
         bool favoritesFirst,
+        bool mineFirst,
         Func<LiveryEntry, string> key1,
         Func<LiveryEntry, string> key2,
         Func<LiveryEntry, string> key3)
     {
-        var ordered = favoritesFirst
-            ? items.OrderByDescending(x => x.IsFavorite).ThenBy(key1, StringComparer.OrdinalIgnoreCase)
-            : items.OrderBy(key1, StringComparer.OrdinalIgnoreCase);
-
-        return [.. ordered
+        return [.. OrderByFavoriteThenMine(items, favoritesFirst, mineFirst, key1, descending: false, StringComparer.OrdinalIgnoreCase)
             .ThenBy(key2, StringComparer.OrdinalIgnoreCase)
             .ThenBy(key3, StringComparer.OrdinalIgnoreCase)];
+    }
+
+    private static IOrderedEnumerable<LiveryEntry> OrderByFavoriteThenMine<TKey>(
+        IEnumerable<LiveryEntry> items, bool favoritesFirst, bool mineFirst,
+        Func<LiveryEntry, TKey> key, bool descending, IComparer<TKey>? comparer = null)
+    {
+        IOrderedEnumerable<LiveryEntry> ordered = favoritesFirst
+            ? items.OrderByDescending(x => x.IsFavorite)
+            : items.OrderBy(_ => 0);
+
+        if (mineFirst) ordered = ordered.ThenByDescending(x => x.IsMine);
+
+        return descending ? ordered.ThenByDescending(key, comparer) : ordered.ThenBy(key, comparer);
     }
 }

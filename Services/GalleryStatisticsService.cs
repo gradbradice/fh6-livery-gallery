@@ -68,8 +68,7 @@ internal static class GalleryStatisticsService
         if (entries.Count == 0) return (null, 0);
         var group = entries
             .GroupBy(selector, StringComparer.OrdinalIgnoreCase)
-            .OrderByDescending(g => g.Count())
-            .First();
+            .MaxBy(g => g.Count())!;
         return (group.Key, group.Count());
     }
 
@@ -81,8 +80,7 @@ internal static class GalleryStatisticsService
             .GroupBy(
                 x => (x.CarManufacturer, x.CarModelName, Year: includeYear ? x.CarYear : null),
                 ModelKeyComparer.Instance)
-            .OrderByDescending(g => g.Count())
-            .First();
+            .MaxBy(g => g.Count())!;
 
         string label = includeYear && group.Key.Year is { } year
             ? $"{group.Key.CarManufacturer} {group.Key.CarModelName} ({year})"

@@ -40,10 +40,12 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
 
     public int Count => Items.Count;
     public int FavoriteCount => Items.Count(x => x.IsFavorite);
+    public int MineCount => Items.Count(x => x.IsMine);
     public int DuplicateCount => Items.Count(x => x.IsDuplicate);
     public int PossibleDuplicateCount => Items.Count(x => x.IsPossibleDuplicate);
 
     public bool HasFavorites => FavoriteCount > 0;
+    public bool HasMine => MineCount > 0;
     public bool HasDuplicates => DuplicateCount > 0;
     public bool HasPossibleDuplicates => PossibleDuplicateCount > 0;
 
@@ -61,6 +63,7 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
     }
 
     public bool IsFavoritesGroup { get; init; }
+    public bool IsMineGroup { get; init; }
 
     public LiveryGroupSpecialKind SpecialKind { get; init; } = LiveryGroupSpecialKind.None;
     public DateTime? SpecialMonth { get; init; }

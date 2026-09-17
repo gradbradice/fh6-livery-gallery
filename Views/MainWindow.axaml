@@ -58,6 +58,22 @@
                             <TextBlock Text="{DynamicResource Loc_PossibleDuplicateBadgeLabel}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
+                        <Border IsVisible="{Binding ShowMineBadge}"
+                                Background="{DynamicResource AccentBrush}"
+                                CornerRadius="6" Padding="7,3"
+                                HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8"
+                                ToolTip.Tip="{DynamicResource Loc_MyLiveryBadgeTooltip}">
+                            <TextBlock Text="{DynamicResource Loc_MyLiveryBadgeLabel}" FontSize="10.5"
+                                       FontWeight="SemiBold" Foreground="White" />
+                        </Border>
+                        <Border IsVisible="{Binding IsPossiblyGenerated}"
+                                Background="{DynamicResource TextSecondaryBrush}"
+                                CornerRadius="6" Padding="7,3"
+                                HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8,0,0,8"
+                                ToolTip.Tip="{DynamicResource Loc_PossiblyGeneratedBadgeTooltip}">
+                            <TextBlock Text="{DynamicResource Loc_PossiblyGeneratedBadgeLabel}" FontSize="10.5"
+                                       FontWeight="SemiBold" Foreground="White" />
+                        </Border>
                     </Grid>
                     <StackPanel Margin="14,12,14,14">
                         <TextBlock Text="{Binding LiveryName}" FontSize="14.5" FontWeight="SemiBold"
@@ -144,6 +160,9 @@
                         <Path Data="{StaticResource IconStarFilled}" Width="13" Height="13" Stretch="Uniform"
                               Fill="#FFD54F" Margin="0,0,7,0" VerticalAlignment="Center"
                               IsVisible="{Binding IsFavoritesGroup}" />
+                        <PathIcon Data="{StaticResource IconUser}" Width="13" Height="13"
+                              Foreground="{DynamicResource AccentBrush}" Margin="0,0,7,0" VerticalAlignment="Center"
+                              IsVisible="{Binding IsMineGroup}" />
                         <TextBlock Text="{Binding Key}" FontSize="15" FontWeight="SemiBold" />
                         <TextBlock Text="{Binding CountText}" FontSize="13" Margin="7,0,0,0"
                                    Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
@@ -153,6 +172,14 @@
                             <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11" Stretch="Uniform"
                                   Fill="#FFD54F" Margin="0,0,4,0" />
                             <TextBlock Text="{Binding FavoriteCount}" FontSize="13"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasMine}"
+                                    VerticalAlignment="Center">
+                            <PathIcon Data="{StaticResource IconUser}" Width="10" Height="10"
+                                  Foreground="{DynamicResource AccentBrush}" Margin="0,0,4,0" />
+                            <TextBlock Text="{Binding MineCount}" FontSize="13"
                                        Foreground="{DynamicResource TextSecondaryBrush}" />
                         </StackPanel>
 
@@ -285,12 +312,53 @@
                                     </MenuItem.Header>
                                 </MenuItem>
                                 <Separator />
+                                <MenuItem x:Name="MineNoneItem" ToggleType="Radio" GroupName="MineGroup"
+                                          Tag="0" Click="MineModeMenuItem_Click" />
+                                <MenuItem x:Name="MineFirstItem" ToggleType="Radio" GroupName="MineGroup"
+                                          Tag="1" Click="MineModeMenuItem_Click">
+                                    <MenuItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <PathIcon Data="{StaticResource IconUser}" Width="11" Height="11"
+                                                  Foreground="{DynamicResource AccentBrush}" Margin="0,0,6,0"
+                                                  VerticalAlignment="Center" />
+                                            <TextBlock x:Name="MineFirstItemText" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem x:Name="MineOnlyItem" ToggleType="Radio" GroupName="MineGroup"
+                                          Tag="2" Click="MineModeMenuItem_Click">
+                                    <MenuItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <PathIcon Data="{StaticResource IconUser}" Width="11" Height="11"
+                                                  Foreground="{DynamicResource AccentBrush}" Margin="0,0,6,0"
+                                                  VerticalAlignment="Center" />
+                                            <TextBlock x:Name="MineOnlyItemText" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem x:Name="MineSeparateItem" ToggleType="Radio" GroupName="MineGroup"
+                                          Tag="3" Click="MineModeMenuItem_Click">
+                                    <MenuItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <PathIcon Data="{StaticResource IconUser}" Width="11" Height="11"
+                                                  Foreground="{DynamicResource AccentBrush}" Margin="0,0,6,0"
+                                                  VerticalAlignment="Center" />
+                                            <TextBlock x:Name="MineSeparateItemText" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <Separator />
                                 <MenuItem x:Name="DupAllItem" ToggleType="Radio" GroupName="DupGroup"
                                           Tag="0" Click="DupModeMenuItem_Click" />
                                 <MenuItem x:Name="DupAndPossibleItem" ToggleType="Radio" GroupName="DupGroup"
                                           Tag="1" Click="DupModeMenuItem_Click" />
                                 <MenuItem x:Name="DupOnlyItem" ToggleType="Radio" GroupName="DupGroup"
                                           Tag="2" Click="DupModeMenuItem_Click" />
+                                <Separator />
+                                <MenuItem x:Name="GenAllItem" ToggleType="Radio" GroupName="GenGroup"
+                                          Tag="0" Click="GeneratedModeMenuItem_Click" />
+                                <MenuItem x:Name="GenOnlyItem" ToggleType="Radio" GroupName="GenGroup"
+                                          Tag="1" Click="GeneratedModeMenuItem_Click" />
                             </MenuFlyout>
                         </Button.Flyout>
                     </Button>

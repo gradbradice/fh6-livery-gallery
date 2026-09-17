@@ -40,7 +40,7 @@ internal partial class MainWindow : Window
         TagService tagService,
         FavoriteService favoriteService,
         AuthorCardService authorCardService,
-        LiveryScanService scanService,
+        LiveryScanner scanService,
         AppUpdateCheckService updateService)
     {
         InitializeComponent();
@@ -100,7 +100,14 @@ internal partial class MainWindow : Window
         _shutdownCts.Cancel();
 
         try { await _scanController.WaitAsync(); }
-        catch { }
+        catch (OperationCanceledException)
+        {
+            
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Unexpected error while waiting for scan to stop during shutdown", ex);
+        }
 
         bool allOk = await PersistenceManager.FlushAsync();
         if (!allOk)
@@ -180,7 +187,7 @@ internal partial class MainWindow : Window
     {
         if (SaveDataPath is null) return;
 
-        await _scanController.RegenerateEntriesAsync(freshEntries =>
+        await _scanController.RegenerateEntriesAsync(_savePathController.CurrentUserId, freshEntries =>
         {
             _galleryController.AllEntries = _galleryController.MergeWithLocalState(freshEntries);
             RebuildTagsBar();
@@ -267,13 +274,18 @@ internal partial class MainWindow : Window
 
         bool started = _scanController.TryRunScan(
             saveDataPath,
+            _savePathController.CurrentUserId,
             progress,
             onEntriesReady: entries =>
             {
-                _galleryController.AllEntries = _galleryController.MergeWithLocalState(entries);
+                bool cacheChanged = _scanController.LastScanResult?.CacheChanged ?? true;
+                if (cacheChanged)
+                {
+                    _galleryController.AllEntries = _galleryController.MergeWithLocalState(entries);
+                    RebuildTagsBar();
+                    RefreshGallery();
+                }
                 if (isUserInitiated) RenderStatus();
-                RebuildTagsBar();
-                RefreshGallery();
             },
             onError: ex => scanError = ex);
 
@@ -342,10 +354,16 @@ internal partial class MainWindow : Window
         HandleEnumMenuClick(sender, SortMode.Manufacture, mode => _settings.SortMode = mode);
 
     private List<LiveryEntry> GetFilteredEntries() => _galleryController.GetFilteredEntries(
-        SearchBox.Text, _settings.FavoriteMode, _settings.DuplicatesFilterMode);
+        SearchBox.Text, _settings.FavoriteMode, _settings.MineMode,
+        _settings.DuplicatesFilterMode, _settings.GeneratedFilterMode);
 
     private void RefreshGallery()
     {
+        bool suppressCardBadge = _settings.GroupingEnabled
+            && (_settings.SortMode == SortMode.Author || _settings.MineMode == MineMode.MineSeparately);
+        foreach (var entry in _galleryController.AllEntries)
+            entry.ShowMineBadge = entry.IsMine && !suppressCardBadge;
+
         var filtered = GetFilteredEntries();
         var groups = BuildGroups(filtered);
         _galleryController.ReplaceGroups(groups);
@@ -353,7 +371,7 @@ internal partial class MainWindow : Window
     }
 
     private List<LiveryGroup> BuildGroups(List<LiveryEntry> filtered) => _galleryController.BuildGroups(
-        filtered, _settings.SortMode, _settings.FavoriteMode, _settings.GroupingEnabled, ComputeGroupWidth());
+        filtered, _settings.SortMode, _settings.FavoriteMode, _settings.MineMode, _settings.GroupingEnabled, ComputeGroupWidth());
 
     private void UpdateCountsAndEmptyState(List<LiveryEntry> filtered)
     {
@@ -410,7 +428,9 @@ internal partial class MainWindow : Window
     {
         if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
 
-        var card = _authorCardService.FindCardForAlias(entry.AuthorRaw);
+        var card = entry.AuthorIdentityTagHex is not null
+            ? _authorCardService.FindCardForIdentityTag(entry.AuthorIdentityTagHex)
+            : null;
         if (card is null)
         {
             await InfoDialog.ShowAsync(this, Strings.AuthorCardViewNoCardTitle,
@@ -470,8 +490,14 @@ internal partial class MainWindow : Window
     private void FavModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
         HandleEnumMenuClick(sender, FavoriteMode.None, mode => _settings.FavoriteMode = mode);
 
+    private void MineModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
+        HandleEnumMenuClick(sender, MineMode.None, mode => _settings.MineMode = mode);
+
     private void DupModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
         HandleEnumMenuClick(sender, DuplicatesFilterMode.All, mode => _settings.DuplicatesFilterMode = mode);
+
+    private void GeneratedModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
+        HandleEnumMenuClick(sender, GeneratedFilterMode.All, mode => _settings.GeneratedFilterMode = mode);
 
     private void GroupingToggleItem_Click(object? sender, RoutedEventArgs e)
     {
@@ -495,9 +521,18 @@ internal partial class MainWindow : Window
         FavSeparateItem.IsChecked = _settings.FavoriteMode == FavoriteMode.FavoritesSeparately;
         FavSeparateItem.IsEnabled = _settings.GroupingEnabled;
 
+        MineNoneItem.IsChecked = _settings.MineMode == MineMode.None;
+        MineFirstItem.IsChecked = _settings.MineMode == MineMode.MineFirst;
+        MineOnlyItem.IsChecked = _settings.MineMode == MineMode.OnlyMine;
+        MineSeparateItem.IsChecked = _settings.MineMode == MineMode.MineSeparately;
+        MineSeparateItem.IsEnabled = _settings.GroupingEnabled;
+
         DupAllItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.All;
         DupAndPossibleItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.DuplicatesAndPossible;
         DupOnlyItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.DuplicatesOnly;
+
+        GenAllItem.IsChecked = _settings.GeneratedFilterMode == GeneratedFilterMode.All;
+        GenOnlyItem.IsChecked = _settings.GeneratedFilterMode == GeneratedFilterMode.GeneratedOnly;
     }
 
     private async void ContactsMenuItem_Click(object? sender, RoutedEventArgs e)

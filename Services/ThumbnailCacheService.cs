@@ -15,6 +15,8 @@ internal static class ThumbnailCacheService
 
     public static async Task<(bool WasSuperseded, Bitmap? Bitmap)> AcquireForAsync(Control control, string? thumbnailPath)
     {
+        Dispatcher.UIThread.VerifyAccess();
+
         ReleaseFor(control);
         if (string.IsNullOrEmpty(thumbnailPath)) return (false, null);
 
@@ -67,6 +69,8 @@ internal static class ThumbnailCacheService
 
     public static void ReleaseFor(Control control)
     {
+        Dispatcher.UIThread.VerifyAccess();
+
         _acquisitionToken.Remove(control);
         if (_acquiredByControl.Remove(control, out var previousPath))
             Release(previousPath);
@@ -95,7 +99,7 @@ internal static class ThumbnailCacheService
         try
         {
             using var stream = File.OpenRead(path);
-            return new Bitmap(stream);
+            return Bitmap.DecodeToWidth(stream, 400, BitmapInterpolationMode.MediumQuality);
         }
         catch (Exception ex)
         {

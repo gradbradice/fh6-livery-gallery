@@ -10,7 +10,9 @@ internal static class GalleryFilterService
         string? search,
         IReadOnlyCollection<string> selectedTags,
         bool onlyFavorites,
-        DuplicatesFilterMode duplicatesFilterMode)
+        bool onlyMine,
+        DuplicatesFilterMode duplicatesFilterMode,
+        GeneratedFilterMode generatedFilterMode)
     {
         IEnumerable<LiveryEntry> query = allEntries;
 
@@ -22,10 +24,13 @@ internal static class GalleryFilterService
         }
 
         if (selectedTags.Count > 0)
-            query = query.Where(x => selectedTags.All(t => x.Tags.Any(xt => xt.Equals(t, StringComparison.OrdinalIgnoreCase))));
+            query = query.Where(x => selectedTags.All(t => x.TagsSet.Contains(t)));
 
         if (onlyFavorites)
             query = query.Where(x => x.IsFavorite);
+
+        if (onlyMine)
+            query = query.Where(x => x.IsMine);
 
         query = duplicatesFilterMode switch
         {
@@ -33,6 +38,9 @@ internal static class GalleryFilterService
             DuplicatesFilterMode.DuplicatesAndPossible => query.Where(x => x.IsDuplicate || x.IsPossibleDuplicate),
             _ => query
         };
+
+        if (generatedFilterMode == GeneratedFilterMode.GeneratedOnly)
+            query = query.Where(x => x.IsPossiblyGenerated);
 
         return [.. query];
     }

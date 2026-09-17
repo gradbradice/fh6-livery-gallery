@@ -7,4 +7,5 @@ internal record LiveryScanEntry
     public int Parsed {  get; set; }
     public int Errors { get; set; }
     public int Removed {  get; set; }
+    public bool CacheChanged { get; set; }
 }

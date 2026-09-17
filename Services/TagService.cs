@@ -33,7 +33,7 @@ internal class TagService
         try
         {
             Dictionary<string, List<string>> snapshot;
-            lock (_lock) snapshot = new Dictionary<string, List<string>>(_data);
+            lock (_lock) snapshot = _data.ToDictionary(x => x.Key, x => new List<string>(x.Value));
             string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
             PersistenceManager.Schedule(_path, json);
         }

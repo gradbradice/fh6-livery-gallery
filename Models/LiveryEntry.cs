@@ -9,10 +9,14 @@ namespace LiveryGallery.Models;
 
 internal class LiveryEntry : INotifyPropertyChanged
 {
-    public required string FolderPath { get; init; }
     public required string FolderName { get; init; }
     public required string LiveryName { get; init; }
     public required string AuthorRaw { get; init; }
+    public string? AuthorIdentityTagHex { get; init; }
+    public ulong? CreatorUserId { get; init; }
+    public bool IsMine { get; set; }
+    public bool ShowMineBadge { get; set; }
+    public bool IsPossiblyGenerated { get; init; }
     public required int CarId { get; init; }
     public required string CarManufacturerRaw { get; init; }
     public required string CarModelNameRaw { get; init; }
@@ -60,6 +64,7 @@ internal class LiveryEntry : INotifyPropertyChanged
 
     private List<string> _tags = [];
     private System.Collections.ObjectModel.ReadOnlyCollection<string> _tagsReadOnly = new([]);
+    private HashSet<string> _tagsSet = new(StringComparer.OrdinalIgnoreCase);
     public IReadOnlyList<string> Tags
     {
         get => _tagsReadOnly;
@@ -67,17 +72,20 @@ internal class LiveryEntry : INotifyPropertyChanged
         {
             _tags = [.. value];
             _tagsReadOnly = _tags.AsReadOnly();
+            _tagsSet = new HashSet<string>(_tags, StringComparer.OrdinalIgnoreCase);
             OnPropertyChanged();
         }
     }
 
+    public IReadOnlySet<string> TagsSet => _tagsSet;
+
     public DateTime? DownloadYearMonth => DownloadDate is { } d ? new DateTime(d.Year, d.Month, 1) : null;
 
     public string? CLiveryHash { get; init; }
-    public IReadOnlyList<uint>? SectionCounts { get; init; }
     public DuplicateStatus DuplicateStatus { get; set; }
     public bool IsDuplicate => DuplicateStatus == DuplicateStatus.Duplicate;
     public bool IsPossibleDuplicate => DuplicateStatus == DuplicateStatus.PossibleDuplicate;
+    public IReadOnlyList<string>? PossibleDuplicateOf { get; set; }
     public required bool HasThumbnail { get; init; }
 
     private Bitmap? _thumbnail;

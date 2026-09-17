@@ -3,7 +3,7 @@ using LiveryGallery.Services;
 
 namespace LiveryGallery.Controller;
 
-internal sealed class ScanController(LiveryScanService scanService)
+internal sealed class ScanController(LiveryScanner scanService)
 {
     private readonly ScanCoordinator _coordinator = new();
     public LiveryScanEntry? LastScanResult { get; private set; }
@@ -14,6 +14,7 @@ internal sealed class ScanController(LiveryScanService scanService)
 
     public bool TryRunScan(
         string savePath,
+        ulong? currentUserId,
         IProgress<string>? progress,
         Action<List<LiveryEntry>> onEntriesReady,
         Action<Exception> onError)
@@ -22,7 +23,7 @@ internal sealed class ScanController(LiveryScanService scanService)
         {
             try
             {
-                var result = await scanService.ScanAsync(savePath, progress, ct);
+                var result = await scanService.ScanAsync(savePath, currentUserId, progress, ct);
                 LastScanResult = result;
                 onEntriesReady(result.Entries);
             }
@@ -33,10 +34,10 @@ internal sealed class ScanController(LiveryScanService scanService)
         });
     }
 
-    public Task RegenerateEntriesAsync(Action<List<LiveryEntry>> onEntriesReady) =>
+    public Task RegenerateEntriesAsync(ulong? currentUserId, Action<List<LiveryEntry>> onEntriesReady) =>
         _coordinator.RunOrQueueAsync(async ct =>
         {
-            var entries = await scanService.RegenerateEntriesAsync(ct);
+            var entries = await scanService.RegenerateEntriesAsync(currentUserId, ct);
             onEntriesReady(entries);
         });
 }

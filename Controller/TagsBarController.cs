@@ -11,17 +11,17 @@ internal sealed class TagsBarController(WrapPanel tagsBar, Control tagsFilterRow
 
     public void Rebuild(IEnumerable<LiveryEntry> allEntries, Action onSelectionChanged)
     {
-        var allTags = allEntries
-            .SelectMany(x => x.Tags)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(t => t, StringComparer.OrdinalIgnoreCase)
-            .ToList();
+        var allTagsSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in allEntries)
+            foreach (var tag in entry.Tags)
+                allTagsSet.Add(tag);
 
-        var allTagsSet = new HashSet<string>(allTags, StringComparer.OrdinalIgnoreCase);
         if (_lastTags is not null && _lastTags.SetEquals(allTagsSet)) return;
         _lastTags = allTagsSet;
 
-        selectedTags.RemoveWhere(t => !allTags.Contains(t, StringComparer.OrdinalIgnoreCase));
+        var allTags = allTagsSet.OrderBy(t => t, StringComparer.OrdinalIgnoreCase).ToList();
+
+        selectedTags.RemoveWhere(t => !allTagsSet.Contains(t));
 
         tagsBar.Children.Clear();
         tagsFilterRow.IsVisible = allTags.Count > 0;

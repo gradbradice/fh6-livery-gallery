@@ -12,6 +12,33 @@ internal sealed class SavePathController(Window owner, AppSettingsData settings)
     public string? SavePath { get; private set; }
     private bool _lostNotified;
 
+    public SaveIdentity? CurrentIdentity
+    {
+        get
+        {
+            if (SavePath is null)
+            {
+                AppLogger.LogErrorThrottled("CurrentIdentity.NoSavePath",
+                    "SavePathController.CurrentIdentity: SavePath has not been set yet. The current UserId cannot be determined.",
+                    new InvalidOperationException("SavePath is null"));
+                return null;
+            }
+
+            int? containerId = settings.LastKnownContainerSavePath == SavePath ? settings.LastKnownContainerId : null;
+            var identity = LocalSaveService.ResolveSaveIdentity(SavePath, containerId);
+            if (identity is null)
+            {
+                AppLogger.LogErrorThrottled("CurrentIdentity.Unresolved",
+                    $"SavePathController.CurrentIdentity: Failed to parse UserId from either the SavePath folder name ('{Path.GetFileName(SavePath)}') or the manifest. " +
+                    $"The MINE badge will not be shown for any livery.",
+                    new InvalidOperationException("ResolveSaveIdentity returned null"));
+            }
+            return identity;
+        }
+    }
+
+    public ulong? CurrentUserId => CurrentIdentity?.UserId;
+
     public bool WasSavedPathMissing =>
         !string.IsNullOrWhiteSpace(settings.SavePath) && !Directory.Exists(settings.SavePath);
 

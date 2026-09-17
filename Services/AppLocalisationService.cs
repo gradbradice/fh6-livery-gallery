@@ -53,6 +53,10 @@ internal static class AppLocalisationService
         app.Resources["Loc_DuplicateBadgeLabel"] = Strings.DuplicateBadgeLabel;
         app.Resources["Loc_PossibleDuplicateBadgeTooltip"] = Strings.PossibleDuplicateBadgeTooltip;
         app.Resources["Loc_PossibleDuplicateBadgeLabel"] = Strings.PossibleDuplicateBadgeLabel;
+        app.Resources["Loc_MyLiveryBadgeTooltip"] = Strings.MyLiveryBadgeTooltip;
+        app.Resources["Loc_MyLiveryBadgeLabel"] = Strings.MyLiveryBadgeLabel;
+        app.Resources["Loc_PossiblyGeneratedBadgeLabel"] = Strings.PossiblyGeneratedBadgeLabel;
+        app.Resources["Loc_PossiblyGeneratedBadgeTooltip"] = Strings.PossiblyGeneratedBadgeTooltip;
         app.Resources["Loc_AuthorLabel"] = Strings.AuthorLabel;
         app.Resources["Loc_DateLabel"] = Strings.DateLabel;
         app.Resources["Loc_EditTagsTooltip"] = Strings.EditTagsTooltip;
