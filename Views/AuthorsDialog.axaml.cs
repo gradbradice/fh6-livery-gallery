@@ -8,6 +8,7 @@ using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
+using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Views;
 

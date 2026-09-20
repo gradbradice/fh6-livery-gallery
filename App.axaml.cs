@@ -28,7 +28,7 @@ internal partial class App : Application
             var scanService = new LiveryScanner(cacheService, carDatabase, favoriteService, tagService, authorCardService);
             var updateService = new AppUpdateCheckService(AppHttpClient.Instance);
             desktop.MainWindow = new MainWindow(
-                settings, cacheService, carDatabase, tagService, favoriteService, authorCardService, scanService, updateService);
+                settings, carDatabase, tagService, favoriteService, authorCardService, scanService, updateService);
         }
 
         base.OnFrameworkInitializationCompleted();

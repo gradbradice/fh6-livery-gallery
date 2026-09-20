@@ -60,6 +60,7 @@ internal static class AppLocalisationService
         app.Resources["Loc_AuthorLabel"] = Strings.AuthorLabel;
         app.Resources["Loc_DateLabel"] = Strings.DateLabel;
         app.Resources["Loc_EditTagsTooltip"] = Strings.EditTagsTooltip;
+        app.Resources["Loc_ClearSelectionLabel"] = Strings.ClearSelectionLabel;
     }
 
     public static AppLanguage GetSystemLanguage()

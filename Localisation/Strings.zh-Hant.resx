@@ -246,6 +246,15 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>編輯標籤</value>
   </data>
+  <data name="SelectToggleTooltip" xml:space="preserve">
+    <value>選擇</value>
+  </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>已選擇 {0} 個</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>標籤:</value>
   </data>

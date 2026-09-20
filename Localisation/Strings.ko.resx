@@ -246,6 +246,15 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>태그 편집</value>
   </data>
+  <data name="SelectToggleTooltip" xml:space="preserve">
+    <value>선택</value>
+  </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>지우기</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>{0}개 선택됨</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>태그:</value>
   </data>

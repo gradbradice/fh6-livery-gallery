@@ -112,9 +112,9 @@ internal static partial class LocalSaveService
 
             if (lastKnownContainerId is { } lastId)
             {
-                string candidateDir = Path.Combine(savePath, (lastId + 1).ToString());
+                string candidateDir = Path.Combine(savePath, lastId.ToString());
                 string candidate = Path.Combine(candidateDir, "ContainersRoot");
-                if (Directory.Exists(candidate)) return (candidate, lastId + 1);
+                if (Directory.Exists(candidate)) return (candidate, lastId);
             }
 
             var candidates = Directory.GetDirectories(savePath)

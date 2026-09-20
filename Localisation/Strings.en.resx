@@ -246,6 +246,15 @@ Choose it manually?
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Edit tags</value>
   </data>
+  <data name="SelectToggleTooltip" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>{0} selected</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>Tags:</value>
   </data>

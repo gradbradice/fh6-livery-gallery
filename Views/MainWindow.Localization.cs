@@ -3,6 +3,7 @@ using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
+using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Views;
 
@@ -50,9 +51,9 @@ internal partial class MainWindow
     {
         if (!_isLoaded) return;
         ApplyLocalizedTexts();
-        RenderStatus();
-        UpdateCountsAndEmptyState(GetFilteredEntries());
-        foreach (var entry in _galleryController.AllEntries)
+        _mainViewModel.Status.RenderScanStatus(_mainViewModel.ScanController.LastScanResult);
+        _mainViewModel.Gallery.RefreshCountsOnly();
+        foreach (var entry in _mainViewModel.Gallery.AllEntries)
             entry.RefreshLocalizedText();
 
         if (GroupsHost.ItemsSource is IEnumerable<LiveryGroup> currentGroups)
@@ -73,7 +74,6 @@ internal partial class MainWindow
             }
         }
 
-        if (_updateController.LatestVersion is not null)
-            UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _updateController.LatestVersion);
+        _mainViewModel.Update.RefreshLocalizedBannerText();
     }
 }

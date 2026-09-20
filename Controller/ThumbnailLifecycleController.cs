@@ -1,6 +1,6 @@
 using Avalonia.Controls;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
+using LiveryGallery.ViewModels;
 using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.Controller;

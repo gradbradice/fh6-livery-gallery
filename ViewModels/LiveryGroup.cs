@@ -1,16 +1,9 @@
+using LiveryGallery.Enums;
+using LiveryGallery.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace LiveryGallery.Models;
-
-internal enum LiveryGroupSpecialKind
-{
-    None,
-    DownloadMonth,
-    UnknownDownloadDate,
-    UnknownManufacturer,
-    AllLiveries
-}
+namespace LiveryGallery.ViewModels;
 
 internal class LiveryGroup : INotifyPropertyChanged, IDisposable
 {

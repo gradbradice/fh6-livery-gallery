@@ -2,6 +2,7 @@ using ForzaData;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
+using LiveryGallery.ViewModels;
 using System.Collections.Concurrent;
 
 namespace LiveryGallery.Services;
@@ -23,7 +24,7 @@ internal sealed class LiveryScanner
         _appCacheService = appCacheService;
         _authorCardService = authorCardService;
         _entryFactory = new LiveryEntryFactory(appCacheService, carDatabaseService, favoriteService, tagService, authorCardService);
-        _reader = new LiveryReader(appCacheService);
+        _reader = new LiveryReader();
     }
 
     public Task<LiveryScanEntry> ScanAsync(
@@ -46,7 +47,8 @@ internal sealed class LiveryScanner
             .ToList();
 
         var newCache = new ConcurrentDictionary<string, LiveryCacheEntry>();
-        var freshlyParsedNames = new ConcurrentDictionary<string, byte>(); // используется как concurrent HashSet<string>
+        var freshlyParsedNames = new ConcurrentDictionary<string, byte>();
+        var freshSectionCounts = new ConcurrentDictionary<string, uint[]?>();
 
         int reused = 0, parsed = 0, errors = 0, done = 0;
         int total = folders.Count;
@@ -63,7 +65,7 @@ internal sealed class LiveryScanner
             LiveryCacheEntry? cacheEntry = null;
             try
             {
-                cacheEntry = TryReuseOrParse(folder, oldCache, progress, myDone, total, out bool wasReused);
+                cacheEntry = TryReuseOrParse(folder, oldCache, progress, myDone, total, out bool wasReused, out uint[]? sectionCounts);
                 if (wasReused)
                 {
                     Interlocked.Increment(ref reused);
@@ -72,6 +74,7 @@ internal sealed class LiveryScanner
                 {
                     Interlocked.Increment(ref parsed);
                     freshlyParsedNames[folderKey] = 0;
+                    if (sectionCounts is not null) freshSectionCounts[folderKey] = sectionCounts;
                 }
             }
             catch (Exception ex)
@@ -90,7 +93,7 @@ internal sealed class LiveryScanner
 
         var finalCache = new Dictionary<string, LiveryCacheEntry>(newCache);
         _entryFactory.ReconcileAuthorCards(finalCache.Values);
-        UpdateDuplicateStatuses(finalCache, oldCache, [.. freshlyParsedNames.Keys], savePath);
+        UpdateDuplicateStatuses(finalCache, oldCache, [.. freshlyParsedNames.Keys], freshSectionCounts, savePath);
 
         var entries = new ConcurrentBag<LiveryEntry>();
         Parallel.ForEach(finalCache.Values, new ParallelOptions
@@ -172,8 +175,11 @@ internal sealed class LiveryScanner
         IProgress<string>? progress,
         int done,
         int total,
-        out bool wasReused)
+        out bool wasReused,
+        out uint[]? cLiverySectionCounts)
     {
+        cLiverySectionCounts = null;
+
         bool found = oldCache.TryGetValue(Path.GetFileName(folder), out var existing);
         if (found && CanReuseCacheByStamp(folder, existing!))
         {
@@ -193,13 +199,36 @@ internal sealed class LiveryScanner
         int reportInterval = Math.Max(1, total / 50);
         if (done % reportInterval == 0 || done == total)
             progress?.Report(string.Format(Strings.ParsingProgress, done, total, Path.GetFileName(folder)));
-        return _reader.ParseLivery(folder, hashes, existing);
+
+        var parsed = _reader.ParseLivery(folder, hashes, existing, out cLiverySectionCounts);
+        return parsed with { ThumbnailFile = GenerateThumbnailIfNeeded(folder, hashes, existing) };
+    }
+
+    private string? GenerateThumbnailIfNeeded(string folder, LiveryReader.LiveryFileHashes hashes, LiveryCacheEntry? previous)
+    {
+        if (hashes.SourceThumbnailPath is null) return null;
+
+        string folderName = Path.GetFileName(folder);
+        string candidate = ThumbnailService.ComputeDestinationFileName(folderName, folder, hashes.SourceThumbnail);
+        string destPath = Path.Combine(_appCacheService.ThumbsDir, candidate);
+
+        if (ThumbnailService.GenerateAndSave(hashes.SourceThumbnailPath, destPath))
+            return candidate;
+
+        if (previous?.ThumbnailFile is not null
+            && File.Exists(Path.Combine(_appCacheService.ThumbsDir, previous.ThumbnailFile)))
+        {
+            return previous.ThumbnailFile;
+        }
+
+        return null;
     }
 
     private void UpdateDuplicateStatuses(
         Dictionary<string, LiveryCacheEntry> finalCache,
         Dictionary<string, LiveryCacheEntry> oldCache,
         HashSet<string> freshlyParsedNames,
+        IReadOnlyDictionary<string, uint[]?> freshSectionCounts,
         string savePath)
     {
         string ResolvedAuthor(LiveryCacheEntry e) => _authorCardService.ResolveDisplayName(e.Author, e.AuthorIdentityTagHex);
@@ -248,7 +277,7 @@ internal sealed class LiveryScanner
                 return;
             }
 
-            RecomputeDuplicatesForDirtyGroup(members, updates, savePath);
+            RecomputeDuplicatesForDirtyGroup(members, updates, freshSectionCounts, savePath);
         });
 
         foreach (var (name, entry) in updates)
@@ -256,12 +285,17 @@ internal sealed class LiveryScanner
     }
 
     private static void RecomputeDuplicatesForDirtyGroup(
-        List<LiveryCacheEntry> members, ConcurrentBag<(string Name, LiveryCacheEntry Entry)> updates, string savePath)
+        List<LiveryCacheEntry> members,
+        ConcurrentBag<(string Name, LiveryCacheEntry Entry)> updates,
+        IReadOnlyDictionary<string, uint[]?> freshSectionCounts,
+        string savePath)
     {
         var candidates = new List<LiveryDuplicateCandidate>(members.Count);
         foreach (var member in members)
         {
-            uint[]? sectionCounts = LiveryReader.TryReadCLiverySectionCounts(Path.Combine(savePath, member.FolderName));
+            uint[]? sectionCounts = freshSectionCounts.TryGetValue(member.FolderName, out var cached)
+                ? cached
+                : LiveryReader.TryReadCLiverySectionCounts(Path.Combine(savePath, member.FolderName));
             candidates.Add(new LiveryDuplicateCandidate(member.FolderName, member.CarId, member.Author, member.CLiveryHash, sectionCounts));
         }
 

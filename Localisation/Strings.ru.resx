@@ -246,6 +246,15 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Изменить теги</value>
   </data>
+  <data name="SelectToggleTooltip" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>Выбрано: {0}</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>Теги:</value>
   </data>

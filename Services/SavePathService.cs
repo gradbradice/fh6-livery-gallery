@@ -2,12 +2,11 @@ using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
-using LiveryGallery.Services;
 using LiveryGallery.Views;
 
-namespace LiveryGallery.Controller;
+namespace LiveryGallery.Services;
 
-internal sealed class SavePathController(Window owner, AppSettingsData settings)
+internal sealed class SavePathService(Window owner, AppSettingsData settings)
 {
     public string? SavePath { get; private set; }
     private bool _lostNotified;
@@ -19,7 +18,7 @@ internal sealed class SavePathController(Window owner, AppSettingsData settings)
             if (SavePath is null)
             {
                 AppLogger.LogErrorThrottled("CurrentIdentity.NoSavePath",
-                    "SavePathController.CurrentIdentity: SavePath has not been set yet. The current UserId cannot be determined.",
+                    "SavePathService.CurrentIdentity: SavePath has not been set yet. The current UserId cannot be determined.",
                     new InvalidOperationException("SavePath is null"));
                 return null;
             }
@@ -29,7 +28,7 @@ internal sealed class SavePathController(Window owner, AppSettingsData settings)
             if (identity is null)
             {
                 AppLogger.LogErrorThrottled("CurrentIdentity.Unresolved",
-                    $"SavePathController.CurrentIdentity: Failed to parse UserId from either the SavePath folder name ('{Path.GetFileName(SavePath)}') or the manifest. " +
+                    $"SavePathService.CurrentIdentity: Failed to parse UserId from either the SavePath folder name ('{Path.GetFileName(SavePath)}') or the manifest. " +
                     $"The MINE badge will not be shown for any livery.",
                     new InvalidOperationException("ResolveSaveIdentity returned null"));
             }

@@ -10,22 +10,18 @@ using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
+using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Views;
 
 internal partial class MainWindow : Window
 {
-    private readonly AppCacheService _cacheService;
     private readonly CarDatabaseService _carDb;
     private readonly TagService _tagService;
-    private readonly FavoriteService _favoriteService;
     private readonly AuthorCardService _authorCardService;
-    private readonly UpdateController _updateController;
-    private GalleryController _galleryController = null!;
-    private SavePathController _savePathController = null!;
-    private TagsBarController _tagsBarController = null!;
-    private string? SaveDataPath => _savePathController.ResolveSaveDataPath();
-    private readonly ScanController _scanController;
+    private MainViewModel _mainViewModel = null!;
+    private SavePathService _savePathService = null!;
+    private string? SaveDataPath => _savePathService.ResolveSaveDataPath();
     private readonly CancellationTokenSource _shutdownCts = new();
     private readonly AppSettingsData _settings;
     private readonly DispatcherTimer _autoScanTimer = new() { Interval = TimeSpan.FromSeconds(30) };
@@ -35,7 +31,6 @@ internal partial class MainWindow : Window
 
     public MainWindow(
         AppSettingsData settings,
-        AppCacheService cacheService,
         CarDatabaseService carDatabase,
         TagService tagService,
         FavoriteService favoriteService,
@@ -44,19 +39,36 @@ internal partial class MainWindow : Window
         AppUpdateCheckService updateService)
     {
         InitializeComponent();
-        _galleryController = new GalleryController(GroupsHost, GalleryScroll);
-        GroupsHost.ItemsSource = _galleryController.DisplayedGroups;
-        _tagsBarController = new TagsBarController(TagsBar, TagsFilterRow, _galleryController.SelectedTags);
+
         _settings = settings;
-        _cacheService = cacheService;
         _carDb = carDatabase;
         _tagService = tagService;
-        _favoriteService = favoriteService;
         _authorCardService = authorCardService;
-        _scanController = new ScanController(scanService);
-        _updateController = new UpdateController(updateService);
-        _savePathController = new SavePathController(this, settings);
-        UpdateDisplayFilterChecks();
+        _savePathService = new SavePathService(this, settings);
+
+        _mainViewModel = new MainViewModel(
+            settings, _savePathService, carDatabase, favoriteService, scanService, updateService)
+        {
+            ShutdownToken = _shutdownCts.Token
+        };
+
+        DataContext = _mainViewModel;
+        _mainViewModel.AuthorRowRequested += async entry => await ShowAuthorRowAsync(entry);
+        _mainViewModel.EditTagsRequested += async entry => await ShowEditTagsAsync(entry);
+
+        GroupsHost.ItemsSource = _mainViewModel.Gallery.DisplayedGroups;
+        _mainViewModel.Gallery.GroupsReplaced += () =>
+        {
+            GroupsHost.InvalidateMeasure();
+            GalleryScroll.InvalidateMeasure();
+        };
+        TagsFilterRow.DataContext = _mainViewModel.TagsBar;
+        SearchBox.DataContext = _mainViewModel.FilterBar;
+        DisplayFilterButton.DataContext = _mainViewModel.FilterBar;
+        StatusBar.DataContext = _mainViewModel.Status;
+        GalleryHost.DataContext = _mainViewModel.Status;
+        RefreshButton.DataContext = _mainViewModel;
+        UpdateBanner.DataContext = _mainViewModel.Update;
 
         ApplyLocalizedTexts();
 
@@ -72,7 +84,7 @@ internal partial class MainWindow : Window
             if (_isLoaded) UpdateGroupWidthsOnly();
         };
 
-        _autoScanTimer.Tick += (_, __) => _ = RunScanAsyncTracked(isUserInitiated: false);
+        _autoScanTimer.Tick += (_, __) => _ = _mainViewModel.RunScanAsyncTracked(isUserInitiated: false);
         SizeChanged += (_, __) =>
         {
             _resizeDebounceTimer.Stop();
@@ -96,13 +108,13 @@ internal partial class MainWindow : Window
         _autoScanTimer.Stop();
         _searchDebounceTimer.Stop();
         _resizeDebounceTimer.Stop();
-        _scanController.Cancel();
+        _mainViewModel.ScanController.Cancel();
         _shutdownCts.Cancel();
 
-        try { await _scanController.WaitAsync(); }
+        try { await _mainViewModel.ScanController.WaitAsync(); }
         catch (OperationCanceledException)
         {
-            
+
         }
         catch (Exception ex)
         {
@@ -121,13 +133,7 @@ internal partial class MainWindow : Window
         Close();
     }
 
-    private void UpdateGroupWidthsOnly()
-    {
-        if (GroupsHost.ItemsSource is not IEnumerable<LiveryGroup> groups) return;
-        double groupWidth = ComputeGroupWidth();
-        foreach (var group in groups)
-            group.GroupWidth = groupWidth;
-    }
+    private void UpdateGroupWidthsOnly() => _mainViewModel.Gallery.GroupWidth = ComputeGroupWidth();
 
     private static void FireAndForget(Func<Task> action, string context) => _ = RunSafelyAsync(action, context);
 
@@ -139,7 +145,7 @@ internal partial class MainWindow : Window
         }
         catch (OperationCanceledException)
         {
-            
+
         }
         catch (Exception ex)
         {
@@ -150,189 +156,32 @@ internal partial class MainWindow : Window
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
         _isLoaded = true;
+        UpdateGroupWidthsOnly();
         FireAndForget(CheckForUpdatesAsync, nameof(CheckForUpdatesAsync));
 
         _carDb.LoadLocal();
 
-        bool savedPathMissing = _savePathController.WasSavedPathMissing;
-        _savePathController.InitializeFromSettings();
+        bool savedPathMissing = _savePathService.WasSavedPathMissing;
+        _savePathService.InitializeFromSettings();
 
         if (savedPathMissing)
         {
             await InfoDialog.ShowAsync(this, Strings.FolderNotFoundTitle, Strings.SavedPathNotFoundNotice);
         }
 
-        if (_savePathController.SavePath is null)
+        if (_savePathService.SavePath is null)
         {
-            await PromptForSavePathAsync(initial: true);
+            await _mainViewModel.PromptForSavePathAsync(initial: true);
             return;
         }
 
-        await RunScanAsyncTracked(isUserInitiated: true);
-        FireAndForget(() => RefreshCarDatabaseAsync(showLoadingOverlay: false), nameof(RefreshCarDatabaseAsync));
+        await _mainViewModel.RunScanAsyncTracked(isUserInitiated: true);
+        FireAndForget(() => _mainViewModel.RefreshCarDatabaseAsync(showLoadingOverlay: false, _shutdownCts.Token), nameof(MainViewModel.RefreshCarDatabaseAsync));
     }
 
-    private async Task CheckForUpdatesAsync()
-    {
-        bool hasUpdate = await _updateController.CheckAsync(_shutdownCts.Token);
-        if (!hasUpdate) return;
+    private async Task CheckForUpdatesAsync() => await _mainViewModel.Update.CheckAsync(_shutdownCts.Token);
 
-        UpdateBannerText.Text = string.Format(Strings.UpdateAvailableFormat, _updateController.LatestVersion);
-        UpdateBanner.IsVisible = true;
-    }
-
-    private async void UpdateBanner_Click(object? sender, RoutedEventArgs e) => await _updateController.ShowDetailsAsync(this);
-
-    private async Task RefreshEntriesFromCacheAsync()
-    {
-        if (SaveDataPath is null) return;
-
-        await _scanController.RegenerateEntriesAsync(_savePathController.CurrentUserId, freshEntries =>
-        {
-            _galleryController.AllEntries = _galleryController.MergeWithLocalState(freshEntries);
-            RebuildTagsBar();
-            RefreshGallery();
-        });
-    }
-
-    private async Task RefreshCarDatabaseAsync(bool showLoadingOverlay = true)
-    {
-        if (showLoadingOverlay) SetLoading(true, Strings.CarDbUpdating);
-        try
-        {
-            var outcome = await _carDb.RefreshAsync(_shutdownCts.Token);
-            string countText = $"{_carDb.Count} {Strings.CarDbCarsWord}";
-            if (_carDb.LastError is not null)
-            {
-                StatusText.Text = _carDb.HasLocalData
-                    ? string.Format(Strings.CarDbDownloadFailed, countText)
-                    : Strings.CarDbNoDataAtAll;
-            }
-            else
-            {
-                StatusText.Text = outcome == CarDatabaseRefreshOutcome.Updated
-                    ? string.Format(Strings.CarDbUpdated, countText)
-                    : string.Format(Strings.CarDbUpToDate, countText);
-            }
-
-            if (outcome == CarDatabaseRefreshOutcome.Updated)
-                await RefreshEntriesFromCacheAsync();
-        }
-        catch (OperationCanceledException)
-        {
-            
-        }
-        finally
-        {
-            if (showLoadingOverlay) SetLoading(false);
-        }
-    }
-
-    private async Task PromptForSavePathAsync(bool initial)
-    {
-        bool selected = await _savePathController.PromptAsync(initial, onDeclined: () =>
-        {
-            StatusText.Text = Strings.SavePathNotChosen;
-            EmptyStateText.Text = Strings.SavePathNotChosen;
-            EmptyState.IsVisible = true;
-        });
-
-        if (selected) await RunScanAsyncTracked(isUserInitiated: true);
-    }
-
-    private async void RefreshButton_Click(object? sender, RoutedEventArgs e)
-    {
-        await Task.WhenAll(RefreshCarDatabaseAsync(), CheckForUpdatesAsync());
-
-        if (!_settings.RefreshLiveriesOnButtonClick) return;
-
-        if (_savePathController.SavePath is null)
-        {
-            await PromptForSavePathAsync(initial: true);
-            return;
-        }
-        await RunScanAsyncTracked(isUserInitiated: true);
-    }
-
-    private async Task RunScanAsyncTracked(bool isUserInitiated)
-    {
-        string? saveDataPath = SaveDataPath;
-        if (saveDataPath is null)
-        {
-            if (_savePathController.ShouldNotifyLost())
-            {
-                await PromptForSavePathAsync(initial: true);
-            }
-            return;
-        }
-        _savePathController.ResetLostNotification();
-
-        if (!isUserInitiated && !_settings.AutoRefreshLiveries) return;
-
-        var progress = isUserInitiated ? new Progress<string>(msg => LoadingText.Text = msg) : null;
-        Exception? scanError = null;
-
-        bool started = _scanController.TryRunScan(
-            saveDataPath,
-            _savePathController.CurrentUserId,
-            progress,
-            onEntriesReady: entries =>
-            {
-                bool cacheChanged = _scanController.LastScanResult?.CacheChanged ?? true;
-                if (cacheChanged)
-                {
-                    _galleryController.AllEntries = _galleryController.MergeWithLocalState(entries);
-                    RebuildTagsBar();
-                    RefreshGallery();
-                }
-                if (isUserInitiated) RenderStatus();
-            },
-            onError: ex => scanError = ex);
-
-        if (!started)
-        {
-            await _scanController.WaitAsync();
-            return;
-        }
-
-        if (isUserInitiated)
-        {
-            SetLoading(true, Strings.LoadingScanning);
-            RefreshButton.IsEnabled = false;
-        }
-
-        await _scanController.WaitAsync();
-
-        if (isUserInitiated)
-        {
-            SetLoading(false);
-            RefreshButton.IsEnabled = true;
-        }
-
-        if (scanError is not null)
-        {
-            AppLogger.LogErrorThrottled(saveDataPath, $"Scan failed: '{saveDataPath}'", scanError);
-            if (isUserInitiated)
-                StatusText.Text = string.Format(Strings.StatusScanError, scanError.Message);
-        }
-    }
-
-    private void RenderStatus()
-    {
-        if (_scanController.LastScanResult is null) return;
-        var r = _scanController.LastScanResult;
-
-        string text = string.Format(Strings.StatusProcessed, r.Parsed, r.ReusedFromCache);
-        if (r.Errors > 0) text += string.Format(Strings.StatusErrors, r.Errors);
-        if (r.Removed > 0) text += string.Format(Strings.StatusRemoved, r.Removed);
-        StatusText.Text = text;
-    }
-
-    private void SetLoading(bool loading, string? text = null)
-    {
-        LoadingOverlay.IsVisible = loading;
-        if (text is not null) LoadingText.Text = text;
-    }
+    private async void UpdateBanner_Click(object? sender, RoutedEventArgs e) => await _mainViewModel.Update.ShowDetailsAsync(this);
 
     private void SearchBox_TextChanged(object? sender, TextChangedEventArgs e)
     {
@@ -340,70 +189,7 @@ internal partial class MainWindow : Window
         _searchDebounceTimer.Start();
     }
 
-    private void HandleEnumMenuClick<TEnum>(object? sender, TEnum fallback, Action<TEnum> apply)
-        where TEnum : struct, Enum
-    {
-        if (sender is not MenuItem item || item.Tag is not string tag || !int.TryParse(tag, out int index)) return;
-        apply(Enum.IsDefined((TEnum)(object)index) ? (TEnum)(object)index : fallback);
-        AppSettingsService.Save(_settings);
-        UpdateDisplayFilterChecks();
-        RefreshGallery();
-    }
-
-    private void SortModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
-        HandleEnumMenuClick(sender, SortMode.Manufacture, mode => _settings.SortMode = mode);
-
-    private List<LiveryEntry> GetFilteredEntries() => _galleryController.GetFilteredEntries(
-        SearchBox.Text, _settings.FavoriteMode, _settings.MineMode,
-        _settings.DuplicatesFilterMode, _settings.GeneratedFilterMode);
-
-    private void RefreshGallery()
-    {
-        bool suppressCardBadge = _settings.GroupingEnabled
-            && (_settings.SortMode == SortMode.Author || _settings.MineMode == MineMode.MineSeparately);
-        foreach (var entry in _galleryController.AllEntries)
-            entry.ShowMineBadge = entry.IsMine && !suppressCardBadge;
-
-        var filtered = GetFilteredEntries();
-        var groups = BuildGroups(filtered);
-        _galleryController.ReplaceGroups(groups);
-        UpdateCountsAndEmptyState(filtered);
-    }
-
-    private List<LiveryGroup> BuildGroups(List<LiveryEntry> filtered) => _galleryController.BuildGroups(
-        filtered, _settings.SortMode, _settings.FavoriteMode, _settings.MineMode, _settings.GroupingEnabled, ComputeGroupWidth());
-
-    private void UpdateCountsAndEmptyState(List<LiveryEntry> filtered)
-    {
-        string search = SearchBox.Text?.Trim() ?? "";
-        var stats = GalleryStatisticsService.Calculate(filtered);
-
-        CountBaseText.Text = _galleryController.AllEntries.Count == 0 ? "" : string.Format(Strings.CountShowing, filtered.Count, _galleryController.AllEntries.Count);
-
-        FavoritesCountPanel.IsVisible = stats.FavoritesShown > 0;
-        FavoritesCountText.Text = stats.FavoritesShown.ToString();
-
-        DuplicatesCountPanel.IsVisible = stats.DuplicatesShown > 0;
-        DuplicatesCountText.Text = stats.DuplicatesShown.ToString();
-
-        PossibleDuplicatesCountPanel.IsVisible = stats.PossibleDuplicatesShown > 0;
-        PossibleDuplicatesCountText.Text = stats.PossibleDuplicatesShown.ToString();
-
-        if (_galleryController.AllEntries.Count == 0)
-        {
-            EmptyStateText.Text = Strings.EmptyNoLiveries;
-            EmptyState.IsVisible = true;
-        }
-        else if (filtered.Count == 0)
-        {
-            EmptyStateText.Text = string.Format(Strings.EmptyNoResults, search);
-            EmptyState.IsVisible = true;
-        }
-        else
-        {
-            EmptyState.IsVisible = false;
-        }
-    }
+    private void RefreshGallery() => _mainViewModel.RefreshGallery();
 
     private const double CardStep = 286;
     private const double Reserve = 32;
@@ -422,12 +208,8 @@ internal partial class MainWindow : Window
         return Math.Max(columns * CardStep, CardStep);
     }
 
-    private void RebuildTagsBar() => _tagsBarController.Rebuild(_galleryController.AllEntries, RefreshGallery);
-
-    private async void AuthorRow_Click(object? sender, RoutedEventArgs e)
+    private async Task ShowAuthorRowAsync(LiveryEntry entry)
     {
-        if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
-
         var card = entry.AuthorIdentityTagHex is not null
             ? _authorCardService.FindCardForIdentityTag(entry.AuthorIdentityTagHex)
             : null;
@@ -438,25 +220,32 @@ internal partial class MainWindow : Window
             return;
         }
 
-        var dialog = new AuthorCardViewDialog(card, _galleryController.AllEntries);
+        var dialog = new AuthorCardViewDialog(card, _mainViewModel.Gallery.AllEntries.ToList());
         await dialog.ShowDialog(this);
     }
 
-    private async void EditTags_Click(object? sender, RoutedEventArgs e)
+    private async Task ShowEditTagsAsync(LiveryEntry entry)
     {
-        if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
-
         var dialog = new TagEditDialog(entry.Tags);
         var result = await dialog.ShowDialog<bool>(this);
         if (result)
         {
             entry.Tags = dialog.ResultTags;
             _tagService.SetTags(entry.FolderName, entry.Tags);
-            RebuildTagsBar();
+            _mainViewModel.RebuildTagsBar();
 
-            if (_galleryController.SelectedTags.Count > 0)
+            if (_mainViewModel.Gallery.SelectedTags.Count > 0)
                 RefreshGallery();
         }
+    }
+
+    private void Card_SelectPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (e.Handled) return;
+        if (!e.GetCurrentPoint(sender as Visual).Properties.IsLeftButtonPressed) return;
+        if (sender is not StyledElement element || element.DataContext is not LiveryEntry entry) return;
+
+        _mainViewModel.Gallery.ToggleSelectionCommand.Execute(entry);
     }
 
     private async void Card_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
@@ -472,67 +261,6 @@ internal partial class MainWindow : Window
     private async void Card_DataContextChanged(object? sender, EventArgs e)
     {
         if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
-    }
-
-    private void ToggleFavorite_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not Control control || control.DataContext is not LiveryEntry entry) return;
-
-        entry.IsFavorite = !entry.IsFavorite;
-        _favoriteService.SetFavorite(entry.FolderName, entry.IsFavorite);
-
-        if (_settings.FavoriteMode != FavoriteMode.None)
-            RefreshGallery();
-        else
-            UpdateCountsAndEmptyState(GetFilteredEntries());
-    }
-
-    private void FavModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
-        HandleEnumMenuClick(sender, FavoriteMode.None, mode => _settings.FavoriteMode = mode);
-
-    private void MineModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
-        HandleEnumMenuClick(sender, MineMode.None, mode => _settings.MineMode = mode);
-
-    private void DupModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
-        HandleEnumMenuClick(sender, DuplicatesFilterMode.All, mode => _settings.DuplicatesFilterMode = mode);
-
-    private void GeneratedModeMenuItem_Click(object? sender, RoutedEventArgs e) =>
-        HandleEnumMenuClick(sender, GeneratedFilterMode.All, mode => _settings.GeneratedFilterMode = mode);
-
-    private void GroupingToggleItem_Click(object? sender, RoutedEventArgs e)
-    {
-        _settings.GroupingEnabled = !_settings.GroupingEnabled;
-        AppSettingsService.Save(_settings);
-        UpdateDisplayFilterChecks();
-        RefreshGallery();
-    }
-
-    private void UpdateDisplayFilterChecks()
-    {
-        GroupingToggleItem.IsChecked = _settings.GroupingEnabled;
-
-        SortManufacturerItem.IsChecked = _settings.SortMode == SortMode.Manufacture;
-        SortAuthorItem.IsChecked = _settings.SortMode == SortMode.Author;
-        SortDownloadTimeItem.IsChecked = _settings.SortMode == SortMode.DownloadTime;
-
-        FavNoneItem.IsChecked = _settings.FavoriteMode == FavoriteMode.None;
-        FavFirstItem.IsChecked = _settings.FavoriteMode == FavoriteMode.FavoritesFirst;
-        FavOnlyItem.IsChecked = _settings.FavoriteMode == FavoriteMode.OnlyFavorites;
-        FavSeparateItem.IsChecked = _settings.FavoriteMode == FavoriteMode.FavoritesSeparately;
-        FavSeparateItem.IsEnabled = _settings.GroupingEnabled;
-
-        MineNoneItem.IsChecked = _settings.MineMode == MineMode.None;
-        MineFirstItem.IsChecked = _settings.MineMode == MineMode.MineFirst;
-        MineOnlyItem.IsChecked = _settings.MineMode == MineMode.OnlyMine;
-        MineSeparateItem.IsChecked = _settings.MineMode == MineMode.MineSeparately;
-        MineSeparateItem.IsEnabled = _settings.GroupingEnabled;
-
-        DupAllItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.All;
-        DupAndPossibleItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.DuplicatesAndPossible;
-        DupOnlyItem.IsChecked = _settings.DuplicatesFilterMode == DuplicatesFilterMode.DuplicatesOnly;
-
-        GenAllItem.IsChecked = _settings.GeneratedFilterMode == GeneratedFilterMode.All;
-        GenOnlyItem.IsChecked = _settings.GeneratedFilterMode == GeneratedFilterMode.GeneratedOnly;
     }
 
     private async void ContactsMenuItem_Click(object? sender, RoutedEventArgs e)
@@ -552,28 +280,29 @@ internal partial class MainWindow : Window
     private async void OpenSettingsMenuItem_Click(object? sender, RoutedEventArgs e)
     {
         SettingsButton.Flyout?.Hide();
-        var dlg = new SettingsDialog(_settings, _savePathController.SavePath);
+        var dlg = new SettingsDialog(_settings, _savePathService.SavePath);
         await dlg.ShowDialog(this);
         if (dlg.SavePathChanged)
         {
-            _savePathController.SyncFromSettings();
-            if (SaveDataPath is not null) await RunScanAsyncTracked(isUserInitiated: true);
+            _savePathService.SyncFromSettings();
+            if (SaveDataPath is not null) await _mainViewModel.RunScanAsyncTracked(isUserInitiated: true);
         }
+        if (dlg.LanguageChanged) OnLanguageChanged();
     }
 
     private async void AuthorsButton_Click(object? sender, RoutedEventArgs e)
     {
-        var dialog = new AuthorsDialog(_authorCardService, _galleryController.AllEntries, async () =>
+        var dialog = new AuthorsDialog(_authorCardService, _mainViewModel.Gallery.AllEntries.ToList(), async () =>
         {
-            await RefreshEntriesFromCacheAsync();
-            return _galleryController.AllEntries;
+            await _mainViewModel.RefreshEntriesFromCacheAsync();
+            return _mainViewModel.Gallery.AllEntries.ToList();
         });
         await dialog.ShowDialog(this);
     }
 
     private async void StatsButton_Click(object? sender, RoutedEventArgs e)
     {
-        var stats = GalleryStatisticsService.CalculateOverall(_galleryController.AllEntries);
+        var stats = GalleryStatisticsService.CalculateOverall(_mainViewModel.Gallery.AllEntries.ToList());
         string message = GalleryStatisticsService.FormatOverallMessage(stats);
         await InfoDialog.ShowAsync(this, Strings.StatsTitle, message);
     }

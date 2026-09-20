@@ -1,3 +1,5 @@
+using LiveryGallery.ViewModels;
+
 namespace LiveryGallery.Models;
 
 internal sealed class GalleryRow

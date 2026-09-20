@@ -1,4 +1,5 @@
 using LiveryGallery.Models;
+using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Services;
 
@@ -16,16 +17,14 @@ internal sealed class LiveryEntryFactory(
     public LiveryEntry ToEntry(LiveryCacheEntry c, ulong? currentUserId)
     {
         var car = carDatabaseService.Get(c.CarId);
-        return new LiveryEntry
+        var data = new LiveryData
         {
             FolderName = c.FolderName,
             LiveryName = c.LiveryName,
             AuthorRaw = c.Author,
             AuthorIdentityTagHex = c.AuthorIdentityTagHex,
-            Author = authorCardService.ResolveDisplayName(c.Author, c.AuthorIdentityTagHex),
             CreatorUserId = c.CreatorUserId,
             IsPossiblyGenerated = c.IsPossiblyGenerated,
-            IsMine = currentUserId is not null && c.CreatorUserId == currentUserId,
             CarId = c.CarId,
             CarManufacturerRaw = car?.Manufacturer ?? string.Empty,
             CarModelNameRaw = car?.Name ?? string.Empty,
@@ -38,9 +37,16 @@ internal sealed class LiveryEntryFactory(
                 ? Path.Combine(appCacheService.ThumbsDir, c.ThumbnailFile)
                 : null,
             HasThumbnail = c.ThumbnailFile is not null,
+            CLiveryHash = c.CLiveryHash,
+        };
+
+        return new LiveryEntry
+        {
+            Data = data,
+            Author = authorCardService.ResolveDisplayName(c.Author, c.AuthorIdentityTagHex),
+            IsMine = currentUserId is not null && c.CreatorUserId == currentUserId,
             Tags = tagService.GetTags(c.FolderName),
             IsFavorite = favoriteService.IsFavorite(c.FolderName),
-            CLiveryHash = c.CLiveryHash,
             DuplicateStatus = c.DuplicateStatus,
             PossibleDuplicateOf = c.PossibleDuplicateOf,
         };

@@ -246,6 +246,15 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Editar etiquetas</value>
   </data>
+  <data name="SelectToggleTooltip" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>Borrar</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>{0} seleccionados</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>Etiquetas:</value>
   </data>

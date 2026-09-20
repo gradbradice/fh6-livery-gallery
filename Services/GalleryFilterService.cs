@@ -1,5 +1,5 @@
 using LiveryGallery.Enums;
-using LiveryGallery.Models;
+using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Services;
 

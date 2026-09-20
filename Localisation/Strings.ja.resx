@@ -246,6 +246,15 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>タグを編集</value>
   </data>
+  <data name="SelectToggleTooltip" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>クリア</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>{0}件選択中</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>タグ:</value>
   </data>

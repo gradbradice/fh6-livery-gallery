@@ -1,6 +1,6 @@
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
+using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Services;
 

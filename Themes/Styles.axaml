@@ -132,7 +132,6 @@
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 	</Style>
 
-
 	<Style Selector="TextBox.search">
 		<Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}" />
 		<Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
@@ -170,6 +169,10 @@
 	<Style Selector="Border.liveryCard:pointerover">
 		<Setter Property="Background" Value="{DynamicResource CardHoverBrush}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+	</Style>
+	<Style Selector="Border.liveryCard.selected">
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+		<Setter Property="BoxShadow" Value="0 0 0 2 #6366F1, 0 3 14 0 #22000000" />
 	</Style>
 
 	<Style Selector="Border.carChip">

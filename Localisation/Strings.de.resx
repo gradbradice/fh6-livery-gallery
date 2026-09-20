@@ -246,6 +246,15 @@ Manuell auswählen?
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Tags bearbeiten</value>
   </data>
+  <data name="SelectToggleTooltip" xml:space="preserve">
+    <value>Auswählen</value>
+  </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>Zurücksetzen</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>{0} ausgewählt</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>Tags:</value>
   </data>

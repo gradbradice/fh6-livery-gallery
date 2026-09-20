@@ -6,6 +6,7 @@ using Avalonia.Media;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
+using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Views;
 

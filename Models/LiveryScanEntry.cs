@@ -1,4 +1,6 @@
-﻿namespace LiveryGallery.Models;
+﻿using LiveryGallery.ViewModels;
+
+namespace LiveryGallery.Models;
 
 internal record LiveryScanEntry
 {

@@ -1,31 +1,37 @@
 using Avalonia.Media.Imaging;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
+using LiveryGallery.Models;
 using LiveryGallery.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace LiveryGallery.Models;
+namespace LiveryGallery.ViewModels;
 
 internal class LiveryEntry : INotifyPropertyChanged
 {
-    public required string FolderName { get; init; }
-    public required string LiveryName { get; init; }
-    public required string AuthorRaw { get; init; }
-    public string? AuthorIdentityTagHex { get; init; }
-    public ulong? CreatorUserId { get; init; }
+    public required LiveryData Data { get; init; }
+
+    public string FolderName => Data.FolderName;
+    public string LiveryName => Data.LiveryName;
+    public string AuthorRaw => Data.AuthorRaw;
+    public string? AuthorIdentityTagHex => Data.AuthorIdentityTagHex;
+    public ulong? CreatorUserId => Data.CreatorUserId;
+    public bool IsPossiblyGenerated => Data.IsPossiblyGenerated;
+    public int CarId => Data.CarId;
+    public string CarManufacturerRaw => Data.CarManufacturerRaw;
+    public string CarModelNameRaw => Data.CarModelNameRaw;
+    public int? CarYear => Data.CarYear;
+    public bool CarKnown => Data.CarKnown;
+    public int? CreatedYear => Data.CreatedYear;
+    public int? CreatedMonth => Data.CreatedMonth;
+    public DateTime? DownloadDate => Data.DownloadDate;
+    public string? ThumbnailPath => Data.ThumbnailPath;
+    public string? CLiveryHash => Data.CLiveryHash;
+    public bool HasThumbnail => Data.HasThumbnail;
+
     public bool IsMine { get; set; }
     public bool ShowMineBadge { get; set; }
-    public bool IsPossiblyGenerated { get; init; }
-    public required int CarId { get; init; }
-    public required string CarManufacturerRaw { get; init; }
-    public required string CarModelNameRaw { get; init; }
-    public int? CarYear { get; init; }
-    public bool CarKnown { get; init; }
-    public int? CreatedYear { get; init; }
-    public int? CreatedMonth { get; init; }
-    public DateTime? DownloadDate { get; init; }
-    public string? ThumbnailPath { get; init; }
 
     public string CarManufacturer => CarKnown
         ? CarManufacturerRaw
@@ -34,6 +40,7 @@ internal class LiveryEntry : INotifyPropertyChanged
     public string CarModelName => CarKnown
         ? CarModelNameRaw
         : string.Format(Strings.UnknownCarIdFormat, CarId);
+
     private string _author = string.Empty;
     public string Author
     {
@@ -50,6 +57,7 @@ internal class LiveryEntry : INotifyPropertyChanged
     public string AuthorDisplayText => string.Equals(Author, AuthorRaw, StringComparison.OrdinalIgnoreCase)
         ? Author
         : $"{Author} ({AuthorRaw})";
+
     private bool _isFavorite;
     public bool IsFavorite
     {
@@ -58,6 +66,18 @@ internal class LiveryEntry : INotifyPropertyChanged
         {
             if (_isFavorite == value) return;
             _isFavorite = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _isSelected;
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (_isSelected == value) return;
+            _isSelected = value;
             OnPropertyChanged();
         }
     }
@@ -79,14 +99,12 @@ internal class LiveryEntry : INotifyPropertyChanged
 
     public IReadOnlySet<string> TagsSet => _tagsSet;
 
-    public DateTime? DownloadYearMonth => DownloadDate is { } d ? new DateTime(d.Year, d.Month, 1) : null;
+    public DateTime? DownloadYearMonth => Data.DownloadDate is { } d ? new DateTime(d.Year, d.Month, 1) : null;
 
-    public string? CLiveryHash { get; init; }
     public DuplicateStatus DuplicateStatus { get; set; }
     public bool IsDuplicate => DuplicateStatus == DuplicateStatus.Duplicate;
     public bool IsPossibleDuplicate => DuplicateStatus == DuplicateStatus.PossibleDuplicate;
     public IReadOnlyList<string>? PossibleDuplicateOf { get; set; }
-    public required bool HasThumbnail { get; init; }
 
     private Bitmap? _thumbnail;
     public Bitmap? Thumbnail
@@ -107,7 +125,7 @@ internal class LiveryEntry : INotifyPropertyChanged
     {
         get
         {
-            if (DownloadDate is { } d) return d.ToString("d", AppLocalisationService.Culture);
+            if (Data.DownloadDate is { } d) return d.ToString("d", AppLocalisationService.Culture);
             if (CreatedYear is > 0 && CreatedMonth is >= 1 and <= 12)
                 return new DateTime(CreatedYear.Value, CreatedMonth.Value, 1)
                     .ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture);

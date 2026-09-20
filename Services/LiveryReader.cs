@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace LiveryGallery.Services;
 
-internal sealed partial class LiveryReader(AppCacheService appCacheService)
+internal sealed partial class LiveryReader
 {
     [GeneratedRegex(@"Livery_(?<carId>\d+)_(?<ts>\d+)")]
     private static partial Regex FolderNameRegex();
@@ -104,11 +104,6 @@ internal sealed partial class LiveryReader(AppCacheService appCacheService)
                 {
                     cLiveryHash = existing.CLiveryHash;
                 }
-                else if (existing?.CLiveryHash is null)
-                {
-                    cLiveryBytes = File.ReadAllBytes(cLiveryPath);
-                    cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryBytes));
-                }
                 else
                 {
                     cLiveryBytes = File.ReadAllBytes(cLiveryPath);
@@ -134,7 +129,7 @@ internal sealed partial class LiveryReader(AppCacheService appCacheService)
             cLiveryLength, cLiveryLastWriteUtc, thumbHashFailed);
     }
 
-    public LiveryCacheEntry ParseLivery(string folder, LiveryFileHashes hashes, LiveryCacheEntry? previous)
+    public LiveryCacheEntry ParseLivery(string folder, LiveryFileHashes hashes, LiveryCacheEntry? previous, out uint[]? cLiverySectionCounts)
     {
         string folderName = Path.GetFileName(folder);
         var (folderCarId, tsRaw) = ParseFolderName(folderName);
@@ -144,6 +139,7 @@ internal sealed partial class LiveryReader(AppCacheService appCacheService)
         byte[]? cLiveryBytes = hashes.CLiveryBytes;
         uint? cLiveryCarId;
         bool isPossiblyGenerated;
+        cLiverySectionCounts = null;
         if (previous is not null && hashes.CLivery is not null && hashes.CLivery == previous.CLiveryHash)
         {
             cLiveryCarId = previous.CLiveryCarId;
@@ -173,6 +169,7 @@ internal sealed partial class LiveryReader(AppCacheService appCacheService)
                     if (liveryResult == LiveryParseResult.Ok && livery is not null)
                     {
                         cLiveryCarId = livery.TargetCarId;
+                        cLiverySectionCounts = [.. livery.SectionCounts];
                     }
 
                     var (_, looksGenerated) = LiveryGenerationDetector.Detect(cLiveryBytes);
@@ -196,25 +193,6 @@ internal sealed partial class LiveryReader(AppCacheService appCacheService)
 
         DateTime? downloadDate = tsRaw is not null ? TryDecodeTimestamp(tsRaw) : null;
 
-        string? thumbnailFile = null;
-        if (hashes.SourceThumbnailPath is not null)
-        {
-            string hashSuffix = hashes.SourceThumbnail is { Length: >= 12 } hash
-                ? hash[..12]
-                : hashes.SourceThumbnail ?? Guid.NewGuid().ToString("N")[..12];
-            string candidate = SanitiseFileName(folderName) + "_" + StableHash(folder) + "_" + hashSuffix + ".png";
-            string destPath = Path.Combine(appCacheService.ThumbsDir, candidate);
-            if (ThumbnailService.GenerateAndSave(hashes.SourceThumbnailPath, destPath))
-            {
-                thumbnailFile = candidate;
-            }
-            else if (previous?.ThumbnailFile is not null
-                && File.Exists(Path.Combine(appCacheService.ThumbsDir, previous.ThumbnailFile)))
-            {
-                thumbnailFile = previous.ThumbnailFile;
-            }
-        }
-
         return new LiveryCacheEntry
         {
             SchemaVersion = LiveryCacheEntry.CurrentSchemaVersion,
@@ -230,7 +208,7 @@ internal sealed partial class LiveryReader(AppCacheService appCacheService)
             CreatedYear = year,
             CreatedMonth = month,
             DownloadDate = downloadDate,
-            ThumbnailFile = thumbnailFile,
+            ThumbnailFile = null,
             HeaderHash = hashes.Header,
             SourceThumbHash = hashes.SourceThumbnail,
             CLiveryHash = hashes.CLivery,
@@ -296,26 +274,5 @@ internal sealed partial class LiveryReader(AppCacheService appCacheService)
         DateTime minPlausible = new(2015, 1, 1);
         DateTime maxPlausible = DateTime.UtcNow.AddDays(1);
         return d >= minPlausible && d <= maxPlausible ? d : null;
-    }
-
-    private static string SanitiseFileName(string name)
-    {
-        foreach (char c in Path.GetInvalidFileNameChars())
-            name = name.Replace(c, '_');
-        return name;
-    }
-
-    private static string StableHash(string input)
-    {
-        unchecked
-        {
-            ulong hash = 14695981039346656037;
-            foreach (char c in input)
-            {
-                hash ^= c;
-                hash *= 1099511628211;
-            }
-            return hash.ToString("x16");
-        }
     }
 }

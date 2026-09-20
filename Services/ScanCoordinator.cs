@@ -21,7 +21,7 @@ internal sealed class ScanCoordinator
         return true;
     }
 
-    public Task RunOrQueueAsync(Func<CancellationToken, Task> operation)
+    public Task RunOrReplaceQueuedAsync(Func<CancellationToken, Task> operation)
     {
         lock (_lock)
         {
