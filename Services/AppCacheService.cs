@@ -18,6 +18,8 @@ internal class AppCacheService
                 string json = File.ReadAllText(_path);
                 var data = JsonSerializer.Deserialize<Dictionary<string, LiveryCacheEntry>>(json);
                 if (data is not null) return (data, false);
+                AtomicFile.TryBackupCorruptedFile(_path);
+                return ([], true);
             }
         }
         catch (Exception ex)

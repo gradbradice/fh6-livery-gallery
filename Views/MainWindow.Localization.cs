@@ -20,6 +20,8 @@ internal partial class MainWindow
         StatsButton.SetValue(ToolTip.TipProperty, Strings.StatsToggleTooltip);
         SettingsButton.SetValue(ToolTip.TipProperty, Strings.SettingsToggleTooltip);
         OpenSettingsMenuItem.Header = Strings.SettingsDialogTitle;
+        OpenArchiveMenuItem.Header = Strings.MenuOpenArchive;
+        OpenBackupsMenuItem.Header = Strings.MenuOpenBackups;
         ContactsMenuItem.Header = Strings.SettingsMenuContacts;
         AboutMenuItem.Header = Strings.AboutTitle;
         SearchBox.PlaceholderText = Strings.SearchPlaceholder;
@@ -43,6 +45,9 @@ internal partial class MainWindow
         DupOnlyItem.Header = Strings.DuplicatesFilterOnly;
         GenAllItem.Header = Strings.GeneratedFilterAll;
         GenOnlyItem.Header = Strings.GeneratedFilterOnly;
+        PaintAllItem.Header = Strings.PaintFilterAll;
+        PaintHideItem.Header = Strings.PaintFilterHide;
+        PaintOnlyItem.Header = Strings.PaintFilterOnly;
 
         TagsFilterLabel.Text = Strings.TagsFilterLabel;
     }
@@ -51,7 +56,7 @@ internal partial class MainWindow
     {
         if (!_isLoaded) return;
         ApplyLocalizedTexts();
-        _mainViewModel.Status.RenderScanStatus(_mainViewModel.ScanController.LastScanResult);
+        _mainViewModel.Status.RenderScanStatus(_mainViewModel.LastScanResult);
         _mainViewModel.Gallery.RefreshCountsOnly();
         foreach (var entry in _mainViewModel.Gallery.AllEntries)
             entry.RefreshLocalizedText();

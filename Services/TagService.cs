@@ -51,7 +51,14 @@ internal class TagService
             {
                 string json = File.ReadAllText(_path);
                 var data = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(json);
-                if (data != null) _data = data;
+                if (data != null)
+                {
+                    _data = data;
+                }
+                else
+                {
+                    AtomicFile.TryBackupCorruptedFile(_path);
+                }
             }
         }
         catch (Exception ex)

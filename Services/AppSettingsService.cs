@@ -63,6 +63,7 @@ internal static class AppSettingsService
                     if (changed) Save(data);
                     return data;
                 }
+                AtomicFile.TryBackupCorruptedFile(_path);
             }
         }
         catch (Exception ex)

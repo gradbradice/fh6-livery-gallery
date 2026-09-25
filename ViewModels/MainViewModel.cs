@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Controller;
 using LiveryGallery.Enums;
@@ -7,14 +8,18 @@ using LiveryGallery.Services;
 
 namespace LiveryGallery.ViewModels;
 
-internal sealed class MainViewModel
+internal sealed partial class MainViewModel : ObservableObject
 {
+    private readonly ISavePathPrompter savePathPrompter;
     private readonly SavePathService savePathService;
     private readonly CarDatabaseService carDatabase;
+    private readonly TagService tagService;
+    private readonly AuthorCardService authorCardService;
+    private readonly LiveryArchiveService archiveService;
+    private readonly ScanController scanController;
     private readonly AppSettingsData settings;
     private bool _hasAppliedEntriesOnce;
-
-    public ScanController ScanController { get; }
+    public LiveryScanEntry? LastScanResult => scanController.LastScanResult;
     public FilterBarViewModel FilterBar { get; }
     public GalleryStatusViewModel Status { get; }
     public GalleryViewModel Gallery { get; }
@@ -22,40 +27,95 @@ internal sealed class MainViewModel
     public UpdateViewModel Update { get; }
     public IAsyncRelayCommand RefreshCommand { get; }
     public CancellationToken ShutdownToken { get; set; }
-    public event Action<LiveryEntry>? AuthorRowRequested;
-    public event Action<LiveryEntry>? EditTagsRequested;
+    [ObservableProperty]
+    private bool _isInitialized;
+    public bool ShowFolderNames => settings.SearchByFolderName;
+    public void RefreshDisplaySettings()
+    {
+        OnPropertyChanged(nameof(ShowFolderNames));
+        if (LiveryEntry.ShowFolderNamesInTooltips != settings.SearchByFolderName)
+        {
+            LiveryEntry.ShowFolderNamesInTooltips = settings.SearchByFolderName;
+            Gallery.RefreshDuplicateTooltips();
+        }
+    }
+
+    public bool WasSavedPathMissing => savePathService.WasSavedPathMissing;
+    public IReadOnlySet<string> SelectedTags => Gallery.SelectedTags;
+    public void SetTagSelected(string tag, bool selected) => Gallery.SetTagSelected(tag, selected);
 
     public MainViewModel(
         AppSettingsData settings,
+        ISavePathPrompter savePathPrompter,
         SavePathService savePathService,
         CarDatabaseService carDatabase,
+        TagService tagService,
+        AuthorCardService authorCardService,
         FavoriteService favoriteService,
+        LiveryArchiveService archiveService,
         LiveryScanner scanService,
         AppUpdateCheckService updateService)
     {
         this.settings = settings;
+        LiveryEntry.ShowFolderNamesInTooltips = settings.SearchByFolderName;
+        this.savePathPrompter = savePathPrompter;
         this.savePathService = savePathService;
         this.carDatabase = carDatabase;
+        this.tagService = tagService;
+        this.authorCardService = authorCardService;
+        this.archiveService = archiveService;
 
-        ScanController = new ScanController(scanService);
+        scanController = new ScanController(scanService);
         FilterBar = new FilterBarViewModel(settings);
         Status = new GalleryStatusViewModel();
-        Gallery = new GalleryViewModel(FilterBar, Status, favoriteService);
-        TagsBar = new TagsBarViewModel(Gallery.SelectedTags, Gallery.SetTagSelected);
+        Gallery = new GalleryViewModel(favoriteService);
+        TagsBar = new TagsBarViewModel(SelectedTags, SetTagSelected);
         Update = new UpdateViewModel(updateService);
-
-        Gallery.AuthorRowRequested += entry => AuthorRowRequested?.Invoke(entry);
-        Gallery.EditTagsRequested += entry => EditTagsRequested?.Invoke(entry);
+        Gallery.CountsUpdated += snapshot =>
+            Status.UpdateCountsAndEmptyState(snapshot.FilteredEntries, snapshot.TotalCount, snapshot.SearchText);
         FilterBar.FiltersChanged += RefreshGallery;
         RefreshCommand = new AsyncRelayCommand(RefreshButtonClickedAsync);
     }
 
-    public void RefreshGallery() => Gallery.Refresh();
+    private GalleryFilterState CurrentFilterState() => new(
+        FilterBar.SearchText, FilterBar.SortMode, FilterBar.FavoriteMode, FilterBar.MineMode,
+        FilterBar.DuplicatesFilterMode, FilterBar.GeneratedFilterMode, FilterBar.PaintFilterMode,
+        FilterBar.GroupingEnabled, settings.SearchByFolderName);
+
+    public void RefreshGallery() => Gallery.Refresh(CurrentFilterState());
 
     public void RebuildTagsBar()
     {
         TagsBar.RecomputeAllTags(Gallery.AllEntries);
         Gallery.SyncKnownTags([.. TagsBar.AllTags.Select(t => t.Tag)]);
+    }
+
+    public void ApplyTagsEdit(LiveryEntry entry, List<string> newTags)
+    {
+        entry.Tags = newTags;
+        tagService.SetTags(entry.FolderName, newTags);
+        RebuildTagsBar();
+
+        if (Gallery.SelectedTags.Count > 0) RefreshGallery();
+    }
+
+    public AuthorCard? FindAuthorCard(LiveryEntry entry) =>
+        entry.AuthorIdentityTagHex is not null ? authorCardService.FindCardForIdentityTag(entry.AuthorIdentityTagHex) : null;
+
+    public (List<string> AvailableAliases, Dictionary<string, List<string>> NameToTags) BuildAuthorAliasIndex() =>
+        authorCardService.BuildAliasIndex(Gallery.AllEntries);
+
+    public async Task<bool> TrySaveAuthorCard(AuthorCard card)
+    {
+        if (!await authorCardService.TrySave(card)) return false;
+        await RefreshEntriesFromCacheAsync();
+        return true;
+    }
+
+    public string GetOverallStatsMessage()
+    {
+        var stats = GalleryStatisticsService.CalculateOverall([.. Gallery.AllEntries]);
+        return GalleryStatisticsService.FormatOverallMessage(stats);
     }
 
     private void OnEntriesChanged()
@@ -80,12 +140,12 @@ internal sealed class MainViewModel
         if (!isUserInitiated && !settings.AutoRefreshLiveries) return;
 
         var progress = isUserInitiated ? new Progress<string>(msg => Status.SetLoading(true, msg)) : null;
-        bool started = ScanController.TryStartScan(
+        bool started = scanController.TryStartScan(
             saveDataPath, savePathService.CurrentUserId, progress, out var resultTask);
 
         if (!started)
         {
-            await ScanController.WaitAsync();
+            await scanController.WaitAsync();
             return;
         }
 
@@ -134,7 +194,8 @@ internal sealed class MainViewModel
     {
         if (savePathService.ResolveSaveDataPath() is null) return;
 
-        await ScanController.RegenerateEntriesAsync(savePathService.CurrentUserId, ApplyFreshEntries);
+        var entries = await scanController.RegenerateEntriesAsync(savePathService.CurrentUserId);
+        ApplyFreshEntries(entries);
     }
 
     private void ApplyFreshEntries(List<LiveryEntry> entries)
@@ -178,13 +239,55 @@ internal sealed class MainViewModel
 
     public async Task PromptForSavePathAsync(bool initial)
     {
-        bool selected = await savePathService.PromptAsync(initial, onDeclined: () =>
+        string? path = await savePathPrompter.PromptForSavePathAsync(initial);
+        if (path is null)
         {
             Status.SetStatusText(Strings.SavePathNotChosen);
             Status.ShowEmptyState(Strings.SavePathNotChosen);
-        });
+            return;
+        }
 
-        if (selected) await RunScanAsyncTracked(isUserInitiated: true);
+        savePathService.SetSavePath(path);
+        await RunScanAsyncTracked(isUserInitiated: true);
+    }
+
+    public async Task HandleSavePathChangedFromSettingsAsync()
+    {
+        savePathService.SyncFromSettings();
+        if (savePathService.ResolveSaveDataPath() is not null)
+            await RunScanAsyncTracked(isUserInitiated: true);
+    }
+
+    public event Action<string>? ErrorMessageRequested;
+
+    [RelayCommand]
+    private async Task MoveSelectedToArchiveAsync()
+    {
+        if (!Gallery.HasSelection) return;
+        string? savePath = savePathService.ResolveSaveDataPath();
+        if (savePath is null)
+        {
+            ErrorMessageRequested?.Invoke(Strings.ArchiveNoSavePathMessage);
+            return;
+        }
+
+        var toArchive = Gallery.SelectedEntries.Select(e => e.Data).ToList();
+        Status.SetLoading(true, Strings.LoadingMovingToArchive);
+        try
+        {
+            await archiveService.MoveToArchiveAsync(toArchive, savePath);
+            Gallery.ClearSelectionCommand.Execute(null);
+            await RunScanAsyncTracked(isUserInitiated: true);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to move selected liveries to archive", ex);
+            ErrorMessageRequested?.Invoke(Strings.FileOperationFailedMessage);
+        }
+        finally
+        {
+            Status.SetLoading(false);
+        }
     }
 
     private async Task RefreshButtonClickedAsync()
@@ -201,5 +304,76 @@ internal sealed class MainViewModel
             return;
         }
         await RunScanAsyncTracked(isUserInitiated: true);
+    }
+
+    public async Task InitializeAsync(CancellationToken shutdownToken)
+    {
+        carDatabase.LoadLocal();
+        savePathService.InitializeFromSettings();
+
+        if (savePathService.SavePath is null)
+        {
+            await PromptForSavePathAsync(initial: true);
+        }
+        else
+        {
+            await RunScanAsyncTracked(isUserInitiated: true);
+            _carDatabaseRefreshTask = RunSafelyAsync(
+                () => RefreshCarDatabaseAsync(showLoadingOverlay: false, shutdownToken),
+                nameof(RefreshCarDatabaseAsync));
+        }
+
+        _updateCheckTask = RunSafelyAsync(() => Update.CheckAsync(shutdownToken), nameof(Update.CheckAsync));
+        IsInitialized = true;
+    }
+
+    private Task? _carDatabaseRefreshTask;
+    private Task? _updateCheckTask;
+
+    public async Task ShutdownAsync()
+    {
+        scanController.Cancel();
+
+        try
+        {
+            await scanController.WaitAsync();
+        }
+        catch (OperationCanceledException)
+        {
+
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Unexpected error while waiting for scan to stop during shutdown", ex);
+        }
+
+        bool allOk = await PersistenceManager.FlushAsync();
+        if (!allOk)
+        {
+            AppLogger.LogError(
+                "Failed to flush one or more files on shutdown",
+                new IOException("PersistenceManager.FlushAsync reported at least one failed write"));
+        }
+
+        if (_carDatabaseRefreshTask is not null) await _carDatabaseRefreshTask;
+        if (_updateCheckTask is not null) await _updateCheckTask;
+
+        AppLogger.Shutdown();
+    }
+
+    private static async Task RunSafelyAsync(Func<Task> action, string context)
+    {
+        try
+        {
+            await action();
+        }
+        catch (OperationCanceledException)
+        {
+
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError($"Unhandled exception in background task: {context}", ex);
+        }
     }
 }

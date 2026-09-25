@@ -95,7 +95,8 @@
             <TextBlock x:Name="ScanningSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
                        Foreground="{DynamicResource TextSecondaryBrush}" />
             <CheckBox x:Name="AutoRefreshLiveriesCheckBox" Margin="0,0,0,10" IsChecked="{Binding AutoRefreshLiveries}" />
-            <CheckBox x:Name="RefreshOnButtonClickCheckBox" IsChecked="{Binding RefreshOnButtonClick}" />
+            <CheckBox x:Name="RefreshOnButtonClickCheckBox" Margin="0,0,0,10" IsChecked="{Binding RefreshOnButtonClick}" />
+            <CheckBox x:Name="SearchByFolderNameCheckBox" IsChecked="{Binding SearchByFolderName}" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
                 <Button x:Name="ExitButton" Classes="secondary" MinWidth="120" Margin="0,0,10,0" Click="ExitButton_Click" />

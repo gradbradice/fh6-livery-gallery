@@ -6,6 +6,7 @@ using LiveryGallery.Configuration;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
 using LiveryGallery.Services;
+using System.Reflection;
 
 namespace LiveryGallery.Views;
 
@@ -23,7 +24,27 @@ internal partial class AboutDialog : Window
         DescriptionText.Text = Strings.AboutDescription;
         CloseButton.Content = Strings.ButtonClose;
         HeaderParserVersionText.Text = string.Format(Strings.HeaderParserVersionFormat, NativeHeaderParser.GetVersion());
+        ForzaDataPackageVersionText.Text = string.Format(Strings.ForzaDataPackageVersionFormat, GetForzaDataPackageVersion());
         GithubLinkButton.Content = Strings.ContactsGithubLabel;
+    }
+
+    private static string GetForzaDataPackageVersion()
+    {
+        try
+        {
+            var assembly = typeof(NativeHeaderParser).Assembly;
+            string? version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                ?? assembly.GetName().Version?.ToString();
+            if (version is null) return "?";
+
+            int plusIndex = version.IndexOf('+');
+            return plusIndex >= 0 ? version[..plusIndex] : version;
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to read ForzaData package version", ex);
+            return "?";
+        }
     }
 
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);

@@ -19,7 +19,6 @@ internal partial class SettingsDialog : Window
     private bool _isClosing;
 
     public bool SavePathChanged => _viewModel.SavePathChanged;
-    public bool LanguageChanged { get; private set; }
 
     public SettingsDialog(AppSettingsData settings, string? resolvedSavePath)
     {
@@ -41,11 +40,18 @@ internal partial class SettingsDialog : Window
 
     private async Task PopulateDiscoveredGamePathAsync()
     {
-        string? discovered = await GameDiscoveryService.TryFindGamePathAsync();
-        if (discovered is null) return;
-        if (!string.IsNullOrEmpty(_viewModel.GamePath)) return;
+        try
+        {
+            string? discovered = await GameDiscoveryService.TryFindGamePathAsync();
+            if (discovered is null) return;
+            if (!string.IsNullOrEmpty(_viewModel.GamePath)) return;
 
-        _viewModel.GamePath = discovered;
+            _viewModel.GamePath = discovered;
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Unhandled exception in PopulateDiscoveredGamePathAsync", ex);
+        }
     }
 
     private void ApplyLocalizedTexts()
@@ -61,6 +67,7 @@ internal partial class SettingsDialog : Window
         ScanningSectionLabel.Text = Strings.SettingsSectionScanning;
         AutoRefreshLiveriesCheckBox.Content = Strings.AutoRefreshLiveriesLabel;
         RefreshOnButtonClickCheckBox.Content = Strings.RefreshOnButtonClickLabel;
+        SearchByFolderNameCheckBox.Content = Strings.SearchByFolderNameLabel;
         SystemThemeRadio.Content = Strings.ThemeSystemLabel;
         LightThemeRadio.Content = Strings.ThemeLightLabel;
         DarkThemeRadio.Content = Strings.ThemeDarkLabel;
@@ -123,7 +130,6 @@ internal partial class SettingsDialog : Window
                 return false;
             case SettingsSaveResult.SavedLanguageChanged:
                 ApplyLocalizedTexts();
-                LanguageChanged = true;
                 return true;
             default:
                 return true;

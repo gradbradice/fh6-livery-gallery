@@ -246,9 +246,6 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Изменить теги</value>
   </data>
-  <data name="SelectToggleTooltip" xml:space="preserve">
-    <value>Выбрать</value>
-  </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
     <value>Сбросить</value>
   </data>
@@ -319,7 +316,10 @@
     <value>Неизвестен</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Библиотека разбора данных FH6: {0}</value>
+    <value>FH6 Data Parser (нативная библиотека): {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser (пакет): {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Настройки</value>
@@ -396,6 +396,15 @@
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>У этого автора есть точно такая же ливрея для этой машины</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Совпадения:</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}: {1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Возможный дубликат ({0})</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>Все ливреи</value>
   </data>
@@ -425,6 +434,27 @@
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
     <value>Узор этой ливреи похож на созданный программно (например, из фото/картинки), а не нарисованный вручную.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Краска</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>У этой ливреи нет ни одного винила — только перекрашенный цвет.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Ошибка чтения</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>Файл этой ливреи не удалось корректно прочитать — возможно, он повреждён или имеет неподдерживаемый формат.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>Все ливреи</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Скрыть покраску</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Только покраски</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>У этого автора есть похожая ливрея для этой машины (совпадает большинство секций декалей, но не всё содержимое)</value>
@@ -479,6 +509,9 @@
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
     <value>Автоматически обновлять ливреи</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Показывать и искать по имени папки</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>Обновлять ливреи по нажатию кнопки</value>
@@ -609,5 +642,116 @@
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>Для художника «{0}» карточка не была создана</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Создать карточку</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>Переместить в архив</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Архив</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Бэкапы</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Архив</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>Архив пуст</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>Выбрано: {0}</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Восстановить</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Удалить безвозвратно</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>Удалить безвозвратно?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} будут перемещены в корзину. Это действие нельзя отменить из приложения.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>В архиве с {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Сначала выберите папку сохранений (Настройки), прежде чем восстанавливать ливреи</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Во время этой операции произошла ошибка. Подробности смотрите в журнале.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Превью</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>Не удалось найти оригинальное превью этой ливреи.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>Открыть оригинальное превью</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Перемещение в архив...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Выбрать всё</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Неизвестно (восстановленная запись)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Дата неизвестна</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>Ливрей: {0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Нечего бэкапить — галерея пуста</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Бэкапы</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>Бэкапов пока нет</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Создать бэкап</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>Удалить этот бэкап?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>Бэкап от {0} ({1}) будет перемещён в корзину.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>Не удалось прочитать содержимое этого бэкапа — файл повреждён или не является корректным бэкапом</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Бэкап от {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Удалено с момента этого бэкапа</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Добавлено с момента этого бэкапа</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>С момента этого бэкапа ничего не удалено</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>С момента этого бэкапа ничего не добавлено</value>
   </data>
 </root>

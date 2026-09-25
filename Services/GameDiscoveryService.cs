@@ -2,14 +2,12 @@ namespace LiveryGallery.Services;
 
 internal static class GameDiscoveryService
 {
-    private static readonly Lazy<string?> _cachedPath = new(() =>
+    private static readonly Lazy<Task<string?>> _cachedPathTask = new(() => Task.Run(() =>
         OperatingSystem.IsWindows()
             ? GameDiscoveryServiceSteam.TryFindViaSteam() ?? GameDiscoveryServiceXbox.TryFindViaXbox()
-            : null);
+            : null));
+    
+    public static Task<string?> TryFindGamePathAsync() => _cachedPathTask.Value;
 
-    public static string? TryFindGamePath() => _cachedPath.Value;
-
-    public static Task<string?> TryFindGamePathAsync() => Task.Run(() => _cachedPath.Value);
-
-    public static void WarmUpInBackground() => _ = Task.Run(() => _cachedPath.Value);
+    public static void WarmUpInBackground() => _ = _cachedPathTask.Value;
 }

@@ -87,6 +87,16 @@
 		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
 	</Style>
 
+	<Style Selector="Button.cardIconButton">
+		<Setter Property="Width" Value="28"/>
+		<Setter Property="Height" Value="28"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="0"/>
+	</Style>
+
 	<Style Selector="Button.tagEdit">
 		<Setter Property="Background" Value="Transparent" />
 		<Setter Property="Width" Value="24" />
@@ -120,16 +130,20 @@
 		<Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
 	</Style>
 
-	<Style Selector="Button.favoriteStar">
-		<Setter Property="Background" Value="#66000000" />
-		<Setter Property="Width" Value="26" />
-		<Setter Property="Height" Value="26" />
+	<Style Selector="Button.cardIconButton">
+		<Setter Property="Background" Value="{DynamicResource BgBrush}" />
+		<Setter Property="Width" Value="30" />
+		<Setter Property="Height" Value="30" />
 		<Setter Property="Padding" Value="0" />
 		<Setter Property="Cursor" Value="Hand" />
-		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="CornerRadius" Value="13" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush2}" />
+		<Setter Property="CornerRadius" Value="15" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
+	</Style>
+	<Style Selector="Button.cardIconButton:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
 	</Style>
 
 	<Style Selector="TextBox.search">
@@ -213,6 +227,27 @@
 	</Style>
 	<Style Selector=":is(ToggleButton).tagChip:pointerover:not(:checked)">
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+	</Style>
+
+	<Style Selector="Button.tagChipCard">
+		<Setter Property="Padding" Value="6,2" />
+		<Setter Property="Margin" Value="0,0,5,5" />
+		<Setter Property="Cursor" Value="Hand" />
+		<Setter Property="Background" Value="{DynamicResource ChipBackgroundBrush}" />
+		<Setter Property="CornerRadius" Value="5" />
+		<Setter Property="Template">
+			<ControlTemplate TargetType="Button">
+				<Border Background="{TemplateBinding Background}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}">
+					<ContentPresenter Content="{TemplateBinding Content}"
+                                       ContentTemplate="{TemplateBinding ContentTemplate}" />
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="Button.tagChipCard:pointerover /template/ Border">
+		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
 	</Style>
 
 	<Style Selector="Expander.groupExpander">

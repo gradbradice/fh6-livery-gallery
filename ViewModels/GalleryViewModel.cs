@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
+using LiveryGallery.Models;
 using LiveryGallery.Services;
 using System.Collections.ObjectModel;
 
@@ -9,8 +10,6 @@ namespace LiveryGallery.ViewModels;
 
 internal sealed partial class GalleryViewModel : ObservableObject
 {
-    private readonly FilterBarViewModel filterBar;
-    private readonly GalleryStatusViewModel status;
     private readonly FavoriteService favoriteService;
     private List<LiveryEntry> _allEntries = [];
     public IReadOnlyList<LiveryEntry> AllEntries => _allEntries;
@@ -22,6 +21,8 @@ internal sealed partial class GalleryViewModel : ObservableObject
     public bool HasSelection => SelectedEntries.Count > 0;
     public int SelectedCount => SelectedEntries.Count;
     public string SelectionSummaryText => string.Format(Strings.SelectedCountLabel, SelectedCount);
+    private GalleryFilterState _filter;
+
     private double _groupWidth = 1200;
     public double GroupWidth
     {
@@ -37,11 +38,11 @@ internal sealed partial class GalleryViewModel : ObservableObject
     public event Action? GroupsReplaced;
     public event Action<LiveryEntry>? AuthorRowRequested;
     public event Action<LiveryEntry>? EditTagsRequested;
+    public event Action<LiveryEntry>? ViewPreviewRequested;
+    public event Action<GalleryCountsSnapshot>? CountsUpdated;
 
-    public GalleryViewModel(FilterBarViewModel filterBar, GalleryStatusViewModel status, FavoriteService favoriteService)
+    public GalleryViewModel(FavoriteService favoriteService)
     {
-        this.filterBar = filterBar;
-        this.status = status;
         this.favoriteService = favoriteService;
         SelectedEntries.CollectionChanged += (_, __) =>
         {
@@ -53,9 +54,10 @@ internal sealed partial class GalleryViewModel : ObservableObject
 
     public List<LiveryEntry> GetFilteredEntries() =>
         GalleryFilterService.Apply(
-            _allEntries, filterBar.SearchText, _selectedTags,
-            filterBar.FavoriteMode == FavoriteMode.OnlyFavorites, filterBar.MineMode == MineMode.OnlyMine,
-            filterBar.DuplicatesFilterMode, filterBar.GeneratedFilterMode);
+            _allEntries, _filter.SearchText, _selectedTags,
+            _filter.FavoriteMode == FavoriteMode.OnlyFavorites, _filter.MineMode == MineMode.OnlyMine,
+            _filter.DuplicatesFilterMode, _filter.GeneratedFilterMode, _filter.PaintFilterMode,
+            _filter.SearchByFolderName);
 
     [RelayCommand]
     private void ToggleFavorite(LiveryEntry entry)
@@ -63,8 +65,8 @@ internal sealed partial class GalleryViewModel : ObservableObject
         entry.IsFavorite = !entry.IsFavorite;
         favoriteService.SetFavorite(entry.FolderName, entry.IsFavorite);
 
-        if (filterBar.FavoriteMode != FavoriteMode.None)
-            Refresh();
+        if (_filter.FavoriteMode != FavoriteMode.None)
+            Refresh(_filter);
         else
             RefreshCountsOnly();
     }
@@ -75,12 +77,23 @@ internal sealed partial class GalleryViewModel : ObservableObject
     [RelayCommand]
     private void EditTags(LiveryEntry entry) => EditTagsRequested?.Invoke(entry);
 
+    public void RefreshDuplicateTooltips()
+    {
+        foreach (var entry in AllEntries) entry.RefreshDuplicateTooltip();
+    }
+
+    [RelayCommand]
+    private void ViewPreview(LiveryEntry entry) => ViewPreviewRequested?.Invoke(entry);
+
     public void SetTagSelected(string tag, bool selected)
     {
         if (selected) _selectedTags.Add(tag);
         else _selectedTags.Remove(tag);
-        Refresh();
+        Refresh(_filter);
     }
+
+    [RelayCommand]
+    private void SelectTag(string tag) => SetTagSelected(tag, true);
 
     public void SyncKnownTags(IReadOnlyCollection<string> knownTags)
     {
@@ -88,19 +101,21 @@ internal sealed partial class GalleryViewModel : ObservableObject
         _selectedTags.RemoveWhere(t => !knownTags.Contains(t));
     }
 
-    public void Refresh()
+    public void Refresh(GalleryFilterState filter)
     {
-        bool suppressCardBadge = filterBar.GroupingEnabled
-            && (filterBar.SortMode == SortMode.Author || filterBar.MineMode == MineMode.MineSeparately);
+        _filter = filter;
+
+        bool suppressCardBadge = filter.GroupingEnabled
+            && (filter.SortMode == SortMode.Author || filter.MineMode == MineMode.MineSeparately);
         foreach (var entry in _allEntries)
             entry.ShowMineBadge = entry.IsMine && !suppressCardBadge;
 
         var filtered = GetFilteredEntries();
         var groups = GalleryGroupingService.Group(
-            filtered, filterBar.SortMode, filterBar.FavoriteMode, filterBar.MineMode,
-            filterBar.GroupingEnabled, GroupWidth);
+            filtered, filter.SortMode, filter.FavoriteMode, filter.MineMode,
+            filter.GroupingEnabled, GroupWidth);
         ReplaceGroups(groups);
-        status.UpdateCountsAndEmptyState(filtered, _allEntries.Count, filterBar.SearchText);
+        CountsUpdated?.Invoke(new GalleryCountsSnapshot(filtered, _allEntries.Count, filter.SearchText));
     }
 
     private void ApplyGroupWidthToDisplayedGroups()
@@ -109,7 +124,8 @@ internal sealed partial class GalleryViewModel : ObservableObject
             group.GroupWidth = GroupWidth;
     }
 
-    public void RefreshCountsOnly() => status.UpdateCountsAndEmptyState(GetFilteredEntries(), _allEntries.Count, filterBar.SearchText);
+    public void RefreshCountsOnly() =>
+        CountsUpdated?.Invoke(new GalleryCountsSnapshot(GetFilteredEntries(), _allEntries.Count, _filter.SearchText));
 
     public void ReplaceGroups(List<LiveryGroup> newGroups)
     {
@@ -205,6 +221,18 @@ internal sealed partial class GalleryViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void SelectOnly(LiveryEntry entry)
+    {
+        foreach (var e in SelectedEntries) e.IsSelected = false;
+        _selectedFolderNames.Clear();
+        SelectedEntries.Clear();
+
+        entry.IsSelected = true;
+        _selectedFolderNames.Add(entry.FolderName);
+        SelectedEntries.Add(entry);
+    }
+
+    [RelayCommand]
     private void ClearSelection()
     {
         if (_selectedFolderNames.Count == 0) return;
@@ -267,14 +295,17 @@ internal sealed partial class GalleryViewModel : ObservableObject
             && PossibleDuplicateOfEqual(a.PossibleDuplicateOf, b.PossibleDuplicateOf)
             && a.IsMine == b.IsMine
             && a.IsPossiblyGenerated == b.IsPossiblyGenerated
+            && a.HasNoLayers == b.HasNoLayers
+            && a.HasParseError == b.HasParseError
+            && a.LiveryId == b.LiveryId
             && a.CLiveryHash == b.CLiveryHash;
     }
 
-    private static bool PossibleDuplicateOfEqual(IReadOnlyList<string>? a, IReadOnlyList<string>? b)
+    private static bool PossibleDuplicateOfEqual(IReadOnlyList<DuplicateRelation>? a, IReadOnlyList<DuplicateRelation>? b)
     {
         if (ReferenceEquals(a, b)) return true;
         if (a is null || a.Count == 0) return b is null || b.Count == 0;
         if (b is null || a.Count != b.Count) return false;
-        return a.ToHashSet(StringComparer.Ordinal).SetEquals(b);
+        return a.ToHashSet().SetEquals(b);
     }
 }

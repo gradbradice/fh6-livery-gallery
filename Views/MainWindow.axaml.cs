@@ -16,12 +16,11 @@ namespace LiveryGallery.Views;
 
 internal partial class MainWindow : Window
 {
-    private readonly CarDatabaseService _carDb;
-    private readonly TagService _tagService;
     private readonly AuthorCardService _authorCardService;
+    private readonly LiveryArchiveService _archiveService;
+    private readonly LiveryBackupService _backupService;
     private MainViewModel _mainViewModel = null!;
     private SavePathService _savePathService = null!;
-    private string? SaveDataPath => _savePathService.ResolveSaveDataPath();
     private readonly CancellationTokenSource _shutdownCts = new();
     private readonly AppSettingsData _settings;
     private readonly DispatcherTimer _autoScanTimer = new() { Interval = TimeSpan.FromSeconds(30) };
@@ -35,26 +34,33 @@ internal partial class MainWindow : Window
         TagService tagService,
         FavoriteService favoriteService,
         AuthorCardService authorCardService,
+        LiveryArchiveService archiveService,
+        LiveryBackupService backupService,
         LiveryScanner scanService,
         AppUpdateCheckService updateService)
     {
         InitializeComponent();
 
         _settings = settings;
-        _carDb = carDatabase;
-        _tagService = tagService;
         _authorCardService = authorCardService;
-        _savePathService = new SavePathService(this, settings);
+        _archiveService = archiveService;
+        _backupService = backupService;
+        _savePathService = new SavePathService(settings);
+        var savePathPrompter = new SavePathPrompter(this);
 
         _mainViewModel = new MainViewModel(
-            settings, _savePathService, carDatabase, favoriteService, scanService, updateService)
+            settings, savePathPrompter, _savePathService, carDatabase, tagService, authorCardService,
+            favoriteService, archiveService, scanService, updateService)
         {
             ShutdownToken = _shutdownCts.Token
         };
 
         DataContext = _mainViewModel;
-        _mainViewModel.AuthorRowRequested += async entry => await ShowAuthorRowAsync(entry);
-        _mainViewModel.EditTagsRequested += async entry => await ShowEditTagsAsync(entry);
+        _mainViewModel.Gallery.AuthorRowRequested += async entry => await ShowAuthorRowAsync(entry);
+        _mainViewModel.Gallery.EditTagsRequested += async entry => await ShowEditTagsAsync(entry);
+        _mainViewModel.Gallery.ViewPreviewRequested += async entry => await ShowPreviewAsync(entry);
+        _mainViewModel.ErrorMessageRequested += async message =>
+            await InfoDialog.ShowAsync(this, Strings.AppTitle, message);
 
         GroupsHost.ItemsSource = _mainViewModel.Gallery.DisplayedGroups;
         _mainViewModel.Gallery.GroupsReplaced += () =>
@@ -62,13 +68,6 @@ internal partial class MainWindow : Window
             GroupsHost.InvalidateMeasure();
             GalleryScroll.InvalidateMeasure();
         };
-        TagsFilterRow.DataContext = _mainViewModel.TagsBar;
-        SearchBox.DataContext = _mainViewModel.FilterBar;
-        DisplayFilterButton.DataContext = _mainViewModel.FilterBar;
-        StatusBar.DataContext = _mainViewModel.Status;
-        GalleryHost.DataContext = _mainViewModel.Status;
-        RefreshButton.DataContext = _mainViewModel;
-        UpdateBanner.DataContext = _mainViewModel.Update;
 
         ApplyLocalizedTexts();
 
@@ -94,9 +93,11 @@ internal partial class MainWindow : Window
         Loaded += MainWindow_Loaded;
         _autoScanTimer.Start();
         Closing += MainWindow_Closing;
+        AppLocalisationService.LanguageChanged += OnLanguageChanged;
     }
 
     private bool _isClosing;
+    private Task? _initializeTask;
 
     private async void MainWindow_Closing(object? sender, WindowClosingEventArgs e)
     {
@@ -104,84 +105,48 @@ internal partial class MainWindow : Window
 
         e.Cancel = true;
         _isClosing = true;
-
         _autoScanTimer.Stop();
         _searchDebounceTimer.Stop();
         _resizeDebounceTimer.Stop();
-        _mainViewModel.ScanController.Cancel();
         _shutdownCts.Cancel();
 
-        try { await _mainViewModel.ScanController.WaitAsync(); }
-        catch (OperationCanceledException)
+        if (_initializeTask is not null)
         {
+            try
+            {
+                await _initializeTask;
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogError("InitializeAsync faulted before shutdown could wait for it", ex);
+            }
+        }
 
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unexpected error while waiting for scan to stop during shutdown", ex);
-        }
-
-        bool allOk = await PersistenceManager.FlushAsync();
-        if (!allOk)
-        {
-            AppLogger.LogError(
-                "Failed to flush one or more files on shutdown",
-                new IOException("PersistenceManager.FlushAsync reported at least one failed write"));
-        }
-        AppLogger.Shutdown();
+        await _mainViewModel.ShutdownAsync();
 
         Close();
     }
 
     private void UpdateGroupWidthsOnly() => _mainViewModel.Gallery.GroupWidth = ComputeGroupWidth();
 
-    private static void FireAndForget(Func<Task> action, string context) => _ = RunSafelyAsync(action, context);
-
-    private static async Task RunSafelyAsync(Func<Task> action, string context)
-    {
-        try
-        {
-            await action();
-        }
-        catch (OperationCanceledException)
-        {
-
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError($"Unhandled exception in background task: {context}", ex);
-        }
-    }
-
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
         _isLoaded = true;
         UpdateGroupWidthsOnly();
-        FireAndForget(CheckForUpdatesAsync, nameof(CheckForUpdatesAsync));
-
-        _carDb.LoadLocal();
-
-        bool savedPathMissing = _savePathService.WasSavedPathMissing;
-        _savePathService.InitializeFromSettings();
-
-        if (savedPathMissing)
-        {
+        if (_mainViewModel.WasSavedPathMissing)
             await InfoDialog.ShowAsync(this, Strings.FolderNotFoundTitle, Strings.SavedPathNotFoundNotice);
-        }
 
-        if (_savePathService.SavePath is null)
-        {
-            await _mainViewModel.PromptForSavePathAsync(initial: true);
-            return;
-        }
-
-        await _mainViewModel.RunScanAsyncTracked(isUserInitiated: true);
-        FireAndForget(() => _mainViewModel.RefreshCarDatabaseAsync(showLoadingOverlay: false, _shutdownCts.Token), nameof(MainViewModel.RefreshCarDatabaseAsync));
+        _initializeTask = _mainViewModel.InitializeAsync(_shutdownCts.Token);
+        await _initializeTask;
     }
 
-    private async Task CheckForUpdatesAsync() => await _mainViewModel.Update.CheckAsync(_shutdownCts.Token);
-
-    private async void UpdateBanner_Click(object? sender, RoutedEventArgs e) => await _mainViewModel.Update.ShowDetailsAsync(this);
+    private async void UpdateBanner_Click(object? sender, RoutedEventArgs e)
+    {
+        if (_mainViewModel.Update.LatestVersion is null) return;
+        var dialog = new WhatsNewDialog(
+            _mainViewModel.Update.LatestVersion, _mainViewModel.Update.ReleaseBody, _mainViewModel.Update.ReleaseUrl);
+        await dialog.ShowDialog(this);
+    }
 
     private void SearchBox_TextChanged(object? sender, TextChangedEventArgs e)
     {
@@ -210,13 +175,12 @@ internal partial class MainWindow : Window
 
     private async Task ShowAuthorRowAsync(LiveryEntry entry)
     {
-        var card = entry.AuthorIdentityTagHex is not null
-            ? _authorCardService.FindCardForIdentityTag(entry.AuthorIdentityTagHex)
-            : null;
+        var card = _mainViewModel.FindAuthorCard(entry);
         if (card is null)
         {
-            await InfoDialog.ShowAsync(this, Strings.AuthorCardViewNoCardTitle,
-                string.Format(Strings.AuthorCardViewNoCardMessage, entry.AuthorRaw));
+            bool wantsToCreate = await InfoDialog.ShowWithActionAsync(this, Strings.AuthorCardViewNoCardTitle,
+                string.Format(Strings.AuthorCardViewNoCardMessage, entry.AuthorRaw), Strings.AuthorCardCreateButton);
+            if (wantsToCreate) await CreateAuthorCardAsync(entry);
             return;
         }
 
@@ -224,19 +188,40 @@ internal partial class MainWindow : Window
         await dialog.ShowDialog(this);
     }
 
+    private async Task CreateAuthorCardAsync(LiveryEntry entry)
+    {
+        var (availableAliases, nameToTags) = _mainViewModel.BuildAuthorAliasIndex();
+
+        var dialog = new AuthorCardEditDialog(
+            _authorCardService, availableAliases, nameToTags, existingCard: null, preselectedAlias: entry.AuthorRaw);
+        bool saved = await dialog.ShowDialog<bool>(this);
+        if (!saved || dialog.Result is null) return;
+
+        await _mainViewModel.TrySaveAuthorCard(dialog.Result);
+    }
+
     private async Task ShowEditTagsAsync(LiveryEntry entry)
     {
         var dialog = new TagEditDialog(entry.Tags);
         var result = await dialog.ShowDialog<bool>(this);
-        if (result)
-        {
-            entry.Tags = dialog.ResultTags;
-            _tagService.SetTags(entry.FolderName, entry.Tags);
-            _mainViewModel.RebuildTagsBar();
+        if (result) _mainViewModel.ApplyTagsEdit(entry, dialog.ResultTags);
+    }
 
-            if (_mainViewModel.Gallery.SelectedTags.Count > 0)
-                RefreshGallery();
+    private async Task ShowPreviewAsync(LiveryEntry entry)
+    {
+        string? savePath = _savePathService.ResolveSaveDataPath();
+        string? webpPath = savePath is not null
+            ? ThumbnailService.FindSourceThumbnail(Path.Combine(savePath, entry.FolderName))
+            : null;
+
+        if (webpPath is null)
+        {
+            await InfoDialog.ShowAsync(this, Strings.PreviewDialogTitle, Strings.PreviewNotFoundMessage);
+            return;
         }
+
+        var dialog = new LiveryPreviewDialog(webpPath);
+        await dialog.ShowDialog(this);
     }
 
     private void Card_SelectPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -248,9 +233,22 @@ internal partial class MainWindow : Window
         _mainViewModel.Gallery.ToggleSelectionCommand.Execute(entry);
     }
 
+    private void Card_ContextRequested(object? sender, ContextRequestedEventArgs e)
+    {
+        if (sender is not StyledElement element || element.DataContext is not LiveryEntry entry) return;
+        if (!entry.IsSelected) _mainViewModel.Gallery.SelectOnlyCommand.Execute(entry);
+    }
+
     private async void Card_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is Control control) await ThumbnailLifecycleController.OnAttachedAsync(control);
+        try
+        {
+            if (sender is Control control) await ThumbnailLifecycleController.OnAttachedAsync(control);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Unhandled exception in Card_AttachedToVisualTree", ex);
+        }
     }
 
     private void Card_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
@@ -260,7 +258,14 @@ internal partial class MainWindow : Window
 
     private async void Card_DataContextChanged(object? sender, EventArgs e)
     {
-        if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
+        try
+        {
+            if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Unhandled exception in Card_DataContextChanged", ex);
+        }
     }
 
     private async void ContactsMenuItem_Click(object? sender, RoutedEventArgs e)
@@ -282,12 +287,8 @@ internal partial class MainWindow : Window
         SettingsButton.Flyout?.Hide();
         var dlg = new SettingsDialog(_settings, _savePathService.SavePath);
         await dlg.ShowDialog(this);
-        if (dlg.SavePathChanged)
-        {
-            _savePathService.SyncFromSettings();
-            if (SaveDataPath is not null) await _mainViewModel.RunScanAsyncTracked(isUserInitiated: true);
-        }
-        if (dlg.LanguageChanged) OnLanguageChanged();
+        if (dlg.SavePathChanged) await _mainViewModel.HandleSavePathChangedFromSettingsAsync();
+        _mainViewModel.RefreshDisplaySettings();
     }
 
     private async void AuthorsButton_Click(object? sender, RoutedEventArgs e)
@@ -300,10 +301,27 @@ internal partial class MainWindow : Window
         await dialog.ShowDialog(this);
     }
 
+    private async void OpenArchiveMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        SettingsButton.Flyout?.Hide();
+        var dialog = new ArchiveDialog(_archiveService, _savePathService,
+            () => _mainViewModel.RunScanAsyncTracked(isUserInitiated: true));
+        await dialog.ShowDialog(this);
+    }
+
+    private async void OpenBackupsMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        SettingsButton.Flyout?.Hide();
+        var dialog = new BackupsDialog(
+            _backupService, _savePathService,
+            () => [.. _mainViewModel.Gallery.AllEntries.Select(entry => entry.Data)],
+            () => _mainViewModel.RunScanAsyncTracked(isUserInitiated: true));
+        await dialog.ShowDialog(this);
+    }
+
     private async void StatsButton_Click(object? sender, RoutedEventArgs e)
     {
-        var stats = GalleryStatisticsService.CalculateOverall(_mainViewModel.Gallery.AllEntries.ToList());
-        string message = GalleryStatisticsService.FormatOverallMessage(stats);
+        string message = _mainViewModel.GetOverallStatsMessage();
         await InfoDialog.ShowAsync(this, Strings.StatsTitle, message);
     }
 

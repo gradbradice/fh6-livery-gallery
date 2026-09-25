@@ -4,8 +4,7 @@ namespace LiveryGallery.Models;
 
 internal record LiveryCacheEntry
 {
-    public const int CurrentSchemaVersion = 3;
-
+    public const int CurrentSchemaVersion = 5;
     public int SchemaVersion { get; init; }
     public string FolderName { get; init; } = string.Empty;
     public string LiveryName { get; init; } = string.Empty;
@@ -13,6 +12,9 @@ internal record LiveryCacheEntry
     public string? AuthorIdentityTagHex { get; init; }
     public ulong? CreatorUserId { get; init; }
     public bool IsPossiblyGenerated { get; init; }
+    public int GenerationAlgorithmVersion { get; init; }
+    public bool HasNoLayers { get; init; }
+    public bool HasParseError { get; init; }
     public uint? CLiveryCarId { get; init; }
     public int CarId { get; init; }
     public LiveryConsistency CarIdConsistency { get; init; } = LiveryConsistency.Consistent;
@@ -30,5 +32,5 @@ internal record LiveryCacheEntry
     public long CLiveryLength { get; init; }
     public DateTime CLiveryLastWriteUtc { get; init; }
     public DuplicateStatus DuplicateStatus { get; init; } = DuplicateStatus.Ok;
-    public IReadOnlyList<string>? PossibleDuplicateOf { get; init; }
+    public IReadOnlyList<DuplicateRelation>? PossibleDuplicateOf { get; init; }
 }

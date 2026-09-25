@@ -4,6 +4,7 @@ using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.ViewModels;
@@ -13,11 +14,17 @@ internal class LiveryEntry : INotifyPropertyChanged
     public required LiveryData Data { get; init; }
 
     public string FolderName => Data.FolderName;
+    public ulong LiveryId => Data.LiveryId;
+    public string LiveryIdText => LiveryId > 0 ? $"#{LiveryId}" : "";
+    public static bool ShowFolderNamesInTooltips { get; set; }
+    public void RefreshDuplicateTooltip() => OnPropertyChanged(nameof(DuplicateMatchTooltip));
     public string LiveryName => Data.LiveryName;
     public string AuthorRaw => Data.AuthorRaw;
     public string? AuthorIdentityTagHex => Data.AuthorIdentityTagHex;
     public ulong? CreatorUserId => Data.CreatorUserId;
     public bool IsPossiblyGenerated => Data.IsPossiblyGenerated;
+    public bool HasNoLayers => Data.HasNoLayers;
+    public bool HasParseError => Data.HasParseError;
     public int CarId => Data.CarId;
     public string CarManufacturerRaw => Data.CarManufacturerRaw;
     public string CarModelNameRaw => Data.CarModelNameRaw;
@@ -104,7 +111,62 @@ internal class LiveryEntry : INotifyPropertyChanged
     public DuplicateStatus DuplicateStatus { get; set; }
     public bool IsDuplicate => DuplicateStatus == DuplicateStatus.Duplicate;
     public bool IsPossibleDuplicate => DuplicateStatus == DuplicateStatus.PossibleDuplicate;
-    public IReadOnlyList<string>? PossibleDuplicateOf { get; set; }
+    public IReadOnlyList<DuplicateRelation>? PossibleDuplicateOf { get; set; }
+
+    public string DuplicateMatchTooltip
+    {
+        get
+        {
+            bool isPossible = DuplicateStatus == DuplicateStatus.PossibleDuplicate;
+            string baseText = isPossible
+                ? Strings.PossibleDuplicateBadgeTooltip
+                : Strings.DuplicateBadgeTooltip;
+
+            string? scoresText = FormatScores(capAt9999: isPossible);
+            return scoresText is null ? baseText : $"{baseText}\n{Strings.DuplicateMatchScoreHeader}\n{scoresText}";
+        }
+    }
+
+    public string PossibleDuplicateBadgeText
+    {
+        get
+        {
+            double? max = null;
+            if (PossibleDuplicateOf is { Count: > 0 } relations)
+                foreach (var r in relations)
+                    if (r.Score is { } s && (max is null || s > max)) max = s;
+
+            if (max is not { } m) return Strings.PossibleDuplicateBadgeLabel;
+
+            int truncated = (int)(m * 100);
+            int capped = Math.Min(truncated, 99);
+            return string.Format(Strings.PossibleDuplicateBadgeWithScoreFormat, capped.ToString(CultureInfo.InvariantCulture) + "%");
+        }
+    }
+
+    private string FormatRelationLabel(string folderName)
+    {
+        var ids = Data.RelatedLiveryIds;
+        if (ids is null || !ids.TryGetValue(folderName, out ulong id)) return folderName;
+        return ShowFolderNamesInTooltips ? $"#{id} ({folderName})" : $"#{id}";
+    }
+
+    private string? FormatScores(bool capAt9999)
+    {
+        if (PossibleDuplicateOf is not { Count: > 0 } relations) return null;
+        var scored = relations
+            .Where(r => r.Score.HasValue)
+            .OrderByDescending(r => r.Score!.Value)
+            .ToList();
+        if (scored.Count == 0) return null;
+
+        return string.Join("\n", scored.Select(r =>
+        {
+            double percent = r.Score!.Value * 100;
+            if (capAt9999) percent = Math.Min(percent, 99.99);
+            return string.Format(Strings.DuplicateMatchRelationFormat, FormatRelationLabel(r.Id), percent.ToString("0.00", CultureInfo.InvariantCulture));
+        }));
+    }
 
     private Bitmap? _thumbnail;
     public Bitmap? Thumbnail
@@ -144,14 +206,15 @@ internal class LiveryEntry : INotifyPropertyChanged
         }
     }
 
-    public bool MatchesSearch(string[] tokens)
+    public bool MatchesSearch(string[] tokens, bool includeFolderName)
     {
         if (tokens.Length == 0) return true;
 
         foreach (var token in tokens)
         {
-            if (!SearchHaystack.Contains(token, StringComparison.OrdinalIgnoreCase))
-                return false;
+            bool matches = SearchHaystack.Contains(token, StringComparison.OrdinalIgnoreCase)
+                || (includeFolderName && FolderName.Contains(token, StringComparison.OrdinalIgnoreCase));
+            if (!matches) return false;
         }
         return true;
     }

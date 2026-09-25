@@ -246,9 +246,6 @@ Sceglierla manualmente?
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Modifica tag</value>
   </data>
-  <data name="SelectToggleTooltip" xml:space="preserve">
-    <value>Seleziona</value>
-  </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
     <value>Cancella</value>
   </data>
@@ -319,7 +316,10 @@ Sceglierla manualmente?
     <value>Sconosciuto</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Libreria di analisi dati FH6: {0}</value>
+    <value>FH6 Data Parser (nativo): {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser (pacchetto): {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Impostazioni</value>
@@ -396,6 +396,15 @@ Sceglierla manualmente?
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>Questo autore ha una livrea identica per questa auto</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Corrispondenze:</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}: {1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Possibile duplicato ({0})</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>Tutte le livree</value>
   </data>
@@ -425,6 +434,27 @@ Sceglierla manualmente?
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
     <value>Il motivo di questa livrea sembra creato in modo programmatico (es. da una foto/immagine), non disegnato a mano.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Vernice</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>Questa livrea non ha adesivi — solo un colore riverniciato.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Errore di lettura</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>Il file di questa livrea non è stato letto correttamente — potrebbe essere danneggiato o in un formato non supportato.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>Tutte le livree</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Nascondi vernice</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Solo vernice</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>Questo autore ha una livrea simile per questa auto (la maggior parte delle sezioni degli adesivi corrisponde, ma non tutto il contenuto)</value>
@@ -479,6 +509,9 @@ Sceglierla manualmente?
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
     <value>Aggiorna automaticamente le livree</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Mostra e cerca per nome della cartella</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>Aggiorna le livree al clic sul pulsante</value>
@@ -609,5 +642,116 @@ Creane una per unire i nickname di un autore sotto un unico nome.</value>
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>Non è stata creata alcuna scheda per l'autore «{0}»</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Crea scheda</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>Sposta nell'archivio</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Archivio</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Archivio</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>L'archivio è vuoto</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>{0} selezionati</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Ripristina</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Elimina definitivamente</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>Eliminare definitivamente?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} verranno spostati nel Cestino. Questa azione non può essere annullata dall'app.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>Archiviato {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Scegli prima una cartella di salvataggio (Impostazioni) prima di ripristinare le livree</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Si è verificato un errore durante questa operazione. Controlla i log per maggiori dettagli.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Anteprima</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>Impossibile trovare l'immagine di anteprima originale di questa livrea.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>Visualizza anteprima originale</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Spostamento nell'archivio...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Seleziona tutto</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Sconosciuto (voce recuperata)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Data sconosciuta</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>Livree: {0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Niente da salvare — la galleria è vuota</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>Ancora nessun backup</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Crea backup</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Apri</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>Eliminare questo backup?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>Il backup del {0} ({1}) verrà spostato nel Cestino.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>Impossibile leggere il contenuto di questo backup — il file potrebbe essere danneggiato o non è un backup valido</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Backup del {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Rimosse da questo backup</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Aggiunte da questo backup</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>Nulla è stato rimosso da questo backup</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>Nulla è stato aggiunto da questo backup</value>
   </data>
 </root>

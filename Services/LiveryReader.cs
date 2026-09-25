@@ -12,8 +12,8 @@ internal sealed partial class LiveryReader
 {
     [GeneratedRegex(@"Livery_(?<carId>\d+)_(?<ts>\d+)")]
     private static partial Regex FolderNameRegex();
-
     private int _carIdMismatchLogged;
+
 
     internal sealed record LiveryFileHashes(
         string Header,
@@ -98,17 +98,8 @@ internal sealed partial class LiveryReader
                 var cLiveryInfo = new FileInfo(cLiveryPath);
                 cLiveryLength = cLiveryInfo.Length;
                 cLiveryLastWriteUtc = cLiveryInfo.LastWriteTimeUtc;
-                if (existing?.CLiveryHash is not null
-                    && existing.CLiveryLength == cLiveryLength
-                    && existing.CLiveryLastWriteUtc == cLiveryLastWriteUtc)
-                {
-                    cLiveryHash = existing.CLiveryHash;
-                }
-                else
-                {
-                    cLiveryBytes = File.ReadAllBytes(cLiveryPath);
-                    cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryBytes));
-                }
+                cLiveryBytes = File.ReadAllBytes(cLiveryPath);
+                cLiveryHash = Convert.ToHexStringLower(SHA256.HashData(cLiveryBytes));
             }
             catch (Exception ex)
             {
@@ -139,11 +130,16 @@ internal sealed partial class LiveryReader
         byte[]? cLiveryBytes = hashes.CLiveryBytes;
         uint? cLiveryCarId;
         bool isPossiblyGenerated;
+        bool hasNoLayers;
+        bool hasParseError;
         cLiverySectionCounts = null;
-        if (previous is not null && hashes.CLivery is not null && hashes.CLivery == previous.CLiveryHash)
+        if (previous is not null && hashes.CLivery is not null && hashes.CLivery == previous.CLiveryHash
+            && previous.GenerationAlgorithmVersion == LiveryGenerationDetector.AlgorithmVersion)
         {
             cLiveryCarId = previous.CLiveryCarId;
             isPossiblyGenerated = previous.IsPossiblyGenerated;
+            hasNoLayers = previous.HasNoLayers;
+            hasParseError = previous.HasParseError;
         }
         else
         {
@@ -161,6 +157,8 @@ internal sealed partial class LiveryReader
 
             cLiveryCarId = null;
             isPossiblyGenerated = false;
+            hasNoLayers = false;
+            hasParseError = false;
             if (cLiveryBytes is not null)
             {
                 try
@@ -171,12 +169,18 @@ internal sealed partial class LiveryReader
                         cLiveryCarId = livery.TargetCarId;
                         cLiverySectionCounts = [.. livery.SectionCounts];
                     }
+                    else
+                    {
+                        hasParseError = true;
+                    }
 
-                    var (_, looksGenerated) = LiveryGenerationDetector.Detect(cLiveryBytes);
-                    isPossiblyGenerated = looksGenerated == true;
+                    var (_, verdict, _) = LiveryGenerationDetector.Detect(cLiveryBytes);
+                    isPossiblyGenerated = verdict == LiveryGenerationVerdict.Generated;
+                    hasNoLayers = verdict == LiveryGenerationVerdict.NoLayers;
                 }
                 catch (Exception ex)
                 {
+                    hasParseError = true;
                     AppLogger.LogErrorThrottled(folder, $"Failed to parse C_livery in '{folder}'", ex);
                 }
             }
@@ -202,6 +206,9 @@ internal sealed partial class LiveryReader
             AuthorIdentityTagHex = authorIdentityTagHex,
             CreatorUserId = creatorUserId,
             IsPossiblyGenerated = isPossiblyGenerated,
+            GenerationAlgorithmVersion = LiveryGenerationDetector.AlgorithmVersion,
+            HasNoLayers = hasNoLayers,
+            HasParseError = hasParseError,
             CLiveryCarId = cLiveryCarId,
             CarId = carId,
             CarIdConsistency = carIdConsistency,
@@ -232,6 +239,21 @@ internal sealed partial class LiveryReader
         catch (Exception ex)
         {
             AppLogger.LogErrorThrottled(folderPath, $"Failed to re-read C_livery for duplicate check: '{folderPath}'", ex);
+            return null;
+        }
+    }
+
+    public static IReadOnlyList<LiveryShapeFingerprint>? TryReadCLiveryShapeFingerprints(string folderPath)
+    {
+        try
+        {
+            byte[] bytes = File.ReadAllBytes(Path.Combine(folderPath, "C_livery"));
+            var (result, shapes) = NativeHeaderParser.TryExtractShapeFingerprints(bytes);
+            return result == LiveryParseResult.Ok ? shapes : null;
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogErrorThrottled(folderPath, $"Failed to re-read C_livery for full-duplicate check: '{folderPath}'", ex);
             return null;
         }
     }

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 namespace LiveryGallery.Models;
 
 internal sealed record LiveryData
@@ -8,6 +9,11 @@ internal sealed record LiveryData
     public string? AuthorIdentityTagHex { get; init; }
     public ulong? CreatorUserId { get; init; }
     public bool IsPossiblyGenerated { get; init; }
+    public bool HasNoLayers { get; init; }
+    public bool HasParseError { get; init; }
+    public ulong LiveryId { get; init; }
+    [JsonIgnore]
+    public IReadOnlyDictionary<string, ulong>? RelatedLiveryIds { get; init; }
     public required int CarId { get; init; }
     public required string CarManufacturerRaw { get; init; }
     public required string CarModelNameRaw { get; init; }

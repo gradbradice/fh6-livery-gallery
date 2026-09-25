@@ -127,7 +127,7 @@
     <value>更新(変更を再スキャン)</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>車(メーカー・車種・年式)、ラッピング名または作者で検索…</value>
+    <value>車（メーカー・車種・年式）、リバリー名または作者で検索…</value>
   </data>
   <data name="SortManufacturer" xml:space="preserve">
     <value>並び替え: メーカー</value>
@@ -246,9 +246,6 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>タグを編集</value>
   </data>
-  <data name="SelectToggleTooltip" xml:space="preserve">
-    <value>選択</value>
-  </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
     <value>クリア</value>
   </data>
@@ -319,7 +316,10 @@
     <value>不明</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6データ解析ライブラリ: {0}</value>
+    <value>FH6 Data Parser（ネイティブ）: {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser（パッケージ）: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>設定</value>
@@ -396,6 +396,15 @@
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>この作者には、この車に対して同じリバリーがあります</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>一致率:</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}: {1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>重複の可能性あり（{0}）</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>すべてのリバリー</value>
   </data>
@@ -425,6 +434,27 @@
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
     <value>このリバリーの模様は、手描きではなくプログラムで生成された(例:写真/画像から)ように見えます。</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>塗装</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>このリバリーにはデカールが一切ありません — 塗り直された色だけです。</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>解析エラー</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>このリバリーのファイルを正しく読み込めませんでした — 破損しているか、サポートされていない形式の可能性があります。</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>すべてのリバリー</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>塗装を非表示</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>塗装のみ</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>この作者には、この車に似たリバリーがあります(デカールのほとんどのセクションは一致しますが、全体は一致しません)</value>
@@ -478,10 +508,13 @@
     <value>スキャン</value>
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
-    <value>ラッピングを自動更新</value>
+    <value>リバリーを自動更新</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>フォルダ名を表示し、検索対象に含める</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
-    <value>更新ボタンでラッピングも更新する</value>
+    <value>更新ボタンをクリックしたときにリバリーも更新</value>
   </data>
   <data name="SettingsSaveFailedTitle" xml:space="preserve">
     <value>保存に失敗しました</value>
@@ -530,7 +563,7 @@
     <value>ニックネーム</value>
   </data>
   <data name="AuthorCardAliasesHint" xml:space="preserve">
-    <value>1つ以上のニックネームを選択してください — 同じ人物が別のアカウントからラッピングを公開することがあります。</value>
+    <value>1つ以上のニックネームを選択してください — 同じ人物が別のアカウントからリバリーを公開することがあります。</value>
   </data>
   <data name="AuthorCardCustomNameLabel" xml:space="preserve">
     <value>表示名</value>
@@ -563,7 +596,7 @@
     <value>ニックネーム: {0}</value>
   </data>
   <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
-    <value>ラッピング: {0}</value>
+    <value>リバリー: {0}</value>
   </data>
   <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
     <value>お気に入り: {0}</value>
@@ -609,5 +642,116 @@
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>作者「{0}」のカードはまだ作成されていません</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>カードを作成</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>アーカイブに移動</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>アーカイブ</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>バックアップ</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>アーカイブ</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>アーカイブは空です</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>{0} 件選択中</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>復元</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>完全に削除</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>完全に削除しますか？</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} がごみ箱に移動されます。アプリ内から元に戻すことはできません。</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>アーカイブ日時: {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>リバリーを復元する前に、保存フォルダを設定で選択してください</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>この操作中にエラーが発生しました。詳細はログを確認してください。</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>プレビュー</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>このリバリーの元のプレビュー画像が見つかりませんでした。</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>元のプレビューを表示</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>アーカイブに移動しています...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>すべて選択</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>不明（復元されたエントリ）</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>不明な日時</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>ラッピング: {0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>バックアップするものがありません — ギャラリーは空です</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>バックアップ</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>まだバックアップがありません</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>（+{0} / -{1}）</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>バックアップを作成</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>開く</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>このバックアップを削除しますか？</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} のバックアップ（{1}）がごみ箱に移動されます。</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>このバックアップの内容を読み込めませんでした — ファイルが破損しているか、有効なバックアップではない可能性があります</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>{0} のバックアップ</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>このバックアップ以降に削除</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>このバックアップ以降に追加</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>このバックアップ以降、削除されたものはありません</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>このバックアップ以降、追加されたものはありません</value>
   </data>
 </root>

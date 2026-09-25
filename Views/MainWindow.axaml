@@ -5,6 +5,7 @@
         xmlns:enums="clr-namespace:LiveryGallery.Enums"
         xmlns:vm="clr-namespace:LiveryGallery.ViewModels"
         x:Class="LiveryGallery.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
         Title="{x:Static loc:Strings.AppTitle}"
         Icon="avares://LiveryGallery/Assets/app-icon.png"
         Height="860" Width="1320" MinHeight="560" MinWidth="960"
@@ -16,15 +17,27 @@
 
     <Window.Resources>
         <DataTemplate x:Key="LiveryCardTemplate" x:DataType="vm:LiveryEntry">
-            <Border Classes="liveryCard" Width="270" Margin="8" ToolTip.Tip="{Binding FolderName}"
+            <Border Classes="liveryCard" Width="270" Margin="8"
                     Classes.selected="{Binding IsSelected}"
                     AttachedToVisualTree="Card_AttachedToVisualTree"
                     DetachedFromVisualTree="Card_DetachedFromVisualTree"
                     DataContextChanged="Card_DataContextChanged"
-                    PointerPressed="Card_SelectPointerPressed">
+                    PointerPressed="Card_SelectPointerPressed"
+                    ContextRequested="Card_ContextRequested">
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static loc:Strings.ContextMenuMoveToArchive}"
+                                  Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).MoveSelectedToArchiveCommand}" />
+                    </ContextMenu>
+                </Border.ContextMenu>
                 <StackPanel>
+                    <Border Height="26" Padding="14,0">
+                        <TextBlock Text="{Binding LiveryIdText}" FontSize="11" FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </Border>
                     <Grid Height="150" ClipToBounds="True">
-                        <Border CornerRadius="14,14,0,0" ClipToBounds="True">
+                        <Border CornerRadius="0" ClipToBounds="True">
                             <Grid>
                                 <Image Source="{Binding Thumbnail}" Stretch="UniformToFill"
                                        IsVisible="{Binding ShowThumbnailImage}" />
@@ -36,23 +49,11 @@
                                 </Border>
                             </Grid>
                         </Border>
-                        <Button Classes="favoriteStar"
-                                Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.ToggleFavoriteCommand}"
-                                CommandParameter="{Binding}"
-                                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,8,0"
-                                ToolTip.Tip="{DynamicResource Loc_FavoriteToggleTooltip}">
-                            <Panel>
-                                <Path Data="{StaticResource IconStarOutline}" Width="13" Height="13" Stretch="Uniform"
-                                      Fill="White" IsVisible="{Binding !IsFavorite}" />
-                                <Path Data="{StaticResource IconStarFilled}" Width="13" Height="13" Stretch="Uniform"
-                                      Fill="#FFD54F" IsVisible="{Binding IsFavorite}" />
-                            </Panel>
-                        </Button>
                         <Border IsVisible="{Binding IsDuplicate}"
                                 Background="{DynamicResource DangerBrush}"
                                 CornerRadius="6" Padding="7,3"
                                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,8,0,0"
-                                ToolTip.Tip="{DynamicResource Loc_DuplicateBadgeTooltip}">
+                                ToolTip.Tip="{Binding DuplicateMatchTooltip}">
                             <TextBlock Text="{DynamicResource Loc_DuplicateBadgeLabel}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
@@ -60,8 +61,8 @@
                                 Background="{DynamicResource WarningBrush}"
                                 CornerRadius="6" Padding="7,3"
                                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,8,0,0"
-                                ToolTip.Tip="{DynamicResource Loc_PossibleDuplicateBadgeTooltip}">
-                            <TextBlock Text="{DynamicResource Loc_PossibleDuplicateBadgeLabel}" FontSize="10.5"
+                                ToolTip.Tip="{Binding DuplicateMatchTooltip}">
+                            <TextBlock Text="{Binding PossibleDuplicateBadgeText}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
                         <Border IsVisible="{Binding ShowMineBadge}"
@@ -80,7 +81,23 @@
                             <TextBlock Text="{DynamicResource Loc_PossiblyGeneratedBadgeLabel}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
-                        <Border CornerRadius="14,14,0,0" Background="#4D000000"
+                        <Border IsVisible="{Binding HasNoLayers}"
+                                Background="{DynamicResource TextSecondaryBrush}"
+                                CornerRadius="6" Padding="7,3"
+                                HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8,0,0,8"
+                                ToolTip.Tip="{DynamicResource Loc_PaintBadgeTooltip}">
+                            <TextBlock Text="{DynamicResource Loc_PaintBadgeLabel}" FontSize="10.5"
+                                       FontWeight="SemiBold" Foreground="White" />
+                        </Border>
+                        <Border IsVisible="{Binding HasParseError}"
+                                Background="{DynamicResource DangerBrush}"
+                                CornerRadius="6" Padding="7,3"
+                                HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8,0,0,8"
+                                ToolTip.Tip="{DynamicResource Loc_ParseErrorBadgeTooltip}">
+                            <TextBlock Text="{DynamicResource Loc_ParseErrorBadgeLabel}" FontSize="10.5"
+                                       FontWeight="SemiBold" Foreground="White" />
+                        </Border>
+                        <Border CornerRadius="0" Background="#4D000000"
                                 IsVisible="{Binding IsSelected}" IsHitTestVisible="False" />
                         <Border Width="40" Height="40" CornerRadius="20"
                                 Background="{DynamicResource AccentBrush}"
@@ -91,17 +108,75 @@
                                   Fill="White" />
                         </Border>
                     </Grid>
-                    <StackPanel Margin="14,12,14,14">
+					<Grid ColumnDefinitions="*,Auto" Margin="14,10,14,0">
+						<StackPanel Grid.Column="0"
+									Orientation="Horizontal"
+									Spacing="8">
+
+							<Button Classes="cardIconButton"
+									Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.EditTagsCommand}"
+									CommandParameter="{Binding}"
+									ToolTip.Tip="{DynamicResource Loc_EditTagsTooltip}">
+								<Path Data="{StaticResource IconBookmark}"
+									  Width="13"
+									  Height="13"
+									  Stretch="Uniform"
+									  Fill="{DynamicResource TextPrimaryBrush}" />
+							</Button>
+
+							<Button Classes="cardIconButton"
+									Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.ViewPreviewCommand}"
+									CommandParameter="{Binding}"
+									ToolTip.Tip="{DynamicResource Loc_ViewPreviewTooltip}">
+								<Path Data="{StaticResource IconPreview}"
+									  Width="13"
+									  Height="13"
+									  Stretch="Uniform"
+									  Fill="{DynamicResource TextPrimaryBrush}" />
+							</Button>
+						</StackPanel>
+
+						<Button Grid.Column="1"
+                            Classes="cardIconButton"
+                            Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.ToggleFavoriteCommand}"
+                            CommandParameter="{Binding}"
+                            ToolTip.Tip="{DynamicResource Loc_FavoriteToggleTooltip}">
+							<Panel HorizontalAlignment="Center" VerticalAlignment="Center">
+								<Path Data="{StaticResource IconStar}"
+									  Width="13"
+									  Height="13"
+									  Stretch="Uniform"
+									  Fill="Transparent"
+									  Stroke="{DynamicResource TextPrimaryBrush}"
+									  StrokeThickness="1.5"
+									  HorizontalAlignment="Center"
+									  VerticalAlignment="Center"
+									  IsVisible="{Binding !IsFavorite}" />
+								
+								<Path Data="{StaticResource IconStar}"
+									  Width="13"
+									  Height="13"
+									  Stretch="Uniform"
+									  Fill="#FFD54F"
+									  HorizontalAlignment="Center"
+									  VerticalAlignment="Center"
+									  IsVisible="{Binding IsFavorite}" />
+							</Panel>
+						</Button>
+					</Grid>
+                    <StackPanel Margin="14,10,14,14">
                         <TextBlock Text="{Binding LiveryName}" FontSize="14.5" FontWeight="SemiBold"
                                    TextTrimming="CharacterEllipsis" />
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0" VerticalAlignment="Center">
                             <Border Classes="carChip">
                                 <TextBlock Text="{Binding CarManufacturer}" FontSize="11.5" FontWeight="Medium"
                                            Foreground="{DynamicResource ChipTextBrush}"
-                                           TextTrimming="CharacterEllipsis" MaxWidth="110" />
+                                           TextTrimming="CharacterEllipsis" MaxWidth="110"
+                                           ToolTip.Tip="{Binding CarManufacturer}" />
                             </Border>
                             <TextBlock Text="{Binding CarModelName}" FontSize="12" FontWeight="Medium" Margin="6,0,0,0"
-                                       TextTrimming="CharacterEllipsis" MaxWidth="120" VerticalAlignment="Center" />
+                                       TextTrimming="CharacterEllipsis" MaxWidth="120" VerticalAlignment="Center"
+                                       ToolTip.Tip="{Binding CarModelName}" />
                             <TextBlock Text="{Binding CarYear, StringFormat=({0})}" FontSize="11.5" Margin="4,0,0,0"
                                        Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
                         </StackPanel>
@@ -126,18 +201,6 @@
                             <TextBlock Text="{Binding DateDisplay}" FontSize="12"
                                        Foreground="{DynamicResource TextSecondaryBrush}" />
                         </StackPanel>
-                        <Button Classes="rowLink"
-                                Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.EditTagsCommand}"
-                                CommandParameter="{Binding}" Margin="-3,4,0,-3"
-                                ToolTip.Tip="{DynamicResource Loc_EditTagsTooltip}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconBookmark}" Width="10.5" Height="10.5" Stretch="Uniform"
-                                      Fill="{DynamicResource TextSecondaryBrush}" Margin="3,0,3,0" />
-                                <TextBlock Text="{DynamicResource Loc_EditTagsTooltip}"
-                                           FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"
-                                           VerticalAlignment="Center" />
-                            </StackPanel>
-                        </Button>
                         <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Tags}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -146,18 +209,19 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="x:String">
-                                    <Border Background="{DynamicResource ChipBackgroundBrush}" CornerRadius="5"
-                                            Padding="6,2" Margin="0,0,5,5">
+                                    <Button Classes="tagChipCard"
+                                            Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.SelectTagCommand}"
+                                            CommandParameter="{Binding}">
                                         <TextBlock Text="{Binding}" FontSize="10.5"
                                                    Foreground="{DynamicResource ChipTextBrush}" />
-                                    </Border>
+                                    </Button>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-
                         <TextBlock Text="{Binding FolderName}" FontSize="10" Margin="0,8,0,0"
                                    Foreground="{DynamicResource TextTertiaryBrush}"
-                                   TextTrimming="CharacterEllipsis" />
+                                   TextTrimming="CharacterEllipsis"
+                                   IsVisible="{Binding $parent[Window].((vm:MainViewModel)DataContext).ShowFolderNames}" />
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -177,7 +241,7 @@
                       Width="{Binding GroupWidth}">
                 <Expander.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Path Data="{StaticResource IconStarFilled}" Width="13" Height="13" Stretch="Uniform"
+						<Path Data="{StaticResource IconStar}" Width="13" Height="13" Stretch="Uniform"
                               Fill="#FFD54F" Margin="0,0,7,0" VerticalAlignment="Center"
                               IsVisible="{Binding IsFavoritesGroup}" />
                         <PathIcon Data="{StaticResource IconUser}" Width="13" Height="13"
@@ -187,13 +251,13 @@
                         <TextBlock Text="{Binding CountText}" FontSize="13" Margin="7,0,0,0"
                                    Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
 
-                        <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasFavorites}"
+						<StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasFavorites}"
                                     VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11" Stretch="Uniform"
-                                  Fill="#FFD54F" Margin="0,0,4,0" />
-                            <TextBlock Text="{Binding FavoriteCount}" FontSize="13"
-                                       Foreground="{DynamicResource TextSecondaryBrush}" />
-                        </StackPanel>
+							<Path Data="{StaticResource IconStar}" Width="11" Height="11" Stretch="Uniform"
+								  Fill="#FFD54F" Margin="0,0,4,0" />
+							<TextBlock Text="{Binding FavoriteCount}" FontSize="13"
+									   Foreground="{DynamicResource TextSecondaryBrush}" />
+						</StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasMine}"
                                     VerticalAlignment="Center">
@@ -284,9 +348,11 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="SearchBox" Grid.Column="0" Classes="search" x:DataType="vm:FilterBarViewModel"
+                             DataContext="{Binding FilterBar}"
                              Margin="0,0,10,0" Text="{Binding SearchText, Mode=TwoWay}"
                              TextChanged="SearchBox_TextChanged" />
 					<Button x:Name="DisplayFilterButton" Grid.Column="1" Classes="icon" Margin="0,0,8,0"
+                            DataContext="{Binding FilterBar}"
                             ToolTip.Tip="{x:Static loc:Strings.DisplayFilterTooltip}">
 						    <PathIcon Data="{StaticResource IconFilter}" Width="16" Height="16"
 								      Foreground="{DynamicResource TextPrimaryBrush}" />
@@ -313,7 +379,7 @@
                                           Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.FavoritesFirst}">
                                     <MenuItem.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11"
+                                            <Path Data="{StaticResource IconStar}" Width="11" Height="11"
                                                   Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
                                                   VerticalAlignment="Center" />
                                             <TextBlock x:Name="FavFirstItemText" VerticalAlignment="Center" />
@@ -325,7 +391,7 @@
                                           Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.OnlyFavorites}">
                                     <MenuItem.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11"
+                                            <Path Data="{StaticResource IconStar}" Width="11" Height="11"
                                                   Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
                                                   VerticalAlignment="Center" />
                                             <TextBlock x:Name="FavOnlyItemText" VerticalAlignment="Center" />
@@ -337,7 +403,7 @@
                                           Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.FavoritesSeparately}">
                                     <MenuItem.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11"
+                                            <Path Data="{StaticResource IconStar}" Width="11" Height="11"
                                                   Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
                                                   VerticalAlignment="Center" />
                                             <TextBlock x:Name="FavSeparateItemText" VerticalAlignment="Center" />
@@ -401,6 +467,16 @@
                                 <MenuItem x:Name="GenOnlyItem" ToggleType="Radio" GroupName="GenGroup"
                                           IsChecked="{Binding IsGenOnly}"
                                           Command="{Binding SetGeneratedFilterModeCommand}" CommandParameter="{x:Static enums:GeneratedFilterMode.GeneratedOnly}" />
+                                <Separator />
+                                <MenuItem x:Name="PaintAllItem" ToggleType="Radio" GroupName="PaintGroup"
+                                          IsChecked="{Binding IsPaintAll}"
+                                          Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.All}" />
+                                <MenuItem x:Name="PaintHideItem" ToggleType="Radio" GroupName="PaintGroup"
+                                          IsChecked="{Binding IsPaintHidden}"
+                                          Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.HidePaint}" />
+                                <MenuItem x:Name="PaintOnlyItem" ToggleType="Radio" GroupName="PaintGroup"
+                                          IsChecked="{Binding IsPaintOnly}"
+                                          Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.PaintOnly}" />
                             </MenuFlyout>
                         </Button.Flyout>
                     </Button>
@@ -428,6 +504,8 @@
 								  Foreground="{DynamicResource TextPrimaryBrush}" />
 						<Button.Flyout>
 							<MenuFlyout Placement="BottomEdgeAlignedRight">
+								<MenuItem x:Name="OpenArchiveMenuItem" Click="OpenArchiveMenuItem_Click" />
+								<MenuItem x:Name="OpenBackupsMenuItem" Click="OpenBackupsMenuItem_Click" />
 								<MenuItem x:Name="OpenSettingsMenuItem" Click="OpenSettingsMenuItem_Click" />
 								<Separator />
 								<MenuItem x:Name="ContactsMenuItem" Click="ContactsMenuItem_Click" />
@@ -436,7 +514,8 @@
 						</Button.Flyout>
                     </Button>
                 </Grid>
-                <Grid x:Name="TagsFilterRow" Margin="0,12,0,0" ColumnDefinitions="Auto,*" x:DataType="vm:TagsBarViewModel" IsVisible="{Binding HasTags}">
+                <Grid x:Name="TagsFilterRow" Margin="0,12,0,0" ColumnDefinitions="Auto,*" x:DataType="vm:TagsBarViewModel"
+                      DataContext="{Binding TagsBar}" IsVisible="{Binding HasTags}">
                     <TextBlock Grid.Column="0" x:Name="TagsFilterLabel" FontSize="12" Margin="0,5,10,0"
                                VerticalAlignment="Top" Foreground="{DynamicResource TextSecondaryBrush}" />
                     <ItemsControl Grid.Column="1" x:Name="TagsBar" ItemsSource="{Binding AllTags}" ItemTemplate="{StaticResource TagChipTemplate}">
@@ -449,7 +528,8 @@
                 </Grid>
             </StackPanel>
         </Border>
-        <Border x:Name="StatusBar" Grid.Row="2" Background="{DynamicResource BgBrush}" Padding="20,10" x:DataType="vm:GalleryStatusViewModel">
+        <Border x:Name="StatusBar" Grid.Row="2" Background="{DynamicResource BgBrush}" Padding="20,10" x:DataType="vm:GalleryStatusViewModel"
+                DataContext="{Binding Status}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -476,6 +556,7 @@
                     </StackPanel>
                 </StackPanel>
                 <Button x:Name="UpdateBanner" Grid.Column="1" Classes="pill" x:DataType="vm:UpdateViewModel"
+                        DataContext="{Binding $parent[Window].((vm:MainViewModel)DataContext).Update}"
                         Margin="0,0,12,0" Padding="10,4" FontSize="11.5" IsVisible="{Binding IsUpdateAvailable}"
                         Click="UpdateBanner_Click">
                     <TextBlock x:Name="UpdateBannerText" Text="{Binding BannerText}" />
@@ -488,7 +569,7 @@
                                 IsVisible="{Binding HasFavorites}" VerticalAlignment="Center">
                         <TextBlock Text="·" FontSize="12" Margin="0,0,6,0"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
-                        <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11" Stretch="Uniform"
+                        <Path Data="{StaticResource IconStar}" Width="11" Height="11" Stretch="Uniform"
                               Fill="#FFD54F" Margin="0,0,4,0" />
                         <TextBlock x:Name="FavoritesCountText" Text="{Binding FavoritesCount}" FontSize="12"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
@@ -516,7 +597,8 @@
                 </StackPanel>
             </Grid>
         </Border>
-        <Grid x:Name="GalleryHost" Grid.Row="3" Background="{DynamicResource BgBrush}" x:DataType="vm:GalleryStatusViewModel">
+        <Grid x:Name="GalleryHost" Grid.Row="3" Background="{DynamicResource BgBrush}" x:DataType="vm:GalleryStatusViewModel"
+              DataContext="{Binding Status}">
             <ScrollViewer x:Name="GalleryScroll" Padding="12,0,12,20">
                 <ItemsControl x:Name="GroupsHost" ItemTemplate="{StaticResource GroupTemplate}">
                     <ItemsControl.ItemsPanel>

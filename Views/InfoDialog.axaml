@@ -71,7 +71,13 @@
 			<StackPanel Grid.Row="1"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
-                        Margin="0,20,0,0">
+                        Margin="0,20,0,0"
+                        Spacing="10">
+				<Button x:Name="ActionButton"
+                        Classes="secondary"
+                        MinWidth="100"
+                        IsVisible="False"
+                        Click="ActionButton_Click" />
 
 				<Button x:Name="OkButton"
                         Classes="primary"

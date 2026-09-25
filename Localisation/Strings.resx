@@ -246,9 +246,6 @@ Choose it manually?
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Edit tags</value>
   </data>
-  <data name="SelectToggleTooltip" xml:space="preserve">
-    <value>Select</value>
-  </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
     <value>Clear</value>
   </data>
@@ -319,7 +316,10 @@ Choose it manually?
     <value>Unknown</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser Library: {0}</value>
+    <value>FH6 Data Parser Native: {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser Package: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Settings</value>
@@ -396,6 +396,15 @@ Choose it manually?
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>This author has an identical livery for this car</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Matches:</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}: {1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Possible duplicate ({0})</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>All liveries</value>
   </data>
@@ -425,6 +434,27 @@ Choose it manually?
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
     <value>This livery's pattern looks like it was created programmatically (e.g. from a photo/image), not drawn by hand.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Paint</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>This livery has no vinyls at all — just a repainted color.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Parse error</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>This livery's file couldn't be read correctly — it may be corrupted or in an unsupported format.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>All liveries</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Hide Paint-only</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Paint-only liveries</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>This author has a similar livery for this car (most decal sections match, but not the full content)</value>
@@ -479,6 +509,9 @@ Choose it manually?
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
     <value>Automatically refresh liveries</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Show and search by folder name</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>Refresh liveries when clicking the refresh button</value>
@@ -609,5 +642,119 @@ Create one to merge one author's nicknames under a single name.</value>
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>No card has been created for the author '{0}'</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Create card</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>Move to archive</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>The archive is empty</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>{0} selected</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Delete permanently</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>Delete permanently?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} will be moved to the Recycle Bin. This can't be undone from within the app.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>Archived {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Choose a save folder first (Settings) before restoring liveries</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Something went wrong during this operation. Check the logs for details.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>Couldn't find the original preview image for this livery.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>View original preview</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Moving to archive...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Unknown (recovered entry)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Unknown date</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>{0} liveries</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Nothing to back up — the gallery is empty</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>No backups yet</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Create backup</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>Delete this backup?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>The backup from {0} ({1}) will be moved to the Recycle Bin.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>This backup's contents couldn't be read — the file may be corrupted or isn't a valid backup</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Backup from {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Removed since this backup</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Added since this backup</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>Nothing has been removed since this backup</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>Nothing has been added since this backup</value>
+  </data>
+  <data name="SelectToggleTooltip" xml:space="preserve">
+    <value>Select</value>
   </data>
 </root>

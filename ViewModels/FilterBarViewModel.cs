@@ -20,6 +20,7 @@ internal sealed partial class FilterBarViewModel : ObservableObject
         _mineMode = settings.MineMode;
         _duplicatesFilterMode = settings.DuplicatesFilterMode;
         _generatedFilterMode = settings.GeneratedFilterMode;
+        _paintFilterMode = settings.PaintFilterMode;
         _groupingEnabled = settings.GroupingEnabled;
     }
 
@@ -56,6 +57,12 @@ internal sealed partial class FilterBarViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsGenAll))]
     [NotifyPropertyChangedFor(nameof(IsGenOnly))]
     private GeneratedFilterMode _generatedFilterMode;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsPaintAll))]
+    [NotifyPropertyChangedFor(nameof(IsPaintHidden))]
+    [NotifyPropertyChangedFor(nameof(IsPaintOnly))]
+    private PaintFilterMode _paintFilterMode;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsFavSeparateEnabled))]
@@ -102,6 +109,13 @@ internal sealed partial class FilterBarViewModel : ObservableObject
     [RelayCommand]
     private void SetGeneratedFilterMode(GeneratedFilterMode mode) => GeneratedFilterMode = mode;
 
+    public bool IsPaintAll => PaintFilterMode == PaintFilterMode.All;
+    public bool IsPaintHidden => PaintFilterMode == PaintFilterMode.HidePaint;
+    public bool IsPaintOnly => PaintFilterMode == PaintFilterMode.PaintOnly;
+
+    [RelayCommand]
+    private void SetPaintFilterMode(PaintFilterMode mode) => PaintFilterMode = mode;
+
     [RelayCommand]
     private void ToggleGrouping() => GroupingEnabled = !GroupingEnabled;
 
@@ -110,6 +124,7 @@ internal sealed partial class FilterBarViewModel : ObservableObject
     partial void OnMineModeChanged(MineMode value) => Persist(s => s.MineMode = value);
     partial void OnDuplicatesFilterModeChanged(DuplicatesFilterMode value) => Persist(s => s.DuplicatesFilterMode = value);
     partial void OnGeneratedFilterModeChanged(GeneratedFilterMode value) => Persist(s => s.GeneratedFilterMode = value);
+    partial void OnPaintFilterModeChanged(PaintFilterMode value) => Persist(s => s.PaintFilterMode = value);
     partial void OnGroupingEnabledChanged(bool value) => Persist(s => s.GroupingEnabled = value);
 
     private void Persist(Action<AppSettingsData> apply)

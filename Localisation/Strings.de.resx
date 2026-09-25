@@ -246,9 +246,6 @@ Manuell auswählen?
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Tags bearbeiten</value>
   </data>
-  <data name="SelectToggleTooltip" xml:space="preserve">
-    <value>Auswählen</value>
-  </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
     <value>Zurücksetzen</value>
   </data>
@@ -319,7 +316,10 @@ Manuell auswählen?
     <value>Unbekannt</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6-Datenparser-Bibliothek: {0}</value>
+    <value>FH6 Data Parser (nativ): {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser (Paket): {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Einstellungen</value>
@@ -396,6 +396,15 @@ Manuell auswählen?
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>Dieser Autor hat für dieses Auto eine identische Livree</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Übereinstimmungen:</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}: {1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Möglicher Duplikat ({0})</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>Alle Livrees</value>
   </data>
@@ -425,6 +434,27 @@ Manuell auswählen?
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
     <value>Das Muster dieser Lackierung wirkt programmatisch erzeugt (z. B. aus einem Foto/Bild), nicht von Hand gezeichnet.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Farbe</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>Diese Lackierung hat überhaupt keine Aufkleber — nur eine neu lackierte Farbe.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Lesefehler</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>Die Datei dieser Lackierung konnte nicht korrekt gelesen werden — sie ist möglicherweise beschädigt oder in einem nicht unterstützten Format.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>Alle Lackierungen</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Farbe ausblenden</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Nur Farbe</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>Dieser Autor hat eine ähnliche Livree für dieses Auto (die meisten Aufkleberbereiche stimmen überein, aber nicht der gesamte Inhalt)</value>
@@ -478,10 +508,13 @@ Manuell auswählen?
     <value>Scannen</value>
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
-    <value>Liverys automatisch aktualisieren</value>
+    <value>Liveries automatisch aktualisieren</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Ordnernamen anzeigen und danach suchen</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
-    <value>Liverys beim Klick auf Aktualisieren neu laden</value>
+    <value>Liveries beim Klick auf „Aktualisieren“ neu laden</value>
   </data>
   <data name="SettingsSaveFailedTitle" xml:space="preserve">
     <value>Speichern fehlgeschlagen</value>
@@ -530,7 +563,7 @@ Erstellen Sie eine, um die Spitznamen eines Autors unter einem Namen zusammenzuf
     <value>Spitznamen</value>
   </data>
   <data name="AuthorCardAliasesHint" xml:space="preserve">
-    <value>Wählen Sie einen oder mehrere Spitznamen aus — eine Person kann Liverys von verschiedenen Konten veröffentlichen.</value>
+    <value>Wählen Sie einen oder mehrere Spitznamen aus — dieselbe Person kann Liveries über verschiedene Konten veröffentlichen.</value>
   </data>
   <data name="AuthorCardCustomNameLabel" xml:space="preserve">
     <value>Anzeigename</value>
@@ -563,7 +596,7 @@ Erstellen Sie eine, um die Spitznamen eines Autors unter einem Namen zusammenzuf
     <value>Spitznamen: {0}</value>
   </data>
   <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
-    <value>Liverys: {0}</value>
+    <value>Liveries: {0}</value>
   </data>
   <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
     <value>Favoriten: {0}</value>
@@ -609,5 +642,116 @@ Erstellen Sie eine, um die Spitznamen eines Autors unter einem Namen zusammenzuf
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>Für den Künstler "{0}" wurde keine Karte erstellt</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Karte erstellen</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>In Archiv verschieben</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Archiv</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Archiv</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>Das Archiv ist leer</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>{0} ausgewählt</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Wiederherstellen</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Endgültig löschen</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>Endgültig löschen?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} wird in den Papierkorb verschoben. Dies kann innerhalb der App nicht rückgängig gemacht werden.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>Archiviert {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Wählen Sie zuerst einen Speicherordner (Einstellungen), bevor Sie Liveries wiederherstellen</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Bei diesem Vorgang ist ein Fehler aufgetreten. Weitere Informationen finden Sie in den Protokollen.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>Das Original-Vorschaubild für diese Lackierung wurde nicht gefunden.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>Original-Vorschau ansehen</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Wird ins Archiv verschoben...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Alle auswählen</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Unbekannt (wiederhergestellter Eintrag)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Unbekanntes Datum</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>{0} Liveries</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Nichts zu sichern — die Galerie ist leer</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>Noch keine Backups</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Backup erstellen</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>Backup löschen?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>Das Backup vom {0} ({1}) wird in den Papierkorb verschoben.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>Der Inhalt dieses Backups konnte nicht gelesen werden — die Datei ist möglicherweise beschädigt oder kein gültiges Backup</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Backup vom {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Entfernt seit diesem Backup</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Hinzugefügt seit diesem Backup</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>Seit diesem Backup wurde nichts entfernt</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>Seit diesem Backup wurde nichts hinzugefügt</value>
   </data>
 </root>

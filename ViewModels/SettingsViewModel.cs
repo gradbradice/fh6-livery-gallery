@@ -19,6 +19,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
     private string _savedSavePath;
     private bool _savedAutoRefreshLiveries;
     private bool _savedRefreshOnButtonClick;
+    private bool _savedSearchByFolderName;
     public bool SavePathChanged { get; private set; }
 
     public SettingsViewModel(AppSettingsData settings, string? resolvedSavePath)
@@ -33,6 +34,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         _initialSavePath = _savedSavePath;
         _savedAutoRefreshLiveries = settings.AutoRefreshLiveries;
         _savedRefreshOnButtonClick = settings.RefreshLiveriesOnButtonClick;
+        _savedSearchByFolderName = settings.SearchByFolderName;
 
         _themeMode = _savedThemeMode;
         _language = _savedLanguage;
@@ -40,6 +42,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         _savePath = _savedSavePath;
         _autoRefreshLiveries = _savedAutoRefreshLiveries;
         _refreshOnButtonClick = _savedRefreshOnButtonClick;
+        _searchByFolderName = _savedSearchByFolderName;
     }
 
     [ObservableProperty]
@@ -102,13 +105,18 @@ internal sealed partial class SettingsViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsDirty))]
     private bool _refreshOnButtonClick;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDirty))]
+    private bool _searchByFolderName;
+
     public bool IsDirty =>
         ThemeMode != _savedThemeMode
         || Language != _savedLanguage
         || GamePath != _savedGamePath
         || SavePath != _savedSavePath
         || AutoRefreshLiveries != _savedAutoRefreshLiveries
-        || RefreshOnButtonClick != _savedRefreshOnButtonClick;
+        || RefreshOnButtonClick != _savedRefreshOnButtonClick
+        || SearchByFolderName != _savedSearchByFolderName;
 
     public async Task<SettingsSaveResult> SaveAsync()
     {
@@ -129,6 +137,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
             : (string.IsNullOrEmpty(SavePath) ? null : SavePath);
         candidate.AutoRefreshLiveries = AutoRefreshLiveries;
         candidate.RefreshLiveriesOnButtonClick = RefreshOnButtonClick;
+        candidate.SearchByFolderName = SearchByFolderName;
 
         bool saved = await AppSettingsService.SaveImmediateAsync(candidate);
         if (!saved) return SettingsSaveResult.PersistFailed;
@@ -152,6 +161,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         _savedSavePath = SavePath;
         _savedAutoRefreshLiveries = AutoRefreshLiveries;
         _savedRefreshOnButtonClick = RefreshOnButtonClick;
+        _savedSearchByFolderName = SearchByFolderName;
         OnPropertyChanged(nameof(IsDirty));
     }
 }

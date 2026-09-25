@@ -12,7 +12,9 @@ internal static class GalleryFilterService
         bool onlyFavorites,
         bool onlyMine,
         DuplicatesFilterMode duplicatesFilterMode,
-        GeneratedFilterMode generatedFilterMode)
+        GeneratedFilterMode generatedFilterMode,
+        PaintFilterMode paintFilterMode,
+        bool searchByFolderName)
     {
         IEnumerable<LiveryEntry> query = allEntries;
 
@@ -20,7 +22,7 @@ internal static class GalleryFilterService
         if (trimmedSearch.Length > 0)
         {
             var searchTokens = trimmedSearch.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
-            query = query.Where(x => x.MatchesSearch(searchTokens));
+            query = query.Where(x => x.MatchesSearch(searchTokens, searchByFolderName));
         }
 
         if (selectedTags.Count > 0)
@@ -41,6 +43,13 @@ internal static class GalleryFilterService
 
         if (generatedFilterMode == GeneratedFilterMode.GeneratedOnly)
             query = query.Where(x => x.IsPossiblyGenerated);
+
+        query = paintFilterMode switch
+        {
+            PaintFilterMode.HidePaint => query.Where(x => !x.HasNoLayers),
+            PaintFilterMode.PaintOnly => query.Where(x => x.HasNoLayers),
+            _ => query
+        };
 
         return [.. query];
     }

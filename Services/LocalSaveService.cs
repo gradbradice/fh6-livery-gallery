@@ -21,8 +21,6 @@ internal static partial class LocalSaveService
         return (id, match.Groups["gameId"].Value.ToUpperInvariant());
     }
 
-    public static ulong? TryParseUserId(string folderPathOrName) => TryParseFolderName(folderPathOrName)?.UserId;
-
     public static (ulong UserId, string GameId)? TryReadManifestIdentity(string uFolderPath, int containerId)
     {
         string manifestPath = Path.Combine(uFolderPath, $"{containerId}.json");
@@ -102,29 +100,34 @@ internal static partial class LocalSaveService
         return GetListDataDirs(path, DataType.Livery);
     }
 
-    public static string? GetSaveDataPath(string savePath) => GetSaveDataPathWithId(savePath, null).Path;
+    public static string? GetSaveDataPath(string savePath) => GetSaveDataPathWithId(savePath).Path;
 
-    public static (string? Path, int? ContainerId) GetSaveDataPathWithId(string savePath, int? lastKnownContainerId)
+    public static (string? Path, int? ContainerId) GetSaveDataPathWithId(string savePath)
     {
         try
         {
             if (!Directory.Exists(savePath)) return (null, null);
-
-            if (lastKnownContainerId is { } lastId)
-            {
-                string candidateDir = Path.Combine(savePath, lastId.ToString());
-                string candidate = Path.Combine(candidateDir, "ContainersRoot");
-                if (Directory.Exists(candidate)) return (candidate, lastId);
-            }
-
             var candidates = Directory.GetDirectories(savePath)
                 .Where(d => Path.GetFileName(d).Length > 0 && Path.GetFileName(d).All(char.IsDigit))
                 .Select(d => (Dir: d, Root: Path.Combine(d, "ContainersRoot")))
                 .Where(x => Directory.Exists(x.Root))
-                .OrderByDescending(x => Directory.GetLastWriteTime(x.Root));
+                .Select(x => (x.Dir, x.Root, MTime: Directory.GetLastWriteTime(x.Root)))
+                .OrderByDescending(x => x.MTime)
+                .ToList();
 
             var best = candidates.FirstOrDefault();
             if (best.Root is null) return (null, null);
+            if (candidates.Count > 1)
+            {
+                string candidatesText = string.Join(", ",
+                    candidates.Select(c => $"{Path.GetFileName(c.Dir)}@{c.MTime:O}"));
+                AppLogger.LogErrorThrottled(
+                    savePath,
+                    $"Container selection for '{savePath}': chose '{Path.GetFileName(best.Dir)}' " +
+                    $"(mtime {best.MTime:O}) out of {candidates.Count} candidates: {candidatesText}",
+                    new InvalidOperationException("Diagnostic: not an actual error"),
+                    minInterval: TimeSpan.FromMinutes(5));
+            }
 
             int? foundId = int.TryParse(Path.GetFileName(best.Dir), out int id) ? id : null;
             return (best.Root, foundId);

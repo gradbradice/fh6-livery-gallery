@@ -1,5 +1,8 @@
 using LiveryGallery.Configuration;
 using LiveryGallery.Models;
+using LiveryGallery.ViewModels;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 
 namespace LiveryGallery.Services;
@@ -14,6 +17,18 @@ internal class AuthorCardService
     private Dictionary<string, AuthorCard> _identityTagIndex = new(StringComparer.OrdinalIgnoreCase);
 
     public AuthorCardService() => Load();
+
+    public string GetIdentityMappingFingerprint()
+    {
+        lock (_lock)
+        {
+            var pairs = _identityTagIndex
+                .Select(kv => $"{kv.Key.ToLowerInvariant()}={kv.Value.Id}")
+                .OrderBy(s => s, StringComparer.Ordinal);
+            byte[] hash = SHA256.HashData(Encoding.UTF8.GetBytes(string.Join('\n', pairs)));
+            return Convert.ToHexStringLower(hash);
+        }
+    }
 
     public IReadOnlyList<AuthorCard> GetAll()
     {
@@ -300,6 +315,10 @@ internal class AuthorCardService
                     _cards = MigrateLegacyAliases(json, data);
                     RebuildIndexNoLock();
                 }
+                else
+                {
+                    AtomicFile.TryBackupCorruptedFile(_path);
+                }
             }
         }
         catch (Exception ex)
@@ -346,5 +365,28 @@ internal class AuthorCardService
             c.KnownNames.Count == 0 && legacyAliasesById.TryGetValue(c.Id, out var names)
                 ? c with { KnownNames = names }
                 : c)];
+    }
+
+    public (List<string> AvailableAliases, Dictionary<string, List<string>> NameToTags) BuildAliasIndex(
+        IEnumerable<LiveryEntry> allEntries, string? excludeCardId = null)
+    {
+        var nameToTags = allEntries
+            .Where(e => e.AuthorIdentityTagHex is not null)
+            .GroupBy(e => e.AuthorRaw, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(e => e.AuthorIdentityTagHex!).Distinct(StringComparer.OrdinalIgnoreCase).ToList(),
+                StringComparer.OrdinalIgnoreCase);
+
+        var availableAliases = nameToTags.Keys
+            .Where(a =>
+            {
+                var tags = nameToTags[a];
+                var owner = tags.Select(FindCardForIdentityTag).FirstOrDefault(o => o is not null);
+                return owner is null || owner.Id == excludeCardId;
+            })
+            .ToList();
+
+        return (availableAliases, nameToTags);
     }
 }

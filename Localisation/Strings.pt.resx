@@ -246,9 +246,6 @@ Escolher manualmente?
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Editar tags</value>
   </data>
-  <data name="SelectToggleTooltip" xml:space="preserve">
-    <value>Selecionar</value>
-  </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
     <value>Limpar</value>
   </data>
@@ -319,7 +316,10 @@ Escolher manualmente?
     <value>Desconhecido</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Biblioteca de análise de dados do FH6: {0}</value>
+    <value>FH6 Data Parser (nativo): {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser (pacote): {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Configurações</value>
@@ -396,6 +396,15 @@ Escolher manualmente?
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>Este autor tem uma pintura idêntica para este carro</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Correspondências:</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}: {1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Possível duplicado ({0})</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>Todas as pinturas</value>
   </data>
@@ -425,6 +434,27 @@ Escolher manualmente?
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
     <value>O padrão desta pintura parece ter sido criado programaticamente (por ex. a partir de uma foto/imagem), não desenhado à mão.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Pintura</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>Esta pintura não tem nenhum adesivo — apenas uma cor repintada.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Erro de leitura</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>O arquivo desta pintura não pôde ser lido corretamente — pode estar corrompido ou em um formato não suportado.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>Todas as pinturas</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Ocultar pintura</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Apenas pintura</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>Este autor tem uma pintura semelhante para este carro (a maioria das seções de decalques coincide, mas não todo o conteúdo)</value>
@@ -479,6 +509,9 @@ Escolher manualmente?
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
     <value>Atualizar automaticamente as pinturas</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Mostrar e pesquisar pelo nome da pasta</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>Atualizar pinturas ao clicar no botão</value>
@@ -609,5 +642,116 @@ Crie um para unir os apelidos de um autor sob um único nome.</value>
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>Nenhum cartão foi criado para o autor «{0}»</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Criar cartão</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>Mover para o arquivo</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>O arquivo está vazio</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>{0} selecionados</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Restaurar</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Excluir permanentemente</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>Excluir permanentemente?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} serão movidos para a Lixeira. Isso não pode ser desfeito dentro do aplicativo.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>Arquivado {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Escolha uma pasta de salvamento primeiro (Configurações) antes de restaurar liveries</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Ocorreu um erro durante esta operação. Consulte os logs para obter mais detalhes.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Visualização</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>Não foi possível encontrar a imagem de visualização original desta pintura.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>Ver visualização original</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Movendo para o arquivo...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Selecionar tudo</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Desconhecido (entrada recuperada)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Data desconhecida</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>Pinturas: {0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Nada para fazer backup — a galeria está vazia</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>Ainda não há backups</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Criar backup</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>Excluir este backup?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>O backup de {0} ({1}) será movido para a Lixeira.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>Não foi possível ler o conteúdo deste backup — o arquivo pode estar corrompido ou não é um backup válido</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Backup de {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Removidas desde este backup</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Adicionadas desde este backup</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>Nada foi removido desde este backup</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>Nada foi adicionado desde este backup</value>
   </data>
 </root>

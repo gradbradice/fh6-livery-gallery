@@ -246,9 +246,6 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>编辑标签</value>
   </data>
-  <data name="SelectToggleTooltip" xml:space="preserve">
-    <value>选择</value>
-  </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
     <value>清除</value>
   </data>
@@ -319,7 +316,10 @@
     <value>未知</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 数据解析库：{0}</value>
+    <value>FH6 Data Parser（原生库）: {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser（包）: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>设置</value>
@@ -396,6 +396,15 @@
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>此作者对这辆车有完全相同的涂装</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>匹配结果：</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}：{1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>可能重复（{0}）</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>所有涂装</value>
   </data>
@@ -425,6 +434,27 @@
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
     <value>这个涂装的图案看起来是通过程序生成的(例如从照片/图片),而不是手绘的。</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>喷漆</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>这个涂装没有任何贴花 — 只是重新喷涂的颜色。</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>解析错误</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>这个涂装的文件无法正确读取 — 可能已损坏或格式不受支持。</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>所有涂装</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>隐藏喷漆</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>仅喷漆</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>此作者对这辆车有类似的涂装(大部分贴花区块相符，但并非全部内容)</value>
@@ -478,10 +508,13 @@
     <value>扫描</value>
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
-    <value>自动刷新彩绘</value>
+    <value>自动刷新涂装</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>显示文件夹名称并可按其搜索</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
-    <value>点击刷新按钮时也刷新彩绘</value>
+    <value>点击刷新按钮时也刷新涂装</value>
   </data>
   <data name="SettingsSaveFailedTitle" xml:space="preserve">
     <value>保存失败</value>
@@ -563,7 +596,7 @@
     <value>昵称：{0}</value>
   </data>
   <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
-    <value>彩绘：{0}</value>
+    <value>涂装：{0}</value>
   </data>
   <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
     <value>收藏：{0}</value>
@@ -609,5 +642,116 @@
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>尚未为作者《{0}》创建卡片</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>创建卡片</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>移至归档</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>归档</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>归档</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>归档为空</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>已选择 {0} 个</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>永久删除</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>永久删除？</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} 将被移至回收站。此操作在应用内无法撤销。</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>归档于 {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>恢复车漆前，请先在设置中选择存档文件夹</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>执行此操作时出现问题。请查看日志了解详细信息。</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>预览</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>找不到这个涂装的原始预览图片。</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>查看原始预览</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>正在移至归档...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>未知（恢复的条目）</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>未知日期</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>涂装：{0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>没有可备份的内容 — 图库为空</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>暂无备份</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>（+{0} / -{1}）</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>创建备份</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>删除此备份？</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} 的备份（{1}）将被移至回收站。</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>无法读取此备份的内容 — 文件可能已损坏或不是有效的备份</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>{0} 的备份</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>自此备份后已删除</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>自此备份后已添加</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>自此备份后没有删除任何内容</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>自此备份后没有添加任何内容</value>
   </data>
 </root>

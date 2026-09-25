@@ -4,9 +4,18 @@ using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Controller;
 
-internal sealed class ScanController(LiveryScanner scanService)
+internal sealed class ScanController
 {
+    private readonly LiveryScanner scanService;
     private readonly ScanCoordinator _coordinator = new();
+    private readonly RegenerateRequestCoalescer _regenerateCoalescer;
+
+    public ScanController(LiveryScanner scanService)
+    {
+        this.scanService = scanService;
+        _regenerateCoalescer = new RegenerateRequestCoalescer(_coordinator);
+    }
+
     public LiveryScanEntry? LastScanResult { get; private set; }
 
     public Task WaitAsync() => _coordinator.WaitAsync();
@@ -27,7 +36,7 @@ internal sealed class ScanController(LiveryScanner scanService)
             try
             {
                 var result = await scanService.ScanAsync(savePath, currentUserId, progress, ct);
-                LastScanResult = result;
+                LastScanResult = result with { Entries = [] };
                 tcs.SetResult(result);
             }
             catch (Exception ex)
@@ -37,10 +46,6 @@ internal sealed class ScanController(LiveryScanner scanService)
         });
     }
 
-    public Task RegenerateEntriesAsync(ulong? currentUserId, Action<List<LiveryEntry>> onEntriesReady) =>
-        _coordinator.RunOrReplaceQueuedAsync(async ct =>
-        {
-            var entries = await scanService.RegenerateEntriesAsync(currentUserId, ct);
-            onEntriesReady(entries);
-        });
+    public Task<List<LiveryEntry>> RegenerateEntriesAsync(ulong? currentUserId) =>
+        _regenerateCoalescer.RequestAsync(ct => scanService.RegenerateEntriesAsync(currentUserId, ct));
 }

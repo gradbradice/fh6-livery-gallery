@@ -1,8 +1,6 @@
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveryGallery.Localisation;
 using LiveryGallery.Services;
-using LiveryGallery.Views;
 
 namespace LiveryGallery.ViewModels;
 
@@ -35,12 +33,5 @@ internal sealed partial class UpdateViewModel(AppUpdateCheckService updateServic
     {
         if (LatestVersion is not null)
             BannerText = string.Format(Strings.UpdateAvailableFormat, LatestVersion);
-    }
-
-    public async Task ShowDetailsAsync(Window owner)
-    {
-        if (LatestVersion is null) return;
-        var dialog = new WhatsNewDialog(LatestVersion, ReleaseBody, ReleaseUrl);
-        await dialog.ShowDialog(owner);
     }
 }

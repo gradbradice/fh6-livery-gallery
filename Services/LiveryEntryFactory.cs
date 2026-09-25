@@ -8,11 +8,15 @@ internal sealed class LiveryEntryFactory(
     CarDatabaseService carDatabaseService,
     FavoriteService favoriteService,
     TagService tagService,
-    AuthorCardService authorCardService)
+    AuthorCardService authorCardService,
+    LiveryIdService liveryIdService)
 {
     public void ReconcileAuthorCards(IEnumerable<LiveryCacheEntry> cacheEntries) =>
         authorCardService.ReconcileAutoCards(cacheEntries.Select(c =>
             new AuthorObservation(c.Author, c.AuthorIdentityTagHex, c.DownloadDate)));
+
+    public void EnsureLiveryIds(IEnumerable<LiveryCacheEntry> cacheEntries) =>
+        liveryIdService.EnsureAssigned(cacheEntries.Select(c => (c.FolderName, c.DownloadDate)));
 
     public LiveryEntry ToEntry(LiveryCacheEntry c, ulong? currentUserId)
     {
@@ -25,6 +29,8 @@ internal sealed class LiveryEntryFactory(
             AuthorIdentityTagHex = c.AuthorIdentityTagHex,
             CreatorUserId = c.CreatorUserId,
             IsPossiblyGenerated = c.IsPossiblyGenerated,
+            HasNoLayers = c.HasNoLayers,
+            HasParseError = c.HasParseError,
             CarId = c.CarId,
             CarManufacturerRaw = car?.Manufacturer ?? string.Empty,
             CarModelNameRaw = car?.Name ?? string.Empty,
@@ -38,6 +44,8 @@ internal sealed class LiveryEntryFactory(
                 : null,
             HasThumbnail = c.ThumbnailFile is not null,
             CLiveryHash = c.CLiveryHash,
+            LiveryId = liveryIdService.TryGet(c.FolderName) ?? 0,
+            RelatedLiveryIds = BuildRelatedLiveryIds(c.PossibleDuplicateOf),
         };
 
         return new LiveryEntry
@@ -52,10 +60,20 @@ internal sealed class LiveryEntryFactory(
         };
     }
 
+    private Dictionary<string, ulong>? BuildRelatedLiveryIds(IReadOnlyList<DuplicateRelation>? relations)
+    {
+        if (relations is not { Count: > 0 }) return null;
+        var result = new Dictionary<string, ulong>(StringComparer.OrdinalIgnoreCase);
+        foreach (var r in relations)
+            if (liveryIdService.TryGet(r.Id) is { } id) result[r.Id] = id;
+        return result;
+    }
+
     public List<LiveryEntry> BuildEntries(IEnumerable<LiveryCacheEntry> cacheEntries, ulong? currentUserId, CancellationToken ct)
     {
         var cacheList = cacheEntries as IReadOnlyCollection<LiveryCacheEntry> ?? [.. cacheEntries];
         ReconcileAuthorCards(cacheList);
+        EnsureLiveryIds(cacheList);
         var entries = new List<LiveryEntry>();
         foreach (var cacheEntry in cacheList)
         {

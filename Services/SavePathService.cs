@@ -1,12 +1,8 @@
-using Avalonia.Controls;
-using Avalonia.Platform.Storage;
-using LiveryGallery.Localisation;
 using LiveryGallery.Models;
-using LiveryGallery.Views;
 
 namespace LiveryGallery.Services;
 
-internal sealed class SavePathService(Window owner, AppSettingsData settings)
+internal sealed class SavePathService(AppSettingsData settings)
 {
     public string? SavePath { get; private set; }
     private bool _lostNotified;
@@ -53,11 +49,8 @@ internal sealed class SavePathService(Window owner, AppSettingsData settings)
     public string? ResolveSaveDataPath()
     {
         if (SavePath is null) return null;
-        int? hint = settings.LastKnownContainerSavePath == SavePath
-            ? settings.LastKnownContainerId
-            : null;
 
-        var (path, containerId) = LocalSaveService.GetSaveDataPathWithId(SavePath, hint);
+        var (path, containerId) = LocalSaveService.GetSaveDataPathWithId(SavePath);
         if (containerId is not null
             && (containerId != settings.LastKnownContainerId || settings.LastKnownContainerSavePath != SavePath))
         {
@@ -68,56 +61,11 @@ internal sealed class SavePathService(Window owner, AppSettingsData settings)
         return path;
     }
 
-    public async Task<bool> PromptAsync(bool initial, Action onDeclined)
+    public void SetSavePath(string path)
     {
-        if (initial)
-        {
-            bool yes = await ConfirmDialog.AskAsync(owner, Strings.FolderNotFoundTitle, Strings.FolderNotFoundMessage);
-            if (!yes)
-            {
-                onDeclined();
-                return false;
-            }
-        }
-
-        return await BrowseAsync();
-    }
-
-    public async Task<bool> BrowseAsync()
-    {
-        var provider = owner.StorageProvider;
-        if (provider is null) return false;
-
-        while (true)
-        {
-            var result = await provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-            {
-                Title = Strings.SelectFolderDialogTitle,
-                AllowMultiple = false
-            });
-
-            var folder = result.Count > 0 ? result[0] : null;
-            string? path = folder?.TryGetLocalPath();
-            if (string.IsNullOrEmpty(path)) return false;
-
-            if (!LocalSaveService.IsSavePathValid(path))
-            {
-                bool retry = await ConfirmDialog.AskAsync(
-                    owner,
-                    Strings.SaveFolderValidationFailedTitle,
-                    Strings.SaveFolderValidationFailed,
-                    yesText: Strings.ButtonRetry,
-                    noText: Strings.ButtonCancel);
-
-                if (!retry) return false;
-                continue;
-            }
-
-            SavePath = path;
-            settings.SavePath = path;
-            AppSettingsService.Save(settings);
-            return true;
-        }
+        SavePath = path;
+        settings.SavePath = path;
+        AppSettingsService.Save(settings);
     }
 
     public bool ShouldNotifyLost()

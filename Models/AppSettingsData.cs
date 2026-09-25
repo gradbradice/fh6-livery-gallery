@@ -14,10 +14,12 @@ internal class AppSettingsData
     public MineMode MineMode { get; set; } = MineMode.None;
     public DuplicatesFilterMode DuplicatesFilterMode { get; set; } = DuplicatesFilterMode.All;
     public GeneratedFilterMode GeneratedFilterMode { get; set; } = GeneratedFilterMode.All;
+    public PaintFilterMode PaintFilterMode { get; set; } = PaintFilterMode.All;
     public bool GroupingEnabled { get; set; } = true;
     public string? GameInstallPath { get; set; }
     public bool AutoRefreshLiveries { get; set; } = true;
     public bool RefreshLiveriesOnButtonClick { get; set; } = false;
+    public bool SearchByFolderName { get; set; } = false;
     public int? LastKnownContainerId { get; set; }
     public string? LastKnownContainerSavePath { get; set; }
 
@@ -32,10 +34,12 @@ internal class AppSettingsData
         MineMode = MineMode,
         DuplicatesFilterMode = DuplicatesFilterMode,
         GeneratedFilterMode = GeneratedFilterMode,
+        PaintFilterMode = PaintFilterMode,
         GroupingEnabled = GroupingEnabled,
         GameInstallPath = GameInstallPath,
         AutoRefreshLiveries = AutoRefreshLiveries,
         RefreshLiveriesOnButtonClick = RefreshLiveriesOnButtonClick,
+        SearchByFolderName = SearchByFolderName,
         LastKnownContainerId = LastKnownContainerId,
         LastKnownContainerSavePath = LastKnownContainerSavePath,
     };
@@ -51,10 +55,12 @@ internal class AppSettingsData
         MineMode = other.MineMode;
         DuplicatesFilterMode = other.DuplicatesFilterMode;
         GeneratedFilterMode = other.GeneratedFilterMode;
+        PaintFilterMode = other.PaintFilterMode;
         GroupingEnabled = other.GroupingEnabled;
         GameInstallPath = other.GameInstallPath;
         AutoRefreshLiveries = other.AutoRefreshLiveries;
         RefreshLiveriesOnButtonClick = other.RefreshLiveriesOnButtonClick;
+        SearchByFolderName = other.SearchByFolderName;
         LastKnownContainerId = other.LastKnownContainerId;
         LastKnownContainerSavePath = other.LastKnownContainerSavePath;
     }

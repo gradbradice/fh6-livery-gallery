@@ -246,9 +246,6 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Editar etiquetas</value>
   </data>
-  <data name="SelectToggleTooltip" xml:space="preserve">
-    <value>Seleccionar</value>
-  </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
     <value>Borrar</value>
   </data>
@@ -319,7 +316,10 @@
     <value>Desconocido</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Librería de análisis de datos de FH6: {0}</value>
+    <value>FH6 Data Parser (nativo): {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser (paquete): {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Configuración</value>
@@ -396,6 +396,15 @@
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>Este autor tiene una librea idéntica para este coche</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Coincidencias:</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}: {1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Posible duplicado ({0})</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>Todas las libreas</value>
   </data>
@@ -425,6 +434,27 @@
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
     <value>El patrón de este diseño parece haberse creado programáticamente (p. ej. a partir de una foto/imagen), no dibujado a mano.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Pintura</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>Este diseño no tiene ninguna calcomanía — solo un color repintado.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Error de lectura</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>El archivo de este diseño no pudo leerse correctamente — puede estar dañado o en un formato no compatible.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>Todos los diseños</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Ocultar pintura</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Solo pintura</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>Este autor tiene una librea similar para este coche (coinciden la mayoría de las secciones de calcomanías, pero no todo el contenido)</value>
@@ -478,10 +508,13 @@
     <value>Escaneo</value>
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
-    <value>Actualizar automáticamente las librés</value>
+    <value>Actualizar automáticamente las libreas</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Mostrar y buscar por nombre de carpeta</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
-    <value>Actualizar librés al pulsar el botón</value>
+    <value>Actualizar las libreas al pulsar el botón</value>
   </data>
   <data name="SettingsSaveFailedTitle" xml:space="preserve">
     <value>Error al guardar</value>
@@ -530,7 +563,7 @@ Cree una para unificar los apodos de un autor bajo un solo nombre.</value>
     <value>Apodos</value>
   </data>
   <data name="AuthorCardAliasesHint" xml:space="preserve">
-    <value>Seleccione uno o más apodos — una persona puede publicar librés desde varias cuentas.</value>
+    <value>Selecciona uno o más apodos — una misma persona puede publicar libreas desde varias cuentas.</value>
   </data>
   <data name="AuthorCardCustomNameLabel" xml:space="preserve">
     <value>Nombre a mostrar</value>
@@ -563,7 +596,7 @@ Cree una para unificar los apodos de un autor bajo un solo nombre.</value>
     <value>Apodos: {0}</value>
   </data>
   <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
-    <value>Librés: {0}</value>
+    <value>Libreas: {0}</value>
   </data>
   <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
     <value>Favoritos: {0}</value>
@@ -609,5 +642,116 @@ Cree una para unificar los apodos de un autor bajo un solo nombre.</value>
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>No se ha creado ninguna tarjeta para el autor «{0}»</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Crear tarjeta</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>Mover al archivo</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Archivo</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Copias de seguridad</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Archivo</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>El archivo está vacío</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>{0} seleccionados</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Restaurar</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Eliminar permanentemente</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>¿Eliminar permanentemente?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} se moverán a la Papelera de reciclaje. Esto no se puede deshacer desde la aplicación.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>Archivado {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Elige primero una carpeta de guardado (Configuración) antes de restaurar libreas</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Algo salió mal durante esta operación. Consulta los registros para obtener más información.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Vista previa</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>No se pudo encontrar la imagen de vista previa original de este diseño.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>Ver vista previa original</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Moviendo al archivo...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Seleccionar todo</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Desconocido (entrada recuperada)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Fecha desconocida</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>Libreas: {0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Nada que respaldar — la galería está vacía</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Copias de seguridad</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>Aún no hay copias de seguridad</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Crear copia de seguridad</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>¿Eliminar esta copia de seguridad?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>La copia de seguridad del {0} ({1}) se moverá a la Papelera de reciclaje.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>No se pudo leer el contenido de esta copia de seguridad — el archivo puede estar dañado o no ser una copia de seguridad válida</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Copia de seguridad del {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Eliminadas desde esta copia de seguridad</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Añadidas desde esta copia de seguridad</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>No se ha eliminado nada desde esta copia de seguridad</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>No se ha añadido nada desde esta copia de seguridad</value>
   </data>
 </root>

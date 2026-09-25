@@ -16,7 +16,7 @@ internal sealed class ScanCoordinator
         lock (_lock)
         {
             if (IsRunning) return false;
-            _currentTask = StartAsync(operation);
+            _currentTask = RunWorkerAsync(operation);
         }
         return true;
     }
@@ -27,7 +27,7 @@ internal sealed class ScanCoordinator
         {
             if (!IsRunning)
             {
-                _currentTask = StartAsync(operation);
+                _currentTask = RunWorkerAsync(operation);
                 return _currentTask;
             }
 
@@ -36,39 +36,38 @@ internal sealed class ScanCoordinator
         }
     }
 
-    private async Task StartAsync(Func<CancellationToken, Task> operation)
+    private async Task RunWorkerAsync(Func<CancellationToken, Task> firstOperation)
     {
-        var cts = new CancellationTokenSource();
-        lock (_lock) _cts = cts;
-        try
+        var operation = firstOperation;
+        while (true)
         {
-            await operation(cts.Token);
-        }
-        catch (OperationCanceledException)
-        {
-            
-        }
-        finally
-        {
+            var cts = new CancellationTokenSource();
+            lock (_lock) _cts = cts;
+            try
+            {
+                await operation(cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+            finally
+            {
+                lock (_lock)
+                {
+                    if (ReferenceEquals(_cts, cts)) _cts = null;
+                }
+                cts.Dispose();
+            }
+
+            Func<CancellationToken, Task>? next;
             lock (_lock)
             {
-                if (ReferenceEquals(_cts, cts)) _cts = null;
+                next = _queuedOperation;
+                _queuedOperation = null;
+                if (next is null) return;
             }
-            cts.Dispose();
-        }
-
-        Func<CancellationToken, Task>? next;
-        lock (_lock)
-        {
-            next = _queuedOperation;
-            _queuedOperation = null;
-        }
-
-        if (next is not null)
-        {
-            Task nextTask;
-            lock (_lock) nextTask = _currentTask = StartAsync(next);
-            await nextTask;
+            operation = next;
         }
     }
 

@@ -1,17 +1,29 @@
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.Services;
 
 internal static class ThumbnailCacheService
 {
     private static readonly Dictionary<string, (Bitmap Bitmap, int RefCount)> _cache = [];
-    private static readonly Dictionary<Control, string> _acquiredByControl = [];
     private static readonly Dictionary<string, Task<Bitmap?>> _inFlightLoads = [];
-    private static readonly Dictionary<Control, long> _acquisitionToken = [];
-    private static long _nextToken;
+    private static readonly ConditionalWeakTable<Control, Lease> _leaseByControl = [];
+
+    private sealed class Lease(string thumbnailPath)
+    {
+        public string ThumbnailPath { get; } = thumbnailPath;
+        private int _released;
+        public bool TryMarkReleased() => Interlocked.Exchange(ref _released, 1) == 0;
+
+        ~Lease()
+        {
+            if (!TryMarkReleased()) return;
+            string path = ThumbnailPath;
+            Dispatcher.UIThread.Post(() => Release(path), DispatcherPriority.Background);
+        }
+    }
 
     public static async Task<(bool WasSuperseded, Bitmap? Bitmap)> AcquireForAsync(Control control, string? thumbnailPath)
     {
@@ -19,18 +31,14 @@ internal static class ThumbnailCacheService
 
         ReleaseFor(control);
         if (string.IsNullOrEmpty(thumbnailPath)) return (false, null);
-
-        long myToken = ++_nextToken;
-        _acquisitionToken[control] = myToken;
+        var lease = new Lease(thumbnailPath);
+        _leaseByControl.AddOrUpdate(control, lease);
 
         if (_cache.TryGetValue(thumbnailPath, out var existing))
         {
             _cache[thumbnailPath] = (existing.Bitmap, existing.RefCount + 1);
-            _acquiredByControl[control] = thumbnailPath;
             return (false, existing.Bitmap);
         }
-
-        _acquiredByControl[control] = thumbnailPath;
 
         if (!_inFlightLoads.TryGetValue(thumbnailPath, out var loadTask))
         {
@@ -53,10 +61,8 @@ internal static class ThumbnailCacheService
                 _cache[thumbnailPath] = (bitmap, 1);
         }
 
-        bool stillCurrent = _acquiredByControl.TryGetValue(control, out var currentPath)
-            && currentPath == thumbnailPath
-            && _acquisitionToken.TryGetValue(control, out var currentToken)
-            && currentToken == myToken;
+        bool stillCurrent = _leaseByControl.TryGetValue(control, out var currentLease)
+            && ReferenceEquals(currentLease, lease);
 
         if (!stillCurrent)
         {
@@ -70,10 +76,9 @@ internal static class ThumbnailCacheService
     public static void ReleaseFor(Control control)
     {
         Dispatcher.UIThread.VerifyAccess();
-
-        _acquisitionToken.Remove(control);
-        if (_acquiredByControl.Remove(control, out var previousPath))
-            Release(previousPath);
+        if (!_leaseByControl.TryGetValue(control, out var lease)) return;
+        _leaseByControl.Remove(control);
+        if (lease.TryMarkReleased()) Release(lease.ThumbnailPath);
     }
 
     private static void Release(string thumbnailPath)
