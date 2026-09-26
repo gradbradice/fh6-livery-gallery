@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Buscar por vehículo (marca, modelo, año), nombre de librea o autor…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>Ordenar por: marca</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>Ordenar por: autor</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>Ordenar por: fecha de descarga</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>Fecha desconocida</value>
   </data>
@@ -462,8 +453,68 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Visualización (favoritos, duplicados)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>Filtros</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>Ordenar por</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>Agrupación</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>Favoritos</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>Mis libreas</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>Duplicados</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>Generadas</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>Pintura</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>Marca</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>Fecha de descarga</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>Ninguna</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>Por marca</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>Por autor</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>Por mes</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>Primero</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>Solo</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>Por separado</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>Ocultar</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>Con posibles</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Todas las libreas</value>
@@ -753,5 +804,43 @@ Cree una para unificar los apodos de un autor bajo un solo nombre.</value>
   </data>
   <data name="BackupNoneAddedHint" xml:space="preserve">
     <value>No se ha añadido nada desde esta copia de seguridad</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>Estas libreas no se restauraron porque exactamente las mismas libreas (mismas carpetas) ya están en el juego:
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>No se pudieron restaurar estas libreas. Consulta los registros para obtener más información:
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…y {0} más</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>Se encontraron duplicados</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>La galería ya tiene duplicados de estas libreas (mismo coche, datos de librea idénticos):
+{0}
+
+¿Restaurarlas de todos modos?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — duplicado: {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>Las demás libreas seleccionadas se restaurarán en cualquier caso.</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>Restaurar de todos modos</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>Omitir</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>Leída parcialmente</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>La librea se leyó, pero no se pudo analizar parte de su archivo. Se muestran los datos principales; algunas comprobaciones (generación, duplicados) pueden no estar disponibles.</value>
   </data>
 </root>

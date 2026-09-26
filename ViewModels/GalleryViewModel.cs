@@ -40,6 +40,7 @@ internal sealed partial class GalleryViewModel : ObservableObject
     public event Action<LiveryEntry>? EditTagsRequested;
     public event Action<LiveryEntry>? ViewPreviewRequested;
     public event Action<GalleryCountsSnapshot>? CountsUpdated;
+    public event Action? SelectedTagsChanged;
 
     public GalleryViewModel(FavoriteService favoriteService)
     {
@@ -87,13 +88,14 @@ internal sealed partial class GalleryViewModel : ObservableObject
 
     public void SetTagSelected(string tag, bool selected)
     {
-        if (selected) _selectedTags.Add(tag);
-        else _selectedTags.Remove(tag);
+        bool changed = selected ? _selectedTags.Add(tag) : _selectedTags.Remove(tag);
+        if (!changed) return;
+        SelectedTagsChanged?.Invoke();
         Refresh(_filter);
     }
 
     [RelayCommand]
-    private void SelectTag(string tag) => SetTagSelected(tag, true);
+    private void ToggleTag(string tag) => SetTagSelected(tag, !_selectedTags.Contains(tag));
 
     public void SyncKnownTags(IReadOnlyCollection<string> knownTags)
     {
@@ -297,8 +299,15 @@ internal sealed partial class GalleryViewModel : ObservableObject
             && a.IsPossiblyGenerated == b.IsPossiblyGenerated
             && a.HasNoLayers == b.HasNoLayers
             && a.HasParseError == b.HasParseError
+            && ParseIssuesEqual(a.Data.ParseIssues, b.Data.ParseIssues)
             && a.LiveryId == b.LiveryId
             && a.CLiveryHash == b.CLiveryHash;
+    }
+
+    private static bool ParseIssuesEqual(IReadOnlyList<LiveryParseIssue>? a, IReadOnlyList<LiveryParseIssue>? b)
+    {
+        if (a is null || b is null) return ReferenceEquals(a, b);
+        return a.SequenceEqual(b);
     }
 
     private static bool PossibleDuplicateOfEqual(IReadOnlyList<DuplicateRelation>? a, IReadOnlyList<DuplicateRelation>? b)

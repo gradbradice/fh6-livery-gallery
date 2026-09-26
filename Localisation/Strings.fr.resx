@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Rechercher par véhicule (marque, modèle, année), nom de livrée ou par auteur…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>Trier par : marque</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>Trier par : auteur</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>Trier par : date de téléchargement</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>Date inconnue</value>
   </data>
@@ -462,8 +453,68 @@ Le choisir manuellement ?
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Affichage (favoris, doublons)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>Trier par</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>Regroupement</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>Favoris</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>Mes livrées</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>Doublons</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>Générées</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>Peinture</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>Marque</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>Auteur</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>Date de téléchargement</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>Par marque</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>Par auteur</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>Par mois</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>Toutes</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>En premier</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>Uniquement</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>Séparément</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>Masquer</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>Avec possibles</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Toutes les livrées</value>
@@ -753,5 +804,43 @@ Créez-en une pour regrouper les pseudos d'un même auteur sous un seul nom.</va
   </data>
   <data name="BackupNoneAddedHint" xml:space="preserve">
     <value>Rien n'a été ajouté depuis cette sauvegarde</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>Ces livrées n'ont pas été restaurées car exactement les mêmes livrées (mêmes dossiers) sont déjà dans le jeu :
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>Impossible de restaurer ces livrées. Consultez les journaux pour plus de détails :
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…et {0} de plus</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>Doublons trouvés</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>La galerie contient déjà des doublons de ces livrées (même voiture, données de livrée identiques) :
+{0}
+
+Les restaurer quand même ?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — doublon : {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>Les autres livrées sélectionnées seront restaurées dans tous les cas.</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>Restaurer quand même</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>Ignorer</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>Lue partiellement</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>La livrée a été lue, mais une partie de son fichier n'a pas pu être analysée. Les données principales sont affichées ; certaines vérifications (génération, doublons) peuvent être indisponibles.</value>
   </data>
 </root>

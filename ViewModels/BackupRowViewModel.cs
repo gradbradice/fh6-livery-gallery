@@ -19,14 +19,13 @@ internal sealed class BackupRowViewModel(LiveryBackupService.BackupSummary summa
 
     public bool HasDiff => Manifest is not null;
 
-    public string DiffText
+    public string DiffText { get; } = BuildDiffText(summary.Manifest, currentEntries);
+
+    private static string BuildDiffText(LiveryBackupManifest? manifest, IReadOnlyList<LiveryData> currentEntries)
     {
-        get
-        {
-            if (Manifest is null) return "";
-            var (added, removed) = LiveryBackupService.ComputeDiff(Manifest, currentEntries);
-            return string.Format(Strings.BackupDiffFormat, added.Count, removed.Count);
-        }
+        if (manifest is null) return "";
+        var (added, removed) = LiveryBackupService.ComputeDiff(manifest, currentEntries);
+        return string.Format(Strings.BackupDiffFormat, added.Count, removed.Count);
     }
 
     private static string FormatSize(long bytes)

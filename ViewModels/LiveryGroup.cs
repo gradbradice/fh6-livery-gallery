@@ -85,13 +85,25 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
             if (_rows is not null && _rowsBuiltForWidth == GroupWidth) return _rows;
 
             int columns = Math.Max(1, (int)(GroupWidth / CardStep));
-            _rows = new LazyRowList(Items, columns);
+            _rows = new LazyRowList(this, Items, columns);
             _rowsBuiltForWidth = GroupWidth;
             return _rows;
         }
     }
 
     public string CountText => $"({Count})";
+
+    private bool _isExpanded = true;
+    public bool IsExpanded
+    {
+        get => _isExpanded;
+        set
+        {
+            if (_isExpanded == value) return;
+            _isExpanded = value;
+            OnPropertyChanged();
+        }
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -1,4 +1,4 @@
-using ForzaData;
+using Forza.Data;
 using LiveryGallery.Configuration;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
@@ -21,6 +21,7 @@ internal sealed class LiveryScanner
         Path.Combine(AppSettings.BaseCachePath, "duplicate_invalidation_signature.txt");
     private string? _lastDuplicateInvalidationSignature;
     private DateTime _lastLohCompaction = DateTime.MinValue;
+    private bool _orphanCleanupDoneOnce;
 
     public LiveryScanner(
         AppCacheService appCacheService,
@@ -72,10 +73,10 @@ internal sealed class LiveryScanner
     }
 
     public async Task<LiveryScanEntry> ScanAsync(
-        string savePath, ulong? currentUserId, IProgress<string>? progress = null, CancellationToken ct = default)
+        string savePath, ulong? currentUserId, bool needEntries, IProgress<string>? progress = null, CancellationToken ct = default)
     {
         using var _ = await _saveFolderLock.AcquireAsync(ct);
-        return await Task.Run(() => Scan(savePath, currentUserId, progress, ct), ct);
+        return await Task.Run(() => Scan(savePath, currentUserId, needEntries, progress, ct), ct);
     }
 
     public Task<List<LiveryEntry>> RegenerateEntriesAsync(ulong? currentUserId, CancellationToken ct = default) =>
@@ -103,7 +104,7 @@ internal sealed class LiveryScanner
         }
     }
 
-    private LiveryScanEntry Scan(string savePath, ulong? currentUserId, IProgress<string>? progress, CancellationToken ct)
+    private LiveryScanEntry Scan(string savePath, ulong? currentUserId, bool needEntries, IProgress<string>? progress, CancellationToken ct)
     {
         var (oldCache, oldCacheLoadFailed) = _appCacheService.Load();
 
@@ -189,19 +190,23 @@ internal sealed class LiveryScanner
         int dirtyGroupsRecomputed = UpdateDuplicateStatuses(finalCache, oldCache, [.. freshlyParsedNames.Keys], freshSectionCounts, savePath);
         _entryFactory.EnsureLiveryIds(finalCache.Values);
 
-        var entries = new ConcurrentBag<LiveryEntry>();
-        Parallel.ForEach(finalCache.Values, new ParallelOptions
-        {
-            CancellationToken = ct,
-            MaxDegreeOfParallelism = Math.Max(2, Environment.ProcessorCount / 2),
-        }, cacheEntry =>
-        {
-            entries.Add(_entryFactory.ToEntry(cacheEntry, currentUserId));
-        });
-
-        var entriesList = entries.ToList();
         bool cacheChanged = !snapshotUnreliable && (oldCache.Count != finalCache.Count
             || finalCache.Any(kv => !oldCache.TryGetValue(kv.Key, out var old) || old != kv.Value));
+
+        List<LiveryEntry> entriesList = [];
+        if (cacheChanged || needEntries)
+        {
+            var entries = new ConcurrentBag<LiveryEntry>();
+            Parallel.ForEach(finalCache.Values, new ParallelOptions
+            {
+                CancellationToken = ct,
+                MaxDegreeOfParallelism = Math.Max(2, Environment.ProcessorCount / 2),
+            }, cacheEntry =>
+            {
+                entries.Add(_entryFactory.ToEntry(cacheEntry, currentUserId));
+            });
+            entriesList = [.. entries];
+        }
 
         if (cacheChanged)
         {
@@ -211,7 +216,11 @@ internal sealed class LiveryScanner
 
         if (errors == 0 && !suspiciousDrop && !oldCacheLoadFailed && !snapshotUnreliable)
         {
-            CleanupOrphanedThumbnails(finalCache);
+            if (cacheChanged || !_orphanCleanupDoneOnce)
+            {
+                CleanupOrphanedThumbnails(finalCache);
+                _orphanCleanupDoneOnce = true;
+            }
         }
         else
         {
@@ -224,9 +233,6 @@ internal sealed class LiveryScanner
         {
             _lastLohCompaction = DateTime.UtcNow;
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
         }
 
         return new LiveryScanEntry
@@ -336,12 +342,27 @@ internal sealed class LiveryScanner
     {
         int dirtyGroupsRecomputed = 0;
         int groupRecomputeFailures = 0;
-        string ResolvedAuthor(LiveryCacheEntry e) => _authorCardService.ResolveDisplayName(e.Author, e.AuthorIdentityTagHex);
+        var resolvedAuthorCache = new Dictionary<(string Author, string? Tag), string>();
+        string ResolvedAuthor(LiveryCacheEntry e)
+        {
+            var key = (e.Author, e.AuthorIdentityTagHex);
+            if (!resolvedAuthorCache.TryGetValue(key, out var name))
+                resolvedAuthorCache[key] = name = _authorCardService.ResolveDisplayName(e.Author, e.AuthorIdentityTagHex);
+            return name;
+        }
+
         string currentSignature = $"{LiveryDuplicateDetector.AlgorithmVersion}|{_authorCardService.GetIdentityMappingFingerprint()}";
         bool invalidationSignatureChanged = currentSignature != _lastDuplicateInvalidationSignature;
         var groups = finalCache.Values
             .GroupBy(e => (e.CarId, Author: ResolvedAuthor(e)), CarIdResolvedAuthorComparer.Instance)
             .ToList();
+
+        var oldMembership = oldCache.Values
+            .GroupBy(e => (e.CarId, Author: ResolvedAuthor(e)), CarIdResolvedAuthorComparer.Instance)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(e => e.FolderName).ToHashSet(StringComparer.Ordinal),
+                CarIdResolvedAuthorComparer.Instance);
 
         var updates = new ConcurrentBag<(string Name, LiveryCacheEntry Entry)>();
 
@@ -361,12 +382,7 @@ internal sealed class LiveryScanner
             }
 
             var currentNames = members.Select(m => m.FolderName).ToHashSet(StringComparer.Ordinal);
-            var oldNames = oldCache.Values
-                .Where(e => e.CarId == group.Key.CarId && string.Equals(ResolvedAuthor(e), group.Key.Author, StringComparison.OrdinalIgnoreCase))
-                .Select(e => e.FolderName)
-                .ToHashSet(StringComparer.Ordinal);
-
-            bool membershipChanged = !currentNames.SetEquals(oldNames);
+            bool membershipChanged = !oldMembership.TryGetValue(group.Key, out var oldNames) || !currentNames.SetEquals(oldNames);
             bool anyMemberFresh = members.Any(m => freshlyParsedNames.Contains(m.FolderName));
 
             if (!membershipChanged && !anyMemberFresh && !invalidationSignatureChanged)
@@ -429,11 +445,9 @@ internal sealed class LiveryScanner
         var candidates = new List<LiveryDuplicateCandidate>(members.Count);
         foreach (var member in members)
         {
-            uint[]? sectionCounts = freshSectionCounts.TryGetValue(member.FolderName, out var cached)
-                ? cached
-                : LiveryReader.TryReadCLiverySectionCounts(Path.Combine(savePath, member.FolderName));
-
-            var shapes = LiveryReader.TryReadCLiveryShapeFingerprints(Path.Combine(savePath, member.FolderName));
+            freshSectionCounts.TryGetValue(member.FolderName, out var freshCounts);
+            var (sectionCounts, shapes) = LiveryReader.TryReadDuplicateInputs(
+                Path.Combine(savePath, member.FolderName), freshCounts);
             candidates.Add(new LiveryDuplicateCandidate(member.FolderName, member.CarId, resolvedAuthor, member.CLiveryHash, sectionCounts, shapes));
         }
 
@@ -505,6 +519,7 @@ internal sealed class LiveryScanner
     {
         if (existing.SchemaVersion != LiveryCacheEntry.CurrentSchemaVersion) return false;
         if (existing.GenerationAlgorithmVersion != LiveryGenerationDetector.AlgorithmVersion) return false;
+        if (existing.ParserVersion != LiveryReader.ParserVersion) return false;
         if (existing.CLiveryHash is null) return false;
 
         string headerPath = Path.Combine(folder, "header");
@@ -524,7 +539,11 @@ internal sealed class LiveryScanner
             if (!File.Exists(Path.Combine(_appCacheService.ThumbsDir, existing.ThumbnailFile))) return false;
         }
 
-        return false;
+        string cLiveryPath = Path.Combine(folder, "C_livery");
+        if (!LiveryReader.TryGetStamp(cLiveryPath, out long cLiveryLen, out DateTime cLiveryMtime)) return false;
+        if (cLiveryLen != existing.CLiveryLength || cLiveryMtime != existing.CLiveryLastWriteUtc) return false;
+
+        return true;
     }
 
     private bool CanReuseCache(LiveryCacheEntry? existing, bool found, LiveryReader.LiveryFileHashes hashes)
@@ -532,6 +551,7 @@ internal sealed class LiveryScanner
         if (!found || existing is null) return false;
         if (existing.SchemaVersion != LiveryCacheEntry.CurrentSchemaVersion) return false;
         if (existing.GenerationAlgorithmVersion != LiveryGenerationDetector.AlgorithmVersion) return false;
+        if (existing.ParserVersion != LiveryReader.ParserVersion) return false;
 
         bool thumbnailValid = hashes.SourceThumbnailPath is null
             ? existing.ThumbnailFile is null

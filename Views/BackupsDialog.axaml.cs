@@ -52,7 +52,7 @@ internal partial class BackupsDialog : Window
         }
 
         var dialog = new BackupDetailDialog(
-            _backupService, _savePathService, row, _getCurrentEntries(), _onRestored);
+            _backupService, _savePathService, row, _getCurrentEntries, _onRestored);
         await dialog.ShowDialog(this);
     }
 

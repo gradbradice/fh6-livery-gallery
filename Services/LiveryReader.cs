@@ -1,4 +1,4 @@
-using ForzaData;
+using Forza.Data;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
@@ -120,26 +120,52 @@ internal sealed partial class LiveryReader
             cLiveryLength, cLiveryLastWriteUtc, thumbHashFailed);
     }
 
+    public static string ParserVersion { get; } = ReadParserVersion();
+
+    private static string ReadParserVersion()
+    {
+        try
+        {
+            return NativeHeaderParser.GetVersion();
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to query the native fdata version", ex);
+            return "?";
+        }
+    }
+
     public LiveryCacheEntry ParseLivery(string folder, LiveryFileHashes hashes, LiveryCacheEntry? previous, out uint[]? cLiverySectionCounts)
     {
         string folderName = Path.GetFileName(folder);
         var (folderCarId, tsRaw) = ParseFolderName(folderName);
-        var (_, parsedHeader) = NativeHeaderParser.TryParseHeader(hashes.HeaderData);
+        var issues = new List<LiveryParseIssue>();
+
+        // Header: Ok, or ParseError (Value == null). A too-long string is not a failure (TruncatedField).
+        var headerResult = NativeHeaderParser.TryParseHeader(hashes.HeaderData);
+        var parsedHeader = headerResult.Value;
+        if (headerResult.Error is { } headerError)
+        {
+            AddIssue(issues, folder, LiveryParseFile.Header,
+                headerResult.HasValue ? LiveryParseSeverity.Partial : LiveryParseSeverity.Error, headerError);
+        }
         uint? headerCarId = parsedHeader?.TargetCarId;
 
         byte[]? cLiveryBytes = hashes.CLiveryBytes;
         uint? cLiveryCarId;
         bool isPossiblyGenerated;
         bool hasNoLayers;
-        bool hasParseError;
         cLiverySectionCounts = null;
-        if (previous is not null && hashes.CLivery is not null && hashes.CLivery == previous.CLiveryHash
+        if (previous is { SchemaVersion: LiveryCacheEntry.CurrentSchemaVersion }
+            && previous.ParserVersion == ParserVersion
+            && hashes.CLivery is not null && hashes.CLivery == previous.CLiveryHash
             && previous.GenerationAlgorithmVersion == LiveryGenerationDetector.AlgorithmVersion)
         {
             cLiveryCarId = previous.CLiveryCarId;
             isPossiblyGenerated = previous.IsPossiblyGenerated;
             hasNoLayers = previous.HasNoLayers;
-            hasParseError = previous.HasParseError;
+            if (previous.ParseIssues is { } previousIssues)
+                issues.AddRange(previousIssues.Where(i => i.File == LiveryParseFile.CLivery));
         }
         else
         {
@@ -158,33 +184,40 @@ internal sealed partial class LiveryReader
             cLiveryCarId = null;
             isPossiblyGenerated = false;
             hasNoLayers = false;
-            hasParseError = false;
             if (cLiveryBytes is not null)
             {
                 try
                 {
-                    var (liveryResult, livery) = NativeHeaderParser.TryParseCLivery(cLiveryBytes);
-                    if (liveryResult == LiveryParseResult.Ok && livery is not null)
+                    var liveryResult = NativeHeaderParser.TryParseCLivery(cLiveryBytes);
+                    if (liveryResult.HasValue)
                     {
-                        cLiveryCarId = livery.TargetCarId;
-                        cLiverySectionCounts = [.. livery.SectionCounts];
+                        cLiveryCarId = liveryResult.Value.TargetCarId;
+                        cLiverySectionCounts = [.. liveryResult.Value.SectionCounts];
                     }
-                    else
+                    if (liveryResult.Error is { } liveryError)
                     {
-                        hasParseError = true;
+                        AddIssue(issues, folder, LiveryParseFile.CLivery,
+                            liveryResult.HasValue ? LiveryParseSeverity.Partial : LiveryParseSeverity.Error, liveryError);
                     }
 
-                    var (_, verdict, _) = LiveryGenerationDetector.Detect(cLiveryBytes);
-                    isPossiblyGenerated = verdict == LiveryGenerationVerdict.Generated;
-                    hasNoLayers = verdict == LiveryGenerationVerdict.NoLayers;
+                    var detection = LiveryGenerationDetector.Detect(cLiveryBytes);
+                    isPossiblyGenerated = detection.Verdict == LiveryGenerationVerdict.Generated;
+                    hasNoLayers = detection.Verdict == LiveryGenerationVerdict.NoLayers;
+                    if (detection.Error is { } detectionError)
+                    {
+                        AddIssue(issues, folder, LiveryParseFile.CLivery,
+                            liveryResult.HasValue ? LiveryParseSeverity.Partial : LiveryParseSeverity.Error, detectionError);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    hasParseError = true;
+                    issues.Add(LiveryParseIssue.Unexpected(LiveryParseFile.CLivery));
                     AppLogger.LogErrorThrottled(folder, $"Failed to parse C_livery in '{folder}'", ex);
                 }
             }
         }
+
+        bool hasParseError = issues.Any(i => i.Severity == LiveryParseSeverity.Error);
 
         var (carId, carIdConsistency) = ResolveCarId(folderName, folderCarId, headerCarId, cLiveryCarId);
 
@@ -209,6 +242,8 @@ internal sealed partial class LiveryReader
             GenerationAlgorithmVersion = LiveryGenerationDetector.AlgorithmVersion,
             HasNoLayers = hasNoLayers,
             HasParseError = hasParseError,
+            ParserVersion = ParserVersion,
+            ParseIssues = issues.Count > 0 ? issues : null,
             CLiveryCarId = cLiveryCarId,
             CarId = carId,
             CarIdConsistency = carIdConsistency,
@@ -228,34 +263,62 @@ internal sealed partial class LiveryReader
         };
     }
 
-    public static uint[]? TryReadCLiverySectionCounts(string folderPath)
+    public static (uint[]? SectionCounts, IReadOnlyList<LiveryShapeFingerprint>? Shapes) TryReadDuplicateInputs(
+        string folderPath, uint[]? knownSectionCounts)
     {
+        byte[] bytes;
         try
         {
-            byte[] bytes = File.ReadAllBytes(Path.Combine(folderPath, "C_livery"));
-            var (result, livery) = NativeHeaderParser.TryParseCLivery(bytes);
-            return result == LiveryParseResult.Ok && livery is not null ? [.. livery.SectionCounts] : null;
+            bytes = File.ReadAllBytes(Path.Combine(folderPath, "C_livery"));
         }
         catch (Exception ex)
         {
             AppLogger.LogErrorThrottled(folderPath, $"Failed to re-read C_livery for duplicate check: '{folderPath}'", ex);
-            return null;
+            return (knownSectionCounts, null);
         }
-    }
 
-    public static IReadOnlyList<LiveryShapeFingerprint>? TryReadCLiveryShapeFingerprints(string folderPath)
-    {
+        uint[]? sectionCounts = knownSectionCounts;
+        IReadOnlyList<LiveryShapeFingerprint>? shapes = null;
         try
         {
-            byte[] bytes = File.ReadAllBytes(Path.Combine(folderPath, "C_livery"));
-            var (result, shapes) = NativeHeaderParser.TryExtractShapeFingerprints(bytes);
-            return result == LiveryParseResult.Ok ? shapes : null;
+            if (sectionCounts is null)
+            {
+                var livery = NativeHeaderParser.TryParseCLivery(bytes);
+                if (livery.HasValue) sectionCounts = [.. livery.Value.SectionCounts];
+            }
+
+            // Partial = the tree is complete and verified, only the paint table after it is broken.
+            var fingerprints = NativeHeaderParser.TryExtractShapeFingerprints(bytes);
+            if (fingerprints.HasValue) shapes = fingerprints.Value;
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled(folderPath, $"Failed to re-read C_livery for full-duplicate check: '{folderPath}'", ex);
-            return null;
+            AppLogger.LogErrorThrottled(folderPath, $"Failed to parse C_livery for duplicate check: '{folderPath}'", ex);
         }
+        return (sectionCounts, shapes);
+    }
+
+    private static void AddIssue(
+        List<LiveryParseIssue> issues, string folder, LiveryParseFile file, LiveryParseSeverity severity, ParseError error)
+    {
+        var issue = LiveryParseIssue.From(file, severity, error);
+        if (issues.Any(i => i.File == issue.File && i.Code == issue.Code && i.Level == issue.Level)) return;
+        issues.Add(issue);
+
+        // The UI shows only the code; everything needed to investigate goes here.
+        string details = string.Join(", ", new[]
+        {
+            $"code={error.Code} ({(int)error.Code})",
+            $"level={error.Level} ({(int)error.Level})",
+            error.SectionIndex is int section ? $"section={error.SectionName ?? section.ToString()}" : null,
+            error.ByteOffset is long offset ? $"offset={offset}" : null,
+            error.Expected is long expected ? $"expected={expected}" : null,
+            error.Actual is long actual ? $"actual={actual}" : null,
+        }.Where(part => part is not null));
+
+        AppLogger.LogErrorThrottled($"{folder}|{file}|{error.Code}|{error.Level}",
+            $"{file} of '{Path.GetFileName(folder)}' parsed with status {severity} [{details}]: {error.Message}",
+            new InvalidDataException(error.Message));
     }
 
     private (int CarId, LiveryConsistency Consistency) ResolveCarId(

@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Enums;
+using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
 
@@ -31,6 +32,9 @@ internal sealed partial class FilterBarViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsSortManufacturer))]
     [NotifyPropertyChangedFor(nameof(IsSortAuthor))]
     [NotifyPropertyChangedFor(nameof(IsSortDownloadTime))]
+    [NotifyPropertyChangedFor(nameof(SortValueText))]
+    [NotifyPropertyChangedFor(nameof(GroupingValueText))]
+    [NotifyPropertyChangedFor(nameof(GroupingByKeyText))]
     private SortMode _sortMode;
 
     [ObservableProperty]
@@ -38,6 +42,7 @@ internal sealed partial class FilterBarViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsFavFirst))]
     [NotifyPropertyChangedFor(nameof(IsFavOnly))]
     [NotifyPropertyChangedFor(nameof(IsFavSeparate))]
+    [NotifyPropertyChangedFor(nameof(FavoriteValueText))]
     private FavoriteMode _favoriteMode;
 
     [ObservableProperty]
@@ -45,28 +50,35 @@ internal sealed partial class FilterBarViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsMineFirst))]
     [NotifyPropertyChangedFor(nameof(IsMineOnly))]
     [NotifyPropertyChangedFor(nameof(IsMineSeparate))]
+    [NotifyPropertyChangedFor(nameof(MineValueText))]
     private MineMode _mineMode;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsDupAll))]
     [NotifyPropertyChangedFor(nameof(IsDupAndPossible))]
     [NotifyPropertyChangedFor(nameof(IsDupOnly))]
+    [NotifyPropertyChangedFor(nameof(DuplicatesValueText))]
     private DuplicatesFilterMode _duplicatesFilterMode;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsGenAll))]
     [NotifyPropertyChangedFor(nameof(IsGenOnly))]
+    [NotifyPropertyChangedFor(nameof(GeneratedValueText))]
     private GeneratedFilterMode _generatedFilterMode;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsPaintAll))]
     [NotifyPropertyChangedFor(nameof(IsPaintHidden))]
     [NotifyPropertyChangedFor(nameof(IsPaintOnly))]
+    [NotifyPropertyChangedFor(nameof(PaintValueText))]
     private PaintFilterMode _paintFilterMode;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsFavSeparateEnabled))]
     [NotifyPropertyChangedFor(nameof(IsMineSeparateEnabled))]
+    [NotifyPropertyChangedFor(nameof(IsGroupingNone))]
+    [NotifyPropertyChangedFor(nameof(IsGroupingByKey))]
+    [NotifyPropertyChangedFor(nameof(GroupingValueText))]
     private bool _groupingEnabled;
 
     public bool IsSortManufacturer => SortMode == SortMode.Manufacture;
@@ -116,8 +128,78 @@ internal sealed partial class FilterBarViewModel : ObservableObject
     [RelayCommand]
     private void SetPaintFilterMode(PaintFilterMode mode) => PaintFilterMode = mode;
 
+    public bool IsGroupingNone => !GroupingEnabled;
+    public bool IsGroupingByKey => GroupingEnabled;
+
     [RelayCommand]
-    private void ToggleGrouping() => GroupingEnabled = !GroupingEnabled;
+    private void DisableGrouping() => GroupingEnabled = false;
+
+    [RelayCommand]
+    private void EnableGrouping() => GroupingEnabled = true;
+
+    public string SortValueText => SortMode switch
+    {
+        SortMode.Author => Strings.SortOptionAuthor,
+        SortMode.DownloadTime => Strings.SortOptionDownloadDate,
+        _ => Strings.SortOptionManufacturer
+    };
+
+    public string GroupingByKeyText => SortMode switch
+    {
+        SortMode.Author => Strings.GroupingOptionByAuthor,
+        SortMode.DownloadTime => Strings.GroupingOptionByMonth,
+        _ => Strings.GroupingOptionByManufacturer
+    };
+
+    public string GroupingValueText => GroupingEnabled ? GroupingByKeyText : Strings.GroupingOptionNone;
+
+    public string FavoriteValueText => FavoriteMode switch
+    {
+        FavoriteMode.FavoritesFirst => Strings.FilterValueFirst,
+        FavoriteMode.OnlyFavorites => Strings.FilterValueOnly,
+        FavoriteMode.FavoritesSeparately => Strings.FilterValueSeparately,
+        _ => Strings.FilterValueAll
+    };
+
+    public string MineValueText => MineMode switch
+    {
+        MineMode.MineFirst => Strings.FilterValueFirst,
+        MineMode.OnlyMine => Strings.FilterValueOnly,
+        MineMode.MineSeparately => Strings.FilterValueSeparately,
+        _ => Strings.FilterValueAll
+    };
+
+    public string DuplicatesValueText => DuplicatesFilterMode switch
+    {
+        DuplicatesFilterMode.DuplicatesAndPossible => Strings.FilterValueWithPossible,
+        DuplicatesFilterMode.DuplicatesOnly => Strings.FilterValueOnly,
+        _ => Strings.FilterValueAll
+    };
+
+    public string GeneratedValueText => GeneratedFilterMode switch
+    {
+        GeneratedFilterMode.GeneratedOnly => Strings.FilterValueOnly,
+        _ => Strings.FilterValueAll
+    };
+
+    public string PaintValueText => PaintFilterMode switch
+    {
+        PaintFilterMode.HidePaint => Strings.FilterValueHide,
+        PaintFilterMode.PaintOnly => Strings.FilterValueOnly,
+        _ => Strings.FilterValueAll
+    };
+
+    public void RefreshLocalizedText()
+    {
+        OnPropertyChanged(nameof(SortValueText));
+        OnPropertyChanged(nameof(GroupingByKeyText));
+        OnPropertyChanged(nameof(GroupingValueText));
+        OnPropertyChanged(nameof(FavoriteValueText));
+        OnPropertyChanged(nameof(MineValueText));
+        OnPropertyChanged(nameof(DuplicatesValueText));
+        OnPropertyChanged(nameof(GeneratedValueText));
+        OnPropertyChanged(nameof(PaintValueText));
+    }
 
     partial void OnSortModeChanged(SortMode value) => Persist(s => s.SortMode = value);
     partial void OnFavoriteModeChanged(FavoriteMode value) => Persist(s => s.FavoriteMode = value);

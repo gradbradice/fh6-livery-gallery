@@ -11,6 +11,7 @@ internal sealed record LiveryData
     public bool IsPossiblyGenerated { get; init; }
     public bool HasNoLayers { get; init; }
     public bool HasParseError { get; init; }
+    public IReadOnlyList<LiveryParseIssue>? ParseIssues { get; init; }
     public ulong LiveryId { get; init; }
     [JsonIgnore]
     public IReadOnlyDictionary<string, ulong>? RelatedLiveryIds { get; init; }

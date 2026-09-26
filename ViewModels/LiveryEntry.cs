@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.ViewModels;
 
-internal class LiveryEntry : INotifyPropertyChanged
+internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost
 {
     public required LiveryData Data { get; init; }
 
@@ -25,6 +25,12 @@ internal class LiveryEntry : INotifyPropertyChanged
     public bool IsPossiblyGenerated => Data.IsPossiblyGenerated;
     public bool HasNoLayers => Data.HasNoLayers;
     public bool HasParseError => Data.HasParseError;
+    public IReadOnlyList<LiveryParseIssue>? ParseIssues => Data.ParseIssues;
+    public bool HasParseWarning => !HasParseError && Data.ParseIssues is { Count: > 0 };
+    private string? _parseIssueTooltip;
+    public string? ParseIssueTooltip => !HasParseError && Data.ParseIssues is not { Count: > 0 }
+        ? null
+        : _parseIssueTooltip ??= LiveryParseIssueFormatter.BuildTooltip(Data.ParseIssues, HasParseError);
     public int CarId => Data.CarId;
     public string CarManufacturerRaw => Data.CarManufacturerRaw;
     public string CarModelNameRaw => Data.CarModelNameRaw;
@@ -38,7 +44,17 @@ internal class LiveryEntry : INotifyPropertyChanged
     public bool HasThumbnail => Data.HasThumbnail;
 
     public bool IsMine { get; set; }
-    public bool ShowMineBadge { get; set; }
+    private bool _showMineBadge;
+    public bool ShowMineBadge
+    {
+        get => _showMineBadge;
+        set
+        {
+            if (_showMineBadge == value) return;
+            _showMineBadge = value;
+            OnPropertyChanged();
+        }
+    }
 
     public string CarManufacturer => CarKnown
         ? CarManufacturerRaw
@@ -225,6 +241,8 @@ internal class LiveryEntry : INotifyPropertyChanged
         OnPropertyChanged(nameof(CarManufacturer));
         OnPropertyChanged(nameof(CarModelName));
         OnPropertyChanged(nameof(DateDisplay));
+        _parseIssueTooltip = null;
+        OnPropertyChanged(nameof(ParseIssueTooltip));
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

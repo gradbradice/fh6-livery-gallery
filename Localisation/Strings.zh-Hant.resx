@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>依車輛(廠牌、車型、年份)、塗裝名稱或作者搜尋…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>排序: 廠牌</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>排序: 作者</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>排序: 下載日期</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>日期不明</value>
   </data>
@@ -462,8 +453,68 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>顯示(收藏、重複)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>篩選</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>排序</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>分組</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>最愛</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>我的塗裝</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>重複</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>產生</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>烤漆</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>廠牌</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>下載日期</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>無</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>依廠牌</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>依作者</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>依月份</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>置頂</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>僅此類</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>獨立</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>隱藏</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>含可能重複</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>所有塗裝</value>
@@ -753,5 +804,43 @@
   </data>
   <data name="BackupNoneAddedHint" xml:space="preserve">
     <value>自此備份後沒有新增任何內容</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>以下塗裝未還原，因為完全相同的塗裝（相同資料夾）已存在於遊戲中：
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>無法還原以下塗裝。請查看記錄以取得詳細資訊：
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…以及另外 {0} 個</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>發現重複項目</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>圖庫中已有這些塗裝的重複項目（同一車輛，塗裝資料完全相同）：
+{0}
+
+仍要還原嗎？</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — 重複：{1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>其他選取的塗裝無論如何都會還原。</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>仍然還原</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>略過</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>部分讀取</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>已讀取塗裝，但其檔案的一部分無法解析。已顯示主要資料；部分檢查（產生、重複）可能無法使用。</value>
   </data>
 </root>

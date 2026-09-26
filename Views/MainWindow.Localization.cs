@@ -28,10 +28,18 @@ internal partial class MainWindow
 
         DisplayFilterButton.SetValue(ToolTip.TipProperty, Strings.DisplayFilterTooltip);
         AuthorsButton.SetValue(ToolTip.TipProperty, Strings.AuthorsButtonTooltip);
-        GroupingToggleItem.Header = Strings.GroupingToggleLabel;
-        SortManufacturerItem.Header = Strings.SortManufacturer;
-        SortAuthorItem.Header = Strings.SortAuthor;
-        SortDownloadTimeItem.Header = Strings.SortDownloadDate;
+        FilterMenuTitleText.Text = Strings.FilterMenuTitle;
+        SortLabelText.Text = Strings.FilterSortLabel;
+        GroupingLabelText.Text = Strings.FilterGroupingLabel;
+        FavLabelText.Text = Strings.FilterFavoritesLabel;
+        MineLabelText.Text = Strings.FilterMineLabel;
+        DupLabelText.Text = Strings.FilterDuplicatesLabel;
+        GenLabelText.Text = Strings.FilterGeneratedLabel;
+        PaintLabelText.Text = Strings.FilterPaintLabel;
+        SortManufacturerItem.Header = Strings.SortOptionManufacturer;
+        SortAuthorItem.Header = Strings.SortOptionAuthor;
+        SortDownloadTimeItem.Header = Strings.SortOptionDownloadDate;
+        GroupingNoneItem.Header = Strings.GroupingOptionNone;
         FavNoneItem.Header = Strings.NormalOrderToggle;
         FavFirstItemText.Text = Strings.FavoritesFirstToggle;
         FavOnlyItemText.Text = Strings.OnlyFavoritesToggle;
@@ -58,25 +66,27 @@ internal partial class MainWindow
         ApplyLocalizedTexts();
         _mainViewModel.Status.RenderScanStatus(_mainViewModel.LastScanResult);
         _mainViewModel.Gallery.RefreshCountsOnly();
+        _mainViewModel.FilterBar.RefreshLocalizedText();
         foreach (var entry in _mainViewModel.Gallery.AllEntries)
             entry.RefreshLocalizedText();
 
-        if (GroupsHost.ItemsSource is IEnumerable<LiveryGroup> currentGroups)
+        foreach (var group in _mainViewModel.Gallery.DisplayedGroups)
         {
-            foreach (var group in currentGroups)
+            string oldKey = group.Key;
+            group.Key = group.SpecialKind switch
             {
-                group.Key = group.SpecialKind switch
-                {
-                    LiveryGroupSpecialKind.DownloadMonth when group.SpecialMonth is { } month =>
-                        month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture),
-                    LiveryGroupSpecialKind.UnknownDownloadDate => Strings.UnknownDownloadDate,
-                    LiveryGroupSpecialKind.UnknownManufacturer => Strings.UnknownManufacturer,
-                    LiveryGroupSpecialKind.AllLiveries => Strings.AllLiveriesGroupName,
-                    _ when group.IsFavoritesGroup => Strings.SeparateFavoritesGroupName,
-                    _ when group.IsMineGroup => Strings.SeparateMineGroupName,
-                    _ => group.Key
-                };
-            }
+                LiveryGroupSpecialKind.DownloadMonth when group.SpecialMonth is { } month =>
+                    month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture),
+                LiveryGroupSpecialKind.UnknownDownloadDate => Strings.UnknownDownloadDate,
+                LiveryGroupSpecialKind.UnknownManufacturer => Strings.UnknownManufacturer,
+                LiveryGroupSpecialKind.AllLiveries => Strings.AllLiveriesGroupName,
+                _ when group.IsFavoritesGroup => Strings.SeparateFavoritesGroupName,
+                _ when group.IsMineGroup => Strings.SeparateMineGroupName,
+                _ => group.Key
+            };
+
+            if (oldKey != group.Key && _collapsedGroupKeys.Remove(oldKey))
+                _collapsedGroupKeys.Add(group.Key);
         }
 
         _mainViewModel.Update.RefreshLocalizedBannerText();

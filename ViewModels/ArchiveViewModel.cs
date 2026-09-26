@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Localisation;
+using LiveryGallery.Models;
 using LiveryGallery.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,20 +13,23 @@ internal sealed partial class ArchiveViewModel : ObservableObject
     private readonly LiveryArchiveService _archiveService;
     private readonly SavePathService _savePathService;
     private readonly Func<Task> _onRestored;
-
+    private readonly Func<IReadOnlyList<LiveryData>> _getCurrentEntries;
     public ObservableCollection<ArchivedLiveryRowViewModel> Rows { get; } = [];
-
     public bool ShowEmptyState => Rows.Count == 0;
     public bool HasSelection => Rows.Any(r => r.IsSelected);
     public int SelectedCount => Rows.Count(r => r.IsSelected);
     public string SelectedCountText => string.Format(Strings.ArchiveSelectedCountFormat, SelectedCount);
     public event Action<string>? ErrorMessageRequested;
+    public Func<string, Task<bool>>? ConfirmRestoreDuplicatesAsync { get; set; }
     public event Action<List<ArchivedLiveryRowViewModel>>? DeleteRequested;
 
-    public ArchiveViewModel(LiveryArchiveService archiveService, SavePathService savePathService, Func<Task> onRestored)
+    public ArchiveViewModel(
+        LiveryArchiveService archiveService, SavePathService savePathService,
+        Func<IReadOnlyList<LiveryData>> getCurrentEntries, Func<Task> onRestored)
     {
         _archiveService = archiveService;
         _savePathService = savePathService;
+        _getCurrentEntries = getCurrentEntries;
         _onRestored = onRestored;
         Reload();
     }
@@ -83,14 +87,42 @@ internal sealed partial class ArchiveViewModel : ObservableObject
             return;
         }
 
-        var folderNames = selected.Select(r => r.FolderName).ToList();
         try
         {
-            var restored = await _archiveService.RestoreAsync(folderNames, savePath);
-            if (restored.Count == 0) return;
+            var conflicts = LiveryRestoreConflicts.Find(
+                selected.Select(r => r.Entry.Data), _getCurrentEntries(), savePath);
 
-            Reload();
-            await _onRestored();
+            var duplicateRows = selected.Where(r => conflicts.Duplicates.ContainsKey(r.FolderName)).ToList();
+            bool restoreDuplicates = false;
+            if (duplicateRows.Count > 0 && ConfirmRestoreDuplicatesAsync is { } confirm)
+            {
+                bool hasOtherLiveries = selected.Any(r =>
+                    !conflicts.SameFolder.Contains(r.FolderName) && !conflicts.Duplicates.ContainsKey(r.FolderName));
+                string prompt = LiveryRestoreConflicts.BuildDuplicatePrompt(
+                    [.. duplicateRows.Select(r => (r.Entry.Data, conflicts.Duplicates[r.FolderName]))], hasOtherLiveries);
+                restoreDuplicates = await confirm(prompt);
+            }
+
+            var toRestore = selected
+                .Where(r => !conflicts.SameFolder.Contains(r.FolderName)
+                    && (restoreDuplicates || !conflicts.Duplicates.ContainsKey(r.FolderName)))
+                .ToList();
+
+            List<string> restored = toRestore.Count > 0
+                ? await _archiveService.RestoreAsync(toRestore.Select(r => r.FolderName), savePath)
+                : [];
+            var restoredSet = restored.ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            if (restoredSet.Count > 0)
+            {
+                Reload();
+                await _onRestored();
+            }
+
+            string? report = LiveryRestoreConflicts.BuildReport(
+                [.. selected.Where(r => conflicts.SameFolder.Contains(r.FolderName)).Select(r => r.Entry.Data)],
+                [.. toRestore.Where(r => !restoredSet.Contains(r.FolderName)).Select(r => r.Entry.Data)]);
+            if (report is not null) ErrorMessageRequested?.Invoke(report);
         }
         catch (Exception ex)
         {

@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Search by car (manufacturer, model, year), livery name or author…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>Sort: manufacturer</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>Sort: author</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>Sort: download date</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>Unknown date</value>
   </data>
@@ -462,8 +453,68 @@ Choose it manually?
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Display (favorites, duplicates)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>Grouping</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>Favorites</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>My liveries</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>Duplicates</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>Generated</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>Paint</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>Manufacturer</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>Download date</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>By manufacturer</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>By author</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>By month</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>First</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>Only</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>Separately</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>With possible</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>All liveries</value>
@@ -754,7 +805,42 @@ Create one to merge one author's nicknames under a single name.</value>
   <data name="BackupNoneAddedHint" xml:space="preserve">
     <value>Nothing has been added since this backup</value>
   </data>
-  <data name="SelectToggleTooltip" xml:space="preserve">
-    <value>Select</value>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>These liveries weren't restored because exactly the same liveries (same folders) are already in the game:
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>These liveries couldn't be restored. Check the logs for details:
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…and {0} more</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>Duplicates found</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>The gallery already has duplicates of these liveries (same car, identical livery data):
+{0}
+
+Restore them anyway?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — duplicate: {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>The other selected liveries will be restored either way.</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>Restore anyway</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>Partially read</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>The livery was read, but part of its file couldn't be parsed. The main data is shown; some checks (generation, duplicates) may be unavailable.</value>
   </data>
 </root>

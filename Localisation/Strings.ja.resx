@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>車（メーカー・車種・年式）、リバリー名または作者で検索…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>並び替え: メーカー</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>並び替え: 作者</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>並び替え: ダウンロード日</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>日付不明</value>
   </data>
@@ -462,8 +453,68 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>表示(お気に入り、重複)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>フィルター</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>並び替え</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>グループ化</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>お気に入り</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>自分のリバリー</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>重複</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>生成</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>塗装</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>メーカー</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>ダウンロード日</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>メーカー別</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>作者別</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>月別</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>先頭</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>該当のみ</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>別枠</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>非表示</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>可能性含む</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>すべてのリバリー</value>
@@ -753,5 +804,43 @@
   </data>
   <data name="BackupNoneAddedHint" xml:space="preserve">
     <value>このバックアップ以降、追加されたものはありません</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>まったく同じリバリー(同じフォルダー)が既にゲーム内にあるため、次のリバリーは復元されませんでした:
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>次のリバリーを復元できませんでした。詳細はログを確認してください:
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…他 {0} 件</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>重複が見つかりました</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>ギャラリーには既にこれらのリバリーの重複があります(同じ車、同一のリバリーデータ):
+{0}
+
+それでも復元しますか?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — 重複: {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>選択した他のリバリーはいずれにしても復元されます。</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>それでも復元</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>スキップ</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>一部のみ読み込み</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>リバリーは読み込めましたが、ファイルの一部を解析できませんでした。主要なデータは表示されますが、一部のチェック(生成・重複)が利用できない場合があります。</value>
   </data>
 </root>

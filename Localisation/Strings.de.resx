@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Suche nach Fahrzeug (Hersteller, Modell, Baujahr), Livree-Name oder Autor…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>Sortierung: Hersteller</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>Sortierung: Autor</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>Sortierung: Downloaddatum</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>Datum unbekannt</value>
   </data>
@@ -462,8 +453,68 @@ Manuell auswählen?
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Anzeige (Favoriten, Duplikate)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>Sortierung</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>Gruppierung</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>Favoriten</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>Meine Livrees</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>Duplikate</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>Generiert</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>Farbe</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>Hersteller</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>Downloaddatum</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>Nach Hersteller</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>Nach Autor</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>Nach Monat</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>Zuerst</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>Nur diese</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>Separat</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>Ausblenden</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>Inkl. mögliche</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Alle Livrees</value>
@@ -753,5 +804,43 @@ Erstellen Sie eine, um die Spitznamen eines Autors unter einem Namen zusammenzuf
   </data>
   <data name="BackupNoneAddedHint" xml:space="preserve">
     <value>Seit diesem Backup wurde nichts hinzugefügt</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>Diese Livrees wurden nicht wiederhergestellt, da genau dieselben Livrees (gleiche Ordner) bereits im Spiel sind:
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>Diese Livrees konnten nicht wiederhergestellt werden. Weitere Informationen finden Sie in den Protokollen:
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…und {0} weitere</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>Duplikate gefunden</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>Die Galerie enthält bereits Duplikate dieser Livrees (gleiches Auto, identische Livree-Daten):
+{0}
+
+Trotzdem wiederherstellen?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — Duplikat: {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>Die übrigen ausgewählten Livrees werden in jedem Fall wiederhergestellt.</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>Trotzdem wiederherstellen</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>Überspringen</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>Teilweise gelesen</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>Die Livree wurde gelesen, aber ein Teil ihrer Datei konnte nicht analysiert werden. Die Hauptdaten werden angezeigt; einige Prüfungen (Generierung, Duplikate) sind eventuell nicht verfügbar.</value>
   </data>
 </root>

@@ -25,10 +25,23 @@ internal static class ThumbnailService
 
     public static bool GenerateAndSave(string sourceWebpPath, string destPngPath, int maxWidth = 360)
     {
-        _generationLimiter.Wait();
         try
         {
             using var srcStream = File.OpenRead(sourceWebpPath);
+            return GenerateAndSave(srcStream, sourceWebpPath, destPngPath, maxWidth);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogErrorThrottled(sourceWebpPath, $"Failed to generate thumbnail from '{sourceWebpPath}'", ex);
+            return false;
+        }
+    }
+
+    public static bool GenerateAndSave(Stream srcStream, string sourceDescription, string destPngPath, int maxWidth = 360)
+    {
+        _generationLimiter.Wait();
+        try
+        {
             using var bitmap = Bitmap.DecodeToWidth(
                 srcStream,
                 maxWidth,
@@ -41,7 +54,7 @@ internal static class ThumbnailService
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled(sourceWebpPath, $"Failed to generate thumbnail from '{sourceWebpPath}'", ex);
+            AppLogger.LogErrorThrottled(sourceDescription, $"Failed to generate thumbnail from '{sourceDescription}'", ex);
             return false;
         }
         finally

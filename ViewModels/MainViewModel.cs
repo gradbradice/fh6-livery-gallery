@@ -70,6 +70,7 @@ internal sealed partial class MainViewModel : ObservableObject
         Status = new GalleryStatusViewModel();
         Gallery = new GalleryViewModel(favoriteService);
         TagsBar = new TagsBarViewModel(SelectedTags, SetTagSelected);
+        Gallery.SelectedTagsChanged += TagsBar.SyncSelection;
         Update = new UpdateViewModel(updateService);
         Gallery.CountsUpdated += snapshot =>
             Status.UpdateCountsAndEmptyState(snapshot.FilteredEntries, snapshot.TotalCount, snapshot.SearchText);
@@ -141,7 +142,7 @@ internal sealed partial class MainViewModel : ObservableObject
 
         var progress = isUserInitiated ? new Progress<string>(msg => Status.SetLoading(true, msg)) : null;
         bool started = scanController.TryStartScan(
-            saveDataPath, savePathService.CurrentUserId, progress, out var resultTask);
+            saveDataPath, savePathService.CurrentUserId, needEntries: !_hasAppliedEntriesOnce, progress, out var resultTask);
 
         if (!started)
         {

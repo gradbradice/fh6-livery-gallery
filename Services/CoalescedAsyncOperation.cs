@@ -12,8 +12,15 @@ internal sealed class CoalescedAsyncOperation<T>
         lock (_gate)
         {
             startedNew = _inFlight is null;
-            _inFlight ??= RunCoreAsync(operation, ct);
-            inFlight = _inFlight;
+            if (startedNew)
+            {
+                inFlight = RunCoreAsync(operation, ct);
+                if (!inFlight.IsCompleted) _inFlight = inFlight;
+            }
+            else
+            {
+                inFlight = _inFlight!;
+            }
         }
 
         if (startedNew || !ct.CanBeCanceled) return inFlight;

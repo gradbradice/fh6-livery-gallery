@@ -37,4 +37,10 @@ internal sealed partial class TagsBarViewModel : ObservableObject
         HasTags = AllTags.Count > 0;
         return true;
     }
+
+    public void SyncSelection()
+    {
+        foreach (var chip in AllTags)
+            chip.IsSelected = _selectedTags.Contains(chip.Tag);
+    }
 }

@@ -31,6 +31,7 @@ internal sealed class LiveryEntryFactory(
             IsPossiblyGenerated = c.IsPossiblyGenerated,
             HasNoLayers = c.HasNoLayers,
             HasParseError = c.HasParseError,
+            ParseIssues = c.ParseIssues,
             CarId = c.CarId,
             CarManufacturerRaw = car?.Manufacturer ?? string.Empty,
             CarModelNameRaw = car?.Name ?? string.Empty,

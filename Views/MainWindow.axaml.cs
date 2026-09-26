@@ -25,7 +25,7 @@ internal partial class MainWindow : Window
     private readonly AppSettingsData _settings;
     private readonly DispatcherTimer _autoScanTimer = new() { Interval = TimeSpan.FromSeconds(30) };
     private bool _isLoaded;
-    private readonly DispatcherTimer _searchDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(500) };
+    private readonly DispatcherTimer _searchDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(300) };
     private readonly DispatcherTimer _resizeDebounceTimer = new() { Interval = TimeSpan.FromMilliseconds(200) };
 
     public MainWindow(
@@ -62,12 +62,8 @@ internal partial class MainWindow : Window
         _mainViewModel.ErrorMessageRequested += async message =>
             await InfoDialog.ShowAsync(this, Strings.AppTitle, message);
 
-        GroupsHost.ItemsSource = _mainViewModel.Gallery.DisplayedGroups;
-        _mainViewModel.Gallery.GroupsReplaced += () =>
-        {
-            GroupsHost.InvalidateMeasure();
-            GalleryScroll.InvalidateMeasure();
-        };
+        GalleryPanel.AnchorKeySelector = GetGalleryAnchorKeys;
+        _mainViewModel.Gallery.GroupsReplaced += () => RebuildGalleryItems(preservePosition: true);
 
         ApplyLocalizedTexts();
 
@@ -127,7 +123,43 @@ internal partial class MainWindow : Window
         Close();
     }
 
-    private void UpdateGroupWidthsOnly() => _mainViewModel.Gallery.GroupWidth = ComputeGroupWidth();
+    private void UpdateGroupWidthsOnly()
+    {
+        double width = ComputeGroupWidth();
+        if (_mainViewModel.Gallery.GroupWidth == width) return;
+        _mainViewModel.Gallery.GroupWidth = width;
+        RebuildGalleryItems(preservePosition: true);
+    }
+
+    private readonly HashSet<string> _collapsedGroupKeys = new(StringComparer.Ordinal);
+
+    private void RebuildGalleryItems(bool preservePosition)
+    {
+        var items = new List<object>();
+        foreach (var group in _mainViewModel.Gallery.DisplayedGroups)
+        {
+            group.IsExpanded = !_collapsedGroupKeys.Contains(group.Key);
+            items.Add(group);
+            if (group.IsExpanded) items.AddRange(group.Rows);
+        }
+        GalleryPanel.SetItems(items, preservePosition);
+    }
+
+    private static IEnumerable<string> GetGalleryAnchorKeys(object item) => item switch
+    {
+        GalleryRow row => row.Items.Select(entry => entry.FolderName),
+        LiveryGroup group => ["group:" + group.Key],
+        _ => []
+    };
+
+    private void GroupHeader_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Control { DataContext: LiveryGroup group }) return;
+
+        if (group.IsExpanded) _collapsedGroupKeys.Remove(group.Key);
+        else _collapsedGroupKeys.Add(group.Key);
+        RebuildGalleryItems(preservePosition: true);
+    }
 
     private async void MainWindow_Loaded(object? sender, RoutedEventArgs e)
     {
@@ -305,6 +337,7 @@ internal partial class MainWindow : Window
     {
         SettingsButton.Flyout?.Hide();
         var dialog = new ArchiveDialog(_archiveService, _savePathService,
+            () => [.. _mainViewModel.Gallery.AllEntries.Select(entry => entry.Data)],
             () => _mainViewModel.RunScanAsyncTracked(isUserInitiated: true));
         await dialog.ShowDialog(this);
     }

@@ -8,6 +8,7 @@ internal class TagService
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "tags.json");
     private Dictionary<string, List<string>> _data = [];
     private readonly Lock _lock = new();
+    private readonly Lock _saveLock = new();
 
     public TagService() => Load();
 
@@ -32,10 +33,13 @@ internal class TagService
     {
         try
         {
-            Dictionary<string, List<string>> snapshot;
-            lock (_lock) snapshot = _data.ToDictionary(x => x.Key, x => new List<string>(x.Value));
-            string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
-            PersistenceManager.Schedule(_path, json);
+            lock (_saveLock)
+            {
+                Dictionary<string, List<string>> snapshot;
+                lock (_lock) snapshot = _data.ToDictionary(x => x.Key, x => new List<string>(x.Value));
+                string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
+                PersistenceManager.Schedule(_path, json);
+            }
         }
         catch (Exception ex)
         {

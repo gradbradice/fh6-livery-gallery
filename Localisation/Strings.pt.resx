@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Pesquisar por veículo (fabricante, modelo, ano), nome da pintura ou autor…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>Ordenar por: fabricante</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>Ordenar por: autor</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>Ordenar por: data de download</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>Data desconhecida</value>
   </data>
@@ -462,8 +453,68 @@ Escolher manualmente?
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Exibição (favoritos, duplicatas)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>Filtros</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>Ordenar por</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>Agrupamento</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>Favoritos</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>Minhas pinturas</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>Duplicatas</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>Gerados</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>Pintura</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>Fabricante</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>Data de download</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>Por fabricante</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>Por autor</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>Por mês</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>Primeiro</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>Apenas</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>Separado</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>Ocultar</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>Com possíveis</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Todas as pinturas</value>
@@ -753,5 +804,43 @@ Crie um para unir os apelidos de um autor sob um único nome.</value>
   </data>
   <data name="BackupNoneAddedHint" xml:space="preserve">
     <value>Nada foi adicionado desde este backup</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>Estas pinturas não foram restauradas porque exatamente as mesmas pinturas (mesmas pastas) já estão no jogo:
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>Não foi possível restaurar estas pinturas. Consulte os logs para obter mais detalhes:
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…e mais {0}</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>Duplicatas encontradas</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>A galeria já tem duplicatas destas pinturas (mesmo carro, dados de pintura idênticos):
+{0}
+
+Restaurá-las mesmo assim?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — duplicata: {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>As demais pinturas selecionadas serão restauradas de qualquer forma.</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>Restaurar mesmo assim</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>Pular</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>Lida parcialmente</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>A pintura foi lida, mas parte do arquivo não pôde ser analisada. Os dados principais são exibidos; algumas verificações (geração, duplicatas) podem não estar disponíveis.</value>
   </data>
 </root>

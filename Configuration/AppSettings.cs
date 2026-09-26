@@ -12,6 +12,7 @@ internal static class AppSettings
     public static string LogsPath { get; } = Path.Combine(BaseCachePath, "logs");
     public static string ArchivePath { get; } = Path.Combine(BaseCachePath, ".archive");
     public static string BackupsPath { get; } = Path.Combine(BaseCachePath, ".backups");
+    public static string BackupThumbsPath { get; } = Path.Combine(BaseCachePath, ".backup-thumbs");
 
     public static void CheckPaths()
     {
@@ -20,5 +21,6 @@ internal static class AppSettings
         if (!Directory.Exists(LogsPath)) Directory.CreateDirectory(LogsPath);
         if (!Directory.Exists(ArchivePath)) Directory.CreateDirectory(ArchivePath);
         if (!Directory.Exists(BackupsPath)) Directory.CreateDirectory(BackupsPath);
+        if (!Directory.Exists(BackupThumbsPath)) Directory.CreateDirectory(BackupThumbsPath);
     }
 }

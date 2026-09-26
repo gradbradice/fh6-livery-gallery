@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using ForzaData;
+using Forza.Data;
 using LiveryGallery.Configuration;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
@@ -42,7 +42,7 @@ internal partial class AboutDialog : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to read ForzaData package version", ex);
+            AppLogger.LogError("Failed to read Forza.Data package version", ex);
             return "?";
         }
     }

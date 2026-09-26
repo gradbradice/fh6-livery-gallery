@@ -14,7 +14,10 @@ internal sealed partial class BackupsViewModel : ObservableObject
     private readonly Func<IReadOnlyList<LiveryData>> _getCurrentEntries;
 
     public ObservableCollection<BackupRowViewModel> Backups { get; } = [];
-    public bool ShowEmptyState => Backups.Count == 0;
+    public bool ShowEmptyState => !_isLoading && Backups.Count == 0;
+
+    private bool _isLoading;
+    private int _reloadVersion;
 
     [ObservableProperty]
     private bool _isCreatingBackup;
@@ -29,15 +32,37 @@ internal sealed partial class BackupsViewModel : ObservableObject
         _backupService = backupService;
         _savePathService = savePathService;
         _getCurrentEntries = getCurrentEntries;
-        Reload();
+        _ = ReloadAsync();
     }
 
-    private void Reload()
+    private async Task ReloadAsync()
     {
+        int version = ++_reloadVersion;
+        _isLoading = true;
+        OnPropertyChanged(nameof(ShowEmptyState));
+
         var currentEntries = _getCurrentEntries();
+        List<BackupRowViewModel> rows;
+        try
+        {
+            rows = await Task.Run(() =>
+            {
+                var backups = _backupService.GetAllBackups();
+                LiveryBackupService.PruneBackupPreviews(backups);
+                return backups.Select(summary => new BackupRowViewModel(summary, currentEntries)).ToList();
+            });
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to list backups", ex);
+            rows = [];
+        }
+
+        if (version != _reloadVersion) return; // a newer reload is in progress
+
         Backups.Clear();
-        foreach (var summary in _backupService.GetAllBackups())
-            Backups.Add(new BackupRowViewModel(summary, currentEntries));
+        foreach (var row in rows) Backups.Add(row);
+        _isLoading = false;
         OnPropertyChanged(nameof(ShowEmptyState));
     }
 
@@ -62,7 +87,7 @@ internal sealed partial class BackupsViewModel : ObservableObject
         try
         {
             await _backupService.CreateBackupAsync(entries, savePath);
-            Reload();
+            await ReloadAsync();
         }
         catch (Exception ex)
         {
@@ -83,6 +108,6 @@ internal sealed partial class BackupsViewModel : ObservableObject
 
     public void DeleteConfirmed(BackupRowViewModel row)
     {
-        if (LiveryBackupService.TryDeleteBackup(row.Path)) Reload();
+        if (LiveryBackupService.TryDeleteBackup(row.Path)) _ = ReloadAsync();
     }
 }

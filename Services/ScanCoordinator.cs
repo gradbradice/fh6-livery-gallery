@@ -6,8 +6,12 @@ internal sealed class ScanCoordinator
     private CancellationTokenSource? _cts;
     private Task? _currentTask;
     private Func<CancellationToken, Task>? _queuedOperation;
+    private bool _workerActive;
 
-    public bool IsRunning => _currentTask is { IsCompleted: false };
+    public bool IsRunning
+    {
+        get { lock (_lock) return _workerActive; }
+    }
     
     public Task Current => _currentTask ?? Task.CompletedTask;
 
@@ -15,7 +19,8 @@ internal sealed class ScanCoordinator
     {
         lock (_lock)
         {
-            if (IsRunning) return false;
+            if (_workerActive) return false;
+            _workerActive = true;
             _currentTask = RunWorkerAsync(operation);
         }
         return true;
@@ -25,8 +30,9 @@ internal sealed class ScanCoordinator
     {
         lock (_lock)
         {
-            if (!IsRunning)
+            if (!_workerActive)
             {
+                _workerActive = true;
                 _currentTask = RunWorkerAsync(operation);
                 return _currentTask;
             }
@@ -51,6 +57,10 @@ internal sealed class ScanCoordinator
             {
 
             }
+            catch (Exception ex)
+            {
+                AppLogger.LogError("Unhandled exception in a scan/regenerate operation", ex);
+            }
             finally
             {
                 lock (_lock)
@@ -65,7 +75,11 @@ internal sealed class ScanCoordinator
             {
                 next = _queuedOperation;
                 _queuedOperation = null;
-                if (next is null) return;
+                if (next is null)
+                {
+                    _workerActive = false;
+                    return;
+                }
             }
             operation = next;
         }

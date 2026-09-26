@@ -66,6 +66,7 @@ internal static class AppLocalisationService
         app.Resources["Loc_PaintBadgeTooltip"] = Strings.PaintBadgeTooltip;
         app.Resources["Loc_ParseErrorBadgeLabel"] = Strings.ParseErrorBadgeLabel;
         app.Resources["Loc_ParseErrorBadgeTooltip"] = Strings.ParseErrorBadgeTooltip;
+        app.Resources["Loc_ParsePartialBadgeLabel"] = Strings.ParsePartialBadgeLabel;
         app.Resources["Loc_AuthorLabel"] = Strings.AuthorLabel;
         app.Resources["Loc_DateLabel"] = Strings.DateLabel;
         app.Resources["Loc_EditTagsTooltip"] = Strings.EditTagsTooltip;

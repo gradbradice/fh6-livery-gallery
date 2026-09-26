@@ -15,14 +15,16 @@ internal partial class BackupDetailDialog : Window
 
     public BackupDetailDialog(
         LiveryBackupService backupService, SavePathService savePathService, BackupRowViewModel backup,
-        IReadOnlyList<LiveryData> currentEntries, Func<Task> onRestored)
+        Func<IReadOnlyList<LiveryData>> getCurrentEntries, Func<Task> onRestored)
     {
         InitializeComponent();
-        _viewModel = new BackupDetailViewModel(backupService, savePathService, backup, currentEntries, onRestored);
+        _viewModel = new BackupDetailViewModel(backupService, savePathService, backup, getCurrentEntries, onRestored);
         DataContext = _viewModel;
 
         _viewModel.ErrorMessageRequested += async message =>
             await InfoDialog.ShowAsync(this, Strings.BackupsDialogTitle, message);
+        _viewModel.ConfirmRestoreDuplicatesAsync = message => ConfirmDialog.AskAsync(
+            this, Strings.RestoreDuplicateTitle, message, Strings.RestoreAnywayButton, Strings.RestoreSkipDuplicatesButton);
 
         string title = string.Format(Strings.BackupDetailTitleFormat, backup.DateText);
         Title = title;
@@ -34,25 +36,38 @@ internal partial class BackupDetailDialog : Window
 
     private void CloseButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
 
-    private async void RemovedRow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    protected override void OnClosed(EventArgs e)
+    {
+        _viewModel.CancelBackgroundWork();
+        base.OnClosed(e);
+    }
+
+    private async void LiveryRow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         try
         {
-            if (sender is not Control control || control.DataContext is not RemovedLiveryRowViewModel row) return;
-
-            var (wasSuperseded, bitmap) = await ThumbnailCacheService.AcquireForAsync(control, row.ThumbnailPath);
-            if (!wasSuperseded && ReferenceEquals(control.DataContext, row)) row.Thumbnail = bitmap;
+            if (sender is Control control) await ThumbnailLifecycleController.OnAttachedAsync(control);
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Unhandled exception in RemovedRow_AttachedToVisualTree", ex);
+            AppLogger.LogError("Unhandled exception in LiveryRow_AttachedToVisualTree", ex);
         }
     }
 
-    private void RemovedRow_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    private void LiveryRow_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is not Control control) return;
-        if (control.DataContext is RemovedLiveryRowViewModel row) row.Thumbnail = null;
-        ThumbnailCacheService.ReleaseFor(control);
+        if (sender is Control control) ThumbnailLifecycleController.OnDetached(control);
+    }
+
+    private async void LiveryRow_DataContextChanged(object? sender, EventArgs e)
+    {
+        try
+        {
+            if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Unhandled exception in LiveryRow_DataContextChanged", ex);
+        }
     }
 }

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
+using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.ViewModels;
 
@@ -12,15 +13,19 @@ internal partial class ArchiveDialog : Window
 {
     private readonly ArchiveViewModel _viewModel;
 
-    public ArchiveDialog(LiveryArchiveService archiveService, SavePathService savePathService, Func<Task> onRestored)
+    public ArchiveDialog(
+        LiveryArchiveService archiveService, SavePathService savePathService,
+        Func<IReadOnlyList<LiveryData>> getCurrentEntries, Func<Task> onRestored)
     {
         InitializeComponent();
-        _viewModel = new ArchiveViewModel(archiveService, savePathService, onRestored);
+        _viewModel = new ArchiveViewModel(archiveService, savePathService, getCurrentEntries, onRestored);
         DataContext = _viewModel;
 
         _viewModel.ErrorMessageRequested += async message =>
             await InfoDialog.ShowAsync(this, Strings.ArchiveDialogTitle, message);
         _viewModel.DeleteRequested += async rows => await ConfirmDeleteAsync(rows);
+        _viewModel.ConfirmRestoreDuplicatesAsync = message => ConfirmDialog.AskAsync(
+            this, Strings.RestoreDuplicateTitle, message, Strings.RestoreAnywayButton, Strings.RestoreSkipDuplicatesButton);
 
         Title = Strings.ArchiveDialogTitle;
         TitleBarText.Text = Strings.ArchiveDialogTitle;
@@ -47,10 +52,7 @@ internal partial class ArchiveDialog : Window
     {
         try
         {
-            if (sender is not Control control || control.DataContext is not ArchivedLiveryRowViewModel row) return;
-
-            var (wasSuperseded, bitmap) = await ThumbnailCacheService.AcquireForAsync(control, row.ThumbnailPath);
-            if (!wasSuperseded && ReferenceEquals(control.DataContext, row)) row.Thumbnail = bitmap;
+            if (sender is Control control) await ThumbnailLifecycleController.OnAttachedAsync(control);
         }
         catch (Exception ex)
         {
@@ -60,8 +62,18 @@ internal partial class ArchiveDialog : Window
 
     private void Row_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is not Control control) return;
-        if (control.DataContext is ArchivedLiveryRowViewModel row) row.Thumbnail = null;
-        ThumbnailCacheService.ReleaseFor(control);
+        if (sender is Control control) ThumbnailLifecycleController.OnDetached(control);
+    }
+
+    private async void Row_DataContextChanged(object? sender, EventArgs e)
+    {
+        try
+        {
+            if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Unhandled exception in Row_DataContextChanged", ex);
+        }
     }
 }

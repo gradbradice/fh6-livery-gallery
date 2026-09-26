@@ -231,4 +231,82 @@ internal sealed class LiveryBackupService(SaveFolderLock saveFolderLock)
     }
 
     public static bool TryDeleteBackup(string backupPath) => RecycleBinHelper.TrySendToRecycleBin(backupPath);
+
+    public static string? FindExistingPreview(string? thumbnailFileName)
+    {
+        if (!IsSafePreviewFileName(thumbnailFileName)) return null;
+
+        string cached = Path.Combine(AppSettings.ThumbsPath, thumbnailFileName!);
+        if (File.Exists(cached)) return cached;
+
+        string backupPreview = Path.Combine(AppSettings.BackupThumbsPath, thumbnailFileName!);
+        return File.Exists(backupPreview) ? backupPreview : null;
+    }
+
+    public static Task GenerateMissingPreviewsAsync(
+        string backupPath, IReadOnlyList<LiveryData> entries, IProgress<(string FolderName, string PreviewPath)> progress,
+        CancellationToken ct)
+    {
+        return Task.Run(() =>
+        {
+            try
+            {
+                using var zip = ZipFile.OpenRead(backupPath);
+                foreach (var data in entries)
+                {
+                    ct.ThrowIfCancellationRequested();
+                    if (!IsSafePreviewFileName(data.ThumbnailPath)) continue;
+
+                    var source = zip.GetEntry($"{LiveriesPrefix}{data.FolderName}/bigThumb.webp")
+                        ?? zip.GetEntry($"{LiveriesPrefix}{data.FolderName}/thumb.webp");
+                    if (source is null || source.Length > MaxSingleFileBytes) continue;
+                    using var buffer = new MemoryStream((int)source.Length);
+                    using (var entryStream = source.Open()) entryStream.CopyTo(buffer);
+                    buffer.Position = 0;
+
+                    string destination = Path.Combine(AppSettings.BackupThumbsPath, data.ThumbnailPath!);
+                    if (ThumbnailService.GenerateAndSave(buffer, $"{backupPath}:{source.FullName}", destination))
+                        progress.Report((data.FolderName, destination));
+                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogError($"Failed to generate previews from backup '{backupPath}'", ex);
+            }
+        }, CancellationToken.None);
+    }
+
+    public static void PruneBackupPreviews(IReadOnlyList<BackupSummary> backups)
+    {
+        if (backups.Any(b => b.Manifest is null)) return;
+
+        var referenced = backups
+            .SelectMany(b => b.Manifest!.Entries)
+            .Select(e => e.ThumbnailPath)
+            .Where(IsSafePreviewFileName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            foreach (string file in Directory.EnumerateFiles(AppSettings.BackupThumbsPath, "*.png"))
+            {
+                if (referenced.Contains(Path.GetFileName(file))) continue;
+                try { File.Delete(file); }
+                catch (Exception ex) { AppLogger.LogErrorThrottled(file, $"Failed to delete unused backup preview '{file}'", ex); }
+            }
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to prune backup previews", ex);
+        }
+    }
+
+    private static bool IsSafePreviewFileName(string? fileName) =>
+        !string.IsNullOrEmpty(fileName)
+        && fileName == Path.GetFileName(fileName)
+        && fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0
+        && fileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase);
 }

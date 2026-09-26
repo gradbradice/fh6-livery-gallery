@@ -25,6 +25,7 @@ internal sealed class ScanController
     public bool TryStartScan(
         string savePath,
         ulong? currentUserId,
+        bool needEntries,
         IProgress<string>? progress,
         out Task<LiveryScanEntry> resultTask)
     {
@@ -35,7 +36,7 @@ internal sealed class ScanController
         {
             try
             {
-                var result = await scanService.ScanAsync(savePath, currentUserId, progress, ct);
+                var result = await scanService.ScanAsync(savePath, currentUserId, needEntries, progress, ct);
                 LastScanResult = result with { Entries = [] };
                 tcs.SetResult(result);
             }
