@@ -6,8 +6,12 @@ internal sealed class ScanCoordinator
     private CancellationTokenSource? _cts;
     private Task? _currentTask;
     private Func<CancellationToken, Task>? _queuedOperation;
+    private bool _workerActive;
 
-    public bool IsRunning => _currentTask is { IsCompleted: false };
+    public bool IsRunning
+    {
+        get { lock (_lock) return _workerActive; }
+    }
     
     public Task Current => _currentTask ?? Task.CompletedTask;
 
@@ -15,19 +19,21 @@ internal sealed class ScanCoordinator
     {
         lock (_lock)
         {
-            if (IsRunning) return false;
-            _currentTask = StartAsync(operation);
+            if (_workerActive) return false;
+            _workerActive = true;
+            _currentTask = RunWorkerAsync(operation);
         }
         return true;
     }
 
-    public Task RunOrQueueAsync(Func<CancellationToken, Task> operation)
+    public Task RunOrReplaceQueuedAsync(Func<CancellationToken, Task> operation)
     {
         lock (_lock)
         {
-            if (!IsRunning)
+            if (!_workerActive)
             {
-                _currentTask = StartAsync(operation);
+                _workerActive = true;
+                _currentTask = RunWorkerAsync(operation);
                 return _currentTask;
             }
 
@@ -36,39 +42,46 @@ internal sealed class ScanCoordinator
         }
     }
 
-    private async Task StartAsync(Func<CancellationToken, Task> operation)
+    private async Task RunWorkerAsync(Func<CancellationToken, Task> firstOperation)
     {
-        var cts = new CancellationTokenSource();
-        lock (_lock) _cts = cts;
-        try
+        var operation = firstOperation;
+        while (true)
         {
-            await operation(cts.Token);
-        }
-        catch (OperationCanceledException)
-        {
-            
-        }
-        finally
-        {
+            var cts = new CancellationTokenSource();
+            lock (_lock) _cts = cts;
+            try
+            {
+                await operation(cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogError("Unhandled exception in a scan/regenerate operation", ex);
+            }
+            finally
+            {
+                lock (_lock)
+                {
+                    if (ReferenceEquals(_cts, cts)) _cts = null;
+                }
+                cts.Dispose();
+            }
+
+            Func<CancellationToken, Task>? next;
             lock (_lock)
             {
-                if (ReferenceEquals(_cts, cts)) _cts = null;
+                next = _queuedOperation;
+                _queuedOperation = null;
+                if (next is null)
+                {
+                    _workerActive = false;
+                    return;
+                }
             }
-            cts.Dispose();
-        }
-
-        Func<CancellationToken, Task>? next;
-        lock (_lock)
-        {
-            next = _queuedOperation;
-            _queuedOperation = null;
-        }
-
-        if (next is not null)
-        {
-            Task nextTask;
-            lock (_lock) nextTask = _currentTask = StartAsync(next);
-            await nextTask;
+            operation = next;
         }
     }
 

@@ -8,66 +8,50 @@ using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.Services;
+using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Views;
 
 internal partial class SettingsDialog : Window
 {
-    private readonly AppSettingsData _settings;
-    private AppThemeMode _savedThemeMode;
-    private AppLanguage _savedLanguage;
-    private string _savedGamePath;
-    private string _savedSavePath;
-    private readonly string _initialSavePath;
-    private readonly bool _saveInitialWasAutoDiscovered;
-    private bool _savedAutoRefreshLiveries;
-    private bool _savedRefreshOnButtonClick;
+    private readonly SettingsViewModel _viewModel;
     private bool _forceClose;
+    private bool _isClosing;
 
-    public bool SavePathChanged { get; private set; }
+    public bool SavePathChanged => _viewModel.SavePathChanged;
 
     public SettingsDialog(AppSettingsData settings, string? resolvedSavePath)
     {
         InitializeComponent();
-        _settings = settings;
+        _viewModel = new SettingsViewModel(settings, resolvedSavePath);
+        DataContext = _viewModel;
 
         ApplyLocalizedTexts();
-
-        _savedThemeMode = _settings.ThemeMode ?? AppThemeMode.System;
-        _savedLanguage = _settings.Language;
-
-        SelectThemeRadio(_savedThemeMode);
-        SelectLanguageInCombo(_savedLanguage);
-
-        string? gameInitial = _settings.GameInstallPath;
-        string? saveInitial = _settings.SavePath ?? resolvedSavePath ?? "";
-        _saveInitialWasAutoDiscovered = string.IsNullOrEmpty(_settings.SavePath);
-        _savedGamePath = gameInitial ?? "";
-        _savedSavePath = saveInitial;
-        _initialSavePath = saveInitial;
-        GamePathBox.Text = _savedGamePath;
-        SavePathBox.Text = _savedSavePath;
-
-        _savedAutoRefreshLiveries = _settings.AutoRefreshLiveries;
-        _savedRefreshOnButtonClick = _settings.RefreshLiveriesOnButtonClick;
-        AutoRefreshLiveriesCheckBox.IsChecked = _savedAutoRefreshLiveries;
-        RefreshOnButtonClickCheckBox.IsChecked = _savedRefreshOnButtonClick;
-
-        UpdateSaveButtonState();
+        UpdateHintDisplay();
+        _viewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is nameof(SettingsViewModel.HintIsError)) UpdateHintDisplay();
+        };
 
         Closing += SettingsDialog_Closing;
-        if (gameInitial is null)
+        if (string.IsNullOrEmpty(_viewModel.GamePath))
             _ = PopulateDiscoveredGamePathAsync();
     }
 
     private async Task PopulateDiscoveredGamePathAsync()
     {
-        string? discovered = await GameDiscoveryService.TryFindGamePathAsync();
-        if (discovered is null) return;
-        if (!string.IsNullOrEmpty(GamePathBox.Text)) return;
+        try
+        {
+            string? discovered = await GameDiscoveryService.TryFindGamePathAsync();
+            if (discovered is null) return;
+            if (!string.IsNullOrEmpty(_viewModel.GamePath)) return;
 
-        _savedGamePath = discovered;
-        GamePathBox.Text = discovered;
+            _viewModel.GamePath = discovered;
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Unhandled exception in PopulateDiscoveredGamePathAsync", ex);
+        }
     }
 
     private void ApplyLocalizedTexts()
@@ -83,98 +67,40 @@ internal partial class SettingsDialog : Window
         ScanningSectionLabel.Text = Strings.SettingsSectionScanning;
         AutoRefreshLiveriesCheckBox.Content = Strings.AutoRefreshLiveriesLabel;
         RefreshOnButtonClickCheckBox.Content = Strings.RefreshOnButtonClickLabel;
+        SearchByFolderNameCheckBox.Content = Strings.SearchByFolderNameLabel;
         SystemThemeRadio.Content = Strings.ThemeSystemLabel;
         LightThemeRadio.Content = Strings.ThemeLightLabel;
         DarkThemeRadio.Content = Strings.ThemeDarkLabel;
         ExitButton.Content = Strings.ButtonExit;
         SaveButton.Content = Strings.ButtonSave;
-        ShowNormalHint();
     }
 
-    private void SelectThemeRadio(AppThemeMode mode)
+    private void UpdateHintDisplay()
     {
-        SystemThemeRadio.IsChecked = mode == AppThemeMode.System;
-        LightThemeRadio.IsChecked = mode == AppThemeMode.Light;
-        DarkThemeRadio.IsChecked = mode == AppThemeMode.Dark;
-    }
-
-    private AppThemeMode GetSelectedThemeMode()
-    {
-        if (LightThemeRadio.IsChecked == true) return AppThemeMode.Light;
-        if (DarkThemeRadio.IsChecked == true) return AppThemeMode.Dark;
-        return AppThemeMode.System;
-    }
-
-    private void SelectLanguageInCombo(AppLanguage language)
-    {
-        string code = AppLocalisationService.AppLanguageToString(language);
-
-        foreach (var obj in LanguageCombo.Items)
+        if (_viewModel.HintIsError)
         {
-            if (obj is ComboBoxItem { Tag: string tag } item && tag == code)
-            {
-                LanguageCombo.SelectedItem = item;
-                return;
-            }
+            HintText.Text = Strings.SaveFolderValidationFailed;
+            HintText.Foreground = this.GetThemeBrush("DangerBrush");
         }
-    }
-
-    private AppLanguage GetSelectedLanguage()
-    {
-        if (LanguageCombo.SelectedItem is not ComboBoxItem { Tag: string code }) return _savedLanguage;
-        return AppLocalisationService.StringToAppLanguage(code);
+        else
+        {
+            HintText.Text = Strings.PathFieldAutoHint + ". " + Strings.SaveFolderContentHint;
+            HintText.Foreground = this.GetThemeBrush("TextSecondaryBrush");
+        }
     }
 
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
-    private void ThemeOption_Click(object? sender, RoutedEventArgs e) => UpdateSaveButtonState();
-
-    private void LanguageCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e) => UpdateSaveButtonState();
-
-    private void ScanOption_Click(object? sender, RoutedEventArgs e) => UpdateSaveButtonState();
-
-    private void PathBox_TextChanged(object? sender, TextChangedEventArgs e)
-    {
-        ShowNormalHint();
-        UpdateSaveButtonState();
-    }
-
-    private bool IsDirty()
-    {
-        bool themeChanged = GetSelectedThemeMode() != _savedThemeMode;
-        bool languageChanged = GetSelectedLanguage() != _savedLanguage;
-        bool gameChanged = (GamePathBox.Text ?? "") != _savedGamePath;
-        bool saveChanged = (SavePathBox.Text ?? "") != _savedSavePath;
-        bool autoRefreshChanged = AutoRefreshLiveriesCheckBox.IsChecked != _savedAutoRefreshLiveries;
-        bool refreshOnClickChanged = RefreshOnButtonClickCheckBox.IsChecked != _savedRefreshOnButtonClick;
-        return themeChanged || languageChanged || gameChanged || saveChanged || autoRefreshChanged || refreshOnClickChanged;
-    }
-
-    private void UpdateSaveButtonState() => SaveButton.IsEnabled = IsDirty();
-
-    private void ShowNormalHint()
-    {
-        HintText.Text = Strings.PathFieldAutoHint + ". " + Strings.SaveFolderContentHint;
-        HintText.Foreground = this.GetThemeBrush("TextSecondaryBrush");
-    }
-
-    private void ShowValidationError()
-    {
-        HintText.Text = Strings.SaveFolderValidationFailed;
-        HintText.Foreground = this.GetThemeBrush("DangerBrush");
-    }
-
-
     private async void GameBrowseButton_Click(object? sender, RoutedEventArgs e)
     {
         string? path = await BrowseForFolderAsync(Strings.SelectGameFolderDialogTitle);
-        if (path is not null) GamePathBox.Text = path;
+        if (path is not null) _viewModel.GamePath = path;
     }
 
     private async void SaveBrowseButton_Click(object? sender, RoutedEventArgs e)
     {
         string? path = await BrowseForFolderAsync(Strings.SelectFolderDialogTitle);
-        if (path is not null) SavePathBox.Text = path;
+        if (path is not null) _viewModel.SavePath = path;
     }
 
     private async Task<string?> BrowseForFolderAsync(string title)
@@ -194,54 +120,20 @@ internal partial class SettingsDialog : Window
 
     private async Task<bool> PerformSaveAsync()
     {
-        AppThemeMode themeMode = GetSelectedThemeMode();
-        AppLanguage languageValue = GetSelectedLanguage();
-        string gameValue = GamePathBox.Text?.Trim() ?? "";
-        string saveValue = SavePathBox.Text?.Trim() ?? "";
-
-        bool saveValueChanged = saveValue != _savedSavePath;
-        if (saveValueChanged && !string.IsNullOrEmpty(saveValue) && !LocalSaveService.IsSavePathValid(saveValue))
+        var result = await _viewModel.SaveAsync();
+        switch (result)
         {
-            ShowValidationError();
-            return false;
+            case SettingsSaveResult.ValidationFailed:
+                return false;
+            case SettingsSaveResult.PersistFailed:
+                await InfoDialog.ShowAsync(this, Strings.SettingsSaveFailedTitle, Strings.SettingsSaveFailedNotice);
+                return false;
+            case SettingsSaveResult.SavedLanguageChanged:
+                ApplyLocalizedTexts();
+                return true;
+            default:
+                return true;
         }
-
-        var candidate = _settings.Clone();
-        candidate.ThemeMode = themeMode;
-        candidate.Language = languageValue;
-        candidate.GameInstallPath = string.IsNullOrEmpty(gameValue) ? null : gameValue;
-        candidate.SavePath = saveValue == _savedSavePath && _saveInitialWasAutoDiscovered
-            ? null
-            : (string.IsNullOrEmpty(saveValue) ? null : saveValue);
-        candidate.AutoRefreshLiveries = AutoRefreshLiveriesCheckBox.IsChecked == true;
-        candidate.RefreshLiveriesOnButtonClick = RefreshOnButtonClickCheckBox.IsChecked == true;
-        bool saved = await AppSettingsService.SaveImmediateAsync(candidate);
-        if (!saved)
-        {
-            await InfoDialog.ShowAsync(this, Strings.SettingsSaveFailedTitle, Strings.SettingsSaveFailedNotice);
-            return false;
-        }
-
-        _settings.CopyFrom(candidate);
-
-        AppThemeService.ApplyTheme(themeMode);
-        if (languageValue != AppLocalisationService.AppLanguage)
-        {
-            AppLocalisationService.AppLanguage = languageValue;
-            ApplyLocalizedTexts();
-            (Owner as MainWindow)?.OnLanguageChanged();
-        }
-
-        if (saveValue != _initialSavePath) SavePathChanged = true;
-
-        _savedThemeMode = themeMode;
-        _savedLanguage = languageValue;
-        _savedGamePath = gameValue;
-        _savedSavePath = saveValue;
-        _savedAutoRefreshLiveries = _settings.AutoRefreshLiveries;
-        _savedRefreshOnButtonClick = _settings.RefreshLiveriesOnButtonClick;
-        UpdateSaveButtonState();
-        return true;
     }
 
     private async void SaveButton_Click(object? sender, RoutedEventArgs e) => await PerformSaveAsync();
@@ -262,15 +154,13 @@ internal partial class SettingsDialog : Window
         }
     }
 
-    private bool _isClosing;
-
     private async Task TryCloseAsync()
     {
         if (_isClosing) return;
         _isClosing = true;
         try
         {
-            if (!IsDirty())
+            if (!_viewModel.IsDirty)
             {
                 _forceClose = true;
                 Close();

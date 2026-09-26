@@ -1,0 +1,179 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:LiveryGallery.Localisation"
+        xmlns:vm="clr-namespace:LiveryGallery.ViewModels"
+        xmlns:models="clr-namespace:LiveryGallery.Models"
+        x:Class="LiveryGallery.Views.BackupDetailDialog"
+        x:DataType="vm:BackupDetailViewModel"
+        Width="560" Height="660" WindowStartupLocation="CenterOwner"
+        CanResize="False" ShowInTaskbar="False"
+        Background="{DynamicResource BgBrush}"
+        WindowDecorations="BorderOnly"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1">
+
+    <Window.Resources>
+        <DataTemplate x:Key="RemovedLiveryRowTemplate" x:DataType="vm:BackupLiveryRowViewModel">
+            <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="10" Padding="10,8" Margin="0,0,0,8">
+                <Grid ColumnDefinitions="Auto,Auto,*">
+                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                              VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <Border Grid.Column="1" Width="100" Height="56" CornerRadius="6" ClipToBounds="True"
+                            Background="{DynamicResource BgBrush}" Margin="0,0,12,0"
+                            AttachedToVisualTree="LiveryRow_AttachedToVisualTree"
+                            DetachedFromVisualTree="LiveryRow_DetachedFromVisualTree"
+                            DataContextChanged="LiveryRow_DataContextChanged">
+                        <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
+                    </Border>
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="{Binding LiveryName}" FontSize="13.5" FontWeight="Bold"
+                                       TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding LiveryName}" />
+                            <TextBlock Grid.Column="1" Text="{Binding LiveryIdText}" FontSize="11" FontWeight="SemiBold"
+                                       Margin="8,0,0,0" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </Grid>
+                        <TextBlock Text="{Binding AuthorRaw}" FontSize="11.5" Margin="0,2,0,0"
+                                   TextTrimming="CharacterEllipsis" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,3,0,0">
+                            <TextBlock Text="{Binding CarManufacturer}" FontSize="11.5"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                            <TextBlock Text="{Binding CarModelName}" FontSize="11.5"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="AddedLiveryTemplate" x:DataType="vm:BackupLiveryRowViewModel">
+            <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="10" Padding="10,8" Margin="0,0,0,8">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Border Grid.Column="0" Width="100" Height="56" CornerRadius="6" ClipToBounds="True"
+                            Background="{DynamicResource BgBrush}" Margin="0,0,12,0"
+                            AttachedToVisualTree="LiveryRow_AttachedToVisualTree"
+                            DetachedFromVisualTree="LiveryRow_DetachedFromVisualTree"
+                            DataContextChanged="LiveryRow_DataContextChanged">
+                        <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
+                    </Border>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="{Binding LiveryName}" FontSize="13.5" FontWeight="Bold"
+                                       TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding LiveryName}" />
+                            <TextBlock Grid.Column="1" Text="{Binding LiveryIdText}" FontSize="11" FontWeight="SemiBold"
+                                       Margin="8,0,0,0" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </Grid>
+                        <TextBlock Text="{Binding AuthorRaw}" FontSize="11.5" Margin="0,2,0,0"
+                                   TextTrimming="CharacterEllipsis" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,3,0,0">
+                            <TextBlock Text="{Binding CarManufacturer}" FontSize="11.5"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                            <TextBlock Text="{Binding CarModelName}" FontSize="11.5"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{DynamicResource ToolbarBrush}" Height="36"
+                PointerPressed="TitleBar_PointerPressed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="12,0,0,0"
+                            VerticalAlignment="Center" IsHitTestVisible="False">
+                    <TextBlock x:Name="TitleBarText" FontSize="12"
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                </StackPanel>
+                <Button Grid.Column="1" Classes="titlebar close" Click="CloseButton_Click">
+                    <TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="20,14,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TabControl Grid.Row="1">
+                <TabItem Header="{x:Static loc:Strings.BackupRemovedSectionLabel}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="0,10,0,10" IsVisible="{Binding !ShowNoRemovedHint}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                                <Button Content="{x:Static loc:Strings.ArchiveSelectAllButton}" Classes="secondary"
+                                        Padding="10,4" Command="{Binding SelectAllCommand}" />
+                                <Button Content="{x:Static loc:Strings.ClearSelectionLabel}" Classes="secondary"
+                                        Padding="10,4" Command="{Binding ClearSelectionCommand}" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="1" Text="{Binding SelectedCountText}" VerticalAlignment="Center"
+                                       HorizontalAlignment="Right" FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </Grid>
+
+                        <ScrollViewer Grid.Row="1" IsVisible="{Binding !ShowNoRemovedHint}">
+                            <ItemsControl ItemsSource="{Binding RemovedRows}"
+                                          ItemTemplate="{StaticResource RemovedLiveryRowTemplate}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"
+                                   IsVisible="{Binding ShowNoRemovedHint}"
+                                   Text="{x:Static loc:Strings.BackupNoneRemovedHint}" />
+
+                        <Button x:Name="RestoreButton" Grid.Row="2" Classes="primary" HorizontalAlignment="Right"
+                                MinWidth="140" Margin="0,14,0,0" IsVisible="{Binding !ShowNoRemovedHint}"
+                                Command="{Binding RestoreSelectedCommand}" />
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="{x:Static loc:Strings.BackupAddedSectionLabel}">
+                    <Grid>
+                        <ScrollViewer IsVisible="{Binding !ShowNoAddedHint}" Margin="0,10,0,0">
+                            <ItemsControl ItemsSource="{Binding AddedEntries}"
+                                          ItemTemplate="{StaticResource AddedLiveryTemplate}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"
+                                   IsVisible="{Binding ShowNoAddedHint}"
+                                   Text="{x:Static loc:Strings.BackupNoneAddedHint}" />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>

@@ -8,6 +8,7 @@ internal class FavoriteService
     private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "favorites.json");
     private HashSet<string> _favorites = new(StringComparer.OrdinalIgnoreCase);
     private readonly Lock _lock = new();
+    private readonly Lock _saveLock = new();
 
     public FavoriteService() => Load();
 
@@ -29,10 +30,13 @@ internal class FavoriteService
     {
         try
         {
-            List<string> snapshot;
-            lock (_lock) snapshot = _favorites.ToList();
-            string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
-            PersistenceManager.Schedule(_path, json);
+            lock (_saveLock)
+            {
+                List<string> snapshot;
+                lock (_lock) snapshot = _favorites.ToList();
+                string json = JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions);
+                PersistenceManager.Schedule(_path, json);
+            }
         }
         catch (Exception ex)
         {

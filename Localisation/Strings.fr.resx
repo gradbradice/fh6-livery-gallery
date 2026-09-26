@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Rechercher par véhicule (marque, modèle, année), nom de livrée ou par auteur…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>Trier par : marque</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>Trier par : auteur</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>Trier par : date de téléchargement</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>Date inconnue</value>
   </data>
@@ -193,7 +184,7 @@ Le choisir manuellement ?
     <value>Non</value>
   </data>
   <data name="SelectFolderDialogTitle" xml:space="preserve">
-    <value>Sélectionnez le dossier de sauvegarde (ContainersRoot ou le dossier numéroté)</value>
+    <value>Sélectionnez le dossier de sauvegarde (le dossier dont le nom commence par « u_ »)</value>
   </data>
   <data name="CarDbUpdating" xml:space="preserve">
     <value>Vérification des mises à jour de la base de données des véhicules…</value>
@@ -246,6 +237,12 @@ Le choisir manuellement ?
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Modifier les tags</value>
   </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>Effacer</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>{0} sélectionné(s)</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>Tags :</value>
   </data>
@@ -266,6 +263,18 @@ Le choisir manuellement ?
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
     <value>Favoris</value>
+  </data>
+  <data name="MineFirstToggle" xml:space="preserve">
+    <value>Les miens d'abord</value>
+  </data>
+  <data name="OnlyMineToggle" xml:space="preserve">
+    <value>Seulement les miens</value>
+  </data>
+  <data name="SeparateMineToggle" xml:space="preserve">
+    <value>Afficher les miens séparément</value>
+  </data>
+  <data name="SeparateMineGroupName" xml:space="preserve">
+    <value>Les miens</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>Nouvelle version {0} disponible →</value>
@@ -298,7 +307,10 @@ Le choisir manuellement ?
     <value>Inconnu</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Bibliothèque d'analyse d'en-tête : {0}</value>
+    <value>FH6 Data Parser (natif) : {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser (paquet) : {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Paramètres</value>
@@ -375,6 +387,15 @@ Le choisir manuellement ?
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>Cet auteur a une livrée identique pour cette voiture</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Correspondances :</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0} : {1} %</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Doublon possible ({0})</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>Toutes les livrées</value>
   </data>
@@ -384,8 +405,47 @@ Le choisir manuellement ?
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Doublons uniquement</value>
   </data>
+  <data name="GeneratedFilterAll" xml:space="preserve">
+    <value>Toutes les livrées</value>
+  </data>
+  <data name="GeneratedFilterOnly" xml:space="preserve">
+    <value>Seulement possiblement générées</value>
+  </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Doublon possible</value>
+  </data>
+  <data name="MyLiveryBadgeTooltip" xml:space="preserve">
+    <value>Votre livrée</value>
+  </data>
+  <data name="MyLiveryBadgeLabel" xml:space="preserve">
+    <value>La mienne</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeLabel" xml:space="preserve">
+    <value>Possiblement généré</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
+    <value>Le motif de cette livrée semble avoir été créé de façon programmatique (par ex. à partir d'une photo/image), pas dessiné à la main.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Peinture</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>Cette livrée n'a aucun autocollant — juste une couleur repeinte.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Erreur de lecture</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>Le fichier de cette livrée n'a pas pu être lu correctement — il est peut-être corrompu ou dans un format non pris en charge.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>Toutes les livrées</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Masquer peinture</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Peinture uniquement</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>Cet auteur a une livrée similaire pour cette voiture (la plupart des sections de décalcomanies correspondent, mais pas tout le contenu)</value>
@@ -393,8 +453,68 @@ Le choisir manuellement ?
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Affichage (favoris, doublons)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>Trier par</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>Regroupement</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>Favoris</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>Mes livrées</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>Doublons</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>Générées</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>Peinture</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>Marque</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>Auteur</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>Date de téléchargement</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>Par marque</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>Par auteur</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>Par mois</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>Toutes</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>En premier</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>Uniquement</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>Séparément</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>Masquer</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>Avec possibles</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Toutes les livrées</value>
@@ -440,6 +560,9 @@ Le choisir manuellement ?
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
     <value>Actualiser automatiquement les livrées</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Afficher et rechercher par nom de dossier</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>Actualiser les livrées en cliquant sur le bouton</value>
@@ -514,6 +637,12 @@ Créez-en une pour regrouper les pseudos d'un même auteur sous un seul nom.</va
   <data name="AuthorCardAliasTakenError" xml:space="preserve">
     <value>Le pseudo « {0} » appartient déjà à une autre fiche</value>
   </data>
+  <data name="AuthorCardAutoGeneratedNotice" xml:space="preserve">
+    <value>Cette fiche a été créée automatiquement après la détection d'un changement de pseudo. L'enregistrement la rendra manuelle — la détection automatique ne la modifiera plus.</value>
+  </data>
+  <data name="AuthorCardAutoGeneratedBadge" xml:space="preserve">
+    <value>Détecté automatiquement</value>
+  </data>
   <data name="AuthorCardAliasesFormat" xml:space="preserve">
     <value>Pseudos : {0}</value>
   </data>
@@ -564,5 +693,154 @@ Créez-en une pour regrouper les pseudos d'un même auteur sous un seul nom.</va
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>Aucune fiche n'a été créée pour l'auteur « {0} »</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Créer une fiche</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>Déplacer vers l'archive</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Sauvegardes</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>L'archive est vide</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>{0} sélectionné(s)</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Restaurer</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Supprimer définitivement</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>Supprimer définitivement ?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} seront déplacés vers la Corbeille. Cette action est irréversible depuis l'application.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>Archivé {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Choisissez d'abord un dossier de sauvegarde (Paramètres) avant de restaurer des liveries</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Une erreur s'est produite lors de cette opération. Consultez les journaux pour plus de détails.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Aperçu</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>Impossible de trouver l'image d'aperçu originale de cette livrée.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>Voir l'aperçu original</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Déplacement vers l'archive...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Tout sélectionner</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Inconnu (entrée récupérée)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Date inconnue</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>Livrées : {0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Rien à sauvegarder — la galerie est vide</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Sauvegardes</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>Aucune sauvegarde pour l'instant</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Créer une sauvegarde</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>Supprimer cette sauvegarde ?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>La sauvegarde du {0} ({1}) sera déplacée vers la Corbeille.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>Le contenu de cette sauvegarde n'a pas pu être lu — le fichier est peut-être corrompu ou n'est pas une sauvegarde valide</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Sauvegarde du {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Supprimées depuis cette sauvegarde</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Ajoutées depuis cette sauvegarde</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>Rien n'a été supprimé depuis cette sauvegarde</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>Rien n'a été ajouté depuis cette sauvegarde</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>Ces livrées n'ont pas été restaurées car exactement les mêmes livrées (mêmes dossiers) sont déjà dans le jeu :
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>Impossible de restaurer ces livrées. Consultez les journaux pour plus de détails :
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…et {0} de plus</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>Doublons trouvés</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>La galerie contient déjà des doublons de ces livrées (même voiture, données de livrée identiques) :
+{0}
+
+Les restaurer quand même ?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — doublon : {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>Les autres livrées sélectionnées seront restaurées dans tous les cas.</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>Restaurer quand même</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>Ignorer</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>Lue partiellement</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>La livrée a été lue, mais une partie de son fichier n'a pas pu être analysée. Les données principales sont affichées ; certaines vérifications (génération, doublons) peuvent être indisponibles.</value>
   </data>
 </root>

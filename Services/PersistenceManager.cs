@@ -27,35 +27,31 @@ internal static class PersistenceManager
     public static void Schedule(string path, string json)
     {
         var state = GetState(path);
-        long myGeneration;
-        CancellationToken token;
         lock (_lock)
         {
             state.Cts?.Cancel();
             state.Cts?.Dispose();
             state.Cts = new CancellationTokenSource();
-            token = state.Cts.Token;
-            myGeneration = ++state.Generation;
+            long myGeneration = ++state.Generation;
             state.PendingJson = json;
+            state.InFlightWrite = DelayedWriteAsync(state, path, json, state.Cts.Token, myGeneration);
         }
-        var task = DelayedWriteAsync(state, path, json, token, myGeneration);
-        lock (_lock) state.InFlightWrite = task;
     }
 
     public static async Task<bool> SaveNowAsync(string path, string json)
     {
         var state = GetState(path);
-        long myGeneration;
+        Task<bool> task;
         lock (_lock)
         {
             state.Cts?.Cancel();
             state.Cts?.Dispose();
             state.Cts = null;
-            myGeneration = ++state.Generation;
+            long myGeneration = ++state.Generation;
             state.PendingJson = null;
+            task = WriteWithSemaphoreAsync(state, path, json, myGeneration);
+            state.InFlightWrite = task;
         }
-        var task = WriteWithSemaphoreAsync(state, path, json, myGeneration);
-        lock (_lock) state.InFlightWrite = task;
         return await task;
     }
 
@@ -109,6 +105,10 @@ internal static class PersistenceManager
             await Task.Delay(TimeSpan.FromSeconds(2), ct);
         }
         catch (OperationCanceledException)
+        {
+            return false;
+        }
+        catch (ObjectDisposedException)
         {
             return false;
         }

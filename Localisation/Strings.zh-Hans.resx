@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>按车辆(厂牌、车型、年份)、涂装名称或作者搜索…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>排序: 厂牌</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>排序: 作者</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>排序: 下载日期</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>日期未知</value>
   </data>
@@ -193,7 +184,7 @@
     <value>否</value>
   </data>
   <data name="SelectFolderDialogTitle" xml:space="preserve">
-    <value>请选择存档文件夹(ContainersRoot 或数字编号的文件夹)</value>
+    <value>请选择存档文件夹(名称以 "u_" 开头的文件夹)</value>
   </data>
   <data name="CarDbUpdating" xml:space="preserve">
     <value>正在检查车辆数据库更新…</value>
@@ -246,6 +237,12 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>编辑标签</value>
   </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>已选择 {0} 个</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>标签:</value>
   </data>
@@ -266,6 +263,18 @@
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
     <value>收藏</value>
+  </data>
+  <data name="MineFirstToggle" xml:space="preserve">
+    <value>我的优先</value>
+  </data>
+  <data name="OnlyMineToggle" xml:space="preserve">
+    <value>仅我的</value>
+  </data>
+  <data name="SeparateMineToggle" xml:space="preserve">
+    <value>单独显示我的</value>
+  </data>
+  <data name="SeparateMineGroupName" xml:space="preserve">
+    <value>我的</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>发现新版本 {0} →</value>
@@ -298,7 +307,10 @@
     <value>未知</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>标头解析库：{0}</value>
+    <value>FH6 Data Parser（原生库）: {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser（包）: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>设置</value>
@@ -375,6 +387,15 @@
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>此作者对这辆车有完全相同的涂装</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>匹配结果：</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}：{1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>可能重复（{0}）</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>所有涂装</value>
   </data>
@@ -384,8 +405,47 @@
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>仅重复</value>
   </data>
+  <data name="GeneratedFilterAll" xml:space="preserve">
+    <value>所有涂装</value>
+  </data>
+  <data name="GeneratedFilterOnly" xml:space="preserve">
+    <value>仅可能生成的</value>
+  </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>可能重复</value>
+  </data>
+  <data name="MyLiveryBadgeTooltip" xml:space="preserve">
+    <value>你的涂装</value>
+  </data>
+  <data name="MyLiveryBadgeLabel" xml:space="preserve">
+    <value>我的</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeLabel" xml:space="preserve">
+    <value>可能是生成的</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
+    <value>这个涂装的图案看起来是通过程序生成的(例如从照片/图片),而不是手绘的。</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>喷漆</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>这个涂装没有任何贴花 — 只是重新喷涂的颜色。</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>解析错误</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>这个涂装的文件无法正确读取 — 可能已损坏或格式不受支持。</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>所有涂装</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>隐藏喷漆</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>仅喷漆</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>此作者对这辆车有类似的涂装(大部分贴花区块相符，但并非全部内容)</value>
@@ -393,8 +453,68 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>显示(收藏、重复)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>筛选</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>排序</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>分组</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>我的涂装</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>重复</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>生成</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>喷漆</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>厂牌</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>下载日期</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>按厂牌</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>按作者</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>按月</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>置顶</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>仅此类</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>单独</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>含可能重复</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>所有涂装</value>
@@ -439,10 +559,13 @@
     <value>扫描</value>
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
-    <value>自动刷新彩绘</value>
+    <value>自动刷新涂装</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>显示文件夹名称并可按其搜索</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
-    <value>点击刷新按钮时也刷新彩绘</value>
+    <value>点击刷新按钮时也刷新涂装</value>
   </data>
   <data name="SettingsSaveFailedTitle" xml:space="preserve">
     <value>保存失败</value>
@@ -514,11 +637,17 @@
   <data name="AuthorCardAliasTakenError" xml:space="preserve">
     <value>昵称《{0}》已属于另一张卡片</value>
   </data>
+  <data name="AuthorCardAutoGeneratedNotice" xml:space="preserve">
+    <value>此卡片是在检测到昵称更改后自动创建的。保存后将变为手动管理——自动检测将不再修改它。</value>
+  </data>
+  <data name="AuthorCardAutoGeneratedBadge" xml:space="preserve">
+    <value>自动检测</value>
+  </data>
   <data name="AuthorCardAliasesFormat" xml:space="preserve">
     <value>昵称：{0}</value>
   </data>
   <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
-    <value>彩绘：{0}</value>
+    <value>涂装：{0}</value>
   </data>
   <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
     <value>收藏：{0}</value>
@@ -564,5 +693,154 @@
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>尚未为作者《{0}》创建卡片</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>创建卡片</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>移至归档</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>归档</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>归档</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>归档为空</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>已选择 {0} 个</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>永久删除</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>永久删除？</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} 将被移至回收站。此操作在应用内无法撤销。</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>归档于 {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>恢复车漆前，请先在设置中选择存档文件夹</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>执行此操作时出现问题。请查看日志了解详细信息。</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>预览</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>找不到这个涂装的原始预览图片。</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>查看原始预览</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>正在移至归档...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>未知（恢复的条目）</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>未知日期</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>涂装：{0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>没有可备份的内容 — 图库为空</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>暂无备份</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>（+{0} / -{1}）</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>创建备份</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>删除此备份？</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} 的备份（{1}）将被移至回收站。</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>无法读取此备份的内容 — 文件可能已损坏或不是有效的备份</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>{0} 的备份</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>自此备份后已删除</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>自此备份后已添加</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>自此备份后没有删除任何内容</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>自此备份后没有添加任何内容</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>以下涂装未恢复，因为完全相同的涂装（相同文件夹）已存在于游戏中：
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>无法恢复以下涂装。请查看日志了解详细信息：
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…以及另外 {0} 个</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>发现重复项</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>图库中已有这些涂装的重复项（同一车辆，涂装数据完全相同）：
+{0}
+
+仍要恢复吗？</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — 重复：{1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>其他选中的涂装无论如何都会被恢复。</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>仍然恢复</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>跳过</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>部分读取</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>已读取涂装，但其文件的一部分无法解析。已显示主要数据；部分检查（生成、重复）可能不可用。</value>
   </data>
 </root>

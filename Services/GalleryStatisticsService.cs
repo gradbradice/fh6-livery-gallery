@@ -1,4 +1,6 @@
+using LiveryGallery.Localisation;
 using LiveryGallery.Models;
+using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Services;
 
@@ -38,13 +40,36 @@ internal static class GalleryStatisticsService
             favAuthor, favAuthorCount);
     }
 
+    public static string FormatOverallMessage(GalleryOverallStatistics stats)
+    {
+        static string Format(string? label, int count) => label is not null ? $"{label} ({count})" : "-";
+
+        return string.Join("\n", new[]
+        {
+            $"{Strings.StatsTotalLiveries}: {stats.Total}",
+            $"{Strings.StatsFavoritesCount}: {stats.FavoritesCount}",
+            "",
+            $"{Strings.StatsPopularManufacturer}: {Format(stats.PopularManufacturer, stats.PopularManufacturerCount)}",
+            $"{Strings.StatsPopularModel}: {Format(stats.PopularModel, stats.PopularModelCount)}",
+            $"{Strings.StatsPopularCar}: {Format(stats.PopularCar, stats.PopularCarCount)}",
+            $"{Strings.StatsPopularAuthor}: {Format(stats.PopularAuthor, stats.PopularAuthorCount)}",
+            "",
+            $"{Strings.StatsFavoriteManufacturer}: {Format(stats.FavoriteManufacturer, stats.FavoriteManufacturerCount)}",
+            $"{Strings.StatsFavoriteModel}: {Format(stats.FavoriteModel, stats.FavoriteModelCount)}",
+            $"{Strings.StatsFavoriteCar}: {Format(stats.FavoriteCar, stats.FavoriteCarCount)}",
+            $"{Strings.StatsFavoriteAuthor}: {Format(stats.FavoriteAuthor, stats.FavoriteAuthorCount)}",
+            "",
+            $"{Strings.StatsTotalDuplicates}: {stats.DuplicatesCount}",
+            $"{Strings.StatsPossibleDuplicates}: {stats.PossibleDuplicatesCount}",
+        });
+    }
+
     private static (string? Label, int Count) TopString(List<LiveryEntry> entries, Func<LiveryEntry, string> selector)
     {
         if (entries.Count == 0) return (null, 0);
         var group = entries
             .GroupBy(selector, StringComparer.OrdinalIgnoreCase)
-            .OrderByDescending(g => g.Count())
-            .First();
+            .MaxBy(g => g.Count())!;
         return (group.Key, group.Count());
     }
 
@@ -56,8 +81,7 @@ internal static class GalleryStatisticsService
             .GroupBy(
                 x => (x.CarManufacturer, x.CarModelName, Year: includeYear ? x.CarYear : null),
                 ModelKeyComparer.Instance)
-            .OrderByDescending(g => g.Count())
-            .First();
+            .MaxBy(g => g.Count())!;
 
         string label = includeYear && group.Key.Year is { } year
             ? $"{group.Key.CarManufacturer} {group.Key.CarModelName} ({year})"

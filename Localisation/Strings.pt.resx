@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Pesquisar por veículo (fabricante, modelo, ano), nome da pintura ou autor…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>Ordenar por: fabricante</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>Ordenar por: autor</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>Ordenar por: data de download</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>Data desconhecida</value>
   </data>
@@ -193,7 +184,7 @@ Escolher manualmente?
     <value>Não</value>
   </data>
   <data name="SelectFolderDialogTitle" xml:space="preserve">
-    <value>Selecione a pasta de salvamento (ContainersRoot ou a pasta numerada)</value>
+    <value>Selecione a pasta de salvamento (a pasta cujo nome começa com "u_")</value>
   </data>
   <data name="CarDbUpdating" xml:space="preserve">
     <value>Verificando atualizações do banco de dados de veículos…</value>
@@ -246,6 +237,12 @@ Escolher manualmente?
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Editar tags</value>
   </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>Limpar</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>{0} selecionados</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>Tags:</value>
   </data>
@@ -266,6 +263,18 @@ Escolher manualmente?
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
     <value>Favoritos</value>
+  </data>
+  <data name="MineFirstToggle" xml:space="preserve">
+    <value>Meus primeiro</value>
+  </data>
+  <data name="OnlyMineToggle" xml:space="preserve">
+    <value>Apenas meus</value>
+  </data>
+  <data name="SeparateMineToggle" xml:space="preserve">
+    <value>Mostrar meus separadamente</value>
+  </data>
+  <data name="SeparateMineGroupName" xml:space="preserve">
+    <value>Meus</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>Nova versão {0} disponível →</value>
@@ -298,7 +307,10 @@ Escolher manualmente?
     <value>Desconhecido</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Biblioteca de análise de cabeçalho: {0}</value>
+    <value>FH6 Data Parser (nativo): {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser (pacote): {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Configurações</value>
@@ -375,6 +387,15 @@ Escolher manualmente?
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>Este autor tem uma pintura idêntica para este carro</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Correspondências:</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}: {1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Possível duplicado ({0})</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>Todas as pinturas</value>
   </data>
@@ -384,8 +405,47 @@ Escolher manualmente?
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Somente duplicatas</value>
   </data>
+  <data name="GeneratedFilterAll" xml:space="preserve">
+    <value>Todas as pinturas</value>
+  </data>
+  <data name="GeneratedFilterOnly" xml:space="preserve">
+    <value>Apenas possivelmente gerados</value>
+  </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Possível duplicata</value>
+  </data>
+  <data name="MyLiveryBadgeTooltip" xml:space="preserve">
+    <value>Sua pintura</value>
+  </data>
+  <data name="MyLiveryBadgeLabel" xml:space="preserve">
+    <value>Minha</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeLabel" xml:space="preserve">
+    <value>Possivelmente gerado</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
+    <value>O padrão desta pintura parece ter sido criado programaticamente (por ex. a partir de uma foto/imagem), não desenhado à mão.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Pintura</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>Esta pintura não tem nenhum adesivo — apenas uma cor repintada.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Erro de leitura</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>O arquivo desta pintura não pôde ser lido corretamente — pode estar corrompido ou em um formato não suportado.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>Todas as pinturas</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Ocultar pintura</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Apenas pintura</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>Este autor tem uma pintura semelhante para este carro (a maioria das seções de decalques coincide, mas não todo o conteúdo)</value>
@@ -393,8 +453,68 @@ Escolher manualmente?
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Exibição (favoritos, duplicatas)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>Filtros</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>Ordenar por</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>Agrupamento</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>Favoritos</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>Minhas pinturas</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>Duplicatas</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>Gerados</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>Pintura</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>Fabricante</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>Data de download</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>Por fabricante</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>Por autor</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>Por mês</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>Primeiro</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>Apenas</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>Separado</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>Ocultar</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>Com possíveis</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Todas as pinturas</value>
@@ -440,6 +560,9 @@ Escolher manualmente?
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
     <value>Atualizar automaticamente as pinturas</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Mostrar e pesquisar pelo nome da pasta</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>Atualizar pinturas ao clicar no botão</value>
@@ -514,6 +637,12 @@ Crie um para unir os apelidos de um autor sob um único nome.</value>
   <data name="AuthorCardAliasTakenError" xml:space="preserve">
     <value>O apelido «{0}» já pertence a outro cartão</value>
   </data>
+  <data name="AuthorCardAutoGeneratedNotice" xml:space="preserve">
+    <value>Este cartão foi criado automaticamente após detectar uma mudança de apelido. Salvar o tornará manual — a detecção automática não o alterará mais.</value>
+  </data>
+  <data name="AuthorCardAutoGeneratedBadge" xml:space="preserve">
+    <value>Detectado automaticamente</value>
+  </data>
   <data name="AuthorCardAliasesFormat" xml:space="preserve">
     <value>Apelidos: {0}</value>
   </data>
@@ -564,5 +693,154 @@ Crie um para unir os apelidos de um autor sob um único nome.</value>
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>Nenhum cartão foi criado para o autor «{0}»</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Criar cartão</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>Mover para o arquivo</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>O arquivo está vazio</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>{0} selecionados</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Restaurar</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Excluir permanentemente</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>Excluir permanentemente?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} serão movidos para a Lixeira. Isso não pode ser desfeito dentro do aplicativo.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>Arquivado {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Escolha uma pasta de salvamento primeiro (Configurações) antes de restaurar liveries</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Ocorreu um erro durante esta operação. Consulte os logs para obter mais detalhes.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Visualização</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>Não foi possível encontrar a imagem de visualização original desta pintura.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>Ver visualização original</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Movendo para o arquivo...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Selecionar tudo</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Desconhecido (entrada recuperada)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Data desconhecida</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>Pinturas: {0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Nada para fazer backup — a galeria está vazia</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>Ainda não há backups</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Criar backup</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>Excluir este backup?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>O backup de {0} ({1}) será movido para a Lixeira.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>Não foi possível ler o conteúdo deste backup — o arquivo pode estar corrompido ou não é um backup válido</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Backup de {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Removidas desde este backup</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Adicionadas desde este backup</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>Nada foi removido desde este backup</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>Nada foi adicionado desde este backup</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>Estas pinturas não foram restauradas porque exatamente as mesmas pinturas (mesmas pastas) já estão no jogo:
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>Não foi possível restaurar estas pinturas. Consulte os logs para obter mais detalhes:
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…e mais {0}</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>Duplicatas encontradas</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>A galeria já tem duplicatas destas pinturas (mesmo carro, dados de pintura idênticos):
+{0}
+
+Restaurá-las mesmo assim?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — duplicata: {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>As demais pinturas selecionadas serão restauradas de qualquer forma.</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>Restaurar mesmo assim</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>Pular</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>Lida parcialmente</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>A pintura foi lida, mas parte do arquivo não pôde ser analisada. Os dados principais são exibidos; algumas verificações (geração, duplicatas) podem não estar disponíveis.</value>
   </data>
 </root>

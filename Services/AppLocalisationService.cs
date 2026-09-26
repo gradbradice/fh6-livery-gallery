@@ -8,18 +8,22 @@ namespace LiveryGallery.Services;
 internal static class AppLocalisationService
 {
     private static AppLanguage _appLanguage = AppLanguage.English;
+    private static CultureInfo _culture = CultureInfo.CurrentCulture;
+    public static event Action? LanguageChanged;
 
     public static AppLanguage AppLanguage
     {
         get => _appLanguage;
         set
         {
+            bool changed = _appLanguage != value;
             _appLanguage = value;
             ApplyCulture(value);
+            if (changed) LanguageChanged?.Invoke();
         }
     }
 
-    public static CultureInfo Culture => CultureInfo.CurrentCulture;
+    public static CultureInfo Culture => _culture;
 
     public static string MonthYearFormat => _appLanguage switch
     {
@@ -32,6 +36,7 @@ internal static class AppLocalisationService
     {
         string culture = AppLanguageToString(language);
         var cultureInfo = new CultureInfo(culture);
+        _culture = cultureInfo;
 
         // try to fix language change
         CultureInfo.CurrentCulture = cultureInfo;
@@ -53,9 +58,20 @@ internal static class AppLocalisationService
         app.Resources["Loc_DuplicateBadgeLabel"] = Strings.DuplicateBadgeLabel;
         app.Resources["Loc_PossibleDuplicateBadgeTooltip"] = Strings.PossibleDuplicateBadgeTooltip;
         app.Resources["Loc_PossibleDuplicateBadgeLabel"] = Strings.PossibleDuplicateBadgeLabel;
+        app.Resources["Loc_MyLiveryBadgeTooltip"] = Strings.MyLiveryBadgeTooltip;
+        app.Resources["Loc_MyLiveryBadgeLabel"] = Strings.MyLiveryBadgeLabel;
+        app.Resources["Loc_PossiblyGeneratedBadgeLabel"] = Strings.PossiblyGeneratedBadgeLabel;
+        app.Resources["Loc_PossiblyGeneratedBadgeTooltip"] = Strings.PossiblyGeneratedBadgeTooltip;
+        app.Resources["Loc_PaintBadgeLabel"] = Strings.PaintBadgeLabel;
+        app.Resources["Loc_PaintBadgeTooltip"] = Strings.PaintBadgeTooltip;
+        app.Resources["Loc_ParseErrorBadgeLabel"] = Strings.ParseErrorBadgeLabel;
+        app.Resources["Loc_ParseErrorBadgeTooltip"] = Strings.ParseErrorBadgeTooltip;
+        app.Resources["Loc_ParsePartialBadgeLabel"] = Strings.ParsePartialBadgeLabel;
         app.Resources["Loc_AuthorLabel"] = Strings.AuthorLabel;
         app.Resources["Loc_DateLabel"] = Strings.DateLabel;
         app.Resources["Loc_EditTagsTooltip"] = Strings.EditTagsTooltip;
+        app.Resources["Loc_ViewPreviewTooltip"] = Strings.ViewPreviewTooltip;
+        app.Resources["Loc_ClearSelectionLabel"] = Strings.ClearSelectionLabel;
     }
 
     public static AppLanguage GetSystemLanguage()

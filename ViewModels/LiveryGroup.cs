@@ -1,16 +1,9 @@
+using LiveryGallery.Enums;
+using LiveryGallery.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace LiveryGallery.Models;
-
-internal enum LiveryGroupSpecialKind
-{
-    None,
-    DownloadMonth,
-    UnknownDownloadDate,
-    UnknownManufacturer,
-    AllLiveries
-}
+namespace LiveryGallery.ViewModels;
 
 internal class LiveryGroup : INotifyPropertyChanged, IDisposable
 {
@@ -40,10 +33,12 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
 
     public int Count => Items.Count;
     public int FavoriteCount => Items.Count(x => x.IsFavorite);
+    public int MineCount => Items.Count(x => x.IsMine);
     public int DuplicateCount => Items.Count(x => x.IsDuplicate);
     public int PossibleDuplicateCount => Items.Count(x => x.IsPossibleDuplicate);
 
     public bool HasFavorites => FavoriteCount > 0;
+    public bool HasMine => MineCount > 0;
     public bool HasDuplicates => DuplicateCount > 0;
     public bool HasPossibleDuplicates => PossibleDuplicateCount > 0;
 
@@ -61,6 +56,7 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
     }
 
     public bool IsFavoritesGroup { get; init; }
+    public bool IsMineGroup { get; init; }
 
     public LiveryGroupSpecialKind SpecialKind { get; init; } = LiveryGroupSpecialKind.None;
     public DateTime? SpecialMonth { get; init; }
@@ -89,13 +85,25 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
             if (_rows is not null && _rowsBuiltForWidth == GroupWidth) return _rows;
 
             int columns = Math.Max(1, (int)(GroupWidth / CardStep));
-            _rows = new LazyRowList(Items, columns);
+            _rows = new LazyRowList(this, Items, columns);
             _rowsBuiltForWidth = GroupWidth;
             return _rows;
         }
     }
 
     public string CountText => $"({Count})";
+
+    private bool _isExpanded = true;
+    public bool IsExpanded
+    {
+        get => _isExpanded;
+        set
+        {
+            if (_isExpanded == value) return;
+            _isExpanded = value;
+            OnPropertyChanged();
+        }
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

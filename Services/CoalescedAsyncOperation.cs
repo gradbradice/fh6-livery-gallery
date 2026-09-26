@@ -8,20 +8,31 @@ internal sealed class CoalescedAsyncOperation<T>
     public Task<T> RunAsync(Func<CancellationToken, Task<T>> operation, CancellationToken ct)
     {
         Task<T> inFlight;
+        bool startedNew;
         lock (_gate)
         {
-            _inFlight ??= RunCoreAsync(operation, ct);
-            inFlight = _inFlight;
+            startedNew = _inFlight is null;
+            if (startedNew)
+            {
+                inFlight = RunCoreAsync(operation, ct);
+                if (!inFlight.IsCompleted) _inFlight = inFlight;
+            }
+            else
+            {
+                inFlight = _inFlight!;
+            }
         }
 
-        return ct.CanBeCanceled ? WaitWithOwnCancellationAsync(inFlight, ct) : inFlight;
+        if (startedNew || !ct.CanBeCanceled) return inFlight;
+        return WaitWithOwnCancellationAsync(inFlight, ct);
     }
 
-    private async Task<T> RunCoreAsync(Func<CancellationToken, Task<T>> operation, CancellationToken ct)
+    private async Task<T> RunCoreAsync(Func<CancellationToken, Task<T>> operation, CancellationToken starterToken)
     {
+        using var sharedCts = CancellationTokenSource.CreateLinkedTokenSource(starterToken);
         try
         {
-            return await operation(ct);
+            return await operation(sharedCts.Token);
         }
         finally
         {

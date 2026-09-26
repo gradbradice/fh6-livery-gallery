@@ -1,9 +1,9 @@
-using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
+using LiveryGallery.Services;
 
 namespace LiveryGallery.Views;
 
@@ -25,21 +25,9 @@ internal partial class ContactsDialog : Window
 
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
-    private void GithubLink_Click(object? sender, RoutedEventArgs e) => OpenUrl(GithubUrl);
+    private void GithubLink_Click(object? sender, RoutedEventArgs e) => TrustedUrlLauncher.TryOpen(GithubUrl);
 
-    private void TwitterLink_Click(object? sender, RoutedEventArgs e) => OpenUrl(TwitterUrl);
-
-    private static void OpenUrl(string url)
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-        }
-        catch
-        {
-            // do not log
-        }
-    }
+    private void TwitterLink_Click(object? sender, RoutedEventArgs e) => TrustedUrlLauncher.TryOpen(TwitterUrl);
 
     private void CloseButton_Click(object? sender, RoutedEventArgs e) => Close();
 }

@@ -11,18 +11,25 @@ internal readonly record struct InfoTextLine(string Text, string? ColorResourceK
 
 internal partial class InfoDialog : Window
 {
-    public InfoDialog(string title, string message, string? okText = null)
-        : this(title, [new InfoTextLine(message)], okText)
+    public bool ActionClicked { get; private set; }
+
+    public InfoDialog(string title, string message, string? okText = null, string? actionText = null)
+        : this(title, [new InfoTextLine(message)], okText, actionText)
     {
     }
 
-    public InfoDialog(string title, IReadOnlyList<InfoTextLine> lines, string? okText = null)
+    public InfoDialog(string title, IReadOnlyList<InfoTextLine> lines, string? okText = null, string? actionText = null)
     {
         InitializeComponent();
         Title = title;
         TitleBarText.Text = title;
         BuildInlines(lines);
         OkButton.Content = okText ?? Strings.ButtonOk;
+        if (actionText is not null)
+        {
+            ActionButton.Content = actionText;
+            ActionButton.IsVisible = true;
+        }
     }
 
     private void BuildInlines(IReadOnlyList<InfoTextLine> lines)
@@ -45,6 +52,12 @@ internal partial class InfoDialog : Window
 
     private void OkButton_Click(object? sender, RoutedEventArgs e) => Close();
 
+    private void ActionButton_Click(object? sender, RoutedEventArgs e)
+    {
+        ActionClicked = true;
+        Close();
+    }
+
     public static async Task ShowAsync(Window owner, string title, string message, string? okText = null)
     {
         var dlg = new InfoDialog(title, message, okText);
@@ -55,5 +68,13 @@ internal partial class InfoDialog : Window
     {
         var dlg = new InfoDialog(title, lines, okText);
         await dlg.ShowDialog(owner);
+    }
+
+    public static async Task<bool> ShowWithActionAsync(
+        Window owner, string title, string message, string actionText, string? okText = null)
+    {
+        var dlg = new InfoDialog(title, message, okText, actionText);
+        await dlg.ShowDialog(owner);
+        return dlg.ActionClicked;
     }
 }

@@ -154,6 +154,10 @@ internal class CarDatabaseService
             LastError = null;
             return changed ? CarDatabaseRefreshOutcome.Updated : CarDatabaseRefreshOutcome.NotModified;
         }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
             LastError = ex.Message;

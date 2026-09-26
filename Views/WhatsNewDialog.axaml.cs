@@ -1,7 +1,7 @@
-using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using LiveryGallery.Controller;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Services;
@@ -33,38 +33,17 @@ internal partial class WhatsNewDialog : Window
         MarkdownContent.Markdown = section ?? Strings.ChangelogNotAvailable;
     }
 
-    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed) return;
-
-        if (e.ClickCount == 2)
-            ToggleMaximize();
-        else
-            BeginMoveDrag(e);
-    }
+    private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) =>
+        this.HandleTitleBarDragOrMaximize(e, MaximizeIcon);
 
     private void MinimizeButton_Click(object? sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
 
-    private void MaximizeButton_Click(object? sender, RoutedEventArgs e) => ToggleMaximize();
-
-    private void ToggleMaximize()
-    {
-        WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        MaximizeIcon.Text = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
-    }
+    private void MaximizeButton_Click(object? sender, RoutedEventArgs e) => this.ToggleMaximize(MaximizeIcon);
 
     private void CloseButton_Click(object? sender, RoutedEventArgs e) => Close();
 
     private void DownloadButton_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(_releaseUrl)) return;
-        try
-        {
-            Process.Start(new ProcessStartInfo(_releaseUrl) { UseShellExecute = true });
-        }
-        catch
-        {
-            // do not log
-        }
+        if (_releaseUrl is not null) TrustedUrlLauncher.TryOpen(_releaseUrl);
     }
 }

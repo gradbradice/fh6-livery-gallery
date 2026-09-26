@@ -25,10 +25,15 @@ internal partial class App : Application
             var tagService = new TagService();
             var favoriteService = new FavoriteService();
             var authorCardService = new AuthorCardService();
-            var scanService = new LiveryScanService(cacheService, carDatabase, favoriteService, tagService, authorCardService);
+            var saveFolderLock = new SaveFolderLock();
+            var archiveService = new LiveryArchiveService(saveFolderLock);
+            var backupService = new LiveryBackupService(saveFolderLock);
+            var liveryIdService = new LiveryIdService();
+            var scanService = new LiveryScanner(cacheService, carDatabase, favoriteService, tagService, authorCardService, archiveService, saveFolderLock, liveryIdService);
             var updateService = new AppUpdateCheckService(AppHttpClient.Instance);
             desktop.MainWindow = new MainWindow(
-                settings, cacheService, carDatabase, tagService, favoriteService, authorCardService, scanService, updateService);
+                settings, carDatabase, tagService, favoriteService, authorCardService, archiveService, backupService,
+                scanService, updateService);
         }
 
         base.OnFrameworkInitializationCompleted();

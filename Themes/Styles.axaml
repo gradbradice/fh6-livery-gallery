@@ -87,6 +87,16 @@
 		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
 	</Style>
 
+	<Style Selector="Button.cardIconButton">
+		<Setter Property="Width" Value="28"/>
+		<Setter Property="Height" Value="28"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="0"/>
+	</Style>
+
 	<Style Selector="Button.tagEdit">
 		<Setter Property="Background" Value="Transparent" />
 		<Setter Property="Width" Value="24" />
@@ -120,18 +130,21 @@
 		<Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
 	</Style>
 
-	<Style Selector="Button.favoriteStar">
-		<Setter Property="Background" Value="#66000000" />
-		<Setter Property="Width" Value="26" />
-		<Setter Property="Height" Value="26" />
+	<Style Selector="Button.cardIconButton">
+		<Setter Property="Background" Value="{DynamicResource BgBrush}" />
+		<Setter Property="Width" Value="30" />
+		<Setter Property="Height" Value="30" />
 		<Setter Property="Padding" Value="0" />
 		<Setter Property="Cursor" Value="Hand" />
-		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="CornerRadius" Value="13" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush2}" />
+		<Setter Property="CornerRadius" Value="15" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 	</Style>
-
+	<Style Selector="Button.cardIconButton:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
+	</Style>
 
 	<Style Selector="TextBox.search">
 		<Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}" />
@@ -164,12 +177,15 @@
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush2}" />
 		<Setter Property="BorderThickness" Value="1" />
 		<Setter Property="CornerRadius" Value="14" />
-		<Setter Property="BoxShadow" Value="0 3 14 0 #22000000" />
 		<Setter Property="Cursor" Value="Hand" />
 	</Style>
 	<Style Selector="Border.liveryCard:pointerover">
 		<Setter Property="Background" Value="{DynamicResource CardHoverBrush}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+	</Style>
+	<Style Selector="Border.liveryCard.selected">
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+		<Setter Property="BoxShadow" Value="0 0 0 2 #6366F1" />
 	</Style>
 
 	<Style Selector="Border.carChip">
@@ -212,16 +228,78 @@
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
 	</Style>
 
-	<Style Selector="Expander.groupExpander">
-		<Setter Property="IsExpanded" Value="True" />
+	<Style Selector="Button.tagChipCard">
+		<Setter Property="Padding" Value="5,1" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="BorderBrush" Value="Transparent" />
+		<Setter Property="Margin" Value="0,0,5,5" />
+		<Setter Property="Cursor" Value="Hand" />
+		<Setter Property="Background" Value="{DynamicResource ChipBackgroundBrush}" />
+		<Setter Property="CornerRadius" Value="5" />
+		<Setter Property="Template">
+			<ControlTemplate TargetType="Button">
+				<Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}">
+					<ContentPresenter Content="{TemplateBinding Content}"
+                                       ContentTemplate="{TemplateBinding ContentTemplate}" />
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="Button.tagChipCard:pointerover">
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+	</Style>
+	<Style Selector="Button.tagChipCard:pressed">
+		<Setter Property="RenderTransform" Value="scale(1)" />
+		<Setter Property="Opacity" Value="0.75" />
+	</Style>
+
+	<Style Selector="ToggleButton.groupHeader">
+		<Setter Property="Background" Value="{DynamicResource GroupBackgroundBrush}" />
+		<Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+		<Setter Property="Padding" Value="16,12" />
+		<Setter Property="Margin" Value="4,10,4,0" />
+		<Setter Property="CornerRadius" Value="10,10,0,0" />
+		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+		<Setter Property="Cursor" Value="Hand" />
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Background="{TemplateBinding Background}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}">
+					<Grid ColumnDefinitions="*,Auto">
+						<ContentPresenter Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          VerticalAlignment="Center" />
+						<Path x:Name="PART_Chevron" Grid.Column="1" Data="M 0 0 L 5 5 L 10 0"
+                              Width="10" Height="6" Stretch="Uniform" Margin="12,0,0,0"
+                              Stroke="{DynamicResource TextSecondaryBrush}" StrokeThickness="1.5"
+                              VerticalAlignment="Center" RenderTransformOrigin="50%,50%" />
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="ToggleButton.groupHeader:checked /template/ Path#PART_Chevron">
+		<Setter Property="RenderTransform" Value="rotate(180deg)" />
+	</Style>
+	<Style Selector="ToggleButton.groupHeader:unchecked">
 		<Setter Property="Margin" Value="4,10,4,4" />
 		<Setter Property="CornerRadius" Value="10" />
-		<Setter Property="Background" Value="{DynamicResource GroupBackgroundBrush}" />
-		<Setter Property="Padding" Value="0" />
 	</Style>
-	<Style Selector="Expander.groupExpander /template/ ToggleButton#ExpanderHeader">
+	<Style Selector="ToggleButton.groupHeader:pressed">
+		<Setter Property="RenderTransform" Value="scale(1)" />
+	</Style>
+	<Style Selector="Border.galleryRow">
 		<Setter Property="Background" Value="{DynamicResource GroupBackgroundBrush}" />
-		<Setter Property="Padding" Value="16,12" />
+		<Setter Property="Margin" Value="4,0" />
+	</Style>
+	<Style Selector="Border.galleryRow.last">
+		<Setter Property="Margin" Value="4,0,4,4" />
+		<Setter Property="CornerRadius" Value="0,0,10,10" />
 	</Style>
 	<Style Selector="Button.pill">
 		<Setter Property="Background" Value="Transparent" />

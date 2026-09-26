@@ -2,7 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:LiveryGallery.Localisation"
         xmlns:models="clr-namespace:LiveryGallery.Models"
+        xmlns:enums="clr-namespace:LiveryGallery.Enums"
+        xmlns:vm="clr-namespace:LiveryGallery.ViewModels"
+        xmlns:views="clr-namespace:LiveryGallery.Views"
         x:Class="LiveryGallery.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
         Title="{x:Static loc:Strings.AppTitle}"
         Icon="avares://LiveryGallery/Assets/app-icon.png"
         Height="860" Width="1320" MinHeight="560" MinWidth="960"
@@ -13,14 +17,28 @@
         ExtendClientAreaTitleBarHeightHint="-1">
 
     <Window.Resources>
-        <DataTemplate x:Key="LiveryCardTemplate" x:DataType="models:LiveryEntry">
-            <Border Classes="liveryCard" Width="270" Margin="8" ToolTip.Tip="{Binding FolderName}"
+        <DataTemplate x:Key="LiveryCardTemplate" x:DataType="vm:LiveryEntry">
+            <Border Classes="liveryCard" Width="270" Margin="8"
+                    Classes.selected="{Binding IsSelected}"
                     AttachedToVisualTree="Card_AttachedToVisualTree"
                     DetachedFromVisualTree="Card_DetachedFromVisualTree"
-                    DataContextChanged="Card_DataContextChanged">
+                    DataContextChanged="Card_DataContextChanged"
+                    PointerPressed="Card_SelectPointerPressed"
+                    ContextRequested="Card_ContextRequested">
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static loc:Strings.ContextMenuMoveToArchive}"
+                                  Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).MoveSelectedToArchiveCommand}" />
+                    </ContextMenu>
+                </Border.ContextMenu>
                 <StackPanel>
+                    <Border Height="26" Padding="14,0">
+                        <TextBlock Text="{Binding LiveryIdText}" FontSize="11" FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </Border>
                     <Grid Height="150" ClipToBounds="True">
-                        <Border CornerRadius="14,14,0,0" ClipToBounds="True">
+                        <Border CornerRadius="0" ClipToBounds="True">
                             <Grid>
                                 <Image Source="{Binding Thumbnail}" Stretch="UniformToFill"
                                        IsVisible="{Binding ShowThumbnailImage}" />
@@ -32,21 +50,11 @@
                                 </Border>
                             </Grid>
                         </Border>
-                        <Button Classes="favoriteStar" Click="ToggleFavorite_Click"
-                                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,8,0"
-                                ToolTip.Tip="{DynamicResource Loc_FavoriteToggleTooltip}">
-                            <Panel>
-                                <Path Data="{StaticResource IconStarOutline}" Width="13" Height="13" Stretch="Uniform"
-                                      Fill="White" IsVisible="{Binding !IsFavorite}" />
-                                <Path Data="{StaticResource IconStarFilled}" Width="13" Height="13" Stretch="Uniform"
-                                      Fill="#FFD54F" IsVisible="{Binding IsFavorite}" />
-                            </Panel>
-                        </Button>
                         <Border IsVisible="{Binding IsDuplicate}"
                                 Background="{DynamicResource DangerBrush}"
                                 CornerRadius="6" Padding="7,3"
                                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,8,0,0"
-                                ToolTip.Tip="{DynamicResource Loc_DuplicateBadgeTooltip}">
+                                ToolTip.Tip="{Binding DuplicateMatchTooltip}">
                             <TextBlock Text="{DynamicResource Loc_DuplicateBadgeLabel}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
@@ -54,27 +62,137 @@
                                 Background="{DynamicResource WarningBrush}"
                                 CornerRadius="6" Padding="7,3"
                                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,8,0,0"
-                                ToolTip.Tip="{DynamicResource Loc_PossibleDuplicateBadgeTooltip}">
-                            <TextBlock Text="{DynamicResource Loc_PossibleDuplicateBadgeLabel}" FontSize="10.5"
+                                ToolTip.Tip="{Binding DuplicateMatchTooltip}">
+                            <TextBlock Text="{Binding PossibleDuplicateBadgeText}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
+                        <Border IsVisible="{Binding ShowMineBadge}"
+                                Background="{DynamicResource AccentBrush}"
+                                CornerRadius="6" Padding="7,3"
+                                HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8"
+                                ToolTip.Tip="{DynamicResource Loc_MyLiveryBadgeTooltip}">
+                            <TextBlock Text="{DynamicResource Loc_MyLiveryBadgeLabel}" FontSize="10.5"
+                                       FontWeight="SemiBold" Foreground="White" />
+                        </Border>
+                        <StackPanel Orientation="Horizontal" Spacing="4"
+                                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8,0,0,8">
+                            <Border IsVisible="{Binding IsPossiblyGenerated}"
+                                    Background="{DynamicResource TextSecondaryBrush}"
+                                    CornerRadius="6" Padding="7,3"
+                                    ToolTip.Tip="{DynamicResource Loc_PossiblyGeneratedBadgeTooltip}">
+                                <TextBlock Text="{DynamicResource Loc_PossiblyGeneratedBadgeLabel}" FontSize="10.5"
+                                           FontWeight="SemiBold" Foreground="White" />
+                            </Border>
+                            <Border IsVisible="{Binding HasNoLayers}"
+                                    Background="{DynamicResource TextSecondaryBrush}"
+                                    CornerRadius="6" Padding="7,3"
+                                    ToolTip.Tip="{DynamicResource Loc_PaintBadgeTooltip}">
+                                <TextBlock Text="{DynamicResource Loc_PaintBadgeLabel}" FontSize="10.5"
+                                           FontWeight="SemiBold" Foreground="White" />
+                            </Border>
+                            <Border IsVisible="{Binding HasParseError}"
+                                    Background="{DynamicResource DangerBrush}"
+                                    CornerRadius="6" Padding="7,3"
+                                    ToolTip.Tip="{Binding ParseIssueTooltip}">
+                                <TextBlock Text="{DynamicResource Loc_ParseErrorBadgeLabel}" FontSize="10.5"
+                                           FontWeight="SemiBold" Foreground="White" />
+                            </Border>
+                            <Border IsVisible="{Binding HasParseWarning}"
+                                    Background="{DynamicResource WarningBrush}"
+                                    CornerRadius="6" Padding="7,3"
+                                    ToolTip.Tip="{Binding ParseIssueTooltip}">
+                                <TextBlock Text="{DynamicResource Loc_ParsePartialBadgeLabel}" FontSize="10.5"
+                                           FontWeight="SemiBold" Foreground="White" />
+                            </Border>
+                        </StackPanel>
+                        <Border CornerRadius="0" Background="#4D000000"
+                                IsVisible="{Binding IsSelected}" IsHitTestVisible="False" />
+                        <Border Width="40" Height="40" CornerRadius="20"
+                                Background="{DynamicResource AccentBrush}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                IsVisible="{Binding IsSelected}" IsHitTestVisible="False">
+                            <Path Data="{StaticResource IconCheck}" Width="18" Height="18" Stretch="Uniform"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  Fill="White" />
+                        </Border>
                     </Grid>
-                    <StackPanel Margin="14,12,14,14">
+					<Grid ColumnDefinitions="*,Auto" Margin="14,10,14,0">
+						<StackPanel Grid.Column="0"
+									Orientation="Horizontal"
+									Spacing="8">
+
+							<Button Classes="cardIconButton"
+									Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.EditTagsCommand}"
+									CommandParameter="{Binding}"
+									ToolTip.Tip="{DynamicResource Loc_EditTagsTooltip}">
+								<Path Data="{StaticResource IconBookmark}"
+									  Width="13"
+									  Height="13"
+									  Stretch="Uniform"
+									  Fill="{DynamicResource TextPrimaryBrush}" />
+							</Button>
+
+							<Button Classes="cardIconButton"
+									Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.ViewPreviewCommand}"
+									CommandParameter="{Binding}"
+									ToolTip.Tip="{DynamicResource Loc_ViewPreviewTooltip}">
+								<Path Data="{StaticResource IconPreview}"
+									  Width="13"
+									  Height="13"
+									  Stretch="Uniform"
+									  Fill="{DynamicResource TextPrimaryBrush}" />
+							</Button>
+						</StackPanel>
+
+						<Button Grid.Column="1"
+                            Classes="cardIconButton"
+                            Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.ToggleFavoriteCommand}"
+                            CommandParameter="{Binding}"
+                            ToolTip.Tip="{DynamicResource Loc_FavoriteToggleTooltip}">
+							<Panel HorizontalAlignment="Center" VerticalAlignment="Center">
+								<Path Data="{StaticResource IconStar}"
+									  Width="13"
+									  Height="13"
+									  Stretch="Uniform"
+									  Fill="Transparent"
+									  Stroke="{DynamicResource TextPrimaryBrush}"
+									  StrokeThickness="1.5"
+									  HorizontalAlignment="Center"
+									  VerticalAlignment="Center"
+									  IsVisible="{Binding !IsFavorite}" />
+								
+								<Path Data="{StaticResource IconStar}"
+									  Width="13"
+									  Height="13"
+									  Stretch="Uniform"
+									  Fill="#FFD54F"
+									  HorizontalAlignment="Center"
+									  VerticalAlignment="Center"
+									  IsVisible="{Binding IsFavorite}" />
+							</Panel>
+						</Button>
+					</Grid>
+                    <StackPanel Margin="14,10,14,14">
                         <TextBlock Text="{Binding LiveryName}" FontSize="14.5" FontWeight="SemiBold"
-                                   TextTrimming="CharacterEllipsis" />
+                                   TextTrimming="CharacterEllipsis"
+                                   ToolTip.Tip="{Binding LiveryName}" />
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0" VerticalAlignment="Center">
                             <Border Classes="carChip">
                                 <TextBlock Text="{Binding CarManufacturer}" FontSize="11.5" FontWeight="Medium"
                                            Foreground="{DynamicResource ChipTextBrush}"
-                                           TextTrimming="CharacterEllipsis" MaxWidth="110" />
+                                           TextTrimming="CharacterEllipsis" MaxWidth="110"
+                                           ToolTip.Tip="{Binding CarManufacturer}" />
                             </Border>
                             <TextBlock Text="{Binding CarModelName}" FontSize="12" FontWeight="Medium" Margin="6,0,0,0"
-                                       TextTrimming="CharacterEllipsis" MaxWidth="120" VerticalAlignment="Center" />
+                                       TextTrimming="CharacterEllipsis" MaxWidth="120" VerticalAlignment="Center"
+                                       ToolTip.Tip="{Binding CarModelName}" />
                             <TextBlock Text="{Binding CarYear, StringFormat=({0})}" FontSize="11.5" Margin="4,0,0,0"
                                        Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
                         </StackPanel>
 
-                        <Button Classes="rowLink" Click="AuthorRow_Click" Margin="0,9,0,0"
+                        <Button Classes="rowLink"
+                                Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.ShowAuthorRowCommand}"
+                                CommandParameter="{Binding}" Margin="0,9,0,0"
                                 ToolTip.Tip="{DynamicResource Loc_AuthorLabel}">
                             <StackPanel Orientation="Horizontal">
                                 <Path Data="{StaticResource IconUser}" Width="11" Height="11" Stretch="Uniform"
@@ -92,16 +210,6 @@
                             <TextBlock Text="{Binding DateDisplay}" FontSize="12"
                                        Foreground="{DynamicResource TextSecondaryBrush}" />
                         </StackPanel>
-                        <Button Classes="rowLink" Click="EditTags_Click" Margin="-3,4,0,-3"
-                                ToolTip.Tip="{DynamicResource Loc_EditTagsTooltip}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconBookmark}" Width="10.5" Height="10.5" Stretch="Uniform"
-                                      Fill="{DynamicResource TextSecondaryBrush}" Margin="3,0,3,0" />
-                                <TextBlock Text="{DynamicResource Loc_EditTagsTooltip}"
-                                           FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"
-                                           VerticalAlignment="Center" />
-                            </StackPanel>
-                        </Button>
                         <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Tags}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -110,78 +218,81 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="x:String">
-                                    <Border Background="{DynamicResource ChipBackgroundBrush}" CornerRadius="5"
-                                            Padding="6,2" Margin="0,0,5,5">
+                                    <Button Classes="tagChipCard"
+                                            Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.ToggleTagCommand}"
+                                            CommandParameter="{Binding}">
                                         <TextBlock Text="{Binding}" FontSize="10.5"
                                                    Foreground="{DynamicResource ChipTextBrush}" />
-                                    </Border>
+                                    </Button>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-
                         <TextBlock Text="{Binding FolderName}" FontSize="10" Margin="0,8,0,0"
                                    Foreground="{DynamicResource TextTertiaryBrush}"
-                                   TextTrimming="CharacterEllipsis" />
+                                   TextTrimming="CharacterEllipsis"
+                                   IsVisible="{Binding $parent[Window].((vm:MainViewModel)DataContext).ShowFolderNames}" />
                     </StackPanel>
                 </StackPanel>
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="GalleryRowTemplate" x:DataType="models:GalleryRow">
-            <ItemsControl ItemsSource="{Binding Items}" ItemTemplate="{StaticResource LiveryCardTemplate}"
-                          Background="Transparent">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+            <Border Classes="galleryRow" Classes.last="{Binding IsLastInGroup}"
+                    Width="{Binding Group.GroupWidth}" HorizontalAlignment="Center">
+                <views:GalleryRowPresenter ItemTemplate="{StaticResource LiveryCardTemplate}" />
+            </Border>
         </DataTemplate>
-        <DataTemplate x:Key="GroupTemplate" x:DataType="models:LiveryGroup">
-            <Expander Classes="groupExpander" HorizontalAlignment="Center"
-                      Width="{Binding GroupWidth}">
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Path Data="{StaticResource IconStarFilled}" Width="13" Height="13" Stretch="Uniform"
-                              Fill="#FFD54F" Margin="0,0,7,0" VerticalAlignment="Center"
-                              IsVisible="{Binding IsFavoritesGroup}" />
-                        <TextBlock Text="{Binding Key}" FontSize="15" FontWeight="SemiBold" />
-                        <TextBlock Text="{Binding CountText}" FontSize="13" Margin="7,0,0,0"
-                                   Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
+        <DataTemplate x:Key="GroupHeaderTemplate" x:DataType="vm:LiveryGroup">
+            <ToggleButton Classes="groupHeader" Width="{Binding GroupWidth}" HorizontalAlignment="Center"
+                          IsChecked="{Binding IsExpanded, Mode=TwoWay}" Click="GroupHeader_Click">
+                <StackPanel Orientation="Horizontal">
+						<Path Data="{StaticResource IconStar}" Width="13" Height="13" Stretch="Uniform"
+                          Fill="#FFD54F" Margin="0,0,7,0" VerticalAlignment="Center"
+                          IsVisible="{Binding IsFavoritesGroup}" />
+                    <PathIcon Data="{StaticResource IconUser}" Width="13" Height="13"
+                          Foreground="{DynamicResource AccentBrush}" Margin="0,0,7,0" VerticalAlignment="Center"
+                          IsVisible="{Binding IsMineGroup}" />
+                    <TextBlock Text="{Binding Key}" FontSize="15" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding CountText}" FontSize="13" Margin="7,0,0,0"
+                               Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
 
-                        <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasFavorites}"
-                                    VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11" Stretch="Uniform"
-                                  Fill="#FFD54F" Margin="0,0,4,0" />
-                            <TextBlock Text="{Binding FavoriteCount}" FontSize="13"
-                                       Foreground="{DynamicResource TextSecondaryBrush}" />
-                        </StackPanel>
+						<StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasFavorites}"
+                                VerticalAlignment="Center">
+							<Path Data="{StaticResource IconStar}" Width="11" Height="11" Stretch="Uniform"
+								  Fill="#FFD54F" Margin="0,0,4,0" />
+							<TextBlock Text="{Binding FavoriteCount}" FontSize="13"
+									   Foreground="{DynamicResource TextSecondaryBrush}" />
+						</StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasDuplicates}"
-                                    VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
-                                  Fill="{DynamicResource DangerBrush}" Margin="0,0,5,0" />
-                            <TextBlock Text="{Binding DuplicateCount}" FontSize="13"
-                                       Foreground="{DynamicResource TextSecondaryBrush}" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasPossibleDuplicates}"
-                                    VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
-                                  Fill="{DynamicResource WarningBrush}" Margin="0,0,5,0" />
-                            <TextBlock Text="{Binding PossibleDuplicateCount}" FontSize="13"
-                                       Foreground="{DynamicResource TextSecondaryBrush}" />
-                        </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasMine}"
+                                VerticalAlignment="Center">
+                        <PathIcon Data="{StaticResource IconUser}" Width="10" Height="10"
+                              Foreground="{DynamicResource AccentBrush}" Margin="0,0,4,0" />
+                        <TextBlock Text="{Binding MineCount}" FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
                     </StackPanel>
-                </Expander.Header>
-                <ItemsControl ItemsSource="{Binding Rows}" ItemTemplate="{StaticResource GalleryRowTemplate}"
-                              Background="Transparent" Width="{Binding GroupWidth}" HorizontalAlignment="Center">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </Expander>
+
+                    <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasDuplicates}"
+                                VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
+                              Fill="{DynamicResource DangerBrush}" Margin="0,0,5,0" />
+                        <TextBlock Text="{Binding DuplicateCount}" FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsVisible="{Binding HasPossibleDuplicates}"
+                                VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
+                              Fill="{DynamicResource WarningBrush}" Margin="0,0,5,0" />
+                        <TextBlock Text="{Binding PossibleDuplicateCount}" FontSize="13"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </StackPanel>
+                </StackPanel>
+            </ToggleButton>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TagChipTemplate" x:DataType="vm:TagChipViewModel">
+            <ToggleButton Content="{Binding Tag}" Classes="tagChip" Margin="0,0,8,8"
+                          IsChecked="{Binding IsSelected, Mode=TwoWay}" />
         </DataTemplate>
     </Window.Resources>
 
@@ -231,72 +342,209 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="SearchBox" Grid.Column="0" Classes="search"
-                             Margin="0,0,10,0" TextChanged="SearchBox_TextChanged" />
+                    <TextBox x:Name="SearchBox" Grid.Column="0" Classes="search" x:DataType="vm:FilterBarViewModel"
+                             DataContext="{Binding FilterBar}"
+                             Margin="0,0,10,0" Text="{Binding SearchText, Mode=TwoWay}"
+                             TextChanged="SearchBox_TextChanged" />
 					<Button x:Name="DisplayFilterButton" Grid.Column="1" Classes="icon" Margin="0,0,8,0"
+                            DataContext="{Binding FilterBar}"
                             ToolTip.Tip="{x:Static loc:Strings.DisplayFilterTooltip}">
 						    <PathIcon Data="{StaticResource IconFilter}" Width="16" Height="16"
 								      Foreground="{DynamicResource TextPrimaryBrush}" />
                         <Button.Flyout>
-                            <MenuFlyout Placement="BottomEdgeAlignedLeft">
-                                <MenuItem x:Name="GroupingToggleItem" ToggleType="CheckBox"
-                                          Click="GroupingToggleItem_Click" />
-                                <Separator />
-                                <MenuItem x:Name="SortManufacturerItem" ToggleType="Radio" GroupName="SortGroup"
-                                          Tag="0" Click="SortModeMenuItem_Click" />
-                                <MenuItem x:Name="SortAuthorItem" ToggleType="Radio" GroupName="SortGroup"
-                                          Tag="1" Click="SortModeMenuItem_Click" />
-                                <MenuItem x:Name="SortDownloadTimeItem" ToggleType="Radio" GroupName="SortGroup"
-                                          Tag="2" Click="SortModeMenuItem_Click" />
-                                <Separator />
-                                <MenuItem x:Name="FavNoneItem" ToggleType="Radio" GroupName="FavGroup"
-                                          Tag="0" Click="FavModeMenuItem_Click" />
-                                <MenuItem x:Name="FavFirstItem" ToggleType="Radio" GroupName="FavGroup"
-                                          Tag="1" Click="FavModeMenuItem_Click">
+                            <MenuFlyout Placement="BottomEdgeAlignedLeft" x:DataType="vm:FilterBarViewModel">
+                                <MenuItem IsHitTestVisible="False" Focusable="False">
                                     <MenuItem.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11"
-                                                  Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
-                                                  VerticalAlignment="Center" />
-                                            <TextBlock x:Name="FavFirstItemText" VerticalAlignment="Center" />
-                                        </StackPanel>
+                                        <TextBlock x:Name="FilterMenuTitleText" FontWeight="SemiBold" Margin="0,2,0,4" />
                                     </MenuItem.Header>
                                 </MenuItem>
-                                <MenuItem x:Name="FavOnlyItem" ToggleType="Radio" GroupName="FavGroup"
-                                          Tag="2" Click="FavModeMenuItem_Click">
+                                <MenuItem x:Name="SortMenuItem">
                                     <MenuItem.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11"
-                                                  Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
-                                                  VerticalAlignment="Center" />
-                                            <TextBlock x:Name="FavOnlyItemText" VerticalAlignment="Center" />
-                                        </StackPanel>
+                                        <Grid ColumnDefinitions="*,Auto" MinWidth="240">
+                                            <TextBlock x:Name="SortLabelText" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding SortValueText}" Margin="24,0,0,0"
+                                                       VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                        </Grid>
                                     </MenuItem.Header>
+                                    <MenuItem x:Name="SortManufacturerItem" ToggleType="Radio" GroupName="SortGroup"
+                                              IsChecked="{Binding IsSortManufacturer}"
+                                              Command="{Binding SetSortModeCommand}" CommandParameter="{x:Static enums:SortMode.Manufacture}" />
+                                    <MenuItem x:Name="SortAuthorItem" ToggleType="Radio" GroupName="SortGroup"
+                                              IsChecked="{Binding IsSortAuthor}"
+                                              Command="{Binding SetSortModeCommand}" CommandParameter="{x:Static enums:SortMode.Author}" />
+                                    <MenuItem x:Name="SortDownloadTimeItem" ToggleType="Radio" GroupName="SortGroup"
+                                              IsChecked="{Binding IsSortDownloadTime}"
+                                              Command="{Binding SetSortModeCommand}" CommandParameter="{x:Static enums:SortMode.DownloadTime}" />
                                 </MenuItem>
-                                <MenuItem x:Name="FavSeparateItem" ToggleType="Radio" GroupName="FavGroup"
-                                          Tag="3" Click="FavModeMenuItem_Click">
+                                <MenuItem x:Name="GroupingMenuItem">
                                     <MenuItem.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11"
-                                                  Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
-                                                  VerticalAlignment="Center" />
-                                            <TextBlock x:Name="FavSeparateItemText" VerticalAlignment="Center" />
-                                        </StackPanel>
+                                        <Grid ColumnDefinitions="*,Auto" MinWidth="240">
+                                            <TextBlock x:Name="GroupingLabelText" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding GroupingValueText}" Margin="24,0,0,0"
+                                                       VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                        </Grid>
                                     </MenuItem.Header>
+                                    <MenuItem x:Name="GroupingNoneItem" ToggleType="Radio" GroupName="GroupingGroup"
+                                              IsChecked="{Binding IsGroupingNone}"
+                                              Command="{Binding DisableGroupingCommand}" />
+                                    <MenuItem x:Name="GroupingByKeyItem" ToggleType="Radio" GroupName="GroupingGroup"
+                                              Header="{Binding GroupingByKeyText}" IsChecked="{Binding IsGroupingByKey}"
+                                              Command="{Binding EnableGroupingCommand}" />
                                 </MenuItem>
                                 <Separator />
-                                <MenuItem x:Name="DupAllItem" ToggleType="Radio" GroupName="DupGroup"
-                                          Tag="0" Click="DupModeMenuItem_Click" />
-                                <MenuItem x:Name="DupAndPossibleItem" ToggleType="Radio" GroupName="DupGroup"
-                                          Tag="1" Click="DupModeMenuItem_Click" />
-                                <MenuItem x:Name="DupOnlyItem" ToggleType="Radio" GroupName="DupGroup"
-                                          Tag="2" Click="DupModeMenuItem_Click" />
+                                <MenuItem x:Name="FavMenuItem">
+                                    <MenuItem.Header>
+                                        <Grid ColumnDefinitions="*,Auto" MinWidth="240">
+                                            <TextBlock x:Name="FavLabelText" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding FavoriteValueText}" Margin="24,0,0,0"
+                                                       VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                        </Grid>
+                                    </MenuItem.Header>
+                                    <MenuItem x:Name="FavNoneItem" ToggleType="Radio" GroupName="FavGroup"
+                                              IsChecked="{Binding IsFavNone}"
+                                              Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.None}" />
+                                    <MenuItem x:Name="FavFirstItem" ToggleType="Radio" GroupName="FavGroup"
+                                              IsChecked="{Binding IsFavFirst}"
+                                              Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.FavoritesFirst}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Data="{StaticResource IconStar}" Width="11" Height="11"
+                                                      Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
+                                                      VerticalAlignment="Center" />
+                                                <TextBlock x:Name="FavFirstItemText" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem x:Name="FavOnlyItem" ToggleType="Radio" GroupName="FavGroup"
+                                              IsChecked="{Binding IsFavOnly}"
+                                              Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.OnlyFavorites}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Data="{StaticResource IconStar}" Width="11" Height="11"
+                                                      Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
+                                                      VerticalAlignment="Center" />
+                                                <TextBlock x:Name="FavOnlyItemText" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem x:Name="FavSeparateItem" ToggleType="Radio" GroupName="FavGroup"
+                                              IsChecked="{Binding IsFavSeparate}" IsEnabled="{Binding IsFavSeparateEnabled}"
+                                              Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.FavoritesSeparately}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Data="{StaticResource IconStar}" Width="11" Height="11"
+                                                      Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
+                                                      VerticalAlignment="Center" />
+                                                <TextBlock x:Name="FavSeparateItemText" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                </MenuItem>
+                                <MenuItem x:Name="MineMenuItem">
+                                    <MenuItem.Header>
+                                        <Grid ColumnDefinitions="*,Auto" MinWidth="240">
+                                            <TextBlock x:Name="MineLabelText" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding MineValueText}" Margin="24,0,0,0"
+                                                       VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                        </Grid>
+                                    </MenuItem.Header>
+                                    <MenuItem x:Name="MineNoneItem" ToggleType="Radio" GroupName="MineGroup"
+                                              IsChecked="{Binding IsMineNone}"
+                                              Command="{Binding SetMineModeCommand}" CommandParameter="{x:Static enums:MineMode.None}" />
+                                    <MenuItem x:Name="MineFirstItem" ToggleType="Radio" GroupName="MineGroup"
+                                              IsChecked="{Binding IsMineFirst}"
+                                              Command="{Binding SetMineModeCommand}" CommandParameter="{x:Static enums:MineMode.MineFirst}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <PathIcon Data="{StaticResource IconUser}" Width="11" Height="11"
+                                                          Foreground="{DynamicResource AccentBrush}" Margin="0,0,6,0"
+                                                          VerticalAlignment="Center" />
+                                                <TextBlock x:Name="MineFirstItemText" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem x:Name="MineOnlyItem" ToggleType="Radio" GroupName="MineGroup"
+                                              IsChecked="{Binding IsMineOnly}"
+                                              Command="{Binding SetMineModeCommand}" CommandParameter="{x:Static enums:MineMode.OnlyMine}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <PathIcon Data="{StaticResource IconUser}" Width="11" Height="11"
+                                                          Foreground="{DynamicResource AccentBrush}" Margin="0,0,6,0"
+                                                          VerticalAlignment="Center" />
+                                                <TextBlock x:Name="MineOnlyItemText" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem x:Name="MineSeparateItem" ToggleType="Radio" GroupName="MineGroup"
+                                              IsChecked="{Binding IsMineSeparate}" IsEnabled="{Binding IsMineSeparateEnabled}"
+                                              Command="{Binding SetMineModeCommand}" CommandParameter="{x:Static enums:MineMode.MineSeparately}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <PathIcon Data="{StaticResource IconUser}" Width="11" Height="11"
+                                                          Foreground="{DynamicResource AccentBrush}" Margin="0,0,6,0"
+                                                          VerticalAlignment="Center" />
+                                                <TextBlock x:Name="MineSeparateItemText" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                </MenuItem>
+                                <MenuItem x:Name="DupMenuItem">
+                                    <MenuItem.Header>
+                                        <Grid ColumnDefinitions="*,Auto" MinWidth="240">
+                                            <TextBlock x:Name="DupLabelText" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding DuplicatesValueText}" Margin="24,0,0,0"
+                                                       VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                        </Grid>
+                                    </MenuItem.Header>
+                                    <MenuItem x:Name="DupAllItem" ToggleType="Radio" GroupName="DupGroup"
+                                              IsChecked="{Binding IsDupAll}"
+                                              Command="{Binding SetDuplicatesFilterModeCommand}" CommandParameter="{x:Static enums:DuplicatesFilterMode.All}" />
+                                    <MenuItem x:Name="DupAndPossibleItem" ToggleType="Radio" GroupName="DupGroup"
+                                              IsChecked="{Binding IsDupAndPossible}"
+                                              Command="{Binding SetDuplicatesFilterModeCommand}" CommandParameter="{x:Static enums:DuplicatesFilterMode.DuplicatesAndPossible}" />
+                                    <MenuItem x:Name="DupOnlyItem" ToggleType="Radio" GroupName="DupGroup"
+                                              IsChecked="{Binding IsDupOnly}"
+                                              Command="{Binding SetDuplicatesFilterModeCommand}" CommandParameter="{x:Static enums:DuplicatesFilterMode.DuplicatesOnly}" />
+                                </MenuItem>
+                                <MenuItem x:Name="GenMenuItem">
+                                    <MenuItem.Header>
+                                        <Grid ColumnDefinitions="*,Auto" MinWidth="240">
+                                            <TextBlock x:Name="GenLabelText" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding GeneratedValueText}" Margin="24,0,0,0"
+                                                       VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                        </Grid>
+                                    </MenuItem.Header>
+                                    <MenuItem x:Name="GenAllItem" ToggleType="Radio" GroupName="GenGroup"
+                                              IsChecked="{Binding IsGenAll}"
+                                              Command="{Binding SetGeneratedFilterModeCommand}" CommandParameter="{x:Static enums:GeneratedFilterMode.All}" />
+                                    <MenuItem x:Name="GenOnlyItem" ToggleType="Radio" GroupName="GenGroup"
+                                              IsChecked="{Binding IsGenOnly}"
+                                              Command="{Binding SetGeneratedFilterModeCommand}" CommandParameter="{x:Static enums:GeneratedFilterMode.GeneratedOnly}" />
+                                </MenuItem>
+                                <MenuItem x:Name="PaintMenuItem">
+                                    <MenuItem.Header>
+                                        <Grid ColumnDefinitions="*,Auto" MinWidth="240">
+                                            <TextBlock x:Name="PaintLabelText" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding PaintValueText}" Margin="24,0,0,0"
+                                                       VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                        </Grid>
+                                    </MenuItem.Header>
+                                    <MenuItem x:Name="PaintAllItem" ToggleType="Radio" GroupName="PaintGroup"
+                                              IsChecked="{Binding IsPaintAll}"
+                                              Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.All}" />
+                                    <MenuItem x:Name="PaintHideItem" ToggleType="Radio" GroupName="PaintGroup"
+                                              IsChecked="{Binding IsPaintHidden}"
+                                              Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.HidePaint}" />
+                                    <MenuItem x:Name="PaintOnlyItem" ToggleType="Radio" GroupName="PaintGroup"
+                                              IsChecked="{Binding IsPaintOnly}"
+                                              Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.PaintOnly}" />
+                                </MenuItem>
                             </MenuFlyout>
                         </Button.Flyout>
                     </Button>
 
-					<Button x:Name="RefreshButton" Grid.Column="2" Classes="icon" Margin="0,0,8,0"
-                            Click="RefreshButton_Click">
+					<Button x:Name="RefreshButton" Grid.Column="2" Classes="icon" Margin="0,0,8,0" x:DataType="vm:MainViewModel"
+                            IsEnabled="{Binding Status.CanRefresh}" Command="{Binding RefreshCommand}">
 						<PathIcon Data="{StaticResource IconRefresh}" Width="16" Height="16"
 								  Foreground="{DynamicResource TextPrimaryBrush}" />
 					</Button>
@@ -318,6 +566,8 @@
 								  Foreground="{DynamicResource TextPrimaryBrush}" />
 						<Button.Flyout>
 							<MenuFlyout Placement="BottomEdgeAlignedRight">
+								<MenuItem x:Name="OpenArchiveMenuItem" Click="OpenArchiveMenuItem_Click" />
+								<MenuItem x:Name="OpenBackupsMenuItem" Click="OpenBackupsMenuItem_Click" />
 								<MenuItem x:Name="OpenSettingsMenuItem" Click="OpenSettingsMenuItem_Click" />
 								<Separator />
 								<MenuItem x:Name="ContactsMenuItem" Click="ContactsMenuItem_Click" />
@@ -326,86 +576,109 @@
 						</Button.Flyout>
                     </Button>
                 </Grid>
-                <Grid x:Name="TagsFilterRow" Margin="0,12,0,0" ColumnDefinitions="Auto,*" IsVisible="False">
+                <Grid x:Name="TagsFilterRow" Margin="0,12,0,0" ColumnDefinitions="Auto,*" x:DataType="vm:TagsBarViewModel"
+                      DataContext="{Binding TagsBar}" IsVisible="{Binding HasTags}">
                     <TextBlock Grid.Column="0" x:Name="TagsFilterLabel" FontSize="12" Margin="0,5,10,0"
                                VerticalAlignment="Top" Foreground="{DynamicResource TextSecondaryBrush}" />
-                    <WrapPanel Grid.Column="1" x:Name="TagsBar" Orientation="Horizontal" />
+                    <ItemsControl Grid.Column="1" x:Name="TagsBar" ItemsSource="{Binding AllTags}" ItemTemplate="{StaticResource TagChipTemplate}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
                 </Grid>
             </StackPanel>
         </Border>
-        <Border Grid.Row="2" Background="{DynamicResource BgBrush}" Padding="20,10">
+        <Border x:Name="StatusBar" Grid.Row="2" Background="{DynamicResource BgBrush}" Padding="20,10" x:DataType="vm:GalleryStatusViewModel"
+                DataContext="{Binding Status}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="StatusText" Grid.Column="0" Text="" FontSize="12"
-                           Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
-                <Button x:Name="UpdateBanner" Grid.Column="1" Classes="pill"
-                        Margin="0,0,12,0" Padding="10,4" FontSize="11.5" IsVisible="False"
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="StatusText" Text="{Binding StatusText}" FontSize="12"
+                               Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
+                    <StackPanel x:Name="SelectionPanel" Orientation="Horizontal" Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                IsVisible="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.HasSelection}">
+                        <TextBlock Text="·" FontSize="12" Margin="0,0,6,0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <TextBlock Text="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.SelectionSummaryText}"
+                                   FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"
+                                   VerticalAlignment="Center" />
+                        <Button Classes="rowLink" Margin="10,0,0,0"
+                                Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.ClearSelectionCommand}"
+                                ToolTip.Tip="{DynamicResource Loc_ClearSelectionLabel}">
+                            <TextBlock Text="{DynamicResource Loc_ClearSelectionLabel}" FontSize="12"
+                                       Foreground="{DynamicResource AccentBrush}" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+                <Button x:Name="UpdateBanner" Grid.Column="1" Classes="pill" x:DataType="vm:UpdateViewModel"
+                        DataContext="{Binding $parent[Window].((vm:MainViewModel)DataContext).Update}"
+                        Margin="0,0,12,0" Padding="10,4" FontSize="11.5" IsVisible="{Binding IsUpdateAvailable}"
                         Click="UpdateBanner_Click">
-                    <TextBlock x:Name="UpdateBannerText" />
+                    <TextBlock x:Name="UpdateBannerText" Text="{Binding BannerText}" />
                 </Button>
                 <StackPanel x:Name="CountPanel" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock x:Name="CountBaseText" FontSize="12"
+                    <TextBlock x:Name="CountBaseText" Text="{Binding CountText}" FontSize="12"
                                Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
 
                     <StackPanel x:Name="FavoritesCountPanel" Orientation="Horizontal" Margin="10,0,0,0"
-                                IsVisible="False" VerticalAlignment="Center">
+                                IsVisible="{Binding HasFavorites}" VerticalAlignment="Center">
                         <TextBlock Text="·" FontSize="12" Margin="0,0,6,0"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
-                        <Path Data="{StaticResource IconStarFilled}" Width="11" Height="11" Stretch="Uniform"
+                        <Path Data="{StaticResource IconStar}" Width="11" Height="11" Stretch="Uniform"
                               Fill="#FFD54F" Margin="0,0,4,0" />
-                        <TextBlock x:Name="FavoritesCountText" FontSize="12"
+                        <TextBlock x:Name="FavoritesCountText" Text="{Binding FavoritesCount}" FontSize="12"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
                     </StackPanel>
 
                     <StackPanel x:Name="DuplicatesCountPanel" Orientation="Horizontal" Margin="10,0,0,0"
-                                IsVisible="False" VerticalAlignment="Center">
+                                IsVisible="{Binding HasDuplicates}" VerticalAlignment="Center">
                         <TextBlock Text="·" FontSize="12" Margin="0,0,6,0"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
                         <Path Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
                               Fill="{DynamicResource DangerBrush}" Margin="0,0,5,0" />
-                        <TextBlock x:Name="DuplicatesCountText" FontSize="12"
+                        <TextBlock x:Name="DuplicatesCountText" Text="{Binding DuplicatesCount}" FontSize="12"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
                     </StackPanel>
 
                     <StackPanel x:Name="PossibleDuplicatesCountPanel" Orientation="Horizontal" Margin="10,0,0,0"
-                                IsVisible="False" VerticalAlignment="Center">
+                                IsVisible="{Binding HasPossibleDuplicates}" VerticalAlignment="Center">
                         <TextBlock Text="·" FontSize="12" Margin="0,0,6,0"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
                         <Path Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
                               Fill="{DynamicResource WarningBrush}" Margin="0,0,5,0" />
-                        <TextBlock x:Name="PossibleDuplicatesCountText" FontSize="12"
+                        <TextBlock x:Name="PossibleDuplicatesCountText" Text="{Binding PossibleDuplicatesCount}" FontSize="12"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
                     </StackPanel>
                 </StackPanel>
             </Grid>
         </Border>
-        <Grid Grid.Row="3" Background="{DynamicResource BgBrush}">
+        <Grid x:Name="GalleryHost" Grid.Row="3" Background="{DynamicResource BgBrush}" x:DataType="vm:GalleryStatusViewModel"
+              DataContext="{Binding Status}">
             <ScrollViewer x:Name="GalleryScroll" Padding="12,0,12,20">
-                <ItemsControl x:Name="GroupsHost" ItemTemplate="{StaticResource GroupTemplate}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                <views:VirtualGalleryPanel x:Name="GalleryPanel"
+                                           HeaderTemplate="{StaticResource GroupHeaderTemplate}"
+                                           RowTemplate="{StaticResource GalleryRowTemplate}" />
             </ScrollViewer>
 
-            <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False">
+            <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding IsEmptyStateVisible}">
                 <Path Data="{StaticResource IconPalette}" Width="42" Height="42" Stretch="Uniform"
                       HorizontalAlignment="Center" Fill="{DynamicResource TextSecondaryBrush}" />
-                <TextBlock x:Name="EmptyStateText" FontSize="14" Margin="0,10,0,0"
+                <TextBlock x:Name="EmptyStateText" Text="{Binding EmptyStateText}" FontSize="14" Margin="0,10,0,0"
                            Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" />
             </StackPanel>
 
-            <Border x:Name="LoadingOverlay" Background="{DynamicResource BgBrush}" Opacity="0.85" IsVisible="False">
+            <Border x:Name="LoadingOverlay" Background="{DynamicResource BgBrush}" Opacity="0.85" IsVisible="{Binding IsLoading}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Path Data="{StaticResource IconRefresh}" Width="30" Height="30" Stretch="Uniform"
                           HorizontalAlignment="Center" Fill="{DynamicResource AccentBrush}" />
-                    <TextBlock x:Name="LoadingText" FontSize="13" Margin="0,10,0,0"
+                    <TextBlock x:Name="LoadingText" Text="{Binding LoadingText}" FontSize="13" Margin="0,10,0,0"
                                Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" />
                 </StackPanel>
             </Border>

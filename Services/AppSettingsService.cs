@@ -41,7 +41,9 @@ internal static class AppSettingsService
         bool changed = false;
         if (!Enum.IsDefined(data.SortMode)) { data.SortMode = SortMode.Manufacture; changed = true; }
         if (!Enum.IsDefined(data.FavoriteMode)) { data.FavoriteMode = FavoriteMode.None; changed = true; }
+        if (!Enum.IsDefined(data.MineMode)) { data.MineMode = MineMode.None; changed = true; }
         if (!Enum.IsDefined(data.DuplicatesFilterMode)) { data.DuplicatesFilterMode = DuplicatesFilterMode.All; changed = true; }
+        if (!Enum.IsDefined(data.GeneratedFilterMode)) { data.GeneratedFilterMode = GeneratedFilterMode.All; changed = true; }
         if (data.ThemeMode is { } theme && !Enum.IsDefined(theme)) { data.ThemeMode = AppThemeMode.System; changed = true; }
         return changed;
     }
@@ -61,6 +63,7 @@ internal static class AppSettingsService
                     if (changed) Save(data);
                     return data;
                 }
+                AtomicFile.TryBackupCorruptedFile(_path);
             }
         }
         catch (Exception ex)

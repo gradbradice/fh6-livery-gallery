@@ -1,0 +1,94 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:LiveryGallery.Localisation"
+        xmlns:vm="clr-namespace:LiveryGallery.ViewModels"
+        x:Class="LiveryGallery.Views.BackupsDialog"
+        x:DataType="vm:BackupsViewModel"
+        Width="520" Height="600" WindowStartupLocation="CenterOwner"
+        CanResize="False" ShowInTaskbar="False"
+        Background="{DynamicResource BgBrush}"
+        WindowDecorations="BorderOnly"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1">
+
+    <Window.Resources>
+        <DataTemplate x:Key="BackupRowTemplate" x:DataType="vm:BackupRowViewModel">
+            <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="10" Padding="14,12" Margin="0,0,0,8">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding DateText}" FontSize="14" FontWeight="Bold" />
+                        <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4,0,0">
+                            <TextBlock Text="{Binding EntryCountText}" FontSize="11.5"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                            <TextBlock Text="{Binding SizeText}" FontSize="11.5"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                            <TextBlock Text="{Binding DiffText}" FontSize="11.5" IsVisible="{Binding HasDiff}"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                        <Button Content="{x:Static loc:Strings.BackupOpenButton}" Classes="secondary" Padding="10,4"
+                                Command="{Binding $parent[Window].((vm:BackupsViewModel)DataContext).OpenCommand}"
+                                CommandParameter="{Binding}" />
+                        <Button Content="{x:Static loc:Strings.BackupDeleteButton}" Classes="danger" Padding="10,4"
+                                Command="{Binding $parent[Window].((vm:BackupsViewModel)DataContext).RequestDeleteCommand}"
+                                CommandParameter="{Binding}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{DynamicResource ToolbarBrush}" Height="36"
+                PointerPressed="TitleBar_PointerPressed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="12,0,0,0"
+                            VerticalAlignment="Center" IsHitTestVisible="False">
+                    <TextBlock x:Name="TitleBarText" FontSize="12"
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                </StackPanel>
+                <Button Grid.Column="1" Classes="titlebar close" Click="CloseButton_Click">
+                    <TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="20,14,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock x:Name="TitleText" Grid.Row="0" FontSize="16" FontWeight="Bold" Margin="0,0,0,14" />
+
+            <Button x:Name="CreateBackupButton" Grid.Row="1" Classes="primary" HorizontalAlignment="Left"
+                    Margin="0,0,0,14" IsEnabled="{Binding !IsCreatingBackup}"
+                    Command="{Binding CreateBackupCommand}" />
+
+            <ScrollViewer Grid.Row="2" IsVisible="{Binding !ShowEmptyState}">
+                <ItemsControl ItemsSource="{Binding Backups}" ItemTemplate="{StaticResource BackupRowTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"
+                       IsVisible="{Binding ShowEmptyState}" Text="{x:Static loc:Strings.BackupsEmptyHint}" />
+        </Grid>
+    </Grid>
+</Window>

@@ -129,15 +129,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Поиск по машине (производитель, модель, год), названию ливреи или автору…</value>
   </data>
-  <data name="SortManufacturer" xml:space="preserve">
-    <value>Сортировка: производитель</value>
-  </data>
-  <data name="SortAuthor" xml:space="preserve">
-    <value>Сортировка: автор</value>
-  </data>
-  <data name="SortDownloadDate" xml:space="preserve">
-    <value>Сортировка: дата скачивания</value>
-  </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>Дата неизвестна</value>
   </data>
@@ -193,7 +184,7 @@
     <value>Нет</value>
   </data>
   <data name="SelectFolderDialogTitle" xml:space="preserve">
-    <value>Выберите папку сохранений (ContainersRoot или папку с номером)</value>
+    <value>Выберите папку сохранений (папку, имя которой начинается с «u_»)</value>
   </data>
   <data name="CarDbUpdating" xml:space="preserve">
     <value>Проверка обновлений базы машин…</value>
@@ -246,6 +237,12 @@
   <data name="EditTagsTooltip" xml:space="preserve">
     <value>Изменить теги</value>
   </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>Выбрано: {0}</value>
+  </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>Теги:</value>
   </data>
@@ -266,6 +263,18 @@
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
     <value>Избранное</value>
+  </data>
+  <data name="MineFirstToggle" xml:space="preserve">
+    <value>Сначала мои</value>
+  </data>
+  <data name="OnlyMineToggle" xml:space="preserve">
+    <value>Только мои</value>
+  </data>
+  <data name="SeparateMineToggle" xml:space="preserve">
+    <value>Показывать мои отдельно</value>
+  </data>
+  <data name="SeparateMineGroupName" xml:space="preserve">
+    <value>Мои</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
     <value>Доступна новая версия {0} →</value>
@@ -298,7 +307,10 @@
     <value>Неизвестен</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>Библиотека разбора header: {0}</value>
+    <value>FH6 Data Parser (нативная библиотека): {0}</value>
+  </data>
+  <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
+    <value>FH6 Data Parser (пакет): {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Настройки</value>
@@ -375,6 +387,15 @@
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
     <value>У этого автора есть точно такая же ливрея для этой машины</value>
   </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Совпадения:</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0}: {1}%</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Возможный дубликат ({0})</value>
+  </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>Все ливреи</value>
   </data>
@@ -384,8 +405,47 @@
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>Только дубликаты</value>
   </data>
+  <data name="GeneratedFilterAll" xml:space="preserve">
+    <value>Все ливреи</value>
+  </data>
+  <data name="GeneratedFilterOnly" xml:space="preserve">
+    <value>Только возможно сгенерированные</value>
+  </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Возможный дубликат</value>
+  </data>
+  <data name="MyLiveryBadgeTooltip" xml:space="preserve">
+    <value>Ваша ливрея</value>
+  </data>
+  <data name="MyLiveryBadgeLabel" xml:space="preserve">
+    <value>Моя</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeLabel" xml:space="preserve">
+    <value>Возможно, сгенерирована</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
+    <value>Узор этой ливреи похож на созданный программно (например, из фото/картинки), а не нарисованный вручную.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Краска</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>У этой ливреи нет ни одного винила — только перекрашенный цвет.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Ошибка чтения</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>Файл этой ливреи не удалось корректно прочитать — возможно, он повреждён или имеет неподдерживаемый формат.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>Все ливреи</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Скрыть покраску</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Только покраски</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
     <value>У этого автора есть похожая ливрея для этой машины (совпадает большинство секций декалей, но не всё содержимое)</value>
@@ -393,8 +453,68 @@
   <data name="DisplayFilterTooltip" xml:space="preserve">
     <value>Отображение (избранное, дубликаты)</value>
   </data>
-  <data name="GroupingToggleLabel" xml:space="preserve">
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>Фильтры</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>Сортировка</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
     <value>Группировка</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>Избранное</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>Мои ливреи</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>Дубликаты</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>Генерация</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>Покраска</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>Производитель</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>Автор</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>Дата скачивания</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>По производителю</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>По автору</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>По месяцам</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>Сначала</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>Только</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>Отдельно</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>Скрыть</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>С возможными</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>Все ливреи</value>
@@ -440,6 +560,9 @@
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
     <value>Автоматически обновлять ливреи</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Показывать и искать по имени папки</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
     <value>Обновлять ливреи по нажатию кнопки</value>
@@ -514,6 +637,12 @@
   <data name="AuthorCardAliasTakenError" xml:space="preserve">
     <value>Ник «{0}» уже добавлен в другую карточку</value>
   </data>
+  <data name="AuthorCardAutoGeneratedNotice" xml:space="preserve">
+    <value>Эта карточка создана автоматически после обнаружения смены ника. Сохранение сделает её ручной — автоопределение больше её не тронет.</value>
+  </data>
+  <data name="AuthorCardAutoGeneratedBadge" xml:space="preserve">
+    <value>Определено автоматически</value>
+  </data>
   <data name="AuthorCardAliasesFormat" xml:space="preserve">
     <value>Ники: {0}</value>
   </data>
@@ -564,5 +693,154 @@
   </data>
   <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
     <value>Для художника «{0}» карточка не была создана</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Создать карточку</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>Переместить в архив</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Архив</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Бэкапы</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Архив</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>Архив пуст</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>Выбрано: {0}</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Восстановить</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Удалить безвозвратно</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>Удалить безвозвратно?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} будут перемещены в корзину. Это действие нельзя отменить из приложения.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>В архиве с {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Сначала выберите папку сохранений (Настройки), прежде чем восстанавливать ливреи</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Во время этой операции произошла ошибка. Подробности смотрите в журнале.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Превью</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>Не удалось найти оригинальное превью этой ливреи.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>Открыть оригинальное превью</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Перемещение в архив...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Выбрать всё</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Неизвестно (восстановленная запись)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Дата неизвестна</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>Ливрей: {0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Нечего бэкапить — галерея пуста</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Бэкапы</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>Бэкапов пока нет</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Создать бэкап</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>Удалить этот бэкап?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>Бэкап от {0} ({1}) будет перемещён в корзину.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>Не удалось прочитать содержимое этого бэкапа — файл повреждён или не является корректным бэкапом</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Бэкап от {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Удалено с момента этого бэкапа</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Добавлено с момента этого бэкапа</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>С момента этого бэкапа ничего не удалено</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>С момента этого бэкапа ничего не добавлено</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>Эти ливреи не восстановлены: в игре уже есть эти же самые ливреи (те же папки):
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>Не удалось восстановить эти ливреи. Подробности смотрите в журнале:
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…и ещё {0}</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>Найдены дубликаты</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>В галерее уже есть дубликаты этих ливрей (та же машина, идентичные данные ливреи):
+{0}
+
+Всё равно восстановить их?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — дубликат: {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>Остальные выбранные ливреи будут восстановлены в любом случае.</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>Всё равно восстановить</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>Пропустить</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>Прочитано частично</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>Ливрея прочитана, но часть её файла разобрать не удалось. Основные данные показаны, некоторые проверки (генерация, дубликаты) могут быть недоступны.</value>
   </data>
 </root>

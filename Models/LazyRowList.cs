@@ -1,15 +1,18 @@
+using LiveryGallery.ViewModels;
 using System.Collections;
 
 namespace LiveryGallery.Models;
 
 internal sealed class LazyRowList : IReadOnlyList<GalleryRow>
 {
+    private readonly LiveryGroup _group;
     private readonly IReadOnlyList<LiveryEntry> _items;
     private readonly int _columns;
     private readonly GalleryRow?[] _cache;
 
-    public LazyRowList(IReadOnlyList<LiveryEntry> items, int columns)
+    public LazyRowList(LiveryGroup group, IReadOnlyList<LiveryEntry> items, int columns)
     {
+        _group = group;
         _items = items;
         _columns = Math.Max(1, columns);
         Count = _items.Count == 0 ? 0 : (_items.Count + _columns - 1) / _columns;
@@ -27,7 +30,12 @@ internal sealed class LazyRowList : IReadOnlyList<GalleryRow>
 
             int start = index * _columns;
             int count = Math.Min(_columns, _items.Count - start);
-            var row = new GalleryRow { Items = new ListSlice<LiveryEntry>(_items, start, count) };
+            var row = new GalleryRow
+            {
+                Items = new ListSlice<LiveryEntry>(_items, start, count),
+                Group = _group,
+                IsLastInGroup = index == Count - 1
+            };
             _cache[index] = row;
             return row;
         }

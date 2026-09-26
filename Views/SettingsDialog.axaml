@@ -1,6 +1,9 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:enums="clr-namespace:LiveryGallery.Enums"
+        xmlns:vm="clr-namespace:LiveryGallery.ViewModels"
         x:Class="LiveryGallery.Views.SettingsDialog"
+        x:DataType="vm:SettingsViewModel"
         Width="580"
         SizeToContent="Height"
         WindowStartupLocation="CenterOwner"
@@ -42,28 +45,26 @@
                        Foreground="{DynamicResource TextSecondaryBrush}" />
             <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                 <RadioButton x:Name="SystemThemeRadio" GroupName="ThemeGroup" Margin="0,0,24,0"
-                             Click="ThemeOption_Click" />
+                             IsChecked="{Binding IsSystemTheme}"
+                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.System}" />
                 <RadioButton x:Name="LightThemeRadio" GroupName="ThemeGroup" Margin="0,0,24,0"
-                             Click="ThemeOption_Click" />
+                             IsChecked="{Binding IsLightTheme}"
+                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.Light}" />
                 <RadioButton x:Name="DarkThemeRadio" GroupName="ThemeGroup"
-                             Click="ThemeOption_Click" />
+                             IsChecked="{Binding IsDarkTheme}"
+                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.Dark}" />
             </StackPanel>
 
             <TextBlock x:Name="LanguageSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
                        Foreground="{DynamicResource TextSecondaryBrush}" />
             <ComboBox x:Name="LanguageCombo" Classes="modern" HorizontalAlignment="Stretch"
-                      Margin="0,0,0,20" SelectionChanged="LanguageCombo_SelectionChanged">
-                <ComboBoxItem Tag="de" Content="Deutsch (DE)" />
-                <ComboBoxItem Tag="en" Content="English (EN)" />
-                <ComboBoxItem Tag="es" Content="Español (ES)" />
-                <ComboBoxItem Tag="fr" Content="Français (FR)" />
-                <ComboBoxItem Tag="it" Content="Italiano (IT)" />
-                <ComboBoxItem Tag="ja" Content="日本語 (JA)" />
-                <ComboBoxItem Tag="ko" Content="한국어 (KO)" />
-                <ComboBoxItem Tag="pt" Content="Português (PT)" />
-                <ComboBoxItem Tag="ru" Content="Русский (RU)" />
-                <ComboBoxItem Tag="zh-Hans" Content="中文（简体） (ZH-CN)" />
-                <ComboBoxItem Tag="zh-Hant" Content="中文（繁體） (ZH-TW)" />
+                      Margin="0,0,0,20" ItemsSource="{Binding LanguageOptions}"
+                      SelectedItem="{Binding SelectedLanguageOption, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:LanguageOption">
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
             </ComboBox>
 
             <TextBlock x:Name="PathsSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
@@ -73,7 +74,7 @@
                        Foreground="{DynamicResource TextSecondaryBrush}" />
             <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,16">
                 <TextBox x:Name="GamePathBox" Grid.Column="0" Classes="search" FontSize="13"
-                         Margin="0,0,8,0" IsEnabled="False" TextChanged="PathBox_TextChanged" />
+                         Margin="0,0,8,0" IsEnabled="False" Text="{Binding GamePath}" />
                 <Button x:Name="GameBrowseButton" Grid.Column="1" Classes="secondary" Width="44"
                         Content="..." IsEnabled="False" Click="GameBrowseButton_Click" />
             </Grid>
@@ -82,7 +83,7 @@
                        Foreground="{DynamicResource TextSecondaryBrush}" />
             <Grid ColumnDefinitions="*,Auto">
                 <TextBox x:Name="SavePathBox" Grid.Column="0" Classes="search" FontSize="13"
-                         Margin="0,0,8,0" TextChanged="PathBox_TextChanged" />
+                         Margin="0,0,8,0" Text="{Binding SavePath, Mode=TwoWay}" />
                 <Button x:Name="SaveBrowseButton" Grid.Column="1" Classes="secondary" Width="44"
                         Content="..." Click="SaveBrowseButton_Click" />
             </Grid>
@@ -93,12 +94,13 @@
 
             <TextBlock x:Name="ScanningSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
                        Foreground="{DynamicResource TextSecondaryBrush}" />
-            <CheckBox x:Name="AutoRefreshLiveriesCheckBox" Margin="0,0,0,10" Click="ScanOption_Click" />
-            <CheckBox x:Name="RefreshOnButtonClickCheckBox" Click="ScanOption_Click" />
+            <CheckBox x:Name="AutoRefreshLiveriesCheckBox" Margin="0,0,0,10" IsChecked="{Binding AutoRefreshLiveries}" />
+            <CheckBox x:Name="RefreshOnButtonClickCheckBox" Margin="0,0,0,10" IsChecked="{Binding RefreshOnButtonClick}" />
+            <CheckBox x:Name="SearchByFolderNameCheckBox" IsChecked="{Binding SearchByFolderName}" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
                 <Button x:Name="ExitButton" Classes="secondary" MinWidth="120" Margin="0,0,10,0" Click="ExitButton_Click" />
-                <Button x:Name="SaveButton" Classes="primary" MinWidth="120" Click="SaveButton_Click" />
+                <Button x:Name="SaveButton" Classes="primary" MinWidth="120" IsEnabled="{Binding IsDirty}" Click="SaveButton_Click" />
             </StackPanel>
         </StackPanel>
     </Grid>
