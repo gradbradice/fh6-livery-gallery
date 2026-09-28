@@ -1,8 +1,25 @@
-﻿namespace LiveryGallery.Configuration;
+﻿using System.Reflection;
+
+namespace LiveryGallery.Configuration;
 
 internal static class AppSettings
 {
-    public const string Version = "1.3.0";
+    public static string Version { get; } = ReadVersion();
+    public static string UserAgent => $"FH6-Livery-Gallery/{Version}";
+
+    private static string ReadVersion()
+    {
+        var assembly = typeof(AppSettings).Assembly;
+        string? informational = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        if (!string.IsNullOrWhiteSpace(informational))
+        {
+            // The SDK appends "+<commit>" (and possibly "-alpha"/"-beta")
+            int cut = informational.IndexOfAny(['+', '-']);
+            return cut > 0 ? informational[..cut] : informational;
+        }
+        var version = assembly.GetName().Version;
+        return version is null ? "0.0.0" : $"{version.Major}.{version.Minor}.{Math.Max(0, version.Build)}";
+    }
 
     public static string BaseCachePath { get; } = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),

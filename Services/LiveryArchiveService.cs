@@ -46,6 +46,14 @@ internal sealed class LiveryArchiveService
 
     private void ReconcileWithDisk()
     {
+        if (!Directory.Exists(AppSettings.ArchivePath))
+        {
+            AppLogger.LogError($"Archive folder '{AppSettings.ArchivePath}' not found — archive index left unchanged",
+                new DirectoryNotFoundException(AppSettings.ArchivePath));
+            return;
+        }
+
+        bool indexChanged = false;
         var toRemove = new List<string>();
         foreach (var (folderName, _) in _index)
         {
@@ -55,6 +63,7 @@ internal sealed class LiveryArchiveService
         foreach (var folderName in toRemove) _index.Remove(folderName);
         if (toRemove.Count > 0)
         {
+            indexChanged = true;
             AppLogger.LogError(
                 $"Archive index referenced {toRemove.Count} folder(s) that no longer exist on disk " +
                 $"({string.Join(", ", toRemove)}) — removed from the index",
@@ -76,7 +85,10 @@ internal sealed class LiveryArchiveService
                 {
                     DateTime archivedAtUtc;
                     try { archivedAtUtc = Directory.GetCreationTimeUtc(Path.Combine(AppSettings.ArchivePath, folderName)); }
-                    catch { archivedAtUtc = DateTime.UtcNow; }
+                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                    {
+                        archivedAtUtc = DateTime.UtcNow; // only used for sorting
+                    }
 
                     _index[folderName] = new ArchivedLiveryEntry
                     {
@@ -85,7 +97,8 @@ internal sealed class LiveryArchiveService
                         {
                             FolderName = folderName,
                             LiveryName = folderName,
-                            AuthorRaw = Strings.ArchiveRecoveredUnknownValue,
+                            AuthorRaw = string.Empty, // shown as "Unknown" in the current language
+                            TextVersion = LiveryCacheEntry.CurrentTextVersion,
                             CarId = 0,
                             CarManufacturerRaw = Strings.ArchiveRecoveredUnknownValue,
                             CarModelNameRaw = "",
@@ -100,13 +113,28 @@ internal sealed class LiveryArchiveService
                     $"({string.Join(", ", orphanedOnDisk)}) — recovered with placeholder metadata " +
                     "(folder name shown as title, author/car unknown) so they remain accessible",
                     new InvalidOperationException("Archive index/disk mismatch"));
-
-                _ = SaveAsync();
+                indexChanged = true;
             }
         }
         catch (Exception ex)
         {
             AppLogger.LogError("Failed to enumerate archive folders for reconciliation", ex);
+        }
+
+        if (indexChanged) ScheduleSave();
+    }
+
+    private void ScheduleSave()
+    {
+        try
+        {
+            Dictionary<string, ArchivedLiveryEntry> snapshot;
+            lock (_lock) snapshot = new(_index);
+            PersistenceManager.Schedule(_indexPath, JsonSerializer.Serialize(snapshot, JsonSettings.DefaultOptions));
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to save archive index", ex);
         }
     }
 
@@ -143,18 +171,27 @@ internal sealed class LiveryArchiveService
         }
     }
 
-    public async Task<List<string>> MoveToArchiveAsync(IEnumerable<LiveryData> entries, string savePath)
+    public async Task<ArchiveOperationResult> MoveToArchiveAsync(IEnumerable<LiveryData> entries, string savePath)
     {
         using var _ = await _saveFolderLock.AcquireAsync();
 
         var moved = new List<(string FolderName, ArchivedLiveryEntry Entry)>();
+        var leftovers = new List<string>();
 
         foreach (var data in entries)
         {
+            if (_saveFolderLock.IsClosing) break;
+            if (data.IsAuction)
+            {
+                AppLogger.LogError($"Refusing to archive auction livery '{data.FolderName}'",
+                    new InvalidOperationException("Auction liveries can't be archived"));
+                continue;
+            }
             if (!TryResolveArchiveFolderPath(data.FolderName, out string destination)) continue;
             string source = Path.Combine(savePath, data.FolderName);
-            var outcome = TryMoveDirectory(source, destination);
-            if (outcome != MoveOutcome.Moved) continue;
+            var outcome = DirectoryMover.Move(source, destination, out string? leftover);
+            if (leftover is not null) leftovers.Add(leftover);
+            if (outcome == MoveOutcome.Failed) continue;
             moved.Add((data.FolderName, new ArchivedLiveryEntry { Data = data, ArchivedAtUtc = DateTime.UtcNow }));
         }
 
@@ -174,29 +211,34 @@ internal sealed class LiveryArchiveService
             }
         }
 
-        return [.. moved.Select(m => m.FolderName)];
+        return new ArchiveOperationResult([.. moved.Select(m => m.FolderName)], leftovers);
     }
 
-    public async Task<List<string>> RestoreAsync(IEnumerable<string> folderNames, string savePath)
+    public async Task<ArchiveOperationResult> RestoreAsync(IEnumerable<string> folderNames, string savePath)
     {
         using var _ = await _saveFolderLock.AcquireAsync();
 
         var restored = new List<string>();
+        var fullyRemovedFromArchive = new List<string>();
+        var leftovers = new List<string>();
 
         foreach (var folderName in folderNames)
         {
+            if (_saveFolderLock.IsClosing) break;
             if (!TryResolveArchiveFolderPath(folderName, out string source)) continue;
             string destination = Path.Combine(savePath, folderName);
-            var outcome = TryMoveDirectory(source, destination);
-            if (outcome != MoveOutcome.Moved) continue;
+            var outcome = DirectoryMover.Move(source, destination, out string? leftover);
+            if (leftover is not null) leftovers.Add(leftover);
+            if (outcome == MoveOutcome.Failed) continue;
 
             restored.Add(folderName);
+            if (outcome == MoveOutcome.Moved) fullyRemovedFromArchive.Add(folderName);
         }
 
-        if (restored.Count > 0)
+        if (fullyRemovedFromArchive.Count > 0)
         {
             lock (_lock)
-                foreach (var folderName in restored)
+                foreach (var folderName in fullyRemovedFromArchive)
                     _index.Remove(folderName);
 
             if (!await SaveAsync())
@@ -208,15 +250,17 @@ internal sealed class LiveryArchiveService
             }
         }
 
-        return restored;
+        return new ArchiveOperationResult(restored, leftovers);
     }
 
     public async Task<List<string>> DeletePermanentlyAsync(IEnumerable<string> folderNames)
     {
+        using var _ = await _saveFolderLock.AcquireAsync();
         var deleted = new List<string>();
 
         foreach (var folderName in folderNames)
         {
+            if (_saveFolderLock.IsClosing) break;
             if (!TryResolveArchiveFolderPath(folderName, out string path)) continue;
             if (!Directory.Exists(path))
             {
@@ -268,70 +312,5 @@ internal sealed class LiveryArchiveService
 
         path = candidate;
         return true;
-    }
-
-    private static MoveOutcome TryMoveDirectory(string source, string destination)
-    {
-        if (!Directory.Exists(source)) return MoveOutcome.Failed;
-        if (Directory.Exists(destination))
-        {
-            AppLogger.LogError($"Cannot move '{source}' to '{destination}' — destination already exists",
-                new IOException("Destination already exists"));
-            return MoveOutcome.Failed;
-        }
-
-        try
-        {
-            Directory.Move(source, destination);
-            return MoveOutcome.Moved;
-        }
-        catch (IOException)
-        {
-            try
-            {
-                CopyDirectoryRecursive(source, destination);
-            }
-            catch (Exception ex)
-            {
-                AppLogger.LogError($"Failed to copy '{source}' to '{destination}'", ex);
-                try 
-                { 
-                    if (Directory.Exists(destination)) Directory.Delete(destination, recursive: true); 
-                }
-                catch 
-                {
-
-                }
-                return MoveOutcome.Failed;
-            }
-
-            try
-            {
-                Directory.Delete(source, recursive: true);
-                return MoveOutcome.Moved;
-            }
-            catch (Exception ex)
-            {
-                AppLogger.LogError(
-                    $"Copied '{source}' to '{destination}' successfully, but failed to delete the source " +
-                    "afterward — both copies now exist on disk; keeping both rather than risking deletion " +
-                    "of the only complete copy", ex);
-                return MoveOutcome.CopiedButSourceRemains;
-            }
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError($"Failed to move '{source}' to '{destination}'", ex);
-            return MoveOutcome.Failed;
-        }
-    }
-
-    private static void CopyDirectoryRecursive(string source, string destination)
-    {
-        Directory.CreateDirectory(destination);
-        foreach (string file in Directory.GetFiles(source))
-            File.Copy(file, Path.Combine(destination, Path.GetFileName(file)));
-        foreach (string dir in Directory.GetDirectories(source))
-            CopyDirectoryRecursive(dir, Path.Combine(destination, Path.GetFileName(dir)));
     }
 }

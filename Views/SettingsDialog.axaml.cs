@@ -15,8 +15,11 @@ namespace LiveryGallery.Views;
 internal partial class SettingsDialog : Window
 {
     private readonly SettingsViewModel _viewModel;
+    private readonly BackgroundTaskTracker _tasks = new();
+    private Task<bool>? _saveInProgress;
     private bool _forceClose;
     private bool _isClosing;
+    private bool _closed;
 
     public bool SavePathChanged => _viewModel.SavePathChanged;
 
@@ -28,9 +31,11 @@ internal partial class SettingsDialog : Window
 
         ApplyLocalizedTexts();
         UpdateHintDisplay();
+        UpdateGameFolderStatusDisplay();
         _viewModel.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName is nameof(SettingsViewModel.HintIsError)) UpdateHintDisplay();
+            if (e.PropertyName is nameof(SettingsViewModel.GameFolderStatusIsError)) UpdateGameFolderStatusDisplay();
         };
 
         Closing += SettingsDialog_Closing;
@@ -43,7 +48,7 @@ internal partial class SettingsDialog : Window
         try
         {
             string? discovered = await GameDiscoveryService.TryFindGamePathAsync();
-            if (discovered is null) return;
+            if (discovered is null || _closed) return;
             if (!string.IsNullOrEmpty(_viewModel.GamePath)) return;
 
             _viewModel.GamePath = discovered;
@@ -68,6 +73,12 @@ internal partial class SettingsDialog : Window
         AutoRefreshLiveriesCheckBox.Content = Strings.AutoRefreshLiveriesLabel;
         RefreshOnButtonClickCheckBox.Content = Strings.RefreshOnButtonClickLabel;
         SearchByFolderNameCheckBox.Content = Strings.SearchByFolderNameLabel;
+        ServerSectionLabel.Text = Strings.SettingsSectionServer;
+        ServerConnectionCheckBox.Content = Strings.ServerConnectionLabel;
+        ServerConnectionDescription.Text = Strings.ServerConnectionDescription;
+        DuplicatesSectionLabel.Text = Strings.SettingsSectionDuplicates;
+        PossibleDuplicateThresholdLabel.Text = Strings.PossibleDuplicateThresholdLabel;
+        PossibleDuplicateThresholdHint.Text = Strings.PossibleDuplicateThresholdHint;
         SystemThemeRadio.Content = Strings.ThemeSystemLabel;
         LightThemeRadio.Content = Strings.ThemeLightLabel;
         DarkThemeRadio.Content = Strings.ThemeDarkLabel;
@@ -89,19 +100,56 @@ internal partial class SettingsDialog : Window
         }
     }
 
+    private void UpdateGameFolderStatusDisplay() =>
+        GameFolderStatusText.Foreground = this.GetThemeBrush(_viewModel.GameFolderStatusIsError ? "DangerBrush" : "TextSecondaryBrush");
+
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) => this.HandleTitleBarDrag(e);
 
-    private async void GameBrowseButton_Click(object? sender, RoutedEventArgs e)
+    private bool _askingServerConsent;
+
+    private void ServerConnectionCheckBox_IsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        string? path = await BrowseForFolderAsync(Strings.SelectGameFolderDialogTitle);
-        if (path is not null) _viewModel.GamePath = path;
+        if (_askingServerConsent || ServerConnectionCheckBox.IsChecked != true || _viewModel.IsServerConnectionSaved) return;
+        _ = _tasks.Run(AskServerConsentAsync, "server consent");
     }
 
-    private async void SaveBrowseButton_Click(object? sender, RoutedEventArgs e)
+    private async Task AskServerConsentAsync()
     {
-        string? path = await BrowseForFolderAsync(Strings.SelectFolderDialogTitle);
-        if (path is not null) _viewModel.SavePath = path;
+        _askingServerConsent = true;
+        bool agreed = false;
+        try
+        {
+            agreed = await ConfirmDialog.AskAsync(this, Strings.ServerConsentTitle, Strings.ServerConsentMessage,
+                Strings.ServerConsentAccept, Strings.ButtonCancel, "IconGlobe");
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to show the livery server consent dialog", ex);
+        }
+        finally
+        {
+            if (!agreed)
+            {
+                ServerConnectionCheckBox.IsChecked = false;
+                _viewModel.ServerConnectionEnabled = false;
+            }
+            _askingServerConsent = false;
+        }
     }
+
+    private void GameBrowseButton_Click(object? sender, RoutedEventArgs e) =>
+        _ = _tasks.Run(async () =>
+        {
+            string? path = await BrowseForFolderAsync(Strings.SelectGameFolderDialogTitle);
+            if (path is not null) _viewModel.GamePath = path;
+        }, "browse for game folder");
+
+    private void SaveBrowseButton_Click(object? sender, RoutedEventArgs e) =>
+        _ = _tasks.Run(async () =>
+        {
+            string? path = await BrowseForFolderAsync(Strings.SelectFolderDialogTitle);
+            if (path is not null) _viewModel.SavePath = path;
+        }, "browse for save folder");
 
     private async Task<string?> BrowseForFolderAsync(string title)
     {
@@ -136,9 +184,15 @@ internal partial class SettingsDialog : Window
         }
     }
 
-    private async void SaveButton_Click(object? sender, RoutedEventArgs e) => await PerformSaveAsync();
+    private Task<bool> SaveOnceAsync()
+    {
+        if (_saveInProgress is { IsCompleted: false } running) return running;
+        return _saveInProgress = PerformSaveAsync();
+    }
 
-    private async void ExitButton_Click(object? sender, RoutedEventArgs e) => await TryCloseAsync();
+    private void SaveButton_Click(object? sender, RoutedEventArgs e) => _ = _tasks.Run(SaveOnceAsync, "save settings");
+
+    private void ExitButton_Click(object? sender, RoutedEventArgs e) => _ = RunCloseSafelyAsync();
 
     private void RequestClose(object? sender, RoutedEventArgs e) => _ = RunCloseSafelyAsync();
 
@@ -160,6 +214,8 @@ internal partial class SettingsDialog : Window
         _isClosing = true;
         try
         {
+            await _tasks.WaitAllAsync(Timeout.InfiniteTimeSpan);
+
             if (!_viewModel.IsDirty)
             {
                 _forceClose = true;
@@ -173,7 +229,7 @@ internal partial class SettingsDialog : Window
                 case UnsavedChangesChoice.Back:
                     return;
                 case UnsavedChangesChoice.SaveAndExit:
-                    if (!await PerformSaveAsync()) return;
+                    if (!await SaveOnceAsync()) return;
                     await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
                     break;
                 case UnsavedChangesChoice.ExitWithoutSaving:
@@ -197,5 +253,11 @@ internal partial class SettingsDialog : Window
 
         e.Cancel = true;
         _ = RunCloseSafelyAsync();
+    }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        _closed = true;
+        base.OnClosed(e);
     }
 }

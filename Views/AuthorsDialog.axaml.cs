@@ -12,6 +12,7 @@ internal partial class AuthorsDialog : Window
 {
     private readonly AuthorCardService _authorCardService;
     private readonly AuthorsViewModel _viewModel;
+    private readonly DialogWorkScope _work;
 
     public AuthorsDialog(AuthorCardService authorCardService, List<LiveryEntry> allEntries, Func<Task<List<LiveryEntry>>> refreshEntries)
     {
@@ -20,8 +21,9 @@ internal partial class AuthorsDialog : Window
         _viewModel = new AuthorsViewModel(authorCardService, allEntries, refreshEntries);
         DataContext = _viewModel;
 
-        _viewModel.EditCardRequested += async existingCard => await EditCardAsync(existingCard);
-        _viewModel.DeleteCardRequested += async row => await DeleteCardAsync(row);
+        _work = new DialogWorkScope(this);
+        _viewModel.EditCardRequested += existingCard => _work.Run(() => EditCardAsync(existingCard), "authors: edit card");
+        _viewModel.DeleteCardRequested += row => _work.Run(() => DeleteCardAsync(row), "authors: delete card");
 
         Title = Strings.AuthorsDialogTitle;
         TitleBarText.Text = Strings.AuthorsDialogTitle;

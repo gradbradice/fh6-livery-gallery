@@ -16,6 +16,7 @@ internal sealed partial class BackupDetailViewModel : ObservableObject
     private readonly Func<Task> _onRestored;
     private readonly Func<IReadOnlyList<LiveryData>> _getCurrentEntries;
     private readonly CancellationTokenSource _previewCts = new();
+    private Task _previewGeneration = Task.CompletedTask;
 
     public string DateText { get; }
     public string SizeText { get; }
@@ -45,10 +46,10 @@ internal sealed partial class BackupDetailViewModel : ObservableObject
 
         var (added, removed) = LiveryBackupService.ComputeDiff(backup.Manifest!, getCurrentEntries());
 
-        foreach (var data in added.OrderBy(d => d.LiveryName, StringComparer.OrdinalIgnoreCase))
+        foreach (var data in added.OrderBy(d => d.DisplayLiveryName, StringComparer.OrdinalIgnoreCase))
             AddedEntries.Add(BackupLiveryRowViewModel.FromCurrent(data));
 
-        foreach (var data in removed.OrderBy(d => d.LiveryName, StringComparer.OrdinalIgnoreCase))
+        foreach (var data in removed.OrderBy(d => d.DisplayLiveryName, StringComparer.OrdinalIgnoreCase))
         {
             var row = BackupLiveryRowViewModel.FromBackup(data);
             row.PropertyChanged += OnRowPropertyChanged;
@@ -58,7 +59,11 @@ internal sealed partial class BackupDetailViewModel : ObservableObject
         GenerateMissingPreviews();
     }
 
-    public void CancelBackgroundWork() => _previewCts.Cancel();
+    public Task CancelBackgroundWork()
+    {
+        _previewCts.Cancel();
+        return _previewGeneration;
+    }
 
     private void GenerateMissingPreviews()
     {
@@ -70,7 +75,25 @@ internal sealed partial class BackupDetailViewModel : ObservableObject
             if (_previewCts.IsCancellationRequested) return;
             ReplaceRowPreview(generated.FolderName, generated.PreviewPath);
         });
-        _ = LiveryBackupService.GenerateMissingPreviewsAsync(_backupPath, missing, progress, _previewCts.Token);
+        _previewGeneration = GenerateMissingPreviewsSafelyAsync(missing, progress);
+    }
+
+    private async Task GenerateMissingPreviewsSafelyAsync(
+        List<LiveryData> missing, IProgress<(string FolderName, string PreviewPath)> progress)
+    {
+        try
+        {
+            await LiveryBackupService.GenerateMissingPreviewsAsync(_backupPath, missing, progress, _previewCts.Token);
+        }
+        catch (OperationCanceledException) when (_previewCts.IsCancellationRequested)
+        {
+            // The dialog was closed. The remaining previews are simply not needed any more
+        }
+        catch (Exception ex)
+        {
+            // Rows without a preview keep their placeholder
+            AppLogger.LogError($"Failed to generate previews from backup '{_backupPath}'", ex);
+        }
     }
 
     private void ReplaceRowPreview(string folderName, string previewPath)

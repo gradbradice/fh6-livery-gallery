@@ -1,7 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Forza.Data;
+using ForzaToolkit.Formats;
+using ForzaToolkit.LiveryRender;
+using ForzaToolkit.LiveryRender.Avalonia;
 using LiveryGallery.Configuration;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
@@ -24,15 +26,19 @@ internal partial class AboutDialog : Window
         DescriptionText.Text = Strings.AboutDescription;
         CloseButton.Content = Strings.ButtonClose;
         HeaderParserVersionText.Text = string.Format(Strings.HeaderParserVersionFormat, NativeHeaderParser.GetVersion());
-        ForzaDataPackageVersionText.Text = string.Format(Strings.ForzaDataPackageVersionFormat, GetForzaDataPackageVersion());
+        ForzaDataPackageVersionText.Text = string.Format(Strings.ForzaDataPackageVersionFormat,
+            GetPackageVersion(typeof(NativeHeaderParser).Assembly));
+        LiveryRenderPackageVersionText.Text = string.Format(Strings.LiveryRenderPackageVersionFormat,
+            GetPackageVersion(typeof(LiveryRenderer).Assembly));
+        LiveryRenderAvaloniaPackageVersionText.Text = string.Format(Strings.LiveryRenderAvaloniaPackageVersionFormat,
+            GetPackageVersion(typeof(LiveryViewer).Assembly));
         GithubLinkButton.Content = Strings.ContactsGithubLabel;
     }
 
-    private static string GetForzaDataPackageVersion()
+    private static string GetPackageVersion(Assembly assembly)
     {
         try
         {
-            var assembly = typeof(NativeHeaderParser).Assembly;
             string? version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
                 ?? assembly.GetName().Version?.ToString();
             if (version is null) return "?";
@@ -42,7 +48,7 @@ internal partial class AboutDialog : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to read Forza.Data package version", ex);
+            AppLogger.LogError($"Failed to read the package version of {assembly.GetName().Name}", ex);
             return "?";
         }
     }

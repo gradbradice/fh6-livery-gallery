@@ -68,7 +68,7 @@ internal static class LiveryRestoreConflicts
     }
 
     private static string FormatName(LiveryData data) =>
-        data.LiveryId > 0 ? $"{data.LiveryName} ({FormatLiveryId(data.LiveryId)})" : data.LiveryName;
+        data.LiveryId > 0 ? $"{data.DisplayLiveryName} ({FormatLiveryId(data.LiveryId)})" : data.DisplayLiveryName;
 
     private static string FormatList(IReadOnlyCollection<LiveryData> entries)
     {

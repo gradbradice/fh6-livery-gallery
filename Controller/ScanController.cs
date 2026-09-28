@@ -27,16 +27,19 @@ internal sealed class ScanController
         ulong? currentUserId,
         bool needEntries,
         IProgress<string>? progress,
+        CancellationToken ct,
         out Task<LiveryScanEntry> resultTask)
     {
         var tcs = new TaskCompletionSource<LiveryScanEntry>(TaskCreationOptions.RunContinuationsAsynchronously);
         resultTask = tcs.Task;
 
-        return _coordinator.TryRun(async ct =>
+        // The scan stops on Cancel() (coordinator) as well as on the caller's token.
+        return _coordinator.TryRun(async coordinatorToken =>
         {
             try
             {
-                var result = await scanService.ScanAsync(savePath, currentUserId, needEntries, progress, ct);
+                using var linked = CancellationTokenSource.CreateLinkedTokenSource(coordinatorToken, ct);
+                var result = await scanService.ScanAsync(savePath, currentUserId, needEntries, progress, linked.Token);
                 LastScanResult = result with { Entries = [] };
                 tcs.SetResult(result);
             }

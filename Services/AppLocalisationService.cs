@@ -72,6 +72,23 @@ internal static class AppLocalisationService
         app.Resources["Loc_EditTagsTooltip"] = Strings.EditTagsTooltip;
         app.Resources["Loc_ViewPreviewTooltip"] = Strings.ViewPreviewTooltip;
         app.Resources["Loc_ClearSelectionLabel"] = Strings.ClearSelectionLabel;
+        app.Resources["Loc_AuctionBadgeLabel"] = Strings.AuctionBadgeLabel;
+        app.Resources["Loc_InstalledBadgeLabel"] = Strings.InstalledBadgeLabel;
+        app.Resources["Loc_AuctionBadgeTooltip"] = Strings.AuctionBadgeTooltip;
+        app.Resources["Loc_ContextMenuMoveToArchive"] = Strings.ContextMenuMoveToArchive;
+        app.Resources["Loc_ContextMenuOnlyThisCar"] = Strings.ContextMenuOnlyThisCar;
+        app.Resources["Loc_ContextMenuOnlyThisManufacturer"] = Strings.ContextMenuOnlyThisManufacturer;
+        app.Resources["Loc_ContextMenuOnlyThisAuthor"] = Strings.ContextMenuOnlyThisAuthor;
+        app.Resources["Loc_ContextMenuClearQuickFilters"] = Strings.ContextMenuClearQuickFilters;
+        app.Resources["Loc_QuickFilterRemoveTooltip"] = Strings.QuickFilterRemoveTooltip;
+        app.Resources["Loc_QuickFilterAddTooltip"] = Strings.QuickFilterAddTooltip;
+        app.Resources["Loc_QuickFilterKindManufacturer"] = Strings.QuickFilterKindManufacturer;
+        app.Resources["Loc_QuickFilterKindCar"] = Strings.QuickFilterKindCar;
+        app.Resources["Loc_QuickFilterKindAuthor"] = Strings.QuickFilterKindAuthor;
+        app.Resources["Loc_QuickFilterSearchWatermark"] = Strings.QuickFilterSearchWatermark;
+        app.Resources["Loc_QuickFilterPickerEmpty"] = Strings.QuickFilterPickerEmpty;
+        app.Resources["Loc_GroupShowOnlyButton"] = Strings.GroupShowOnlyButton;
+        app.Resources["Loc_GroupShowOnlyTooltip"] = Strings.GroupShowOnlyTooltip;
     }
 
     public static AppLanguage GetSystemLanguage()

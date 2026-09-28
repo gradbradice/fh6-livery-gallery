@@ -1,11 +1,10 @@
-using Forza.Data;
+using ForzaToolkit.Formats;
 using LiveryGallery.Configuration;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
 using LiveryGallery.ViewModels;
 using System.Collections.Concurrent;
-using System.Runtime;
 
 namespace LiveryGallery.Services;
 
@@ -17,11 +16,15 @@ internal sealed class LiveryScanner
     private readonly SaveFolderLock _saveFolderLock;
     private readonly LiveryEntryFactory _entryFactory;
     private readonly LiveryReader _reader;
+    private readonly AuctionThumbnailResolver _auctionThumbnails = new();
     private static readonly string _duplicateInvalidationSignaturePath =
         Path.Combine(AppSettings.BaseCachePath, "duplicate_invalidation_signature.txt");
     private string? _lastDuplicateInvalidationSignature;
-    private DateTime _lastLohCompaction = DateTime.MinValue;
     private bool _orphanCleanupDoneOnce;
+    private static readonly int ScanParallelism = Math.Clamp(Environment.ProcessorCount / 2, 2, 4);
+
+    private const int StampVerificationsPerScan = 32;
+    private readonly ConcurrentDictionary<string, byte> _verifiedThisSession = new(StringComparer.OrdinalIgnoreCase);
 
     public LiveryScanner(
         AppCacheService appCacheService,
@@ -112,6 +115,12 @@ internal sealed class LiveryScanner
             .Select(name => Path.Combine(savePath, name))
             .ToList();
 
+        var auctionIndex = folders.Any(f => LiveryFolders.IsAuction(Path.GetFileName(f)))
+            ? _auctionThumbnails.LoadIndex()
+            : null;
+
+        var verifyByHash = PickStampVerifications(folders, oldCache);
+
         var newCache = new ConcurrentDictionary<string, LiveryCacheEntry>();
         var freshlyParsedNames = new ConcurrentDictionary<string, byte>();
         var freshSectionCounts = new ConcurrentDictionary<string, uint[]?>();
@@ -122,7 +131,7 @@ internal sealed class LiveryScanner
         Parallel.ForEach(folders, new ParallelOptions
         {
             CancellationToken = ct,
-            MaxDegreeOfParallelism = Math.Max(2, Environment.ProcessorCount / 2),
+            MaxDegreeOfParallelism = ScanParallelism,
         }, folder =>
         {
             int myDone = Interlocked.Increment(ref done);
@@ -131,7 +140,8 @@ internal sealed class LiveryScanner
             LiveryCacheEntry? cacheEntry = null;
             try
             {
-                cacheEntry = TryReuseOrParse(folder, oldCache, progress, myDone, total, out bool wasReused, out uint[]? sectionCounts);
+                cacheEntry = TryReuseOrParse(folder, oldCache, auctionIndex, progress, myDone, total,
+                    trustStamp: !verifyByHash.Contains(folder), out bool wasReused, out uint[]? sectionCounts);
                 if (wasReused)
                 {
                     Interlocked.Increment(ref reused);
@@ -159,6 +169,7 @@ internal sealed class LiveryScanner
 
         var finalCache = new Dictionary<string, LiveryCacheEntry>(newCache);
         int removed = oldCache.Keys.Except(finalCache.Keys).Count();
+        int added = finalCache.Keys.Except(oldCache.Keys).Count();
         bool suspiciousDrop = oldCache.Count > 0 && removed > oldCache.Count * 0.2;
         bool snapshotUnreliable = false;
         if (errors == 0 && suspiciousDrop)
@@ -183,6 +194,7 @@ internal sealed class LiveryScanner
                 new InvalidOperationException("Unreliable scan snapshot"));
             finalCache = new Dictionary<string, LiveryCacheEntry>(oldCache);
             removed = 0;
+            added = 0;
             suspiciousDrop = false;
         }
 
@@ -200,7 +212,7 @@ internal sealed class LiveryScanner
             Parallel.ForEach(finalCache.Values, new ParallelOptions
             {
                 CancellationToken = ct,
-                MaxDegreeOfParallelism = Math.Max(2, Environment.ProcessorCount / 2),
+                MaxDegreeOfParallelism = ScanParallelism,
             }, cacheEntry =>
             {
                 entries.Add(_entryFactory.ToEntry(cacheEntry, currentUserId));
@@ -219,6 +231,7 @@ internal sealed class LiveryScanner
             if (cacheChanged || !_orphanCleanupDoneOnce)
             {
                 CleanupOrphanedThumbnails(finalCache);
+                DuplicateInputsCache.RemoveUnreferenced(finalCache.Values.Select(e => e.CLiveryHash));
                 _orphanCleanupDoneOnce = true;
             }
         }
@@ -229,11 +242,7 @@ internal sealed class LiveryScanner
                 new InvalidOperationException("Unreliable scan snapshot"));
         }
 
-        if (dirtyGroupsRecomputed > 0 && DateTime.UtcNow - _lastLohCompaction > TimeSpan.FromMinutes(5))
-        {
-            _lastLohCompaction = DateTime.UtcNow;
-            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-        }
+        if (dirtyGroupsRecomputed > 0) MemoryReclaimer.RequestLohCompaction();
 
         return new LiveryScanEntry
         {
@@ -242,9 +251,16 @@ internal sealed class LiveryScanner
             Parsed = parsed,
             Errors = errors,
             Removed = removed,
+            Added = added,
             CacheChanged = cacheChanged
         };
     }
+
+    private HashSet<string> PickStampVerifications(List<string> folders, Dictionary<string, LiveryCacheEntry> oldCache) =>
+        folders
+            .Where(f => !_verifiedThisSession.ContainsKey(f) && oldCache.ContainsKey(Path.GetFileName(f)))
+            .Take(StampVerificationsPerScan)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
     private void CleanupOrphanedThumbnails(Dictionary<string, LiveryCacheEntry> newCache)
     {
@@ -280,36 +296,71 @@ internal sealed class LiveryScanner
     private LiveryCacheEntry TryReuseOrParse(
         string folder,
         Dictionary<string, LiveryCacheEntry> oldCache,
+        AuctionThumbnailResolver.Index? auctionIndex,
         IProgress<string>? progress,
         int done,
         int total,
+        bool trustStamp,
         out bool wasReused,
         out uint[]? cLiverySectionCounts)
     {
         cLiverySectionCounts = null;
+        string folderName = Path.GetFileName(folder);
+        bool isAuction = LiveryFolders.IsAuction(folderName);
 
-        bool found = oldCache.TryGetValue(Path.GetFileName(folder), out var existing);
-        if (found && CanReuseCacheByStamp(folder, existing!))
+        bool found = oldCache.TryGetValue(folderName, out var existing);
+        string? thumbSource = ThumbnailService.FindSourceThumbnail(folder);
+        string? auctionToken = null;
+        if (isAuction)
+        {
+            auctionToken = AuctionThumbnailResolver.TryComputeToken(Path.Combine(folder, "header"));
+            thumbSource ??= auctionIndex?.Resolve(LiveryReader.GetFolderCarId(folderName), auctionToken);
+            if (thumbSource is null
+                && existing?.ExternalThumbSource is { } knownSource
+                && string.Equals(existing.AuctionToken, auctionToken, StringComparison.Ordinal)
+                && File.Exists(knownSource))
+            {
+                thumbSource = knownSource;
+            }
+        }
+        string? externalThumbSource = isAuction ? thumbSource : null;
+
+        bool stampMatches = found && CanReuseCacheByStamp(folder, existing!, thumbSource, isAuction, externalThumbSource, auctionToken);
+        if (stampMatches && trustStamp)
         {
             wasReused = true;
             return existing!;
         }
 
-        var hashes = _reader.CalculateFileHashes(folder, existing);
+        var hashes = _reader.CalculateFileHashes(folder, existing, thumbSource);
+        _verifiedThisSession[folder] = 0;
 
-        if (CanReuseCache(existing, found, hashes))
+        if (CanReuseCache(existing, found, hashes, isAuction, externalThumbSource, auctionToken))
         {
             wasReused = true;
             return RefreshStampsIfNeeded(existing!, hashes);
         }
 
+        if (stampMatches && (existing!.HeaderHash != hashes.Header || existing.CLiveryHash != hashes.CLivery))
+        {
+            AppLogger.LogErrorThrottled("LiveryScanner.StampMismatch",
+                $"'{folderName}' changed although its size and timestamps did not — re-reading it",
+                new InvalidDataException("Diagnostic: content changed under an unchanged file stamp"),
+                minInterval: TimeSpan.FromHours(6));
+        }
+
         wasReused = false;
         int reportInterval = Math.Max(1, total / 50);
         if (done % reportInterval == 0 || done == total)
-            progress?.Report(string.Format(Strings.ParsingProgress, done, total, Path.GetFileName(folder)));
+            progress?.Report(string.Format(Strings.ParsingProgress, done, total, folderName));
 
         var parsed = _reader.ParseLivery(folder, hashes, existing, out cLiverySectionCounts);
-        return parsed with { ThumbnailFile = GenerateThumbnailIfNeeded(folder, hashes, existing) };
+        return parsed with
+        {
+            ThumbnailFile = GenerateThumbnailIfNeeded(folder, hashes, existing),
+            AuctionToken = auctionToken,
+            ExternalThumbSource = externalThumbSource,
+        };
     }
 
     private string? GenerateThumbnailIfNeeded(string folder, LiveryReader.LiveryFileHashes hashes, LiveryCacheEntry? previous)
@@ -345,13 +396,15 @@ internal sealed class LiveryScanner
         var resolvedAuthorCache = new Dictionary<(string Author, string? Tag), string>();
         string ResolvedAuthor(LiveryCacheEntry e)
         {
-            var key = (e.Author, e.AuthorIdentityTagHex);
+            string raw = _entryFactory.ResolveRawAuthor(e).Name;
+            var key = (raw, e.AuthorIdentityTagHex);
             if (!resolvedAuthorCache.TryGetValue(key, out var name))
-                resolvedAuthorCache[key] = name = _authorCardService.ResolveDisplayName(e.Author, e.AuthorIdentityTagHex);
+                resolvedAuthorCache[key] = name = _authorCardService.ResolveDisplayName(raw, e.AuthorIdentityTagHex);
             return name;
         }
 
-        string currentSignature = $"{LiveryDuplicateDetector.AlgorithmVersion}|{_authorCardService.GetIdentityMappingFingerprint()}";
+        string currentSignature = $"{LiveryDuplicateDetector.AlgorithmVersion}|{_authorCardService.GetIdentityMappingFingerprint()}"
+            + $"|{_entryFactory.AuthorInference.Fingerprint(finalCache.Values)}";
         bool invalidationSignatureChanged = currentSignature != _lastDuplicateInvalidationSignature;
         var groups = finalCache.Values
             .GroupBy(e => (e.CarId, Author: ResolvedAuthor(e)), CarIdResolvedAuthorComparer.Instance)
@@ -445,20 +498,22 @@ internal sealed class LiveryScanner
         var candidates = new List<LiveryDuplicateCandidate>(members.Count);
         foreach (var member in members)
         {
+            if (member.CLiveryHash is null && LiveryFolders.IsAuction(member.FolderName)) continue;
+
             freshSectionCounts.TryGetValue(member.FolderName, out var freshCounts);
             var (sectionCounts, shapes) = LiveryReader.TryReadDuplicateInputs(
-                Path.Combine(savePath, member.FolderName), freshCounts);
+                Path.Combine(savePath, member.FolderName), member.CLiveryHash, freshCounts);
             candidates.Add(new LiveryDuplicateCandidate(member.FolderName, member.CarId, resolvedAuthor, member.CLiveryHash, sectionCounts, shapes));
         }
 
-        var results = LiveryDuplicateDetector.Detect(candidates);
+        var results = candidates.Count > 1 ? LiveryDuplicateDetector.Detect(candidates) : null;
 
         foreach (var member in members)
         {
             DuplicateStatus status = DuplicateStatus.Ok;
             IReadOnlyList<DuplicateRelation>? possibleDuplicateOf = null;
 
-            if (results.TryGetValue(member.FolderName, out var match))
+            if (results is not null && results.TryGetValue(member.FolderName, out var match))
             {
                 status = match.Status switch
                 {
@@ -515,18 +570,21 @@ internal sealed class LiveryScanner
         };
     }
 
-    private bool CanReuseCacheByStamp(string folder, LiveryCacheEntry existing)
+    private bool CanReuseCacheByStamp(
+        string folder, LiveryCacheEntry existing, string? thumbSource,
+        bool isAuction, string? externalThumbSource, string? auctionToken)
     {
         if (existing.SchemaVersion != LiveryCacheEntry.CurrentSchemaVersion) return false;
         if (existing.GenerationAlgorithmVersion != LiveryGenerationDetector.AlgorithmVersion) return false;
         if (existing.ParserVersion != LiveryReader.ParserVersion) return false;
-        if (existing.CLiveryHash is null) return false;
+        if (existing.CLiveryHash is null && !isAuction) return false;
+        if (!AuctionFieldsMatch(existing, isAuction, externalThumbSource, auctionToken)) return false;
+        if (PlaceholderTexts.NeedsTextMigration(existing)) return false;
 
         string headerPath = Path.Combine(folder, "header");
         if (!LiveryReader.TryGetStamp(headerPath, out long headerLen, out DateTime headerMtime)) return false;
         if (headerLen != existing.HeaderLength || headerMtime != existing.HeaderLastWriteUtc) return false;
 
-        string? thumbSource = ThumbnailService.FindSourceThumbnail(folder);
         if (thumbSource is null)
         {
             if (existing.ThumbnailFile is not null) return false;
@@ -540,18 +598,32 @@ internal sealed class LiveryScanner
         }
 
         string cLiveryPath = Path.Combine(folder, "C_livery");
-        if (!LiveryReader.TryGetStamp(cLiveryPath, out long cLiveryLen, out DateTime cLiveryMtime)) return false;
+        if (!LiveryReader.TryGetStamp(cLiveryPath, out long cLiveryLen, out DateTime cLiveryMtime))
+        {
+            return isAuction && existing.CLiveryHash is null;
+        }
+        if (existing.CLiveryHash is null) return false;
         if (cLiveryLen != existing.CLiveryLength || cLiveryMtime != existing.CLiveryLastWriteUtc) return false;
 
         return true;
     }
 
-    private bool CanReuseCache(LiveryCacheEntry? existing, bool found, LiveryReader.LiveryFileHashes hashes)
+    private static bool AuctionFieldsMatch(
+        LiveryCacheEntry existing, bool isAuction, string? externalThumbSource, string? auctionToken) =>
+        !isAuction
+        || (string.Equals(existing.ExternalThumbSource, externalThumbSource, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(existing.AuctionToken, auctionToken, StringComparison.Ordinal));
+
+    private bool CanReuseCache(
+        LiveryCacheEntry? existing, bool found, LiveryReader.LiveryFileHashes hashes,
+        bool isAuction, string? externalThumbSource, string? auctionToken)
     {
         if (!found || existing is null) return false;
         if (existing.SchemaVersion != LiveryCacheEntry.CurrentSchemaVersion) return false;
         if (existing.GenerationAlgorithmVersion != LiveryGenerationDetector.AlgorithmVersion) return false;
         if (existing.ParserVersion != LiveryReader.ParserVersion) return false;
+        if (!AuctionFieldsMatch(existing, isAuction, externalThumbSource, auctionToken)) return false;
+        if (PlaceholderTexts.NeedsTextMigration(existing)) return false;
 
         bool thumbnailValid = hashes.SourceThumbnailPath is null
             ? existing.ThumbnailFile is null
@@ -562,7 +634,7 @@ internal sealed class LiveryScanner
             && existing.HeaderHash == hashes.Header
             && existing.SourceThumbHash == hashes.SourceThumbnail
             && existing.CLiveryHash == hashes.CLivery
-            && existing.CLiveryHash is not null
+            && (existing.CLiveryHash is not null || isAuction)
             && thumbnailValid;
     }
 }

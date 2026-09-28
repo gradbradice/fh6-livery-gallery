@@ -307,10 +307,10 @@ Manuell auswählen?
     <value>Unbekannt</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser (nativ): {0}</value>
+    <value>ForzaToolkit Formats Native: {0}</value>
   </data>
   <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser (Paket): {0}</value>
+    <value>ForzaToolkit Formats Package: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Einstellungen</value>
@@ -415,7 +415,7 @@ Manuell auswählen?
     <value>Mögliches Duplikat</value>
   </data>
   <data name="MyLiveryBadgeTooltip" xml:space="preserve">
-    <value>Deine Lackierung</value>
+    <value>Ihre Lackierung</value>
   </data>
   <data name="MyLiveryBadgeLabel" xml:space="preserve">
     <value>Meine</value>
@@ -842,5 +842,419 @@ Trotzdem wiederherstellen?</value>
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
     <value>Die Livree wurde gelesen, aber ein Teil ihrer Datei konnte nicht analysiert werden. Die Hauptdaten werden angezeigt; einige Prüfungen (Generierung, Duplikate) sind eventuell nicht verfügbar.</value>
+  </data>
+  <data name="GameFolderProblemNotSet" xml:space="preserve">
+    <value>der Spielordner ist nicht festgelegt</value>
+  </data>
+  <data name="GameFolderProblemNotFound" xml:space="preserve">
+    <value>der Ordner existiert nicht</value>
+  </data>
+  <data name="GameFolderProblemAccessDenied" xml:space="preserve">
+    <value>kein Zugriff auf den Ordner</value>
+  </data>
+  <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
+    <value>das ist nicht der Spielordner (kein media-Ordner)</value>
+  </data>
+  <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
+    <value>media\cars wurde nicht gefunden</value>
+  </data>
+  <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
+    <value>in media\cars sind keine Autos</value>
+  </data>
+  <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
+    <value>media\Livery wurde nicht gefunden</value>
+  </data>
+  <data name="GameFolderProblemNoVinyls" xml:space="preserve">
+    <value>die Vinyls des Spiels wurden nicht gefunden (media\Livery\Vinyls.zip)</value>
+  </data>
+  <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
+    <value>die Vinyls des Spiels konnten nicht gelesen werden</value>
+  </data>
+  <data name="GameFolderProblemNoDecals" xml:space="preserve">
+    <value>Logos wurden nicht gefunden, einige Aufkleber werden nicht gezeichnet</value>
+  </data>
+  <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
+    <value>einige Autos konnten nicht gelesen werden</value>
+  </data>
+  <data name="GameFolderProblemUnknown" xml:space="preserve">
+    <value>der Ordner ist ungeeignet</value>
+  </data>
+  <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
+    <value>Die Vinyls des Spiels wurden nicht gefunden. Prüfen Sie den Spielordner (media\Livery).</value>
+  </data>
+  <data name="RenderErrorGamePathInvalid" xml:space="preserve">
+    <value>Der Spielordner ist nicht festgelegt oder wurde nicht gefunden.</value>
+  </data>
+  <data name="RenderErrorCarNotFound" xml:space="preserve">
+    <value>Das Auto dieser Livree ist nicht im Spielordner.</value>
+  </data>
+  <data name="RenderErrorCarFormat" xml:space="preserve">
+    <value>Die Dateien des Autos konnten nicht gelesen werden.</value>
+  </data>
+  <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
+    <value>Dieses Auto hat kein Livree-Layout.</value>
+  </data>
+  <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
+    <value>Nicht gezeichnete Formen: {0}</value>
+  </data>
+  <data name="RenderErrorRasterLogosSkippedFormat" xml:space="preserve">
+    <value>Nicht gezeichnete Logos: {0}</value>
+  </data>
+  <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
+    <value>Formen ohne Abschnitt: {0}</value>
+  </data>
+  <data name="RenderErrorGeneric" xml:space="preserve">
+    <value>Die Livree konnte nicht gezeichnet werden.</value>
+  </data>
+  <data name="View3DGameFolderChecking" xml:space="preserve">
+    <value>3D ist noch nicht verfügbar: Spielordner wird geprüft</value>
+  </data>
+  <data name="View3DTooltip" xml:space="preserve">
+    <value>In 3D ansehen</value>
+  </data>
+  <data name="View3DNoCLivery" xml:space="preserve">
+    <value>3D nicht verfügbar: Die Livree hat keine C_livery-Datei</value>
+  </data>
+  <data name="View3DParseError" xml:space="preserve">
+    <value>3D nicht verfügbar: Die Livree konnte nicht gelesen werden</value>
+  </data>
+  <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
+    <value>3D nicht verfügbar: {0}. Lege den Spielordner in den Einstellungen fest.</value>
+  </data>
+  <data name="View3DDialogTitle" xml:space="preserve">
+    <value>3D-Ansicht</value>
+  </data>
+  <data name="View3DReadFailed" xml:space="preserve">
+    <value>Die Livree-Datei konnte nicht gelesen werden. Details im Protokoll.</value>
+  </data>
+  <data name="View3DParseFailedFormat" xml:space="preserve">
+    <value>Die Livree konnte nicht gelesen werden: {0}</value>
+  </data>
+  <data name="ViewerStatsFormat" xml:space="preserve">
+    <value>{0:N0} Dreiecke (LOD {1}) · Livree {2}×{3} · Bild {4}×{5}, MSAA {6}× · {7:F1} ms</value>
+  </data>
+  <data name="ViewerNoOpenGl" xml:space="preserve">
+    <value>3D-Ansicht nicht verfügbar: OpenGL konnte nicht initialisiert werden.</value>
+  </data>
+  <data name="ViewerQualityLow" xml:space="preserve">
+    <value>Niedrig</value>
+  </data>
+  <data name="ViewerQualityMedium" xml:space="preserve">
+    <value>Mittel</value>
+  </data>
+  <data name="ViewerQualityHigh" xml:space="preserve">
+    <value>Hoch</value>
+  </data>
+  <data name="ViewerQualityUltra" xml:space="preserve">
+    <value>Ultra</value>
+  </data>
+  <data name="ViewerResetView" xml:space="preserve">
+    <value>Ansicht zurücksetzen</value>
+  </data>
+  <data name="ViewerTitleFormat" xml:space="preserve">
+    <value>{0} — 3D</value>
+  </data>
+  <data name="GameFolderNotSetHint" xml:space="preserve">
+    <value>Der Spielordner wird für die 3D-Ansicht von Livrees benötigt</value>
+  </data>
+  <data name="GameFolderChecking" xml:space="preserve">
+    <value>Spielordner wird geprüft…</value>
+  </data>
+  <data name="GameFolderInvalidFormat" xml:space="preserve">
+    <value>Der Spielordner ist ungeeignet: {0}</value>
+  </data>
+  <data name="GameFolderValidFormat" xml:space="preserve">
+    <value>Spielordner gefunden, Autos: {0}</value>
+  </data>
+  <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
+    <value>Spielordner gefunden, Autos: {0}. Aber: {1}</value>
+  </data>
+  <data name="ViewerControlsHint" xml:space="preserve">
+    <value>Linke Maustaste: drehen · Rechte Maustaste: verschieben · Mausrad: zoomen · Doppelklick: zurücksetzen</value>
+  </data>
+  <data name="AuctionBadgeLabel" xml:space="preserve">
+    <value>Auktion</value>
+  </data>
+  <data name="AuctionBadgeTooltip" xml:space="preserve">
+    <value>Im Auktionshaus gekauft.
+Auktions-Lackierungen können nicht ins Archiv verschoben werden.</value>
+  </data>
+  <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
+    <value>Auktions-Lackierungen können nicht ins Archiv verschoben werden</value>
+  </data>
+  <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
+    <value>Auktions-Lackierungen können nicht ins Archiv verschoben werden – {0} der ausgewählten Lackierungen bleiben im Spiel.</value>
+  </data>
+  <data name="ContextMenuOnlyThisCar" xml:space="preserve">
+    <value>Nur dieses Auto</value>
+  </data>
+  <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
+    <value>Nur dieser Hersteller</value>
+  </data>
+  <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
+    <value>Nur dieser Autor</value>
+  </data>
+  <data name="ContextMenuClearQuickFilters" xml:space="preserve">
+    <value>Wieder alles anzeigen</value>
+  </data>
+  <data name="QuickFiltersLabel" xml:space="preserve">
+    <value>Nur:</value>
+  </data>
+  <data name="QuickFilterCarFormat" xml:space="preserve">
+    <value>Auto: {0}</value>
+  </data>
+  <data name="QuickFilterManufacturerFormat" xml:space="preserve">
+    <value>Hersteller: {0}</value>
+  </data>
+  <data name="QuickFilterAuthorFormat" xml:space="preserve">
+    <value>Autor: {0}</value>
+  </data>
+  <data name="QuickFilterRemoveTooltip" xml:space="preserve">
+    <value>Diesen Filter entfernen</value>
+  </data>
+  <data name="StatusAutoRefreshedFormat" xml:space="preserve">
+    <value>Spielstand geändert: +{0} / −{1}, Galerie aktualisiert</value>
+  </data>
+  <data name="FilterAuctionLabel" xml:space="preserve">
+    <value>Auktion</value>
+  </data>
+  <data name="AuctionFilterAll" xml:space="preserve">
+    <value>Alle Lackierungen</value>
+  </data>
+  <data name="AuctionFilterSeparately" xml:space="preserve">
+    <value>Auktions-Lackierungen separat anzeigen</value>
+  </data>
+  <data name="AuctionFilterOnly" xml:space="preserve">
+    <value>Nur Auktions-Lackierungen</value>
+  </data>
+  <data name="AuctionFilterHide" xml:space="preserve">
+    <value>Auktions-Lackierungen ausblenden</value>
+  </data>
+  <data name="SeparateAuctionGroupName" xml:space="preserve">
+    <value>Auktion</value>
+  </data>
+  <data name="AuthorInferredTooltip" xml:space="preserve">
+    <value>Die Lackierung enthält keinen Autorennamen – er stammt aus anderen Lackierungen desselben Autors</value>
+  </data>
+  <data name="AuthorUnknownMessage" xml:space="preserve">
+    <value>Diese Lackierung enthält keinen Autorennamen, und in der Galerie gibt es keine anderen Lackierungen dieses Autors, aus denen er übernommen werden könnte.</value>
+  </data>
+  <data name="QuickFilterAddButton" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="QuickFilterAddTooltip" xml:space="preserve">
+    <value>Nur einen Hersteller, ein Auto oder einen Autor anzeigen</value>
+  </data>
+  <data name="QuickFilterKindManufacturer" xml:space="preserve">
+    <value>Hersteller</value>
+  </data>
+  <data name="QuickFilterKindCar" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="QuickFilterKindAuthor" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="QuickFilterSearchWatermark" xml:space="preserve">
+    <value>Suchen…</value>
+  </data>
+  <data name="QuickFilterPickerEmpty" xml:space="preserve">
+    <value>Nichts gefunden</value>
+  </data>
+  <data name="GroupShowOnlyButton" xml:space="preserve">
+    <value>Nur diese</value>
+  </data>
+  <data name="GroupShowOnlyTooltip" xml:space="preserve">
+    <value>Nur diese Gruppe anzeigen</value>
+  </data>
+  <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
+    <value>Autos von {0}</value>
+  </data>
+  <data name="SettingsSectionDuplicates" xml:space="preserve">
+    <value>Duplikate</value>
+  </data>
+  <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
+    <value>Als mögliches Duplikat markieren ab einer Ähnlichkeit von</value>
+  </data>
+  <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
+    <value>Weniger ähnliche Treffer werden nicht angezeigt. Exakte Duplikate werden immer angezeigt. Wirkt sofort, ohne erneuten Scan.</value>
+  </data>
+  <data name="LiveryRenderPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Package: {0}</value>
+  </data>
+  <data name="LiveryRenderAvaloniaPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Avalonia Package: {0}</value>
+  </data>
+  <data name="View3DDifferenceNote" xml:space="preserve">
+    <value>Die 3D-Ansicht ist eine Annäherung: Farben, Materialien, Beleuchtung und einige Details können anders aussehen als im Spiel.</value>
+  </data>
+  <data name="ServerStatusChecking" xml:space="preserve">
+    <value>Server: Verbindung wird hergestellt…</value>
+  </data>
+  <data name="ServerStatusOnline" xml:space="preserve">
+    <value>Server: verbunden</value>
+  </data>
+  <data name="ServerStatusSyncing" xml:space="preserve">
+    <value>Server: Spielstand wird gelesen…</value>
+  </data>
+  <data name="ServerStatusSaveNotSupported" xml:space="preserve">
+    <value>Server: Spielstand noch nicht unterstützt</value>
+  </data>
+  <data name="ServerStatusDegraded" xml:space="preserve">
+    <value>Server: eingeschränkt</value>
+  </data>
+  <data name="ServerStatusMaintenance" xml:space="preserve">
+    <value>Server: Wartung</value>
+  </data>
+  <data name="ServerStatusUnreachable" xml:space="preserve">
+    <value>Server nicht erreichbar</value>
+  </data>
+  <data name="ServerStatusNoInternet" xml:space="preserve">
+    <value>Keine Internetverbindung</value>
+  </data>
+  <data name="ServerStatusRateLimited" xml:space="preserve">
+    <value>Server: zu viele Anfragen</value>
+  </data>
+  <data name="ServerStatusUpdateRequired" xml:space="preserve">
+    <value>Server: bitte App aktualisieren</value>
+  </data>
+  <data name="ServerStatusAppRejected" xml:space="preserve">
+    <value>Server: dieser Build wird nicht akzeptiert</value>
+  </data>
+  <data name="ServerStatusCertificateError" xml:space="preserve">
+    <value>Server: sichere Verbindung fehlgeschlagen</value>
+  </data>
+  <data name="ServerStatusServerError" xml:space="preserve">
+    <value>Serverfehler</value>
+  </data>
+  <data name="ServerStatusNotConfigured" xml:space="preserve">
+    <value>Server in diesem Build nicht eingerichtet</value>
+  </data>
+  <data name="ServerStatusVersionFormat" xml:space="preserve">
+    <value>Server {0}</value>
+  </data>
+  <data name="ServerStatusRetryHint" xml:space="preserve">
+    <value>Die App versucht es automatisch erneut.</value>
+  </data>
+  <data name="ServerStatusRetryInFormat" xml:space="preserve">
+    <value>Nächster Versuch in {0} s.</value>
+  </data>
+  <data name="ServerStatusUpdateHint" xml:space="preserve">
+    <value>Der Server benötigt eine neuere App-Version. Bitte aktualisieren.</value>
+  </data>
+  <data name="ServerStatusAppRejectedHint" xml:space="preserve">
+    <value>Der Server akzeptiert diesen Build der App nicht. Bitte die offizielle Version verwenden.</value>
+  </data>
+  <data name="ServerStatusCertificateHint" xml:space="preserve">
+    <value>Das Serverzertifikat hat die Prüfung nicht bestanden: Die Verbindung wird möglicherweise abgefangen (z. B. durch Antivirus oder Proxy). Die App versucht es nicht selbst erneut.</value>
+  </data>
+  <data name="ServerStatusClickToRecheck" xml:space="preserve">
+    <value>Klicken, um den Serverstatus zu prüfen</value>
+  </data>
+  <data name="ServerSyncDoneFormat" xml:space="preserve">
+    <value>Auf Autos angewendete Lackierungen: {0}
+Aktualisiert um {1}</value>
+  </data>
+  <data name="ServerSyncProfileNotFound" xml:space="preserve">
+    <value>Die Profildatei (C_ProfileData) wurde im Spielstandordner nicht gefunden.</value>
+  </data>
+  <data name="ServerSyncSaveNotSupported" xml:space="preserve">
+    <value>Der Server kann diesen Spielstand noch nicht lesen – vermutlich wurde das Spiel aktualisiert. Die Unterstützung folgt.</value>
+  </data>
+  <data name="ServerSyncSaveRejected" xml:space="preserve">
+    <value>Laut Server ist diese Datei kein gültiger Profil-Spielstand.</value>
+  </data>
+  <data name="ServerSyncFailed" xml:space="preserve">
+    <value>Die angewendeten Lackierungen konnten nicht aktualisiert werden; die App versucht es erneut.</value>
+  </data>
+  <data name="InstalledBadgeLabel" xml:space="preserve">
+    <value>Angewendet</value>
+  </data>
+  <data name="InstalledBadgeTooltip" xml:space="preserve">
+    <value>Im Spiel auf ein Auto angewendet</value>
+  </data>
+  <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
+    <value>Im Spiel auf {0} Autos angewendet</value>
+  </data>
+  <data name="SettingsSectionServer" xml:space="preserve">
+    <value>Lackierungsdatenserver</value>
+  </data>
+  <data name="ServerConnectionLabel" xml:space="preserve">
+    <value>Mit dem Server verbinden, um angewendete Lackierungen zu ermitteln</value>
+  </data>
+  <data name="ServerConnectionDescription" xml:space="preserve">
+    <value>Um die auf Fahrzeuge angewendeten Lackierungen zu ermitteln, übermittelt die Anwendung die Spielstanddatei (C_ProfileData) an den Server. Die Datei wird ausschließlich zur Ermittlung der angewendeten Lackierungen verarbeitet und nicht auf dem Server gespeichert.
+
+Daten aus der Spielstanddatei werden weder gespeichert noch zu anderen Zwecken verwendet. Der Server dient der sicheren Aufbewahrung der Schlüssel, die zur Entschlüsselung der Spielstanddatei erforderlich sind.
+
+Der Server steht in keiner Verbindung zu den offiziellen Servern von Forza Horizon, Xbox oder Microsoft.</value>
+  </data>
+  <data name="ServerConsentMessage" xml:space="preserve">
+    <value>Um die auf Fahrzeuge angewendeten Lackierungen zu ermitteln, übermittelt die Anwendung die Spielstanddatei (C_ProfileData) an den Server. Die Datei wird ausschließlich zur Ermittlung der angewendeten Lackierungen verarbeitet und nicht auf dem Server gespeichert.
+
+Daten aus der Spielstanddatei werden weder gespeichert noch zu anderen Zwecken verwendet. Der Server dient der sicheren Aufbewahrung der Schlüssel, die zur Entschlüsselung der Spielstanddatei erforderlich sind.
+
+Der Server steht in keiner Verbindung zu den offiziellen Servern von Forza Horizon, Xbox oder Microsoft.
+
+Daten werden nur mit Ihrer Zustimmung an den Server übermittelt. Möchten Sie die Serververbindung aktivieren?</value>
+  </data>
+  <data name="ServerConsentTitle" xml:space="preserve">
+    <value>Verbindung zum Lackierungsdatenserver</value>
+  </data>
+  <data name="ServerConsentAccept" xml:space="preserve">
+    <value>Ja, ich verstehe und möchte fortfahren</value>
+  </data>
+  <data name="FilterInstalledLabel" xml:space="preserve">
+    <value>Angewendete Lackierungen</value>
+  </data>
+  <data name="InstalledAllToggle" xml:space="preserve">
+    <value>Alle Lackierungen</value>
+  </data>
+  <data name="InstalledFirstToggle" xml:space="preserve">
+    <value>Angewendete zuerst</value>
+  </data>
+  <data name="OnlyInstalledToggle" xml:space="preserve">
+    <value>Nur angewendete</value>
+  </data>
+  <data name="FilterValueUnavailable" xml:space="preserve">
+    <value>Aus</value>
+  </data>
+  <data name="InstalledFilterNeedsServer" xml:space="preserve">
+    <value>Aktivieren Sie in den Einstellungen die Verbindung zum Lackierungsdatenserver, um angewendete Lackierungen zu ermitteln.</value>
+  </data>
+  <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
+    <value>Einige Ordner konnten nicht vom alten Speicherort entfernt werden – vermutlich wird eine Datei darin verwendet (läuft das Spiel?). Es ist nichts verloren gegangen: Die maßgebliche Kopie ist vollständig. Diese Reste werden nicht mehr benötigt und können gelöscht werden:
+{0}</value>
+  </data>
+  <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Im Spiel auf Autos angewendete Lackierungen können nicht ins Archiv verschoben werden</value>
+  </data>
+  <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
+    <value>Im Spiel auf Autos angewendete Lackierungen können nicht ins Archiv verschoben werden – {0} der ausgewählten Lackierungen bleiben im Spiel.</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
+    <value>Es ist nicht bekannt, welche Lackierungen auf Autos angewendet sind. Das Verschieben dieser Lackierung ins Archiv ist daher nicht sicher: Sie könnte im Spiel auf ein Auto angewendet sein.
+
+Lackierung ins Archiv verschieben?</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
+    <value>Es ist nicht bekannt, welche Lackierungen auf Autos angewendet sind. Das Verschieben dieser Lackierungen ins Archiv ist daher nicht sicher: Einige könnten im Spiel auf Autos angewendet sein.
+
+Lackierungen ins Archiv verschieben?</value>
+  </data>
+  <data name="DontShowAgainCheckBox" xml:space="preserve">
+    <value>Nicht mehr anzeigen</value>
+  </data>
+  <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Auktions-Lackierungen und im Spiel auf Autos angewendete Lackierungen können nicht ins Archiv verschoben werden</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
+    <value>Die Speicherdatei hat sich seit der letzten Synchronisierung geändert, und die neuen Daten wurden noch nicht an den Lackierungsserver gesendet. Die Liste der auf Autos angewendeten Lackierungen ist daher möglicherweise veraltet, und das Verschieben dieser Lackierung ins Archiv ist nicht sicher: Sie könnte im Spiel auf ein Auto angewendet sein.
+
+Warten Sie am besten die Synchronisierung ab (sie erfolgt automatisch und kann einige Minuten dauern) und versuchen Sie es erneut. Lackierung jetzt ins Archiv verschieben?</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
+    <value>Die Speicherdatei hat sich seit der letzten Synchronisierung geändert, und die neuen Daten wurden noch nicht an den Lackierungsserver gesendet. Die Liste der auf Autos angewendeten Lackierungen ist daher möglicherweise veraltet, und das Verschieben dieser Lackierungen ins Archiv ist nicht sicher: Einige könnten im Spiel auf Autos angewendet sein.
+
+Warten Sie am besten die Synchronisierung ab (sie erfolgt automatisch und kann einige Minuten dauern) und versuchen Sie es erneut. Lackierungen jetzt ins Archiv verschieben?</value>
   </data>
 </root>

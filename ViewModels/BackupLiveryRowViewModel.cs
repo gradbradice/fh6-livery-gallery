@@ -24,9 +24,9 @@ internal sealed partial class BackupLiveryRowViewModel : ObservableObject, IThum
     public LiveryData Data { get; }
 
     public string FolderName => Data.FolderName;
-    public string LiveryName => Data.LiveryName;
+    public string LiveryName => Data.DisplayLiveryName;
     public string LiveryIdText => LiveryRestoreConflicts.FormatLiveryId(Data.LiveryId);
-    public string AuthorRaw => Data.AuthorRaw;
+    public string AuthorRaw => Data.DisplayAuthorRaw;
     public string CarManufacturer => Data.CarManufacturerRaw;
     public string CarModelName => Data.CarModelNameRaw;
     public string? ThumbnailPath { get; }

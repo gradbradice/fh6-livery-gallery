@@ -12,6 +12,28 @@
 		<Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
 	</Style>
 
+	<Style Selector="Path.menuIcon.star">
+		<Setter Property="Fill" Value="#FFD54F" />
+	</Style>
+	<Style Selector="Path.menuIcon.installed">
+		<Setter Property="Fill" Value="{DynamicResource SuccessBrush}" />
+	</Style>
+	<Style Selector="PathIcon.menuIcon.mine">
+		<Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+	</Style>
+
+	<Style Selector="MenuItem.separateOption:disabled">
+		<Style Selector="^ TextBlock">
+			<Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemForegroundDisabled}" />
+		</Style>
+		<Style Selector="^ Path.menuIcon">
+			<Setter Property="Fill" Value="{DynamicResource MenuFlyoutItemForegroundDisabled}" />
+		</Style>
+		<Style Selector="^ PathIcon.menuIcon">
+			<Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemForegroundDisabled}" />
+		</Style>
+	</Style>
+
 	<Style Selector="ToolTip">
 		<Setter Property="Background" Value="{DynamicResource CardBrush}" />
 		<Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
@@ -142,6 +164,10 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 	</Style>
+	<Style Selector="Button.cardIconButton.view3d:disabled">
+		<Setter Property="Opacity" Value="0.4" />
+		<Setter Property="Cursor" Value="Arrow" />
+	</Style>
 	<Style Selector="Button.cardIconButton:pointerover /template/ ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
 	</Style>
@@ -226,6 +252,83 @@
 	</Style>
 	<Style Selector=":is(ToggleButton).tagChip:pointerover:not(:checked)">
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+	</Style>
+
+	<Style Selector="Ellipse.serverDot">
+		<Setter Property="Fill" Value="{DynamicResource TextTertiaryBrush}" />
+	</Style>
+	<Style Selector="Ellipse.serverDot.green">
+		<Setter Property="Fill" Value="{DynamicResource SuccessBrush}" />
+	</Style>
+	<Style Selector="Ellipse.serverDot.yellow">
+		<Setter Property="Fill" Value="{DynamicResource WarningBrush}" />
+	</Style>
+	<Style Selector="Ellipse.serverDot.blue">
+		<Setter Property="Fill" Value="{DynamicResource AccentBrush}" />
+	</Style>
+	<Style Selector="Ellipse.serverDot.red">
+		<Setter Property="Fill" Value="{DynamicResource DangerBrush}" />
+	</Style>
+
+	<Style Selector="Button.toolbarText">
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="Height" Value="38" />
+		<Setter Property="Padding" Value="14,0" />
+		<Setter Property="Cursor" Value="Hand" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush2}" />
+		<Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+		<Setter Property="CornerRadius" Value="19" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+	</Style>
+	<Style Selector="Button.toolbarText:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
+	</Style>
+
+	<Style Selector="Button.groupOnly">
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+		<Setter Property="Padding" Value="8,3" />
+		<Setter Property="CornerRadius" Value="10" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+		<Setter Property="Cursor" Value="Hand" />
+		<Setter Property="Opacity" Value="0" />
+		<Setter Property="Transitions">
+			<Transitions>
+				<DoubleTransition Property="Opacity" Duration="0:0:0.12" />
+			</Transitions>
+		</Setter>
+	</Style>
+	<Style Selector="ToggleButton.groupHeader:pointerover Button.groupOnly, Button.groupOnly:focus-visible">
+		<Setter Property="Opacity" Value="1" />
+	</Style>
+	<Style Selector="Button.groupOnly:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
+	</Style>
+
+	<Style Selector="Button.quickFilterChip">
+		<Setter Property="Padding" Value="10,5" />
+		<Setter Property="FontSize" Value="11.5" />
+		<Setter Property="Cursor" Value="Hand" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="CornerRadius" Value="14" />
+		<Setter Property="Template">
+			<ControlTemplate TargetType="Button">
+				<Border Background="{TemplateBinding Background}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}">
+					<ContentPresenter Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      VerticalAlignment="Center" />
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="Button.quickFilterChip:pointerover">
+		<Setter Property="Background" Value="{DynamicResource AccentHoverBrush}" />
 	</Style>
 
 	<Style Selector="Button.tagChipCard">

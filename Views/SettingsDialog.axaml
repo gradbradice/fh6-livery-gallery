@@ -6,6 +6,7 @@
         x:DataType="vm:SettingsViewModel"
         Width="580"
         SizeToContent="Height"
+        MaxHeight="700"
         WindowStartupLocation="CenterOwner"
         CanResize="False" ShowInTaskbar="False"
         Background="{DynamicResource BgBrush}"
@@ -15,6 +16,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="36" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -38,70 +40,97 @@
             </Grid>
         </Border>
 
-        <StackPanel Grid.Row="1" Margin="24">
-            <TextBlock x:Name="TitleText" FontSize="16" FontWeight="Bold" Margin="0,0,0,20" />
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="24,24,24,0">
+                <TextBlock x:Name="TitleText" FontSize="16" FontWeight="Bold" Margin="0,0,0,20" />
 
-            <TextBlock x:Name="ThemeSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
-                       Foreground="{DynamicResource TextSecondaryBrush}" />
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                <RadioButton x:Name="SystemThemeRadio" GroupName="ThemeGroup" Margin="0,0,24,0"
-                             IsChecked="{Binding IsSystemTheme}"
-                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.System}" />
-                <RadioButton x:Name="LightThemeRadio" GroupName="ThemeGroup" Margin="0,0,24,0"
-                             IsChecked="{Binding IsLightTheme}"
-                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.Light}" />
-                <RadioButton x:Name="DarkThemeRadio" GroupName="ThemeGroup"
-                             IsChecked="{Binding IsDarkTheme}"
-                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.Dark}" />
+                <TextBlock x:Name="ThemeSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <RadioButton x:Name="SystemThemeRadio" GroupName="ThemeGroup" Margin="0,0,24,0"
+                                 IsChecked="{Binding IsSystemTheme}"
+                                 Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.System}" />
+                    <RadioButton x:Name="LightThemeRadio" GroupName="ThemeGroup" Margin="0,0,24,0"
+                                 IsChecked="{Binding IsLightTheme}"
+                                 Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.Light}" />
+                    <RadioButton x:Name="DarkThemeRadio" GroupName="ThemeGroup"
+                                 IsChecked="{Binding IsDarkTheme}"
+                                 Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.Dark}" />
+                </StackPanel>
+
+                <TextBlock x:Name="LanguageSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+                <ComboBox x:Name="LanguageCombo" Classes="modern" HorizontalAlignment="Stretch"
+                          Margin="0,0,0,20" ItemsSource="{Binding LanguageOptions}"
+                          SelectedItem="{Binding SelectedLanguageOption, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:LanguageOption">
+                            <TextBlock Text="{Binding DisplayName}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock x:Name="ServerSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+                <CheckBox x:Name="ServerConnectionCheckBox" IsChecked="{Binding ServerConnectionEnabled}"
+                          IsCheckedChanged="ServerConnectionCheckBox_IsCheckedChanged" />
+                <TextBlock x:Name="ServerConnectionDescription" FontSize="11" Margin="0,2,0,20" MaxWidth="500"
+                           HorizontalAlignment="Stretch" TextWrapping="Wrap" Foreground="{DynamicResource TextSecondaryBrush}" />
+
+                <TextBlock x:Name="DuplicatesSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+                <TextBlock x:Name="PossibleDuplicateThresholdLabel" FontSize="13" Margin="0,0,0,4" TextWrapping="Wrap" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <Slider x:Name="PossibleDuplicateThresholdSlider" Grid.Column="0"
+                            Minimum="{Binding MinPossibleDuplicateThreshold}" Maximum="{Binding MaxPossibleDuplicateThreshold}"
+                            TickFrequency="5" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                            Value="{Binding PossibleDuplicateThreshold, Mode=TwoWay}" />
+                    <TextBlock Grid.Column="1" Text="{Binding PossibleDuplicateThresholdText}" MinWidth="44"
+                               Margin="12,0,0,0" VerticalAlignment="Center" TextAlignment="Right" FontWeight="SemiBold" />
+                </Grid>
+                <TextBlock x:Name="PossibleDuplicateThresholdHint" FontSize="11" Margin="0,2,0,20" MaxWidth="500"
+                           HorizontalAlignment="Stretch" TextWrapping="Wrap" Foreground="{DynamicResource TextSecondaryBrush}" />
+
+                <TextBlock x:Name="PathsSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+
+                <TextBlock x:Name="GamePathLabel" FontSize="12" Margin="0,0,0,6"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox x:Name="GamePathBox" Grid.Column="0" Classes="search" FontSize="13"
+                             Margin="0,0,8,0" IsEnabled="False" Text="{Binding GamePath}" />
+                    <Button x:Name="GameBrowseButton" Grid.Column="1" Classes="secondary" Width="44"
+                            Content="..." Click="GameBrowseButton_Click" />
+                </Grid>
+                <TextBlock x:Name="GameFolderStatusText" FontSize="11" Margin="0,6,0,16"
+                           MaxWidth="500" HorizontalAlignment="Stretch" TextWrapping="Wrap"
+                           Text="{Binding GameFolderStatusText}"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+
+                <TextBlock x:Name="SavePathLabel" FontSize="12" Margin="0,0,0,6"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox x:Name="SavePathBox" Grid.Column="0" Classes="search" FontSize="13"
+                             Margin="0,0,8,0" Text="{Binding SavePath, Mode=TwoWay}" />
+                    <Button x:Name="SaveBrowseButton" Grid.Column="1" Classes="secondary" Width="44"
+                            Content="..." Click="SaveBrowseButton_Click" />
+                </Grid>
+
+                <TextBlock x:Name="HintText" FontSize="11" Margin="0,10,0,20"
+                           HorizontalAlignment="Stretch" MaxWidth="500"
+                           Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" />
+
+                <TextBlock x:Name="ScanningSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+                <CheckBox x:Name="AutoRefreshLiveriesCheckBox" Margin="0,0,0,10" IsChecked="{Binding AutoRefreshLiveries}" />
+                <CheckBox x:Name="RefreshOnButtonClickCheckBox" Margin="0,0,0,10" IsChecked="{Binding RefreshOnButtonClick}" />
+                <CheckBox x:Name="SearchByFolderNameCheckBox" IsChecked="{Binding SearchByFolderName}" />
             </StackPanel>
+        </ScrollViewer>
 
-            <TextBlock x:Name="LanguageSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
-                       Foreground="{DynamicResource TextSecondaryBrush}" />
-            <ComboBox x:Name="LanguageCombo" Classes="modern" HorizontalAlignment="Stretch"
-                      Margin="0,0,0,20" ItemsSource="{Binding LanguageOptions}"
-                      SelectedItem="{Binding SelectedLanguageOption, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="vm:LanguageOption">
-                        <TextBlock Text="{Binding DisplayName}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-
-            <TextBlock x:Name="PathsSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
-                       Foreground="{DynamicResource TextSecondaryBrush}" />
-
-            <TextBlock x:Name="GamePathLabel" FontSize="12" Margin="0,0,0,6"
-                       Foreground="{DynamicResource TextSecondaryBrush}" />
-            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,16">
-                <TextBox x:Name="GamePathBox" Grid.Column="0" Classes="search" FontSize="13"
-                         Margin="0,0,8,0" IsEnabled="False" Text="{Binding GamePath}" />
-                <Button x:Name="GameBrowseButton" Grid.Column="1" Classes="secondary" Width="44"
-                        Content="..." IsEnabled="False" Click="GameBrowseButton_Click" />
-            </Grid>
-
-            <TextBlock x:Name="SavePathLabel" FontSize="12" Margin="0,0,0,6"
-                       Foreground="{DynamicResource TextSecondaryBrush}" />
-            <Grid ColumnDefinitions="*,Auto">
-                <TextBox x:Name="SavePathBox" Grid.Column="0" Classes="search" FontSize="13"
-                         Margin="0,0,8,0" Text="{Binding SavePath, Mode=TwoWay}" />
-                <Button x:Name="SaveBrowseButton" Grid.Column="1" Classes="secondary" Width="44"
-                        Content="..." Click="SaveBrowseButton_Click" />
-            </Grid>
-
-            <TextBlock x:Name="HintText" FontSize="11" Margin="0,10,0,20"
-                       HorizontalAlignment="Stretch" MaxWidth="500"
-                       Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" />
-
-            <TextBlock x:Name="ScanningSectionLabel" FontSize="12" FontWeight="Bold" Margin="0,0,0,8"
-                       Foreground="{DynamicResource TextSecondaryBrush}" />
-            <CheckBox x:Name="AutoRefreshLiveriesCheckBox" Margin="0,0,0,10" IsChecked="{Binding AutoRefreshLiveries}" />
-            <CheckBox x:Name="RefreshOnButtonClickCheckBox" Margin="0,0,0,10" IsChecked="{Binding RefreshOnButtonClick}" />
-            <CheckBox x:Name="SearchByFolderNameCheckBox" IsChecked="{Binding SearchByFolderName}" />
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
-                <Button x:Name="ExitButton" Classes="secondary" MinWidth="120" Margin="0,0,10,0" Click="ExitButton_Click" />
-                <Button x:Name="SaveButton" Classes="primary" MinWidth="120" IsEnabled="{Binding IsDirty}" Click="SaveButton_Click" />
-            </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="24,24,24,24">
+            <Button x:Name="ExitButton" Classes="secondary" MinWidth="120" Margin="0,0,10,0" Click="ExitButton_Click" />
+            <Button x:Name="SaveButton" Classes="primary" MinWidth="120" IsEnabled="{Binding IsDirty}" Click="SaveButton_Click" />
         </StackPanel>
     </Grid>
 </Window>

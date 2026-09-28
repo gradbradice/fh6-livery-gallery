@@ -108,10 +108,10 @@ internal sealed partial class ArchiveViewModel : ObservableObject
                     && (restoreDuplicates || !conflicts.Duplicates.ContainsKey(r.FolderName)))
                 .ToList();
 
-            List<string> restored = toRestore.Count > 0
+            var result = toRestore.Count > 0
                 ? await _archiveService.RestoreAsync(toRestore.Select(r => r.FolderName), savePath)
-                : [];
-            var restoredSet = restored.ToHashSet(StringComparer.OrdinalIgnoreCase);
+                : ArchiveOperationResult.Empty;
+            var restoredSet = result.Completed.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
             if (restoredSet.Count > 0)
             {
@@ -123,6 +123,8 @@ internal sealed partial class ArchiveViewModel : ObservableObject
                 [.. selected.Where(r => conflicts.SameFolder.Contains(r.FolderName)).Select(r => r.Entry.Data)],
                 [.. toRestore.Where(r => !restoredSet.Contains(r.FolderName)).Select(r => r.Entry.Data)]);
             if (report is not null) ErrorMessageRequested?.Invoke(report);
+            if (result.LeftoverPaths.Count > 0)
+                ErrorMessageRequested?.Invoke(string.Format(Strings.ArchiveLeftoverFoldersFormat, string.Join("\n", result.LeftoverPaths)));
         }
         catch (Exception ex)
         {

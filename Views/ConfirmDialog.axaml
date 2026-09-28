@@ -60,6 +60,7 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 
 			<TextBlock x:Name="MessageText"
@@ -69,7 +70,14 @@
                        FontSize="13.5"
                        Foreground="{DynamicResource TextPrimaryBrush}" />
 
-			<StackPanel Grid.Row="1"
+			<CheckBox x:Name="OptionCheckBox"
+                      Grid.Row="1"
+                      IsVisible="False"
+                      Margin="0,16,0,0"
+                      FontSize="12.5"
+                      Foreground="{DynamicResource TextSecondaryBrush}" />
+
+			<StackPanel Grid.Row="2"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="0,20,0,0">

@@ -5,6 +5,7 @@ using LiveryGallery.Models;
 using LiveryGallery.Services;
 using System.ComponentModel;
 using System.Globalization;
+using System.Text;
 using System.Runtime.CompilerServices;
 
 namespace LiveryGallery.ViewModels;
@@ -17,9 +18,14 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost
     public ulong LiveryId => Data.LiveryId;
     public string LiveryIdText => LiveryId > 0 ? $"#{LiveryId}" : "";
     public static bool ShowFolderNamesInTooltips { get; set; }
-    public void RefreshDuplicateTooltip() => OnPropertyChanged(nameof(DuplicateMatchTooltip));
-    public string LiveryName => Data.LiveryName;
-    public string AuthorRaw => Data.AuthorRaw;
+    public void RefreshDuplicateTooltip()
+    {
+        InvalidateDuplicateTexts();
+        OnPropertyChanged(nameof(DuplicateMatchTooltip));
+    }
+    public string LiveryName => Data.DisplayLiveryName;
+    public string AuthorRaw => Data.DisplayAuthorRaw;
+    public string AuthorTooltip => Data.IsAuthorInferred ? Strings.AuthorInferredTooltip : Strings.AuthorLabel;
     public string? AuthorIdentityTagHex => Data.AuthorIdentityTagHex;
     public ulong? CreatorUserId => Data.CreatorUserId;
     public bool IsPossiblyGenerated => Data.IsPossiblyGenerated;
@@ -32,6 +38,44 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost
         ? null
         : _parseIssueTooltip ??= LiveryParseIssueFormatter.BuildTooltip(Data.ParseIssues, HasParseError);
     public int CarId => Data.CarId;
+
+    public static string? View3DGameFolderProblem { get; set; } = Strings.View3DGameFolderChecking;
+
+    private IEnumerable<LiveryParseIssue> CLiveryErrors => Data.ParseIssues?
+        .Where(i => i.File == LiveryParseFile.CLivery && i.Severity == LiveryParseSeverity.Error) ?? [];
+
+    private bool CanParseForView3D => Data.CLiveryHash is not null && !CLiveryErrors.Any();
+
+    public bool CanView3D => View3DGameFolderProblem is null && CanParseForView3D;
+
+    private string? _view3DTooltip;
+    public string View3DTooltip => _view3DTooltip ??= BuildView3DTooltip();
+
+    private string BuildView3DTooltip()
+    {
+        if (CanView3D) return $"{Strings.View3DTooltip}\n\n{Strings.View3DDifferenceNote}";
+
+        var text = new StringBuilder();
+        if (View3DGameFolderProblem is { } folderProblem) text.Append(folderProblem);
+        if (!CanParseForView3D)
+        {
+            if (text.Length > 0) text.AppendLine().AppendLine();
+            if (Data.CLiveryHash is null) text.Append(Strings.View3DNoCLivery);
+            else
+            {
+                text.Append(Strings.View3DParseError);
+                LiveryParseIssueFormatter.AppendIssueLines(text, CLiveryErrors);
+            }
+        }
+        return text.ToString();
+    }
+
+    public void RefreshView3D()
+    {
+        _view3DTooltip = null;
+        OnPropertyChanged(nameof(CanView3D));
+        OnPropertyChanged(nameof(View3DTooltip));
+    }
     public string CarManufacturerRaw => Data.CarManufacturerRaw;
     public string CarModelNameRaw => Data.CarModelNameRaw;
     public int? CarYear => Data.CarYear;
@@ -42,8 +86,27 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost
     public string? ThumbnailPath => Data.ThumbnailPath;
     public string? CLiveryHash => Data.CLiveryHash;
     public bool HasThumbnail => Data.HasThumbnail;
+    public bool IsAuction => Data.IsAuction;
 
     public bool IsMine { get; set; }
+
+    private int _installedCarCount;
+    public int InstalledCarCount
+    {
+        get => _installedCarCount;
+        set
+        {
+            if (_installedCarCount == value) return;
+            _installedCarCount = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsInstalled));
+            OnPropertyChanged(nameof(InstalledBadgeTooltip));
+        }
+    }
+    public bool IsInstalled => _installedCarCount > 0;
+    public string InstalledBadgeTooltip => _installedCarCount > 1
+        ? string.Format(Strings.InstalledBadgeTooltipManyFormat, _installedCarCount)
+        : Strings.InstalledBadgeTooltip;
     private bool _showMineBadge;
     public bool ShowMineBadge
     {
@@ -67,7 +130,7 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost
     private string _author = string.Empty;
     public string Author
     {
-        get => _author;
+        get => Data.IsAuthorUnknown ? Strings.UnknownAuthor : _author;
         set
         {
             if (_author == value) return;
@@ -124,40 +187,101 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost
 
     public DateTime? DownloadYearMonth => Data.DownloadDate is { } d ? new DateTime(d.Year, d.Month, 1) : null;
 
-    public DuplicateStatus DuplicateStatus { get; set; }
+    private DuplicateStatus _duplicateStatus;
+    public DuplicateStatus DuplicateStatus
+    {
+        get => _duplicateStatus;
+        set
+        {
+            _duplicateStatus = value;
+            InvalidateDuplicateTexts();
+        }
+    }
     public bool IsDuplicate => DuplicateStatus == DuplicateStatus.Duplicate;
-    public bool IsPossibleDuplicate => DuplicateStatus == DuplicateStatus.PossibleDuplicate;
-    public IReadOnlyList<DuplicateRelation>? PossibleDuplicateOf { get; set; }
 
-    public string DuplicateMatchTooltip
+    public static int PossibleDuplicateThresholdPercent { get; set; } = AppSettingsData.DefaultPossibleDuplicateThresholdPercent;
+
+    public bool IsPossibleDuplicate => DuplicateStatus == DuplicateStatus.PossibleDuplicate && VisiblePossibleRelations is not null;
+
+    private IReadOnlyList<DuplicateRelation>? _visiblePossibleRelations;
+    private int _visiblePossibleRelationsThreshold = -1;
+
+    private IReadOnlyList<DuplicateRelation>? VisiblePossibleRelations
     {
         get
         {
-            bool isPossible = DuplicateStatus == DuplicateStatus.PossibleDuplicate;
-            string baseText = isPossible
-                ? Strings.PossibleDuplicateBadgeTooltip
-                : Strings.DuplicateBadgeTooltip;
-
-            string? scoresText = FormatScores(capAt9999: isPossible);
-            return scoresText is null ? baseText : $"{baseText}\n{Strings.DuplicateMatchScoreHeader}\n{scoresText}";
+            if (_visiblePossibleRelationsThreshold != PossibleDuplicateThresholdPercent)
+            {
+                _visiblePossibleRelationsThreshold = PossibleDuplicateThresholdPercent;
+                _visiblePossibleRelations = FilterByThreshold(PossibleDuplicateOf, PossibleDuplicateThresholdPercent);
+            }
+            return _visiblePossibleRelations;
         }
     }
 
-    public string PossibleDuplicateBadgeText
+    private static IReadOnlyList<DuplicateRelation>? FilterByThreshold(IReadOnlyList<DuplicateRelation>? relations, int thresholdPercent)
     {
-        get
+        if (relations is not { Count: > 0 }) return [];
+        var kept = relations.Where(r => r.Score is not { } score || score * 100 >= thresholdPercent - 1e-9).ToList();
+        return kept.Count > 0 ? kept : null;
+    }
+
+    public void RefreshPossibleDuplicateThreshold()
+    {
+        InvalidateDuplicateTexts();
+        OnPropertyChanged(nameof(IsPossibleDuplicate));
+        OnPropertyChanged(nameof(PossibleDuplicateBadgeText));
+        OnPropertyChanged(nameof(DuplicateMatchTooltip));
+    }
+
+    private IReadOnlyList<DuplicateRelation>? _possibleDuplicateOf;
+    public IReadOnlyList<DuplicateRelation>? PossibleDuplicateOf
+    {
+        get => _possibleDuplicateOf;
+        set
         {
-            double? max = null;
-            if (PossibleDuplicateOf is { Count: > 0 } relations)
-                foreach (var r in relations)
-                    if (r.Score is { } s && (max is null || s > max)) max = s;
-
-            if (max is not { } m) return Strings.PossibleDuplicateBadgeLabel;
-
-            int truncated = (int)(m * 100);
-            int capped = Math.Min(truncated, 99);
-            return string.Format(Strings.PossibleDuplicateBadgeWithScoreFormat, capped.ToString(CultureInfo.InvariantCulture) + "%");
+            _possibleDuplicateOf = value;
+            InvalidateDuplicateTexts();
         }
+    }
+
+    private string? _duplicateMatchTooltip;
+    private string? _possibleDuplicateBadgeText;
+
+    private void InvalidateDuplicateTexts()
+    {
+        _duplicateMatchTooltip = null;
+        _possibleDuplicateBadgeText = null;
+        _visiblePossibleRelationsThreshold = -1;
+    }
+
+    public string DuplicateMatchTooltip => _duplicateMatchTooltip ??= BuildDuplicateMatchTooltip();
+
+    private string BuildDuplicateMatchTooltip()
+    {
+        bool isPossible = DuplicateStatus == DuplicateStatus.PossibleDuplicate;
+        string baseText = isPossible
+            ? Strings.PossibleDuplicateBadgeTooltip
+            : Strings.DuplicateBadgeTooltip;
+
+        string? scoresText = FormatScores(capAt9999: isPossible);
+        return scoresText is null ? baseText : $"{baseText}\n{Strings.DuplicateMatchScoreHeader}\n{scoresText}";
+    }
+
+    public string PossibleDuplicateBadgeText => _possibleDuplicateBadgeText ??= BuildPossibleDuplicateBadgeText();
+
+    private string BuildPossibleDuplicateBadgeText()
+    {
+        double? max = null;
+        if (VisiblePossibleRelations is { Count: > 0 } relations)
+            foreach (var r in relations)
+                if (r.Score is { } s && (max is null || s > max)) max = s;
+
+        if (max is not { } m) return Strings.PossibleDuplicateBadgeLabel;
+
+        int truncated = (int)(m * 100);
+        int capped = Math.Min(truncated, 99);
+        return string.Format(Strings.PossibleDuplicateBadgeWithScoreFormat, capped.ToString(CultureInfo.InvariantCulture) + "%");
     }
 
     private string FormatRelationLabel(string folderName)
@@ -169,7 +293,8 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost
 
     private string? FormatScores(bool capAt9999)
     {
-        if (PossibleDuplicateOf is not { Count: > 0 } relations) return null;
+        var relations = DuplicateStatus == DuplicateStatus.PossibleDuplicate ? VisiblePossibleRelations : PossibleDuplicateOf;
+        if (relations is not { Count: > 0 }) return null;
         var scored = relations
             .Where(r => r.Score.HasValue)
             .OrderByDescending(r => r.Score!.Value)
@@ -217,7 +342,9 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost
         get
         {
             if (_searchHaystack is not null) return _searchHaystack;
-            _searchHaystack = $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}";
+            _searchHaystack = IsAuction
+                ? $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author} {Strings.AuctionBadgeLabel}"
+                : $"{CarManufacturer} {CarModelName} {CarYear} {LiveryName} {Author}";
             return _searchHaystack;
         }
     }
@@ -243,6 +370,16 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost
         OnPropertyChanged(nameof(DateDisplay));
         _parseIssueTooltip = null;
         OnPropertyChanged(nameof(ParseIssueTooltip));
+        InvalidateDuplicateTexts();
+        OnPropertyChanged(nameof(DuplicateMatchTooltip));
+        OnPropertyChanged(nameof(PossibleDuplicateBadgeText));
+        OnPropertyChanged(nameof(AuthorTooltip));
+        OnPropertyChanged(nameof(InstalledBadgeTooltip));
+        OnPropertyChanged(nameof(LiveryName));
+        OnPropertyChanged(nameof(Author));
+        OnPropertyChanged(nameof(AuthorRaw));
+        OnPropertyChanged(nameof(AuthorDisplayText));
+        RefreshView3D();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

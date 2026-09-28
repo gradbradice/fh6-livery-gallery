@@ -7,24 +7,26 @@ namespace LiveryGallery.Views;
 
 internal sealed class SavePathPrompter(Window owner) : ISavePathPrompter
 {
-    public async Task<string?> PromptForSavePathAsync(bool initial)
+    public async Task<string?> PromptForSavePathAsync(bool initial, CancellationToken ct = default)
     {
+        if (ct.IsCancellationRequested) return null;
         if (initial)
         {
             bool yes = await ConfirmDialog.AskAsync(owner, Strings.FolderNotFoundTitle, Strings.FolderNotFoundMessage);
-            if (!yes) return null;
+            if (!yes || ct.IsCancellationRequested) return null;
         }
 
-        return await BrowseAsync();
+        return await BrowseAsync(ct);
     }
 
-    private async Task<string?> BrowseAsync()
+    private async Task<string?> BrowseAsync(CancellationToken ct)
     {
         var provider = owner.StorageProvider;
         if (provider is null) return null;
 
         while (true)
         {
+            if (ct.IsCancellationRequested) return null;
             var result = await provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {
                 Title = Strings.SelectFolderDialogTitle,
@@ -44,11 +46,11 @@ internal sealed class SavePathPrompter(Window owner) : ISavePathPrompter
                     yesText: Strings.ButtonRetry,
                     noText: Strings.ButtonCancel);
 
-                if (!retry) return null;
+                if (!retry || ct.IsCancellationRequested) return null;
                 continue;
             }
 
-            return path;
+            return ct.IsCancellationRequested ? null : path;
         }
     }
 }

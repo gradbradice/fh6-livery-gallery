@@ -1,4 +1,4 @@
-using Forza.Data;
+using ForzaToolkit.Formats;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Models;
@@ -40,7 +40,7 @@ internal sealed partial class LiveryReader
             lastWriteUtc = info.LastWriteTimeUtc;
             return true;
         }
-        catch
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
         {
             length = 0;
             lastWriteUtc = default;
@@ -48,14 +48,14 @@ internal sealed partial class LiveryReader
         }
     }
 
-    public LiveryFileHashes CalculateFileHashes(string folder, LiveryCacheEntry? existing)
+    public LiveryFileHashes CalculateFileHashes(string folder, LiveryCacheEntry? existing, string? thumbSource)
     {
         string headerPath = Path.Combine(folder, "header");
         byte[] headerData = File.ReadAllBytes(headerPath);
         string headerHash = Convert.ToHexStringLower(SHA256.HashData(headerData));
         var headerInfo = new FileInfo(headerPath);
+        bool isAuction = LiveryFolders.IsAuction(Path.GetFileName(folder));
 
-        string? thumbSource = ThumbnailService.FindSourceThumbnail(folder);
         string? sourceThumbHash = null;
         long thumbLength = 0;
         DateTime thumbLastWriteUtc = default;
@@ -69,7 +69,8 @@ internal sealed partial class LiveryReader
                 thumbLastWriteUtc = thumbInfo.LastWriteTimeUtc;
                 if (existing?.SourceThumbHash is not null
                     && existing.SourceThumbLength == thumbLength
-                    && existing.SourceThumbLastWriteUtc == thumbLastWriteUtc)
+                    && existing.SourceThumbLastWriteUtc == thumbLastWriteUtc
+                    && (!isAuction || string.Equals(existing.ExternalThumbSource, thumbSource, StringComparison.OrdinalIgnoreCase)))
                 {
                     sourceThumbHash = existing.SourceThumbHash;
                 }
@@ -106,7 +107,7 @@ internal sealed partial class LiveryReader
                 AppLogger.LogErrorThrottled(cLiveryPath, $"Failed to read '{cLiveryPath}'", ex);
             }
         }
-        else
+        else if (!isAuction)
         {
             AppLogger.LogErrorThrottled(cLiveryPath,
                 $"'{cLiveryPath}' disappeared between folder listing and processing",
@@ -220,11 +221,21 @@ internal sealed partial class LiveryReader
         bool hasParseError = issues.Any(i => i.Severity == LiveryParseSeverity.Error);
 
         var (carId, carIdConsistency) = ResolveCarId(folderName, folderCarId, headerCarId, cLiveryCarId);
-
-        string liveryName = !string.IsNullOrWhiteSpace(parsedHeader?.LiveryName) ? parsedHeader!.LiveryName : Strings.LiveryNoName;
-        string author = !string.IsNullOrWhiteSpace(parsedHeader?.CreatorName) ? parsedHeader!.CreatorName : Strings.UnknownAuthor;
+        string liveryName = !string.IsNullOrWhiteSpace(parsedHeader?.LiveryName) ? parsedHeader!.LiveryName : string.Empty;
+        string author = !string.IsNullOrWhiteSpace(parsedHeader?.CreatorName) ? parsedHeader!.CreatorName : string.Empty;
         string? authorIdentityTagHex = parsedHeader?.CreatorIdentityTag is { Length: 8 } tag ? Convert.ToHexStringLower(tag) : null;
         ulong? creatorUserId = parsedHeader?.CreatorIdentityTag is { Length: 8 } ? parsedHeader!.CreatorUserId : null;
+
+        if (LiveryFolders.IsAuction(folderName))
+        {
+            if (IsGamePlaceholder(liveryName)) liveryName = string.Empty;
+            if (IsGamePlaceholder(author))
+            {
+                author = string.Empty;
+                authorIdentityTagHex = null;
+                creatorUserId = null;
+            }
+        }
         int year = parsedHeader is { Year: > 0 } ? parsedHeader.Year : 0;
         int month = parsedHeader is { Month: >= 1 and <= 12 } ? parsedHeader.Month : 0;
 
@@ -236,6 +247,7 @@ internal sealed partial class LiveryReader
             FolderName = folderName,
             LiveryName = liveryName,
             Author = author,
+            TextVersion = LiveryCacheEntry.CurrentTextVersion,
             AuthorIdentityTagHex = authorIdentityTagHex,
             CreatorUserId = creatorUserId,
             IsPossiblyGenerated = isPossiblyGenerated,
@@ -263,13 +275,27 @@ internal sealed partial class LiveryReader
         };
     }
 
+    private static readonly string[] GamePlaceholderNames = ["Forza SoulBoundLivery", "Forza BaseLivery", "Forza Livery"];
+
+    private static bool IsGamePlaceholder(string value) =>
+        GamePlaceholderNames.Any(p => string.Equals(p, value.Trim(), StringComparison.OrdinalIgnoreCase));
+
+    public static int GetFolderCarId(string folderName) => ParseFolderName(folderName).CarId;
+
     public static (uint[]? SectionCounts, IReadOnlyList<LiveryShapeFingerprint>? Shapes) TryReadDuplicateInputs(
-        string folderPath, uint[]? knownSectionCounts)
+        string folderPath, string? cLiveryHash, uint[]? knownSectionCounts)
     {
+        if (DuplicateInputsCache.TryLoad(cLiveryHash, out var cachedCounts, out var cachedShapes))
+            return (cachedCounts ?? knownSectionCounts, cachedShapes);
+
+        string cLiveryPath = Path.Combine(folderPath, "C_livery");
+        if (LiveryFolders.IsAuction(Path.GetFileName(folderPath)) && !File.Exists(cLiveryPath))
+            return (knownSectionCounts, null);
+
         byte[] bytes;
         try
         {
-            bytes = File.ReadAllBytes(Path.Combine(folderPath, "C_livery"));
+            bytes = File.ReadAllBytes(cLiveryPath);
         }
         catch (Exception ex)
         {
@@ -287,13 +313,20 @@ internal sealed partial class LiveryReader
                 if (livery.HasValue) sectionCounts = [.. livery.Value.SectionCounts];
             }
 
-            // Partial = the tree is complete and verified, only the paint table after it is broken.
+            // Partial = the tree is complete and verified, only the paint table after it is broken
             var fingerprints = NativeHeaderParser.TryExtractShapeFingerprints(bytes);
             if (fingerprints.HasValue) shapes = fingerprints.Value;
         }
         catch (Exception ex)
         {
             AppLogger.LogErrorThrottled(folderPath, $"Failed to parse C_livery for duplicate check: '{folderPath}'", ex);
+            return (sectionCounts, shapes); // an unexpected failure is not worth remembering
+        }
+
+        if (cLiveryHash is not null
+            && string.Equals(Convert.ToHexStringLower(SHA256.HashData(bytes)), cLiveryHash, StringComparison.OrdinalIgnoreCase))
+        {
+            DuplicateInputsCache.Save(cLiveryHash, sectionCounts, shapes);
         }
         return (sectionCounts, shapes);
     }
@@ -305,7 +338,6 @@ internal sealed partial class LiveryReader
         if (issues.Any(i => i.File == issue.File && i.Code == issue.Code && i.Level == issue.Level)) return;
         issues.Add(issue);
 
-        // The UI shows only the code; everything needed to investigate goes here.
         string details = string.Join(", ", new[]
         {
             $"code={error.Code} ({(int)error.Code})",

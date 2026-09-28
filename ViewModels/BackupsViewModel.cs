@@ -18,6 +18,7 @@ internal sealed partial class BackupsViewModel : ObservableObject
 
     private bool _isLoading;
     private int _reloadVersion;
+    private readonly CancellationTokenSource _lifetimeCts = new();
 
     [ObservableProperty]
     private bool _isCreatingBackup;
@@ -32,11 +33,16 @@ internal sealed partial class BackupsViewModel : ObservableObject
         _backupService = backupService;
         _savePathService = savePathService;
         _getCurrentEntries = getCurrentEntries;
-        _ = ReloadAsync();
+        StartReload();
     }
+
+    public void Close() => _lifetimeCts.Cancel();
+    private void StartReload() => _ = ReloadAsync();
 
     private async Task ReloadAsync()
     {
+        var ct = _lifetimeCts.Token;
+        if (ct.IsCancellationRequested) return;
         int version = ++_reloadVersion;
         _isLoading = true;
         OnPropertyChanged(nameof(ShowEmptyState));
@@ -48,9 +54,14 @@ internal sealed partial class BackupsViewModel : ObservableObject
             rows = await Task.Run(() =>
             {
                 var backups = _backupService.GetAllBackups();
+                ct.ThrowIfCancellationRequested();
                 LiveryBackupService.PruneBackupPreviews(backups);
                 return backups.Select(summary => new BackupRowViewModel(summary, currentEntries)).ToList();
-            });
+            }, ct);
+        }
+        catch (OperationCanceledException) when (ct.IsCancellationRequested)
+        {
+            return; // dialog closed
         }
         catch (Exception ex)
         {
@@ -58,7 +69,7 @@ internal sealed partial class BackupsViewModel : ObservableObject
             rows = [];
         }
 
-        if (version != _reloadVersion) return; // a newer reload is in progress
+        if (ct.IsCancellationRequested || version != _reloadVersion) return; // closed or a newer reload is in progress
 
         Backups.Clear();
         foreach (var row in rows) Backups.Add(row);
@@ -89,6 +100,10 @@ internal sealed partial class BackupsViewModel : ObservableObject
             await _backupService.CreateBackupAsync(entries, savePath);
             await ReloadAsync();
         }
+        catch (OperationCanceledException) when (_backupService.IsShuttingDown)
+        {
+            // The app is closing. The unfinished backup file was removed, nothing to report
+        }
         catch (Exception ex)
         {
             AppLogger.LogError("Failed to create backup", ex);
@@ -108,6 +123,6 @@ internal sealed partial class BackupsViewModel : ObservableObject
 
     public void DeleteConfirmed(BackupRowViewModel row)
     {
-        if (LiveryBackupService.TryDeleteBackup(row.Path)) _ = ReloadAsync();
+        if (LiveryBackupService.TryDeleteBackup(row.Path)) StartReload();
     }
 }

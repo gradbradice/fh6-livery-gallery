@@ -6,5 +6,6 @@ internal enum LiveryGroupSpecialKind
     DownloadMonth,
     UnknownDownloadDate,
     UnknownManufacturer,
+    UnknownAuthor,
     AllLiveries
 }

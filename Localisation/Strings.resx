@@ -307,10 +307,10 @@ Choose it manually?
     <value>Unknown</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser Native: {0}</value>
+    <value>ForzaToolkit Formats Native: {0}</value>
   </data>
   <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser Package: {0}</value>
+    <value>ForzaToolkit Formats Package: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Settings</value>
@@ -842,5 +842,419 @@ Restore them anyway?</value>
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
     <value>The livery was read, but part of its file couldn't be parsed. The main data is shown; some checks (generation, duplicates) may be unavailable.</value>
+  </data>
+  <data name="GameFolderProblemNotSet" xml:space="preserve">
+    <value>the game folder is not set</value>
+  </data>
+  <data name="GameFolderProblemNotFound" xml:space="preserve">
+    <value>the folder doesn't exist</value>
+  </data>
+  <data name="GameFolderProblemAccessDenied" xml:space="preserve">
+    <value>no access to the folder</value>
+  </data>
+  <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
+    <value>this isn't the game folder (no media folder)</value>
+  </data>
+  <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
+    <value>media\cars wasn't found</value>
+  </data>
+  <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
+    <value>there are no cars in media\cars</value>
+  </data>
+  <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
+    <value>media\Livery wasn't found</value>
+  </data>
+  <data name="GameFolderProblemNoVinyls" xml:space="preserve">
+    <value>the game's vinyls weren't found (media\Livery\Vinyls.zip)</value>
+  </data>
+  <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
+    <value>the game's vinyls couldn't be read</value>
+  </data>
+  <data name="GameFolderProblemNoDecals" xml:space="preserve">
+    <value>logos weren't found, some decals won't be drawn</value>
+  </data>
+  <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
+    <value>some cars couldn't be read</value>
+  </data>
+  <data name="GameFolderProblemUnknown" xml:space="preserve">
+    <value>the folder doesn't fit</value>
+  </data>
+  <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
+    <value>The game's vinyls weren't found. Check the game folder (media\Livery).</value>
+  </data>
+  <data name="RenderErrorGamePathInvalid" xml:space="preserve">
+    <value>The game folder isn't set or wasn't found.</value>
+  </data>
+  <data name="RenderErrorCarNotFound" xml:space="preserve">
+    <value>This livery's car isn't in the game folder.</value>
+  </data>
+  <data name="RenderErrorCarFormat" xml:space="preserve">
+    <value>The car's files couldn't be read.</value>
+  </data>
+  <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
+    <value>This car has no livery layout.</value>
+  </data>
+  <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
+    <value>Shapes not drawn: {0}</value>
+  </data>
+  <data name="RenderErrorRasterLogosSkippedFormat" xml:space="preserve">
+    <value>Logos not drawn: {0}</value>
+  </data>
+  <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
+    <value>Shapes without a section: {0}</value>
+  </data>
+  <data name="RenderErrorGeneric" xml:space="preserve">
+    <value>The livery couldn't be drawn.</value>
+  </data>
+  <data name="View3DGameFolderChecking" xml:space="preserve">
+    <value>3D is not available yet: checking the game folder</value>
+  </data>
+  <data name="View3DTooltip" xml:space="preserve">
+    <value>View in 3D</value>
+  </data>
+  <data name="View3DNoCLivery" xml:space="preserve">
+    <value>3D is not available: the livery has no C_livery file</value>
+  </data>
+  <data name="View3DParseError" xml:space="preserve">
+    <value>3D is not available: the livery couldn't be read</value>
+  </data>
+  <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
+    <value>3D is not available: {0}. Set the game folder in the settings.</value>
+  </data>
+  <data name="View3DDialogTitle" xml:space="preserve">
+    <value>3D view</value>
+  </data>
+  <data name="View3DReadFailed" xml:space="preserve">
+    <value>The livery file couldn't be read. See the log for details.</value>
+  </data>
+  <data name="View3DParseFailedFormat" xml:space="preserve">
+    <value>The livery couldn't be read: {0}</value>
+  </data>
+  <data name="ViewerStatsFormat" xml:space="preserve">
+    <value>{0:N0} triangles (LOD {1}) · livery {2}×{3} · frame {4}×{5}, MSAA {6}× · {7:F1} ms</value>
+  </data>
+  <data name="ViewerNoOpenGl" xml:space="preserve">
+    <value>3D view is not available: OpenGL couldn't be initialized.</value>
+  </data>
+  <data name="ViewerQualityLow" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="ViewerQualityMedium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="ViewerQualityHigh" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="ViewerQualityUltra" xml:space="preserve">
+    <value>Ultra</value>
+  </data>
+  <data name="ViewerResetView" xml:space="preserve">
+    <value>Reset view</value>
+  </data>
+  <data name="ViewerTitleFormat" xml:space="preserve">
+    <value>{0} — 3D</value>
+  </data>
+  <data name="GameFolderNotSetHint" xml:space="preserve">
+    <value>The game folder is needed for 3D livery view</value>
+  </data>
+  <data name="GameFolderChecking" xml:space="preserve">
+    <value>Checking the game folder…</value>
+  </data>
+  <data name="GameFolderInvalidFormat" xml:space="preserve">
+    <value>The game folder doesn't fit: {0}</value>
+  </data>
+  <data name="GameFolderValidFormat" xml:space="preserve">
+    <value>Game folder found, cars: {0}</value>
+  </data>
+  <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
+    <value>Game folder found, cars: {0}. However: {1}</value>
+  </data>
+  <data name="ViewerControlsHint" xml:space="preserve">
+    <value>Left drag: rotate · Right drag: move · Wheel: zoom · Double-click: reset</value>
+  </data>
+  <data name="AuctionBadgeLabel" xml:space="preserve">
+    <value>Auction</value>
+  </data>
+  <data name="AuctionBadgeTooltip" xml:space="preserve">
+    <value>Bought at the Auction House.
+Auction liveries can't be moved to the archive.</value>
+  </data>
+  <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
+    <value>Auction liveries can't be moved to the archive</value>
+  </data>
+  <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
+    <value>Auction liveries can't be moved to the archive, so {0} of the selected liveries stayed in the game.</value>
+  </data>
+  <data name="ContextMenuOnlyThisCar" xml:space="preserve">
+    <value>Only this car</value>
+  </data>
+  <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
+    <value>Only this manufacturer</value>
+  </data>
+  <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
+    <value>Only this author</value>
+  </data>
+  <data name="ContextMenuClearQuickFilters" xml:space="preserve">
+    <value>Show everything again</value>
+  </data>
+  <data name="QuickFiltersLabel" xml:space="preserve">
+    <value>Only:</value>
+  </data>
+  <data name="QuickFilterCarFormat" xml:space="preserve">
+    <value>Car: {0}</value>
+  </data>
+  <data name="QuickFilterManufacturerFormat" xml:space="preserve">
+    <value>Manufacturer: {0}</value>
+  </data>
+  <data name="QuickFilterAuthorFormat" xml:space="preserve">
+    <value>Author: {0}</value>
+  </data>
+  <data name="QuickFilterRemoveTooltip" xml:space="preserve">
+    <value>Remove this filter</value>
+  </data>
+  <data name="StatusAutoRefreshedFormat" xml:space="preserve">
+    <value>Save folder changed: +{0} / −{1}, gallery updated</value>
+  </data>
+  <data name="FilterAuctionLabel" xml:space="preserve">
+    <value>Auction</value>
+  </data>
+  <data name="AuctionFilterAll" xml:space="preserve">
+    <value>All liveries</value>
+  </data>
+  <data name="AuctionFilterSeparately" xml:space="preserve">
+    <value>Show auction liveries separately</value>
+  </data>
+  <data name="AuctionFilterOnly" xml:space="preserve">
+    <value>Auction liveries only</value>
+  </data>
+  <data name="AuctionFilterHide" xml:space="preserve">
+    <value>Hide auction liveries</value>
+  </data>
+  <data name="SeparateAuctionGroupName" xml:space="preserve">
+    <value>Auction</value>
+  </data>
+  <data name="AuthorInferredTooltip" xml:space="preserve">
+    <value>The livery doesn't store its creator's name — it was taken from other liveries by the same creator</value>
+  </data>
+  <data name="AuthorUnknownMessage" xml:space="preserve">
+    <value>This livery doesn't store its creator's name, and there are no other liveries by this creator in the gallery to take it from.</value>
+  </data>
+  <data name="QuickFilterAddButton" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="QuickFilterAddTooltip" xml:space="preserve">
+    <value>Show only one manufacturer, car or author</value>
+  </data>
+  <data name="QuickFilterKindManufacturer" xml:space="preserve">
+    <value>Manufacturer</value>
+  </data>
+  <data name="QuickFilterKindCar" xml:space="preserve">
+    <value>Car</value>
+  </data>
+  <data name="QuickFilterKindAuthor" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="QuickFilterSearchWatermark" xml:space="preserve">
+    <value>Search…</value>
+  </data>
+  <data name="QuickFilterPickerEmpty" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
+  <data name="GroupShowOnlyButton" xml:space="preserve">
+    <value>Show only</value>
+  </data>
+  <data name="GroupShowOnlyTooltip" xml:space="preserve">
+    <value>Show only this group</value>
+  </data>
+  <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
+    <value>Cars by {0}</value>
+  </data>
+  <data name="SettingsSectionDuplicates" xml:space="preserve">
+    <value>Duplicates</value>
+  </data>
+  <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
+    <value>Mark as a possible duplicate from a similarity of</value>
+  </data>
+  <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
+    <value>Less similar matches are not shown. Exact duplicates are always shown. Applies immediately, no rescan needed.</value>
+  </data>
+  <data name="LiveryRenderPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Package: {0}</value>
+  </data>
+  <data name="LiveryRenderAvaloniaPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Avalonia Package: {0}</value>
+  </data>
+  <data name="View3DDifferenceNote" xml:space="preserve">
+    <value>The 3D view is an approximation: colours, materials, lighting and some details may look different than in the game.</value>
+  </data>
+  <data name="ServerStatusChecking" xml:space="preserve">
+    <value>Server: connecting…</value>
+  </data>
+  <data name="ServerStatusOnline" xml:space="preserve">
+    <value>Server: connected</value>
+  </data>
+  <data name="ServerStatusSyncing" xml:space="preserve">
+    <value>Server: reading the save…</value>
+  </data>
+  <data name="ServerStatusSaveNotSupported" xml:space="preserve">
+    <value>Server: save not supported yet</value>
+  </data>
+  <data name="ServerStatusDegraded" xml:space="preserve">
+    <value>Server: limited</value>
+  </data>
+  <data name="ServerStatusMaintenance" xml:space="preserve">
+    <value>Server: maintenance</value>
+  </data>
+  <data name="ServerStatusUnreachable" xml:space="preserve">
+    <value>Server unavailable</value>
+  </data>
+  <data name="ServerStatusNoInternet" xml:space="preserve">
+    <value>No internet connection</value>
+  </data>
+  <data name="ServerStatusRateLimited" xml:space="preserve">
+    <value>Server: too many requests</value>
+  </data>
+  <data name="ServerStatusUpdateRequired" xml:space="preserve">
+    <value>Server: please update the app</value>
+  </data>
+  <data name="ServerStatusAppRejected" xml:space="preserve">
+    <value>Server: this build is not accepted</value>
+  </data>
+  <data name="ServerStatusCertificateError" xml:space="preserve">
+    <value>Server: secure connection failed</value>
+  </data>
+  <data name="ServerStatusServerError" xml:space="preserve">
+    <value>Server error</value>
+  </data>
+  <data name="ServerStatusNotConfigured" xml:space="preserve">
+    <value>Server not set up in this build</value>
+  </data>
+  <data name="ServerStatusVersionFormat" xml:space="preserve">
+    <value>Server {0}</value>
+  </data>
+  <data name="ServerStatusRetryHint" xml:space="preserve">
+    <value>The app will try again automatically.</value>
+  </data>
+  <data name="ServerStatusRetryInFormat" xml:space="preserve">
+    <value>Next try in {0} s.</value>
+  </data>
+  <data name="ServerStatusUpdateHint" xml:space="preserve">
+    <value>The server needs a newer version of the app. Please update.</value>
+  </data>
+  <data name="ServerStatusAppRejectedHint" xml:space="preserve">
+    <value>The server does not accept this build of the app. Please use the official release.</value>
+  </data>
+  <data name="ServerStatusCertificateHint" xml:space="preserve">
+    <value>The server's certificate did not pass the check: the connection may be intercepted (for example by an antivirus or a proxy). The app won't retry on its own.</value>
+  </data>
+  <data name="ServerStatusClickToRecheck" xml:space="preserve">
+    <value>Click to check the server status</value>
+  </data>
+  <data name="ServerSyncDoneFormat" xml:space="preserve">
+    <value>Liveries applied to cars: {0}
+Updated at {1}</value>
+  </data>
+  <data name="ServerSyncProfileNotFound" xml:space="preserve">
+    <value>The profile save (C_ProfileData) was not found in the save folder.</value>
+  </data>
+  <data name="ServerSyncSaveNotSupported" xml:space="preserve">
+    <value>The server cannot read this save yet — the game was probably updated. Support will follow.</value>
+  </data>
+  <data name="ServerSyncSaveRejected" xml:space="preserve">
+    <value>The server says this file is not a valid profile save.</value>
+  </data>
+  <data name="ServerSyncFailed" xml:space="preserve">
+    <value>Could not update the installed liveries; the app will try again.</value>
+  </data>
+  <data name="InstalledBadgeLabel" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="InstalledBadgeTooltip" xml:space="preserve">
+    <value>Applied to a car in the game</value>
+  </data>
+  <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
+    <value>Applied to {0} cars in the game</value>
+  </data>
+  <data name="SettingsSectionServer" xml:space="preserve">
+    <value>Livery data server</value>
+  </data>
+  <data name="ServerConnectionLabel" xml:space="preserve">
+    <value>Connect to the server to identify installed liveries</value>
+  </data>
+  <data name="ServerConnectionDescription" xml:space="preserve">
+    <value>To identify the liveries installed on cars, the application sends the save file (C_ProfileData) to the server. The file is processed solely to obtain information about installed liveries and is not stored on the server.
+
+Data from the save file is not stored or used for any other purpose. The server is used to securely store the keys required to decrypt the save file.
+
+The server is not affiliated with the official servers of Forza Horizon, Xbox or Microsoft.</value>
+  </data>
+  <data name="ServerConsentMessage" xml:space="preserve">
+    <value>To identify the liveries installed on cars, the application sends the save file (C_ProfileData) to the server. The file is processed solely to obtain information about installed liveries and is not stored on the server.
+
+Data from the save file is not stored or used for any other purpose. The server is used to securely store the keys required to decrypt the save file.
+
+The server is not affiliated with the official servers of Forza Horizon, Xbox or Microsoft.
+
+Data is sent to the server only with your consent. Do you want to enable the server connection?</value>
+  </data>
+  <data name="ServerConsentTitle" xml:space="preserve">
+    <value>Livery data server connection</value>
+  </data>
+  <data name="ServerConsentAccept" xml:space="preserve">
+    <value>Yes, I understand and want to continue</value>
+  </data>
+  <data name="FilterInstalledLabel" xml:space="preserve">
+    <value>Installed liveries</value>
+  </data>
+  <data name="InstalledAllToggle" xml:space="preserve">
+    <value>All liveries</value>
+  </data>
+  <data name="InstalledFirstToggle" xml:space="preserve">
+    <value>Installed first</value>
+  </data>
+  <data name="OnlyInstalledToggle" xml:space="preserve">
+    <value>Installed only</value>
+  </data>
+  <data name="FilterValueUnavailable" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="InstalledFilterNeedsServer" xml:space="preserve">
+    <value>Enable the livery data server connection in the settings to identify installed liveries.</value>
+  </data>
+  <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
+    <value>Some folders could not be removed from their old location — a file in them is probably in use (is the game running?). Nothing was lost: the folder that counts is complete. These leftovers are no longer needed and can be deleted:
+{0}</value>
+  </data>
+  <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Liveries applied to cars in the game can't be moved to the archive</value>
+  </data>
+  <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
+    <value>Liveries applied to cars in the game can't be moved to the archive, so {0} of the selected liveries stayed in the game.</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
+    <value>It isn't known which liveries are applied to cars, so moving this livery to the archive isn't safe: it may be applied to a car in the game.
+
+Move the livery to the archive?</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
+    <value>It isn't known which liveries are applied to cars, so moving these liveries to the archive isn't safe: some of them may be applied to cars in the game.
+
+Move the liveries to the archive?</value>
+  </data>
+  <data name="DontShowAgainCheckBox" xml:space="preserve">
+    <value>Don't show again</value>
+  </data>
+  <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Auction liveries and liveries applied to cars in the game can't be moved to the archive</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
+    <value>The save file has changed since the last sync, and the new data hasn't been sent to the livery server yet. The list of liveries applied to cars may be out of date, so moving this livery to the archive isn't safe: it may be applied to a car in the game.
+
+It's better to wait for the sync (it happens automatically and may take a few minutes) and try again. Move the livery to the archive now?</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
+    <value>The save file has changed since the last sync, and the new data hasn't been sent to the livery server yet. The list of liveries applied to cars may be out of date, so moving these liveries to the archive isn't safe: some of them may be applied to cars in the game.
+
+It's better to wait for the sync (it happens automatically and may take a few minutes) and try again. Move the liveries to the archive now?</value>
   </data>
 </root>

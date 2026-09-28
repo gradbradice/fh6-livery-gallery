@@ -39,6 +39,7 @@ internal sealed partial class GalleryViewModel : ObservableObject
     public event Action<LiveryEntry>? AuthorRowRequested;
     public event Action<LiveryEntry>? EditTagsRequested;
     public event Action<LiveryEntry>? ViewPreviewRequested;
+    public event Action<LiveryEntry>? View3DRequested;
     public event Action<GalleryCountsSnapshot>? CountsUpdated;
     public event Action? SelectedTagsChanged;
 
@@ -58,7 +59,9 @@ internal sealed partial class GalleryViewModel : ObservableObject
             _allEntries, _filter.SearchText, _selectedTags,
             _filter.FavoriteMode == FavoriteMode.OnlyFavorites, _filter.MineMode == MineMode.OnlyMine,
             _filter.DuplicatesFilterMode, _filter.GeneratedFilterMode, _filter.PaintFilterMode,
-            _filter.SearchByFolderName);
+            _filter.SearchByFolderName, _filter.QuickFilters,
+            auctionFilterMode: _filter.AuctionFilterMode,
+            onlyInstalled: _filter.InstalledMode == InstalledMode.OnlyInstalled);
 
     [RelayCommand]
     private void ToggleFavorite(LiveryEntry entry)
@@ -83,8 +86,24 @@ internal sealed partial class GalleryViewModel : ObservableObject
         foreach (var entry in AllEntries) entry.RefreshDuplicateTooltip();
     }
 
+    public void RefreshPossibleDuplicateThreshold()
+    {
+        foreach (var entry in AllEntries) entry.RefreshPossibleDuplicateThreshold();
+    }
+
     [RelayCommand]
     private void ViewPreview(LiveryEntry entry) => ViewPreviewRequested?.Invoke(entry);
+
+    [RelayCommand]
+    private void View3D(LiveryEntry entry)
+    {
+        if (entry.CanView3D) View3DRequested?.Invoke(entry);
+    }
+
+    public void RefreshView3DAvailability()
+    {
+        foreach (var entry in _allEntries) entry.RefreshView3D();
+    }
 
     public void SetTagSelected(string tag, bool selected)
     {
@@ -106,16 +125,13 @@ internal sealed partial class GalleryViewModel : ObservableObject
     public void Refresh(GalleryFilterState filter)
     {
         _filter = filter;
-
-        bool suppressCardBadge = filter.GroupingEnabled
-            && (filter.SortMode == SortMode.Author || filter.MineMode == MineMode.MineSeparately);
         foreach (var entry in _allEntries)
-            entry.ShowMineBadge = entry.IsMine && !suppressCardBadge;
+            entry.ShowMineBadge = entry.IsMine;
 
         var filtered = GetFilteredEntries();
         var groups = GalleryGroupingService.Group(
-            filtered, filter.SortMode, filter.FavoriteMode, filter.MineMode,
-            filter.GroupingEnabled, GroupWidth);
+            filtered, filter.SortMode, filter.FavoriteMode, filter.MineMode, filter.AuctionFilterMode,
+            filter.GroupingEnabled, GroupWidth, filter.InstalledMode);
         ReplaceGroups(groups);
         CountsUpdated?.Invoke(new GalleryCountsSnapshot(filtered, _allEntries.Count, filter.SearchText));
     }
@@ -187,7 +203,29 @@ internal sealed partial class GalleryViewModel : ObservableObject
     public void ReplaceEntries(List<LiveryEntry> entries)
     {
         _allEntries = entries;
+        ApplyInstalledCounts();
         ReconcileSelection();
+    }
+
+    private IReadOnlyDictionary<string, int>? _installedCounts;
+
+    public bool IsInstalledDataKnown => _installedCounts is not null;
+
+    public void SetInstalledLiveries(IReadOnlyDictionary<string, int>? installedCounts)
+    {
+        _installedCounts = installedCounts is null
+            ? null
+            : new Dictionary<string, int>(installedCounts, StringComparer.OrdinalIgnoreCase);
+        ApplyInstalledCounts();
+    }
+
+    public event Action? InstalledCountsChanged;
+
+    private void ApplyInstalledCounts()
+    {
+        foreach (var entry in _allEntries)
+            entry.InstalledCarCount = _installedCounts is not null && _installedCounts.TryGetValue(entry.FolderName, out int n) ? n : 0;
+        InstalledCountsChanged?.Invoke();
     }
 
     private void ReconcileSelection()
@@ -284,6 +322,8 @@ internal sealed partial class GalleryViewModel : ObservableObject
         return a.FolderName == b.FolderName
             && a.LiveryName == b.LiveryName
             && a.Author == b.Author
+            && a.AuthorRaw == b.AuthorRaw
+            && a.Data.IsAuthorInferred == b.Data.IsAuthorInferred
             && a.CarId == b.CarId
             && a.CarManufacturerRaw == b.CarManufacturerRaw
             && a.CarModelNameRaw == b.CarModelNameRaw
@@ -293,6 +333,7 @@ internal sealed partial class GalleryViewModel : ObservableObject
             && a.CreatedMonth == b.CreatedMonth
             && a.DownloadDate == b.DownloadDate
             && a.ThumbnailPath == b.ThumbnailPath
+            && a.Data.ExternalPreviewPath == b.Data.ExternalPreviewPath
             && a.DuplicateStatus == b.DuplicateStatus
             && PossibleDuplicateOfEqual(a.PossibleDuplicateOf, b.PossibleDuplicateOf)
             && a.IsMine == b.IsMine

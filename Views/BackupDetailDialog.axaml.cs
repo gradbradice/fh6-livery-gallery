@@ -12,6 +12,7 @@ namespace LiveryGallery.Views;
 internal partial class BackupDetailDialog : Window
 {
     private readonly BackupDetailViewModel _viewModel;
+    private readonly DialogWorkScope _work;
 
     public BackupDetailDialog(
         LiveryBackupService backupService, SavePathService savePathService, BackupRowViewModel backup,
@@ -20,9 +21,10 @@ internal partial class BackupDetailDialog : Window
         InitializeComponent();
         _viewModel = new BackupDetailViewModel(backupService, savePathService, backup, getCurrentEntries, onRestored);
         DataContext = _viewModel;
+        _work = new DialogWorkScope(this, _viewModel.RestoreSelectedCommand);
 
-        _viewModel.ErrorMessageRequested += async message =>
-            await InfoDialog.ShowAsync(this, Strings.BackupsDialogTitle, message);
+        _viewModel.ErrorMessageRequested += message => _work.Run(
+            () => InfoDialog.ShowAsync(this, Strings.BackupsDialogTitle, message), "backup detail: error message");
         _viewModel.ConfirmRestoreDuplicatesAsync = message => ConfirmDialog.AskAsync(
             this, Strings.RestoreDuplicateTitle, message, Strings.RestoreAnywayButton, Strings.RestoreSkipDuplicatesButton);
 

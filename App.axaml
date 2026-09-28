@@ -29,6 +29,7 @@
                     <SolidColorBrush x:Key="DangerBrush" Color="#DC2626" />
                     <SolidColorBrush x:Key="WarningBrush" Color="#B45309" />
                     <SolidColorBrush x:Key="SuccessBrush" Color="#16A34A" />
+                    <SolidColorBrush x:Key="AuctionBrush" Color="#0E7490" />
                     <SolidColorBrush x:Key="InputBackgroundBrush" Color="#FFFFFF" />
                     <SolidColorBrush x:Key="ThumbnailPlaceholderBrush" Color="#EEEFF3" />
                     <SolidColorBrush x:Key="ThumbnailPlaceholderTextBrush" Color="#9AA0AC" />
@@ -54,6 +55,7 @@
                     <SolidColorBrush x:Key="DangerBrush" Color="#F87171" />
                     <SolidColorBrush x:Key="WarningBrush" Color="#B45309" />
                     <SolidColorBrush x:Key="SuccessBrush" Color="#4ADE80" />
+                    <SolidColorBrush x:Key="AuctionBrush" Color="#0891B2" />
                     <SolidColorBrush x:Key="InputBackgroundBrush" Color="#25272F" />
                     <SolidColorBrush x:Key="ThumbnailPlaceholderBrush" Color="#2A2C34" />
                     <SolidColorBrush x:Key="ThumbnailPlaceholderTextBrush" Color="#6E7280" />

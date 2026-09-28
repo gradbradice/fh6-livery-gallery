@@ -307,10 +307,10 @@ Escolher manualmente?
     <value>Desconhecido</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser (nativo): {0}</value>
+    <value>ForzaToolkit Formats Native: {0}</value>
   </data>
   <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser (pacote): {0}</value>
+    <value>ForzaToolkit Formats Package: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Configurações</value>
@@ -842,5 +842,419 @@ Restaurá-las mesmo assim?</value>
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
     <value>A pintura foi lida, mas parte do arquivo não pôde ser analisada. Os dados principais são exibidos; algumas verificações (geração, duplicatas) podem não estar disponíveis.</value>
+  </data>
+  <data name="GameFolderProblemNotSet" xml:space="preserve">
+    <value>a pasta do jogo não está definida</value>
+  </data>
+  <data name="GameFolderProblemNotFound" xml:space="preserve">
+    <value>a pasta não existe</value>
+  </data>
+  <data name="GameFolderProblemAccessDenied" xml:space="preserve">
+    <value>sem acesso à pasta</value>
+  </data>
+  <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
+    <value>esta não é a pasta do jogo (sem pasta media)</value>
+  </data>
+  <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
+    <value>media\cars não encontrada</value>
+  </data>
+  <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
+    <value>não há carros em media\cars</value>
+  </data>
+  <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
+    <value>media\Livery não encontrada</value>
+  </data>
+  <data name="GameFolderProblemNoVinyls" xml:space="preserve">
+    <value>os vinis do jogo não foram encontrados (media\Livery\Vinyls.zip)</value>
+  </data>
+  <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
+    <value>não foi possível ler os vinis do jogo</value>
+  </data>
+  <data name="GameFolderProblemNoDecals" xml:space="preserve">
+    <value>logotipos não encontrados, alguns adesivos não serão desenhados</value>
+  </data>
+  <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
+    <value>alguns carros não puderam ser lidos</value>
+  </data>
+  <data name="GameFolderProblemUnknown" xml:space="preserve">
+    <value>a pasta não serve</value>
+  </data>
+  <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
+    <value>Os vinis do jogo não foram encontrados. Verifique a pasta do jogo (media\Livery).</value>
+  </data>
+  <data name="RenderErrorGamePathInvalid" xml:space="preserve">
+    <value>A pasta do jogo não está definida ou não foi encontrada.</value>
+  </data>
+  <data name="RenderErrorCarNotFound" xml:space="preserve">
+    <value>O carro desta pintura não está na pasta do jogo.</value>
+  </data>
+  <data name="RenderErrorCarFormat" xml:space="preserve">
+    <value>Não foi possível ler os arquivos do carro.</value>
+  </data>
+  <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
+    <value>Este carro não tem layout de pintura.</value>
+  </data>
+  <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
+    <value>Formas não desenhadas: {0}</value>
+  </data>
+  <data name="RenderErrorRasterLogosSkippedFormat" xml:space="preserve">
+    <value>Logotipos não desenhados: {0}</value>
+  </data>
+  <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
+    <value>Formas sem seção: {0}</value>
+  </data>
+  <data name="RenderErrorGeneric" xml:space="preserve">
+    <value>Não foi possível desenhar a pintura.</value>
+  </data>
+  <data name="View3DGameFolderChecking" xml:space="preserve">
+    <value>O 3D ainda não está disponível: verificando a pasta do jogo</value>
+  </data>
+  <data name="View3DTooltip" xml:space="preserve">
+    <value>Ver em 3D</value>
+  </data>
+  <data name="View3DNoCLivery" xml:space="preserve">
+    <value>3D indisponível: a pintura não tem o arquivo C_livery</value>
+  </data>
+  <data name="View3DParseError" xml:space="preserve">
+    <value>3D indisponível: não foi possível ler a pintura</value>
+  </data>
+  <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
+    <value>3D indisponível: {0}. Defina a pasta do jogo nas configurações.</value>
+  </data>
+  <data name="View3DDialogTitle" xml:space="preserve">
+    <value>Visualização 3D</value>
+  </data>
+  <data name="View3DReadFailed" xml:space="preserve">
+    <value>Não foi possível ler o arquivo da pintura. Detalhes no log.</value>
+  </data>
+  <data name="View3DParseFailedFormat" xml:space="preserve">
+    <value>Não foi possível ler a pintura: {0}</value>
+  </data>
+  <data name="ViewerStatsFormat" xml:space="preserve">
+    <value>{0:N0} triângulos (LOD {1}) · pintura {2}×{3} · quadro {4}×{5}, MSAA {6}× · {7:F1} ms</value>
+  </data>
+  <data name="ViewerNoOpenGl" xml:space="preserve">
+    <value>Visualização 3D indisponível: não foi possível iniciar o OpenGL.</value>
+  </data>
+  <data name="ViewerQualityLow" xml:space="preserve">
+    <value>Baixa</value>
+  </data>
+  <data name="ViewerQualityMedium" xml:space="preserve">
+    <value>Média</value>
+  </data>
+  <data name="ViewerQualityHigh" xml:space="preserve">
+    <value>Alta</value>
+  </data>
+  <data name="ViewerQualityUltra" xml:space="preserve">
+    <value>Ultra</value>
+  </data>
+  <data name="ViewerResetView" xml:space="preserve">
+    <value>Redefinir visão</value>
+  </data>
+  <data name="ViewerTitleFormat" xml:space="preserve">
+    <value>{0} — 3D</value>
+  </data>
+  <data name="GameFolderNotSetHint" xml:space="preserve">
+    <value>A pasta do jogo é necessária para ver pinturas em 3D</value>
+  </data>
+  <data name="GameFolderChecking" xml:space="preserve">
+    <value>Verificando a pasta do jogo…</value>
+  </data>
+  <data name="GameFolderInvalidFormat" xml:space="preserve">
+    <value>A pasta do jogo não serve: {0}</value>
+  </data>
+  <data name="GameFolderValidFormat" xml:space="preserve">
+    <value>Pasta do jogo encontrada, carros: {0}</value>
+  </data>
+  <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
+    <value>Pasta do jogo encontrada, carros: {0}. Porém: {1}</value>
+  </data>
+  <data name="ViewerControlsHint" xml:space="preserve">
+    <value>Botão esquerdo: girar · Botão direito: mover · Roda: zoom · Clique duplo: redefinir</value>
+  </data>
+  <data name="AuctionBadgeLabel" xml:space="preserve">
+    <value>Leilão</value>
+  </data>
+  <data name="AuctionBadgeTooltip" xml:space="preserve">
+    <value>Comprada na casa de leilões.
+Pinturas de leilão não podem ser movidas para o arquivo.</value>
+  </data>
+  <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
+    <value>Pinturas de leilão não podem ser movidas para o arquivo</value>
+  </data>
+  <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
+    <value>Pinturas de leilão não podem ser movidas para o arquivo, então {0} das selecionadas continuam no jogo.</value>
+  </data>
+  <data name="ContextMenuOnlyThisCar" xml:space="preserve">
+    <value>Somente este carro</value>
+  </data>
+  <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
+    <value>Somente este fabricante</value>
+  </data>
+  <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
+    <value>Somente este autor</value>
+  </data>
+  <data name="ContextMenuClearQuickFilters" xml:space="preserve">
+    <value>Mostrar tudo novamente</value>
+  </data>
+  <data name="QuickFiltersLabel" xml:space="preserve">
+    <value>Somente:</value>
+  </data>
+  <data name="QuickFilterCarFormat" xml:space="preserve">
+    <value>Carro: {0}</value>
+  </data>
+  <data name="QuickFilterManufacturerFormat" xml:space="preserve">
+    <value>Fabricante: {0}</value>
+  </data>
+  <data name="QuickFilterAuthorFormat" xml:space="preserve">
+    <value>Autor: {0}</value>
+  </data>
+  <data name="QuickFilterRemoveTooltip" xml:space="preserve">
+    <value>Remover este filtro</value>
+  </data>
+  <data name="StatusAutoRefreshedFormat" xml:space="preserve">
+    <value>Salvamento alterado: +{0} / −{1}, galeria atualizada</value>
+  </data>
+  <data name="FilterAuctionLabel" xml:space="preserve">
+    <value>Leilão</value>
+  </data>
+  <data name="AuctionFilterAll" xml:space="preserve">
+    <value>Todas as pinturas</value>
+  </data>
+  <data name="AuctionFilterSeparately" xml:space="preserve">
+    <value>Mostrar pinturas de leilão separadamente</value>
+  </data>
+  <data name="AuctionFilterOnly" xml:space="preserve">
+    <value>Apenas pinturas de leilão</value>
+  </data>
+  <data name="AuctionFilterHide" xml:space="preserve">
+    <value>Ocultar pinturas de leilão</value>
+  </data>
+  <data name="SeparateAuctionGroupName" xml:space="preserve">
+    <value>Leilão</value>
+  </data>
+  <data name="AuthorInferredTooltip" xml:space="preserve">
+    <value>A pintura não guarda o nome do autor — ele foi obtido de outras pinturas do mesmo autor</value>
+  </data>
+  <data name="AuthorUnknownMessage" xml:space="preserve">
+    <value>Esta pintura não guarda o nome do autor, e não há outras pinturas desse autor na galeria de onde obtê-lo.</value>
+  </data>
+  <data name="QuickFilterAddButton" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="QuickFilterAddTooltip" xml:space="preserve">
+    <value>Mostrar apenas um fabricante, carro ou autor</value>
+  </data>
+  <data name="QuickFilterKindManufacturer" xml:space="preserve">
+    <value>Fabricante</value>
+  </data>
+  <data name="QuickFilterKindCar" xml:space="preserve">
+    <value>Carro</value>
+  </data>
+  <data name="QuickFilterKindAuthor" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="QuickFilterSearchWatermark" xml:space="preserve">
+    <value>Pesquisar…</value>
+  </data>
+  <data name="QuickFilterPickerEmpty" xml:space="preserve">
+    <value>Nada encontrado</value>
+  </data>
+  <data name="GroupShowOnlyButton" xml:space="preserve">
+    <value>Somente esta</value>
+  </data>
+  <data name="GroupShowOnlyTooltip" xml:space="preserve">
+    <value>Mostrar somente este grupo</value>
+  </data>
+  <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
+    <value>Carros da {0}</value>
+  </data>
+  <data name="SettingsSectionDuplicates" xml:space="preserve">
+    <value>Duplicatas</value>
+  </data>
+  <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
+    <value>Marcar como possível duplicata a partir de uma semelhança de</value>
+  </data>
+  <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
+    <value>Correspondências menos semelhantes não são mostradas. Duplicatas exatas são sempre mostradas. Aplica-se na hora, sem nova varredura.</value>
+  </data>
+  <data name="LiveryRenderPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Package: {0}</value>
+  </data>
+  <data name="LiveryRenderAvaloniaPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Avalonia Package: {0}</value>
+  </data>
+  <data name="View3DDifferenceNote" xml:space="preserve">
+    <value>A visualização 3D é uma aproximação: cores, materiais, iluminação e alguns detalhes podem parecer diferentes do jogo.</value>
+  </data>
+  <data name="ServerStatusChecking" xml:space="preserve">
+    <value>Servidor: conectando…</value>
+  </data>
+  <data name="ServerStatusOnline" xml:space="preserve">
+    <value>Servidor: conectado</value>
+  </data>
+  <data name="ServerStatusSyncing" xml:space="preserve">
+    <value>Servidor: lendo o salvamento…</value>
+  </data>
+  <data name="ServerStatusSaveNotSupported" xml:space="preserve">
+    <value>Servidor: salvamento ainda não suportado</value>
+  </data>
+  <data name="ServerStatusDegraded" xml:space="preserve">
+    <value>Servidor: limitado</value>
+  </data>
+  <data name="ServerStatusMaintenance" xml:space="preserve">
+    <value>Servidor: manutenção</value>
+  </data>
+  <data name="ServerStatusUnreachable" xml:space="preserve">
+    <value>Servidor indisponível</value>
+  </data>
+  <data name="ServerStatusNoInternet" xml:space="preserve">
+    <value>Sem conexão com a internet</value>
+  </data>
+  <data name="ServerStatusRateLimited" xml:space="preserve">
+    <value>Servidor: muitas solicitações</value>
+  </data>
+  <data name="ServerStatusUpdateRequired" xml:space="preserve">
+    <value>Servidor: atualize o aplicativo</value>
+  </data>
+  <data name="ServerStatusAppRejected" xml:space="preserve">
+    <value>Servidor: esta versão não é aceita</value>
+  </data>
+  <data name="ServerStatusCertificateError" xml:space="preserve">
+    <value>Servidor: falha na conexão segura</value>
+  </data>
+  <data name="ServerStatusServerError" xml:space="preserve">
+    <value>Erro do servidor</value>
+  </data>
+  <data name="ServerStatusNotConfigured" xml:space="preserve">
+    <value>Servidor não configurado nesta versão</value>
+  </data>
+  <data name="ServerStatusVersionFormat" xml:space="preserve">
+    <value>Servidor {0}</value>
+  </data>
+  <data name="ServerStatusRetryHint" xml:space="preserve">
+    <value>O aplicativo tentará novamente automaticamente.</value>
+  </data>
+  <data name="ServerStatusRetryInFormat" xml:space="preserve">
+    <value>Próxima tentativa em {0} s.</value>
+  </data>
+  <data name="ServerStatusUpdateHint" xml:space="preserve">
+    <value>O servidor precisa de uma versão mais recente do aplicativo. Atualize-o.</value>
+  </data>
+  <data name="ServerStatusAppRejectedHint" xml:space="preserve">
+    <value>O servidor não aceita esta versão do aplicativo. Use a versão oficial.</value>
+  </data>
+  <data name="ServerStatusCertificateHint" xml:space="preserve">
+    <value>O certificado do servidor não passou na verificação: a conexão pode estar sendo interceptada (por exemplo, por um antivírus ou proxy). O aplicativo não tentará novamente sozinho.</value>
+  </data>
+  <data name="ServerStatusClickToRecheck" xml:space="preserve">
+    <value>Clique para verificar o status do servidor</value>
+  </data>
+  <data name="ServerSyncDoneFormat" xml:space="preserve">
+    <value>Pinturas aplicadas aos carros: {0}
+Atualizado às {1}</value>
+  </data>
+  <data name="ServerSyncProfileNotFound" xml:space="preserve">
+    <value>O arquivo de perfil (C_ProfileData) não foi encontrado na pasta de salvamento.</value>
+  </data>
+  <data name="ServerSyncSaveNotSupported" xml:space="preserve">
+    <value>O servidor ainda não consegue ler este salvamento — provavelmente o jogo foi atualizado. O suporte virá em breve.</value>
+  </data>
+  <data name="ServerSyncSaveRejected" xml:space="preserve">
+    <value>O servidor informou que este arquivo não é um salvamento de perfil válido.</value>
+  </data>
+  <data name="ServerSyncFailed" xml:space="preserve">
+    <value>Não foi possível atualizar as pinturas aplicadas; o aplicativo tentará novamente.</value>
+  </data>
+  <data name="InstalledBadgeLabel" xml:space="preserve">
+    <value>Aplicada</value>
+  </data>
+  <data name="InstalledBadgeTooltip" xml:space="preserve">
+    <value>Aplicada a um carro no jogo</value>
+  </data>
+  <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
+    <value>Aplicada a {0} carros no jogo</value>
+  </data>
+  <data name="SettingsSectionServer" xml:space="preserve">
+    <value>Servidor de dados de pinturas</value>
+  </data>
+  <data name="ServerConnectionLabel" xml:space="preserve">
+    <value>Conectar-se ao servidor para identificar as pinturas aplicadas</value>
+  </data>
+  <data name="ServerConnectionDescription" xml:space="preserve">
+    <value>Para identificar as pinturas aplicadas aos carros, o aplicativo envia o arquivo de salvamento (C_ProfileData) ao servidor. O arquivo é processado exclusivamente para obter informações sobre as pinturas aplicadas e não é armazenado no servidor.
+
+Os dados do arquivo de salvamento não são armazenados nem utilizados para outros fins. O servidor é utilizado para armazenar com segurança as chaves necessárias para descriptografar o arquivo de salvamento.
+
+O servidor não tem vínculo com os servidores oficiais de Forza Horizon, Xbox ou Microsoft.</value>
+  </data>
+  <data name="ServerConsentMessage" xml:space="preserve">
+    <value>Para identificar as pinturas aplicadas aos carros, o aplicativo envia o arquivo de salvamento (C_ProfileData) ao servidor. O arquivo é processado exclusivamente para obter informações sobre as pinturas aplicadas e não é armazenado no servidor.
+
+Os dados do arquivo de salvamento não são armazenados nem utilizados para outros fins. O servidor é utilizado para armazenar com segurança as chaves necessárias para descriptografar o arquivo de salvamento.
+
+O servidor não tem vínculo com os servidores oficiais de Forza Horizon, Xbox ou Microsoft.
+
+Os dados são enviados ao servidor somente com o seu consentimento. Deseja ativar a conexão com o servidor?</value>
+  </data>
+  <data name="ServerConsentTitle" xml:space="preserve">
+    <value>Conexão com o servidor de dados de pinturas</value>
+  </data>
+  <data name="ServerConsentAccept" xml:space="preserve">
+    <value>Sim, eu entendo e quero continuar</value>
+  </data>
+  <data name="FilterInstalledLabel" xml:space="preserve">
+    <value>Pinturas aplicadas</value>
+  </data>
+  <data name="InstalledAllToggle" xml:space="preserve">
+    <value>Todas as pinturas</value>
+  </data>
+  <data name="InstalledFirstToggle" xml:space="preserve">
+    <value>Aplicadas primeiro</value>
+  </data>
+  <data name="OnlyInstalledToggle" xml:space="preserve">
+    <value>Somente aplicadas</value>
+  </data>
+  <data name="FilterValueUnavailable" xml:space="preserve">
+    <value>Desativado</value>
+  </data>
+  <data name="InstalledFilterNeedsServer" xml:space="preserve">
+    <value>Ative a conexão com o servidor de dados de pinturas nas configurações para identificar as pinturas aplicadas.</value>
+  </data>
+  <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
+    <value>Algumas pastas não puderam ser removidas do local anterior — provavelmente um arquivo está em uso (o jogo está aberto?). Nada foi perdido: a cópia válida está completa. Estes restos não são mais necessários e podem ser excluídos:
+{0}</value>
+  </data>
+  <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Pinturas aplicadas a carros no jogo não podem ser movidas para o arquivo</value>
+  </data>
+  <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
+    <value>Pinturas aplicadas a carros no jogo não podem ser movidas para o arquivo, então {0} das selecionadas continuam no jogo.</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
+    <value>Não se sabe quais pinturas estão aplicadas a carros, então mover esta pintura para o arquivo não é seguro: ela pode estar aplicada a um carro no jogo.
+
+Mover a pintura para o arquivo?</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
+    <value>Não se sabe quais pinturas estão aplicadas a carros, então mover estas pinturas para o arquivo não é seguro: algumas podem estar aplicadas a carros no jogo.
+
+Mover as pinturas para o arquivo?</value>
+  </data>
+  <data name="DontShowAgainCheckBox" xml:space="preserve">
+    <value>Não mostrar novamente</value>
+  </data>
+  <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Pinturas de leilão e pinturas aplicadas a carros no jogo não podem ser movidas para o arquivo</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
+    <value>O arquivo de salvamento mudou desde a última sincronização, e os novos dados ainda não foram enviados ao servidor de pinturas. A lista de pinturas aplicadas a carros pode estar desatualizada, então mover esta pintura para o arquivo não é seguro: ela pode estar aplicada a um carro no jogo.
+
+É melhor aguardar a sincronização (ela acontece automaticamente e pode levar alguns minutos) e tentar de novo. Mover a pintura para o arquivo agora?</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
+    <value>O arquivo de salvamento mudou desde a última sincronização, e os novos dados ainda não foram enviados ao servidor de pinturas. A lista de pinturas aplicadas a carros pode estar desatualizada, então mover estas pinturas para o arquivo não é seguro: algumas podem estar aplicadas a carros no jogo.
+
+É melhor aguardar a sincronização (ela acontece automaticamente e pode levar alguns minutos) e tentar de novo. Mover as pinturas para o arquivo agora?</value>
   </data>
 </root>

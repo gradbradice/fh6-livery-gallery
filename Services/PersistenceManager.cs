@@ -91,7 +91,11 @@ internal static class PersistenceManager
             else if (previousInFlight is not null)
             {
                 try { allOk &= await previousInFlight; }
-                catch { allOk = false; }
+                catch (Exception ex)
+                {
+                    allOk = false;
+                    AppLogger.LogError($"Pending write of '{path}' failed during flush", ex);
+                }
             }
         }
         return allOk;

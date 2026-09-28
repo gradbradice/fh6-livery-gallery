@@ -24,9 +24,9 @@ internal static class TrustedUrlLauncher
         {
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
-        catch
+        catch (Exception ex)
         {
-            
+            AppLogger.LogErrorThrottled("TrustedUrlLauncher", $"Failed to open '{url}'", ex);
         }
     }
 }

@@ -11,9 +11,22 @@ internal sealed class LiveryEntryFactory(
     AuthorCardService authorCardService,
     LiveryIdService liveryIdService)
 {
-    public void ReconcileAuthorCards(IEnumerable<LiveryCacheEntry> cacheEntries) =>
-        authorCardService.ReconcileAutoCards(cacheEntries.Select(c =>
-            new AuthorObservation(c.Author, c.AuthorIdentityTagHex, c.DownloadDate)));
+    private volatile AuthorNameInference _authorInference = AuthorNameInference.Empty;
+
+    public AuthorNameInference AuthorInference => _authorInference;
+
+    public void ReconcileAuthorCards(IEnumerable<LiveryCacheEntry> cacheEntries)
+    {
+        var list = cacheEntries as IReadOnlyCollection<LiveryCacheEntry> ?? [.. cacheEntries];
+        _authorInference = AuthorNameInference.Build(list);
+        authorCardService.ReconcileAutoCards(list
+            .Where(c => !AuthorNameInference.IsAuthorMissing(c))
+            .Select(c => new AuthorObservation(c.Author, c.AuthorIdentityTagHex, c.DownloadDate)));
+    }
+
+    public (string Name, bool IsInferred, bool IsUnknown) ResolveRawAuthor(LiveryCacheEntry c) =>
+        _authorInference.Resolve(c, tag => authorCardService.FindCardForIdentityTag(tag)?.KnownNames
+            .LastOrDefault(n => !string.IsNullOrWhiteSpace(n)));
 
     public void EnsureLiveryIds(IEnumerable<LiveryCacheEntry> cacheEntries) =>
         liveryIdService.EnsureAssigned(cacheEntries.Select(c => (c.FolderName, c.DownloadDate)));
@@ -21,11 +34,15 @@ internal sealed class LiveryEntryFactory(
     public LiveryEntry ToEntry(LiveryCacheEntry c, ulong? currentUserId)
     {
         var car = carDatabaseService.Get(c.CarId);
+        var (rawAuthor, isAuthorInferred, isAuthorUnknown) = ResolveRawAuthor(c);
         var data = new LiveryData
         {
             FolderName = c.FolderName,
-            LiveryName = c.LiveryName,
-            AuthorRaw = c.Author,
+            LiveryName = PlaceholderTexts.IsNameMissing(c) ? string.Empty : c.LiveryName,
+            TextVersion = LiveryCacheEntry.CurrentTextVersion,
+            AuthorRaw = rawAuthor,
+            IsAuthorInferred = isAuthorInferred,
+            IsAuthorUnknown = isAuthorUnknown,
             AuthorIdentityTagHex = c.AuthorIdentityTagHex,
             CreatorUserId = c.CreatorUserId,
             IsPossiblyGenerated = c.IsPossiblyGenerated,
@@ -44,6 +61,7 @@ internal sealed class LiveryEntryFactory(
                 ? Path.Combine(appCacheService.ThumbsDir, c.ThumbnailFile)
                 : null,
             HasThumbnail = c.ThumbnailFile is not null,
+            ExternalPreviewPath = c.ExternalThumbSource,
             CLiveryHash = c.CLiveryHash,
             LiveryId = liveryIdService.TryGet(c.FolderName) ?? 0,
             RelatedLiveryIds = BuildRelatedLiveryIds(c.PossibleDuplicateOf),
@@ -52,7 +70,7 @@ internal sealed class LiveryEntryFactory(
         return new LiveryEntry
         {
             Data = data,
-            Author = authorCardService.ResolveDisplayName(c.Author, c.AuthorIdentityTagHex),
+            Author = authorCardService.ResolveDisplayName(rawAuthor, c.AuthorIdentityTagHex),
             IsMine = currentUserId is not null && c.CreatorUserId == currentUserId,
             Tags = tagService.GetTags(c.FolderName),
             IsFavorite = favoriteService.IsFavorite(c.FolderName),

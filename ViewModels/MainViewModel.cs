@@ -21,7 +21,16 @@ internal sealed partial class MainViewModel : ObservableObject
     private bool _hasAppliedEntriesOnce;
     public LiveryScanEntry? LastScanResult => scanController.LastScanResult;
     public FilterBarViewModel FilterBar { get; }
+    public QuickFilterPickerViewModel QuickFilterPicker { get; } = new();
+
+    public void PrepareQuickFilterPicker() => QuickFilterPicker.Load(Gallery.AllEntries, FilterBar.ActiveManufacturerFilter);
+
+    public void ApplyQuickFilter(QuickFilter filter) => FilterBar.ApplyQuickFilter(filter);
     public GalleryStatusViewModel Status { get; }
+
+    public ServerStatusViewModel ServerStatus { get; } = new();
+
+    public event Action? ScanCompleted;
     public GalleryViewModel Gallery { get; }
     public TagsBarViewModel TagsBar { get; }
     public UpdateViewModel Update { get; }
@@ -37,6 +46,14 @@ internal sealed partial class MainViewModel : ObservableObject
         {
             LiveryEntry.ShowFolderNamesInTooltips = settings.SearchByFolderName;
             Gallery.RefreshDuplicateTooltips();
+        }
+
+        int threshold = AppSettingsData.ClampPossibleDuplicateThreshold(settings.PossibleDuplicateThresholdPercent);
+        if (LiveryEntry.PossibleDuplicateThresholdPercent != threshold)
+        {
+            LiveryEntry.PossibleDuplicateThresholdPercent = threshold;
+            Gallery.RefreshPossibleDuplicateThreshold();
+            RefreshGallery();
         }
     }
 
@@ -58,6 +75,8 @@ internal sealed partial class MainViewModel : ObservableObject
     {
         this.settings = settings;
         LiveryEntry.ShowFolderNamesInTooltips = settings.SearchByFolderName;
+        LiveryEntry.PossibleDuplicateThresholdPercent =
+            AppSettingsData.ClampPossibleDuplicateThreshold(settings.PossibleDuplicateThresholdPercent);
         this.savePathPrompter = savePathPrompter;
         this.savePathService = savePathService;
         this.carDatabase = carDatabase;
@@ -74,14 +93,16 @@ internal sealed partial class MainViewModel : ObservableObject
         Update = new UpdateViewModel(updateService);
         Gallery.CountsUpdated += snapshot =>
             Status.UpdateCountsAndEmptyState(snapshot.FilteredEntries, snapshot.TotalCount, snapshot.SearchText);
+        Gallery.SelectedEntries.CollectionChanged += (_, __) => RefreshArchiveAvailability();
+        Gallery.InstalledCountsChanged += RefreshArchiveAvailability;
         FilterBar.FiltersChanged += RefreshGallery;
         RefreshCommand = new AsyncRelayCommand(RefreshButtonClickedAsync);
     }
 
     private GalleryFilterState CurrentFilterState() => new(
-        FilterBar.SearchText, FilterBar.SortMode, FilterBar.FavoriteMode, FilterBar.MineMode,
+        FilterBar.SearchText, FilterBar.SortMode, FilterBar.FavoriteMode, FilterBar.MineMode, FilterBar.EffectiveInstalledMode,
         FilterBar.DuplicatesFilterMode, FilterBar.GeneratedFilterMode, FilterBar.PaintFilterMode,
-        FilterBar.GroupingEnabled, settings.SearchByFolderName);
+        FilterBar.AuctionFilterMode, FilterBar.GroupingEnabled, settings.SearchByFolderName, FilterBar.ActiveQuickFilters);
 
     public void RefreshGallery() => Gallery.Refresh(CurrentFilterState());
 
@@ -125,8 +146,15 @@ internal sealed partial class MainViewModel : ObservableObject
         RefreshGallery();
     }
 
-    public async Task RunScanAsyncTracked(bool isUserInitiated)
+    public async Task RunScanAsyncTracked(bool isUserInitiated) => await RunScanCoreAsync(isUserInitiated);
+
+    public Task<bool> RunAutoRefreshAsync(CancellationToken ct = default) => RunScanCoreAsync(isUserInitiated: false, ct);
+
+    public event Action? SavePathChanged;
+
+    private async Task<bool> RunScanCoreAsync(bool isUserInitiated, CancellationToken ct = default)
     {
+        if (ShutdownToken.IsCancellationRequested || ct.IsCancellationRequested) return true;
         string? saveDataPath = savePathService.ResolveSaveDataPath();
         if (saveDataPath is null)
         {
@@ -134,20 +162,22 @@ internal sealed partial class MainViewModel : ObservableObject
             {
                 await PromptForSavePathAsync(initial: true);
             }
-            return;
+            return true;
         }
         savePathService.ResetLostNotification();
 
-        if (!isUserInitiated && !settings.AutoRefreshLiveries) return;
+        if (!isUserInitiated && !settings.AutoRefreshLiveries) return true;
 
         var progress = isUserInitiated ? new Progress<string>(msg => Status.SetLoading(true, msg)) : null;
+        using var scanCts = CancellationTokenSource.CreateLinkedTokenSource(ShutdownToken, ct);
         bool started = scanController.TryStartScan(
-            saveDataPath, savePathService.CurrentUserId, needEntries: !_hasAppliedEntriesOnce, progress, out var resultTask);
+            saveDataPath, savePathService.CurrentUserId, needEntries: !_hasAppliedEntriesOnce, progress, scanCts.Token,
+            out var resultTask);
 
         if (!started)
         {
             await scanController.WaitAsync();
-            return;
+            return false;
         }
 
         if (isUserInitiated)
@@ -161,6 +191,10 @@ internal sealed partial class MainViewModel : ObservableObject
         try
         {
             result = await resultTask;
+        }
+        catch (OperationCanceledException) when (scanCts.IsCancellationRequested)
+        {
+            // Stopped on purpose. Not an error, nothing to apply
         }
         catch (Exception ex)
         {
@@ -181,6 +215,9 @@ internal sealed partial class MainViewModel : ObservableObject
                 _hasAppliedEntriesOnce = true;
             }
             if (isUserInitiated) Status.RenderScanStatus(result);
+            else if (result.Added > 0 || result.Removed > 0)
+                Status.SetStatusText(string.Format(Strings.StatusAutoRefreshedFormat, result.Added, result.Removed));
+            ScanCompleted?.Invoke();
         }
 
         if (scanError is not null)
@@ -189,6 +226,7 @@ internal sealed partial class MainViewModel : ObservableObject
             if (isUserInitiated)
                 Status.SetStatusText(string.Format(Strings.StatusScanError, scanError.Message));
         }
+        return true;
     }
 
     public async Task RefreshEntriesFromCacheAsync()
@@ -228,9 +266,9 @@ internal sealed partial class MainViewModel : ObservableObject
             if (outcome == CarDatabaseRefreshOutcome.Updated)
                 await RefreshEntriesFromCacheAsync();
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (shutdownToken.IsCancellationRequested)
         {
-
+            // Shutting down
         }
         finally
         {
@@ -240,7 +278,8 @@ internal sealed partial class MainViewModel : ObservableObject
 
     public async Task PromptForSavePathAsync(bool initial)
     {
-        string? path = await savePathPrompter.PromptForSavePathAsync(initial);
+        string? path = await savePathPrompter.PromptForSavePathAsync(initial, ShutdownToken);
+        if (ShutdownToken.IsCancellationRequested) return;
         if (path is null)
         {
             Status.SetStatusText(Strings.SavePathNotChosen);
@@ -249,19 +288,107 @@ internal sealed partial class MainViewModel : ObservableObject
         }
 
         savePathService.SetSavePath(path);
+        SavePathChanged?.Invoke();
         await RunScanAsyncTracked(isUserInitiated: true);
     }
 
     public async Task HandleSavePathChangedFromSettingsAsync()
     {
         savePathService.SyncFromSettings();
+        SavePathChanged?.Invoke();
         if (savePathService.ResolveSaveDataPath() is not null)
             await RunScanAsyncTracked(isUserInitiated: true);
     }
 
     public event Action<string>? ErrorMessageRequested;
 
-    [RelayCommand]
+    public Func<int, Task<(bool Confirmed, bool DontShowAgain)>>? ConfirmArchiveWithoutInstalledDataAsync { get; set; }
+
+    public Func<int, Task<(bool Confirmed, bool DontShowAgain)>>? ConfirmArchiveWithOutdatedInstalledDataAsync { get; set; }
+
+    public Func<Task<bool>>? IsInstalledDataOutdatedAsync { get; set; }
+
+    private static bool CanArchive(LiveryEntry entry) => !entry.IsAuction && !entry.IsInstalled;
+
+    private bool CanMoveSelectedToArchive() => Gallery.SelectedEntries.Any(CanArchive);
+
+    private void RefreshArchiveAvailability()
+    {
+        MoveSelectedToArchiveCommand.NotifyCanExecuteChanged();
+        OnPropertyChanged(nameof(ArchiveBlockedTooltip));
+    }
+
+    public string? ArchiveBlockedTooltip =>
+        Gallery.HasSelection && !CanMoveSelectedToArchive() ? ArchiveBlockedReason(Gallery.SelectedEntries) : null;
+
+    private static string ArchiveBlockedReason(IEnumerable<LiveryEntry> blocked)
+    {
+        bool anyAuction = false, anyInstalled = false;
+        foreach (var entry in blocked)
+        {
+            if (entry.IsAuction) anyAuction = true;
+            else if (entry.IsInstalled) anyInstalled = true;
+        }
+        return (anyAuction, anyInstalled) switch
+        {
+            (true, true) => Strings.ArchiveAuctionOrInstalledNotAllowedTooltip,
+            (false, true) => Strings.ArchiveInstalledNotAllowedTooltip,
+            _ => Strings.ArchiveAuctionNotAllowedTooltip,
+        };
+    }
+
+    private async Task<bool> ConfirmArchiveRiskAsync()
+    {
+        int CountToArchive() => Gallery.SelectedEntries.Count(CanArchive);
+
+        if (!Gallery.IsInstalledDataKnown)
+        {
+            if (!settings.WarnArchiveWithoutInstalledData || ConfirmArchiveWithoutInstalledDataAsync is not { } askUnknown)
+                return true;
+            return await AskAndRememberAsync(askUnknown(CountToArchive()), s => s.WarnArchiveWithoutInstalledData = false);
+        }
+
+        if (!settings.WarnArchiveWithOutdatedInstalledData
+            || IsInstalledDataOutdatedAsync is not { } isOutdated
+            || ConfirmArchiveWithOutdatedInstalledDataAsync is not { } askOutdated)
+            return true;
+
+        bool outdated;
+        try
+        {
+            outdated = await isOutdated();
+        }
+        catch (OperationCanceledException) when (ShutdownToken.IsCancellationRequested)
+        {
+            return false; // shutting down
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to check whether the installed liveries are up to date", ex);
+            outdated = true;
+        }
+        if (ShutdownToken.IsCancellationRequested) return false;
+        if (!outdated) return true;
+
+        // Counted after the check. New data may have arrived meanwhile and blocked some of the selection
+        int count = CountToArchive();
+        if (count == 0) return true; // the caller explains why nothing can be archived
+        return await AskAndRememberAsync(askOutdated(count), s => s.WarnArchiveWithOutdatedInstalledData = false);
+    }
+
+    private async Task<bool> AskAndRememberAsync(
+        Task<(bool Confirmed, bool DontShowAgain)> question, Action<AppSettingsData> turnWarningOff)
+    {
+        var (confirmed, dontShowAgain) = await question;
+        if (confirmed && dontShowAgain)
+        {
+            turnWarningOff(settings);
+            AppSettingsService.Save(settings);
+        }
+        return confirmed;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanMoveSelectedToArchive))]
     private async Task MoveSelectedToArchiveAsync()
     {
         if (!Gallery.HasSelection) return;
@@ -272,11 +399,28 @@ internal sealed partial class MainViewModel : ObservableObject
             return;
         }
 
-        var toArchive = Gallery.SelectedEntries.Select(e => e.Data).ToList();
+        if (!Gallery.SelectedEntries.Any(CanArchive))
+        {
+            ErrorMessageRequested?.Invoke(ArchiveBlockedReason(Gallery.SelectedEntries));
+            return;
+        }
+
+        if (!await ConfirmArchiveRiskAsync()) return;
+        var selected = Gallery.SelectedEntries.ToList();
+        var toArchive = selected.Where(CanArchive).Select(e => e.Data).ToList();
+        int skippedAuction = selected.Count(e => e.IsAuction);
+        int skippedInstalled = selected.Count(e => !e.IsAuction && e.IsInstalled);
+        if (toArchive.Count == 0)
+        {
+            if (selected.Count > 0) ErrorMessageRequested?.Invoke(ArchiveBlockedReason(selected));
+            return;
+        }
+
         Status.SetLoading(true, Strings.LoadingMovingToArchive);
+        ArchiveOperationResult result;
         try
         {
-            await archiveService.MoveToArchiveAsync(toArchive, savePath);
+            result = await archiveService.MoveToArchiveAsync(toArchive, savePath);
             Gallery.ClearSelectionCommand.Execute(null);
             await RunScanAsyncTracked(isUserInitiated: true);
         }
@@ -284,11 +428,19 @@ internal sealed partial class MainViewModel : ObservableObject
         {
             AppLogger.LogError("Failed to move selected liveries to archive", ex);
             ErrorMessageRequested?.Invoke(Strings.FileOperationFailedMessage);
+            return;
         }
         finally
         {
             Status.SetLoading(false);
         }
+
+        var notes = new List<string>(3);
+        if (skippedAuction > 0) notes.Add(string.Format(Strings.ArchiveAuctionSkippedFormat, skippedAuction));
+        if (skippedInstalled > 0) notes.Add(string.Format(Strings.ArchiveInstalledSkippedFormat, skippedInstalled));
+        if (result.LeftoverPaths.Count > 0)
+            notes.Add(string.Format(Strings.ArchiveLeftoverFoldersFormat, string.Join(Environment.NewLine, result.LeftoverPaths)));
+        if (notes.Count > 0) ErrorMessageRequested?.Invoke(string.Join(Environment.NewLine + Environment.NewLine, notes));
     }
 
     private async Task RefreshButtonClickedAsync()
@@ -319,11 +471,13 @@ internal sealed partial class MainViewModel : ObservableObject
         else
         {
             await RunScanAsyncTracked(isUserInitiated: true);
+            if (shutdownToken.IsCancellationRequested) return;
             _carDatabaseRefreshTask = RunSafelyAsync(
                 () => RefreshCarDatabaseAsync(showLoadingOverlay: false, shutdownToken),
                 nameof(RefreshCarDatabaseAsync));
         }
 
+        if (shutdownToken.IsCancellationRequested) return;
         _updateCheckTask = RunSafelyAsync(() => Update.CheckAsync(shutdownToken), nameof(Update.CheckAsync));
         IsInitialized = true;
     }
@@ -334,20 +488,14 @@ internal sealed partial class MainViewModel : ObservableObject
     public async Task ShutdownAsync()
     {
         scanController.Cancel();
+        await AwaitForShutdownAsync(scanController.WaitAsync(), "scan");
+        await AwaitForShutdownAsync(MoveSelectedToArchiveCommand.ExecutionTask, "move to archive");
+        await AwaitForShutdownAsync(RefreshCommand.ExecutionTask, "refresh");
+        await AwaitForShutdownAsync(_carDatabaseRefreshTask, "car database refresh");
+        await AwaitForShutdownAsync(_updateCheckTask, "update check");
+        await AwaitForShutdownAsync(scanController.WaitAsync(), "entry regeneration");
 
-        try
-        {
-            await scanController.WaitAsync();
-        }
-        catch (OperationCanceledException)
-        {
-
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unexpected error while waiting for scan to stop during shutdown", ex);
-        }
-
+        // Last, so that whatever the steps above saved is written too.
         bool allOk = await PersistenceManager.FlushAsync();
         if (!allOk)
         {
@@ -355,11 +503,23 @@ internal sealed partial class MainViewModel : ObservableObject
                 "Failed to flush one or more files on shutdown",
                 new IOException("PersistenceManager.FlushAsync reported at least one failed write"));
         }
+    }
 
-        if (_carDatabaseRefreshTask is not null) await _carDatabaseRefreshTask;
-        if (_updateCheckTask is not null) await _updateCheckTask;
-
-        AppLogger.Shutdown();
+    private static async Task AwaitForShutdownAsync(Task? task, string what)
+    {
+        if (task is null) return;
+        try
+        {
+            await task;
+        }
+        catch (OperationCanceledException)
+        {
+            // Cancelled by the shutdown itself
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError($"Background work '{what}' failed while shutting down", ex);
+        }
     }
 
     private static async Task RunSafelyAsync(Func<Task> action, string context)
@@ -370,7 +530,7 @@ internal sealed partial class MainViewModel : ObservableObject
         }
         catch (OperationCanceledException)
         {
-
+            // Background tasks are only cancelled by the shutdown
         }
         catch (Exception ex)
         {

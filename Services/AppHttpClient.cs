@@ -7,7 +7,7 @@ internal static class AppHttpClient
     private static HttpClient Create()
     {
         var client = new HttpClient();
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("FH6-Livery-Gallery/1.0");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd(Configuration.AppSettings.UserAgent);
         return client;
     }
 }

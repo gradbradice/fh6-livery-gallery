@@ -12,11 +12,28 @@ internal class AppSettingsData
     public SortMode SortMode { get; set; } = SortMode.Manufacture;
     public FavoriteMode FavoriteMode { get; set; } = FavoriteMode.None;
     public MineMode MineMode { get; set; } = MineMode.None;
+    public InstalledMode InstalledMode { get; set; } = InstalledMode.None;
     public DuplicatesFilterMode DuplicatesFilterMode { get; set; } = DuplicatesFilterMode.All;
     public GeneratedFilterMode GeneratedFilterMode { get; set; } = GeneratedFilterMode.All;
     public PaintFilterMode PaintFilterMode { get; set; } = PaintFilterMode.All;
+    public AuctionFilterMode AuctionFilterMode { get; set; } = AuctionFilterMode.All;
+
+    public bool ServerConnectionEnabled { get; set; }
+
+    public bool WarnArchiveWithoutInstalledData { get; set; } = true;
+
+    public bool WarnArchiveWithOutdatedInstalledData { get; set; } = true;
+
+    public const int MinPossibleDuplicateThresholdPercent = 50;
+    public const int MaxPossibleDuplicateThresholdPercent = 90;
+    public const int DefaultPossibleDuplicateThresholdPercent = 70;
+    public int PossibleDuplicateThresholdPercent { get; set; } = DefaultPossibleDuplicateThresholdPercent;
+
+    public static int ClampPossibleDuplicateThreshold(int percent) =>
+        Math.Clamp(percent, MinPossibleDuplicateThresholdPercent, MaxPossibleDuplicateThresholdPercent);
     public bool GroupingEnabled { get; set; } = true;
     public string? GameInstallPath { get; set; }
+    public int ViewerQualityIndex { get; set; } = 2;
     public bool AutoRefreshLiveries { get; set; } = true;
     public bool RefreshLiveriesOnButtonClick { get; set; } = false;
     public bool SearchByFolderName { get; set; } = false;
@@ -32,11 +49,18 @@ internal class AppSettingsData
         SortMode = SortMode,
         FavoriteMode = FavoriteMode,
         MineMode = MineMode,
+        InstalledMode = InstalledMode,
         DuplicatesFilterMode = DuplicatesFilterMode,
         GeneratedFilterMode = GeneratedFilterMode,
         PaintFilterMode = PaintFilterMode,
+        AuctionFilterMode = AuctionFilterMode,
+        PossibleDuplicateThresholdPercent = PossibleDuplicateThresholdPercent,
+        ServerConnectionEnabled = ServerConnectionEnabled,
+        WarnArchiveWithoutInstalledData = WarnArchiveWithoutInstalledData,
+        WarnArchiveWithOutdatedInstalledData = WarnArchiveWithOutdatedInstalledData,
         GroupingEnabled = GroupingEnabled,
         GameInstallPath = GameInstallPath,
+        ViewerQualityIndex = ViewerQualityIndex,
         AutoRefreshLiveries = AutoRefreshLiveries,
         RefreshLiveriesOnButtonClick = RefreshLiveriesOnButtonClick,
         SearchByFolderName = SearchByFolderName,
@@ -53,11 +77,18 @@ internal class AppSettingsData
         SortMode = other.SortMode;
         FavoriteMode = other.FavoriteMode;
         MineMode = other.MineMode;
+        InstalledMode = other.InstalledMode;
         DuplicatesFilterMode = other.DuplicatesFilterMode;
         GeneratedFilterMode = other.GeneratedFilterMode;
         PaintFilterMode = other.PaintFilterMode;
+        AuctionFilterMode = other.AuctionFilterMode;
+        PossibleDuplicateThresholdPercent = other.PossibleDuplicateThresholdPercent;
+        ServerConnectionEnabled = other.ServerConnectionEnabled;
+        WarnArchiveWithoutInstalledData = other.WarnArchiveWithoutInstalledData;
+        WarnArchiveWithOutdatedInstalledData = other.WarnArchiveWithOutdatedInstalledData;
         GroupingEnabled = other.GroupingEnabled;
         GameInstallPath = other.GameInstallPath;
+        ViewerQualityIndex = other.ViewerQualityIndex;
         AutoRefreshLiveries = other.AutoRefreshLiveries;
         RefreshLiveriesOnButtonClick = other.RefreshLiveriesOnButtonClick;
         SearchByFolderName = other.SearchByFolderName;

@@ -32,10 +32,12 @@ internal partial class MainWindow
         SortLabelText.Text = Strings.FilterSortLabel;
         GroupingLabelText.Text = Strings.FilterGroupingLabel;
         FavLabelText.Text = Strings.FilterFavoritesLabel;
+        InstalledLabelText.Text = Strings.FilterInstalledLabel;
         MineLabelText.Text = Strings.FilterMineLabel;
         DupLabelText.Text = Strings.FilterDuplicatesLabel;
         GenLabelText.Text = Strings.FilterGeneratedLabel;
         PaintLabelText.Text = Strings.FilterPaintLabel;
+        AuctionLabelText.Text = Strings.FilterAuctionLabel;
         SortManufacturerItem.Header = Strings.SortOptionManufacturer;
         SortAuthorItem.Header = Strings.SortOptionAuthor;
         SortDownloadTimeItem.Header = Strings.SortOptionDownloadDate;
@@ -44,6 +46,9 @@ internal partial class MainWindow
         FavFirstItemText.Text = Strings.FavoritesFirstToggle;
         FavOnlyItemText.Text = Strings.OnlyFavoritesToggle;
         FavSeparateItemText.Text = Strings.SeparateFavoritesToggle;
+        InstalledNoneItem.Header = Strings.InstalledAllToggle;
+        InstalledFirstItemText.Text = Strings.InstalledFirstToggle;
+        InstalledOnlyItemText.Text = Strings.OnlyInstalledToggle;
         MineNoneItem.Header = Strings.NormalOrderToggle;
         MineFirstItemText.Text = Strings.MineFirstToggle;
         MineOnlyItemText.Text = Strings.OnlyMineToggle;
@@ -54,10 +59,16 @@ internal partial class MainWindow
         GenAllItem.Header = Strings.GeneratedFilterAll;
         GenOnlyItem.Header = Strings.GeneratedFilterOnly;
         PaintAllItem.Header = Strings.PaintFilterAll;
-        PaintHideItem.Header = Strings.PaintFilterHide;
         PaintOnlyItem.Header = Strings.PaintFilterOnly;
+        PaintHideItem.Header = Strings.PaintFilterHide;
+        AuctionAllItem.Header = Strings.AuctionFilterAll;
+        AuctionOnlyItem.Header = Strings.AuctionFilterOnly;
+        AuctionSeparateItem.Header = Strings.AuctionFilterSeparately;
+        AuctionHideItem.Header = Strings.AuctionFilterHide;
 
         TagsFilterLabel.Text = Strings.TagsFilterLabel;
+        QuickFiltersLabel.Text = Strings.QuickFiltersLabel;
+        AddQuickFilterLabel.Text = Strings.QuickFilterAddButton;
     }
 
     internal void OnLanguageChanged()
@@ -67,6 +78,7 @@ internal partial class MainWindow
         _mainViewModel.Status.RenderScanStatus(_mainViewModel.LastScanResult);
         _mainViewModel.Gallery.RefreshCountsOnly();
         _mainViewModel.FilterBar.RefreshLocalizedText();
+        _mainViewModel.ServerStatus.RefreshLocalizedText();
         foreach (var entry in _mainViewModel.Gallery.AllEntries)
             entry.RefreshLocalizedText();
 
@@ -79,9 +91,11 @@ internal partial class MainWindow
                     month.ToString(AppLocalisationService.MonthYearFormat, AppLocalisationService.Culture),
                 LiveryGroupSpecialKind.UnknownDownloadDate => Strings.UnknownDownloadDate,
                 LiveryGroupSpecialKind.UnknownManufacturer => Strings.UnknownManufacturer,
+                LiveryGroupSpecialKind.UnknownAuthor => Strings.UnknownAuthor,
                 LiveryGroupSpecialKind.AllLiveries => Strings.AllLiveriesGroupName,
                 _ when group.IsFavoritesGroup => Strings.SeparateFavoritesGroupName,
                 _ when group.IsMineGroup => Strings.SeparateMineGroupName,
+                _ when group.IsAuctionGroup => Strings.SeparateAuctionGroupName,
                 _ => group.Key
             };
 
