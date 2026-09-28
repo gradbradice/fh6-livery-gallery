@@ -57,6 +57,10 @@ internal class LiveryGroup : INotifyPropertyChanged, IDisposable
 
     public bool IsFavoritesGroup { get; init; }
     public bool IsMineGroup { get; init; }
+    public bool IsAuctionGroup { get; init; }
+
+    public QuickFilter? GroupFilter { get; init; }
+    public bool HasGroupFilter => GroupFilter is not null;
 
     public LiveryGroupSpecialKind SpecialKind { get; init; } = LiveryGroupSpecialKind.None;
     public DateTime? SpecialMonth { get; init; }

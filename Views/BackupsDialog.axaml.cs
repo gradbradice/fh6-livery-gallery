@@ -15,6 +15,7 @@ internal partial class BackupsDialog : Window
     private readonly Func<IReadOnlyList<LiveryData>> _getCurrentEntries;
     private readonly Func<Task> _onRestored;
     private readonly BackupsViewModel _viewModel;
+    private readonly DialogWorkScope _work;
 
     public BackupsDialog(
         LiveryBackupService backupService, SavePathService savePathService,
@@ -27,11 +28,12 @@ internal partial class BackupsDialog : Window
         _onRestored = onRestored;
         _viewModel = new BackupsViewModel(backupService, savePathService, getCurrentEntries);
         DataContext = _viewModel;
+        _work = new DialogWorkScope(this, _viewModel.CreateBackupCommand);
 
-        _viewModel.ErrorMessageRequested += async message =>
-            await InfoDialog.ShowAsync(this, Strings.BackupsDialogTitle, message);
-        _viewModel.OpenRequested += row => OpenDetail(row);
-        _viewModel.DeleteRequested += async row => await ConfirmDeleteAsync(row);
+        _viewModel.ErrorMessageRequested += message => _work.Run(
+            () => InfoDialog.ShowAsync(this, Strings.BackupsDialogTitle, message), "backups: error message");
+        _viewModel.OpenRequested += row => _work.Run(() => OpenDetailAsync(row), "backups: open detail");
+        _viewModel.DeleteRequested += row => _work.Run(() => ConfirmDeleteAsync(row), "backups: delete");
 
         Title = Strings.BackupsDialogTitle;
         TitleBarText.Text = Strings.BackupsDialogTitle;
@@ -43,7 +45,13 @@ internal partial class BackupsDialog : Window
 
     private void CloseButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
 
-    private async void OpenDetail(BackupRowViewModel row)
+    protected override void OnClosed(EventArgs e)
+    {
+        _viewModel.Close();
+        base.OnClosed(e);
+    }
+
+    private async Task OpenDetailAsync(BackupRowViewModel row)
     {
         if (row.Manifest is null)
         {

@@ -12,6 +12,7 @@ namespace LiveryGallery.Views;
 internal partial class ArchiveDialog : Window
 {
     private readonly ArchiveViewModel _viewModel;
+    private readonly DialogWorkScope _work;
 
     public ArchiveDialog(
         LiveryArchiveService archiveService, SavePathService savePathService,
@@ -20,10 +21,11 @@ internal partial class ArchiveDialog : Window
         InitializeComponent();
         _viewModel = new ArchiveViewModel(archiveService, savePathService, getCurrentEntries, onRestored);
         DataContext = _viewModel;
+        _work = new DialogWorkScope(this, _viewModel.RestoreSelectedCommand);
 
-        _viewModel.ErrorMessageRequested += async message =>
-            await InfoDialog.ShowAsync(this, Strings.ArchiveDialogTitle, message);
-        _viewModel.DeleteRequested += async rows => await ConfirmDeleteAsync(rows);
+        _viewModel.ErrorMessageRequested += message => _work.Run(
+            () => InfoDialog.ShowAsync(this, Strings.ArchiveDialogTitle, message), "archive: error message");
+        _viewModel.DeleteRequested += rows => _work.Run(() => ConfirmDeleteAsync(rows), "archive: delete");
         _viewModel.ConfirmRestoreDuplicatesAsync = message => ConfirmDialog.AskAsync(
             this, Strings.RestoreDuplicateTitle, message, Strings.RestoreAnywayButton, Strings.RestoreSkipDuplicatesButton);
 

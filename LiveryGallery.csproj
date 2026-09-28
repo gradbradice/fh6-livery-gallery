@@ -7,10 +7,23 @@
     <Nullable>enable</Nullable>
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <ApplicationIcon>Assets\app-icon.ico</ApplicationIcon>
+    <Version>1.4.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tests\**" />
+    <EmbeddedResource Remove="Tests\**" />
+    <None Remove="Tests\**" />
+    <AvaloniaResource Remove="Tests\**" />
+    <AvaloniaXaml Remove="Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="LiveryGallery.Tests" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +32,10 @@
     <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.1" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="Forza.Data" Version="0.40.0" />
+    <PackageReference Include="ForzaToolkit.Crypto.Client" Version="1.2.0" />
+    <PackageReference Include="ForzaToolkit.Formats" Version="0.43.0" />
+    <PackageReference Include="ForzaToolkit.LiveryRender" Version="0.6.1" />
+    <PackageReference Include="ForzaToolkit.LiveryRender.Avalonia" Version="0.4.1" />
     <PackageReference Include="Gameloop.Vdf" Version="0.6.2" />
     <PackageReference Include="MarkView.Avalonia" Version="12.2.0" />
     <PackageReference Include="Serilog" Version="4.4.0" />

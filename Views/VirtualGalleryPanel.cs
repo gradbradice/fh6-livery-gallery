@@ -32,7 +32,6 @@ public sealed class VirtualGalleryPanel : Panel
     private const double DefaultRowHeight = 340;
     private const double MinBuffer = 300;
     private const int MaxPooledPerKind = 12;
-
     // Once realized, the viewport may move this far inside the realized area before a new
     // measure pass is needed
     private const double RemeasureMargin = 120;
@@ -40,8 +39,8 @@ public sealed class VirtualGalleryPanel : Panel
 
     private IReadOnlyList<object> _items = [];
     private bool[] _isHeader = [];
-    private double[] _heights = [];      // NaN = not measured yet at the current width
-    private double[] _tops = [0];        // _tops[i] = top of item i; _tops[n] = total height
+    private double[] _heights = []; // NaN = not measured yet at the current width
+    private double[] _tops = [0]; // _tops[i] = top of item i; _tops[n] = total height
     private bool _topsDirty = true;
     private double _coveredTop, _coveredBottom = -1; // area realized by the last measure pass
 
@@ -59,7 +58,9 @@ public sealed class VirtualGalleryPanel : Panel
 
     private Rect _viewport;
     private double _pendingScrollDelta;
-    private List<(string[] Keys, double RelativeTop)>? _pendingAnchor;
+    private sealed record AnchorSnapshot(List<(string[] Keys, double RelativeTop)> Candidates, int HintIndex);
+
+    private AnchorSnapshot? _pendingAnchor;
     private ScrollViewer? _scrollViewer;
 
     public VirtualGalleryPanel()
@@ -374,48 +375,66 @@ public sealed class VirtualGalleryPanel : Panel
         return new Rect(viewport.X, Math.Max(0, viewport.Y + _pendingScrollDelta), viewport.Width, viewport.Height);
     }
 
-    private List<(string[] Keys, double RelativeTop)>? CaptureAnchor()
+    private AnchorSnapshot? CaptureAnchor()
     {
         if (_items.Count == 0 || AnchorKeySelector is null || _tops.Length != _items.Count + 1) return null;
 
         var viewport = CurrentViewport(_measureWidth);
 
-        // At the very top there is nothing that could shift — staying at 0 is correct.
         if (_viewport.Height <= 0 || viewport.Y <= 0.5) return null;
 
+        int firstVisible = FindIndexAt(viewport.Y);
         var candidates = new List<(string[] Keys, double RelativeTop)>();
-        for (int i = FindIndexAt(viewport.Y); i < _items.Count && _tops[i] < viewport.Bottom; i++)
+        for (int i = firstVisible; i < _items.Count && _tops[i] < viewport.Bottom; i++)
         {
             string[] keys = [.. AnchorKeySelector(_items[i])];
             if (keys.Length > 0) candidates.Add((keys, _tops[i] - viewport.Y));
             if (candidates.Count >= MaxAnchorCandidates) break;
         }
-        return candidates.Count > 0 ? candidates : null;
+        return candidates.Count > 0 ? new AnchorSnapshot(candidates, firstVisible) : null;
     }
 
-    private bool TryResolveAnchor(List<(string[] Keys, double RelativeTop)> anchor, out int index, out double relativeTop)
+    private bool TryResolveAnchor(AnchorSnapshot anchor, out int index, out double relativeTop)
     {
         index = -1;
         relativeTop = 0;
-        if (AnchorKeySelector is null) return false;
+        int count = _items.Count;
+        if (AnchorKeySelector is null || count == 0) return false;
 
-        var indexByKey = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        for (int i = 0; i < _items.Count; i++)
+        var rankByKey = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        for (int rank = 0; rank < anchor.Candidates.Count; rank++)
+            foreach (string key in anchor.Candidates[rank].Keys)
+                rankByKey.TryAdd(key, rank);
+
+        int bestRank = int.MaxValue;
+        int bestIndex = -1;
+        int stopDistance = int.MaxValue;
+        int hint = Math.Clamp(anchor.HintIndex, 0, count - 1);
+        int maxDistance = Math.Max(hint, count - 1 - hint);
+
+        for (int distance = 0; distance <= maxDistance && distance <= stopDistance; distance++)
         {
-            foreach (string key in AnchorKeySelector(_items[i]))
-                indexByKey.TryAdd(key, i);
+            CheckItem(hint - distance);
+            if (distance > 0) CheckItem(hint + distance);
+            if (bestRank == 0) break;
         }
 
-        foreach (var (keys, top) in anchor)
+        if (bestIndex < 0) return false;
+        index = bestIndex;
+        relativeTop = anchor.Candidates[bestRank].RelativeTop;
+        return true;
+
+        void CheckItem(int i)
         {
-            foreach (string key in keys)
+            if (i < 0 || i >= count) return;
+            foreach (string key in AnchorKeySelector!(_items[i]))
             {
-                if (!indexByKey.TryGetValue(key, out int found)) continue;
-                index = found;
-                relativeTop = top;
-                return true;
+                if (!rankByKey.TryGetValue(key, out int rank) || rank >= bestRank) continue;
+                bestRank = rank;
+                bestIndex = i;
+                if (stopDistance == int.MaxValue)
+                    stopDistance = Math.Abs(i - hint) + 2 * MaxAnchorCandidates;
             }
         }
-        return false;
     }
 }

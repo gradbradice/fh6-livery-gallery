@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Threading;
 using LiveryGallery.Services;
 using LiveryGallery.ViewModels;
 using System.Runtime.CompilerServices;
@@ -9,9 +10,22 @@ internal static class ThumbnailLifecycleController
 {
     private static readonly ConditionalWeakTable<Control, IThumbnailHost> _hostByControl = new();
     private static readonly ConditionalWeakTable<IThumbnailHost, StrongBox<int>> _bindingCountByHost = new();
+    private static readonly TimeSpan OrphanSweepInterval = TimeSpan.FromSeconds(15);
+    private static DispatcherTimer? _orphanSweepTimer;
+    private static bool _shuttingDown;
+
+    public static void BeginShutdown()
+    {
+        Dispatcher.UIThread.VerifyAccess();
+        _shuttingDown = true;
+        _orphanSweepTimer?.Stop();
+        ThumbnailCacheService.BeginShutdown();
+    }
 
     public static async Task OnAttachedAsync(Control control)
     {
+        if (_shuttingDown) return;
+        EnsureOrphanSweep();
         if (control.DataContext is not IThumbnailHost host) return;
         await LoadIntoAsync(control, host);
     }
@@ -35,6 +49,7 @@ internal static class ThumbnailLifecycleController
 
     private static async Task LoadIntoAsync(Control control, IThumbnailHost host)
     {
+        if (_shuttingDown) return;
         if (_hostByControl.TryGetValue(control, out var previous) && !ReferenceEquals(previous, host))
             Unbind(control);
 
@@ -74,6 +89,57 @@ internal static class ThumbnailLifecycleController
 
         _bindingCountByHost.Remove(host);
         host.Thumbnail = null;
+    }
+
+    private static void EnsureOrphanSweep()
+    {
+        if (_orphanSweepTimer is not null || _shuttingDown) return;
+        _orphanSweepTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = OrphanSweepInterval };
+        _orphanSweepTimer.Tick += (_, _) => SweepOrphanedLeases();
+        _orphanSweepTimer.Start();
+    }
+
+    private static void SweepOrphanedLeases()
+    {
+        if (_shuttingDown) return;
+        try
+        {
+            var (released, collected) = ThumbnailCacheService.ReleaseOrphanedLeases(static (control, thumbnailPath) =>
+                TopLevel.GetTopLevel(control) is not null
+                && control.DataContext is IThumbnailHost host
+                && string.Equals(host.ThumbnailPath, thumbnailPath, StringComparison.OrdinalIgnoreCase));
+
+            foreach (var control in released)
+            {
+                Unbind(control);
+                if (TopLevel.GetTopLevel(control) is not null && control.DataContext is IThumbnailHost current)
+                    _ = ReloadSafelyAsync(control, current);
+            }
+            if (released.Count > 0 || collected > 0)
+            {
+                AppLogger.LogErrorThrottled("ThumbnailLifecycleController.Orphans",
+                    $"Released {released.Count} preview(s) whose card missed its detach/data-context event " +
+                    $"and {collected} preview(s) of cards that were garbage-collected without being detached",
+                    new InvalidOperationException("Diagnostic: orphaned thumbnail leases"),
+                    minInterval: TimeSpan.FromMinutes(10));
+            }
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to sweep orphaned preview leases", ex);
+        }
+    }
+
+    private static async Task ReloadSafelyAsync(Control control, IThumbnailHost host)
+    {
+        try
+        {
+            await LoadIntoAsync(control, host);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to reload a preview after releasing an orphaned lease", ex);
+        }
     }
 
     private static int BindingCount(IThumbnailHost host) =>

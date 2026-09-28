@@ -1,4 +1,4 @@
-using Forza.Data;
+using ForzaToolkit.Formats;
 
 namespace LiveryGallery.Models;
 
@@ -12,7 +12,6 @@ internal enum LiveryParseSeverity
 {
     /// <summary>The file (or its main data) could not be read.</summary>
     Error,
-
     /// <summary>The main data was read; a part of the file (or an analysis of it) failed.</summary>
     Partial
 }

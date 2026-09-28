@@ -10,6 +10,8 @@ internal record LiveryCacheEntry
     public string LiveryName { get; init; } = string.Empty;
     public string Author { get; init; } = string.Empty;
     public string? AuthorIdentityTagHex { get; init; }
+    public int TextVersion { get; init; }
+    public const int CurrentTextVersion = 1;
     public ulong? CreatorUserId { get; init; }
     public bool IsPossiblyGenerated { get; init; }
     public int GenerationAlgorithmVersion { get; init; }
@@ -33,6 +35,8 @@ internal record LiveryCacheEntry
     public DateTime SourceThumbLastWriteUtc { get; init; }
     public long CLiveryLength { get; init; }
     public DateTime CLiveryLastWriteUtc { get; init; }
+    public string? AuctionToken { get; init; }
+    public string? ExternalThumbSource { get; init; }
     public DuplicateStatus DuplicateStatus { get; init; } = DuplicateStatus.Ok;
     public IReadOnlyList<DuplicateRelation>? PossibleDuplicateOf { get; init; }
 }

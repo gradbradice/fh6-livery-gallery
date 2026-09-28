@@ -10,7 +10,8 @@ namespace LiveryGallery.Views;
 
 internal partial class ConfirmDialog : Window
 {
-    public ConfirmDialog(string title, string message, string? yesText = null, string? noText = null, string iconKey = "IconFlag")
+    public ConfirmDialog(string title, string message, string? yesText = null, string? noText = null, string iconKey = "IconFlag",
+        string? optionText = null)
     {
         InitializeComponent();
         Title = title;
@@ -18,6 +19,12 @@ internal partial class ConfirmDialog : Window
         MessageText.Text = message;
         YesButton.Content = yesText ?? Strings.ButtonYes;
         NoButton.Content = noText ?? Strings.ButtonNo;
+
+        if (optionText is not null)
+        {
+            OptionCheckBox.Content = optionText;
+            OptionCheckBox.IsVisible = true;
+        }
 
         if (Application.Current?.TryGetResource(iconKey, ActualThemeVariant, out var res) == true && res is Geometry geometry)
             TitleBarIcon.Data = geometry;
@@ -33,5 +40,14 @@ internal partial class ConfirmDialog : Window
     {
         var dlg = new ConfirmDialog(title, message, yesText, noText, iconKey);
         return await dlg.ShowDialog<bool>(owner);
+    }
+
+    public static async Task<(bool Confirmed, bool OptionChecked)> AskWithOptionAsync(
+        Window owner, string title, string message, string optionText,
+        string? yesText = null, string? noText = null, string iconKey = "IconFlag")
+    {
+        var dlg = new ConfirmDialog(title, message, yesText, noText, iconKey, optionText);
+        bool confirmed = await dlg.ShowDialog<bool>(owner);
+        return (confirmed, dlg.OptionCheckBox.IsChecked == true);
     }
 }

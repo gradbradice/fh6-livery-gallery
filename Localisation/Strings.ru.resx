@@ -307,10 +307,10 @@
     <value>Неизвестен</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser (нативная библиотека): {0}</value>
+    <value>ForzaToolkit Formats Native: {0}</value>
   </data>
   <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser (пакет): {0}</value>
+    <value>ForzaToolkit Formats Package: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Настройки</value>
@@ -842,5 +842,419 @@
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
     <value>Ливрея прочитана, но часть её файла разобрать не удалось. Основные данные показаны, некоторые проверки (генерация, дубликаты) могут быть недоступны.</value>
+  </data>
+  <data name="GameFolderProblemNotSet" xml:space="preserve">
+    <value>папка игры не указана</value>
+  </data>
+  <data name="GameFolderProblemNotFound" xml:space="preserve">
+    <value>папка не существует</value>
+  </data>
+  <data name="GameFolderProblemAccessDenied" xml:space="preserve">
+    <value>нет доступа к папке</value>
+  </data>
+  <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
+    <value>это не папка игры (нет папки media)</value>
+  </data>
+  <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
+    <value>не найдена папка media\cars</value>
+  </data>
+  <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
+    <value>в media\cars нет машин</value>
+  </data>
+  <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
+    <value>не найдена папка media\Livery</value>
+  </data>
+  <data name="GameFolderProblemNoVinyls" xml:space="preserve">
+    <value>не найдены наклейки игры (media\Livery\Vinyls.zip)</value>
+  </data>
+  <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
+    <value>не удалось прочитать наклейки игры</value>
+  </data>
+  <data name="GameFolderProblemNoDecals" xml:space="preserve">
+    <value>не найдены логотипы, часть наклеек не будет нарисована</value>
+  </data>
+  <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
+    <value>часть машин не удалось прочитать</value>
+  </data>
+  <data name="GameFolderProblemUnknown" xml:space="preserve">
+    <value>папка не подходит</value>
+  </data>
+  <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
+    <value>Не найдены наклейки игры. Проверьте папку игры (media\Livery).</value>
+  </data>
+  <data name="RenderErrorGamePathInvalid" xml:space="preserve">
+    <value>Папка игры не задана или не найдена.</value>
+  </data>
+  <data name="RenderErrorCarNotFound" xml:space="preserve">
+    <value>Машины этой ливреи нет в папке игры.</value>
+  </data>
+  <data name="RenderErrorCarFormat" xml:space="preserve">
+    <value>Файлы машины не удалось прочитать.</value>
+  </data>
+  <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
+    <value>У этой машины нет раскладки ливреи.</value>
+  </data>
+  <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
+    <value>Не нарисовано фигур: {0}</value>
+  </data>
+  <data name="RenderErrorRasterLogosSkippedFormat" xml:space="preserve">
+    <value>Не нарисовано логотипов: {0}</value>
+  </data>
+  <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
+    <value>Фигур без секции: {0}</value>
+  </data>
+  <data name="RenderErrorGeneric" xml:space="preserve">
+    <value>Не удалось нарисовать ливрею.</value>
+  </data>
+  <data name="View3DGameFolderChecking" xml:space="preserve">
+    <value>3D пока недоступно: проверяется папка игры</value>
+  </data>
+  <data name="View3DTooltip" xml:space="preserve">
+    <value>Показать в 3D</value>
+  </data>
+  <data name="View3DNoCLivery" xml:space="preserve">
+    <value>3D недоступно: у ливреи нет файла C_livery</value>
+  </data>
+  <data name="View3DParseError" xml:space="preserve">
+    <value>3D недоступно: ливрею не удалось прочитать</value>
+  </data>
+  <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
+    <value>3D недоступно: {0}. Укажите папку игры в настройках.</value>
+  </data>
+  <data name="View3DDialogTitle" xml:space="preserve">
+    <value>3D-просмотр</value>
+  </data>
+  <data name="View3DReadFailed" xml:space="preserve">
+    <value>Не удалось прочитать файл ливреи. Подробности в журнале.</value>
+  </data>
+  <data name="View3DParseFailedFormat" xml:space="preserve">
+    <value>Ливрею не удалось прочитать: {0}</value>
+  </data>
+  <data name="ViewerStatsFormat" xml:space="preserve">
+    <value>{0:N0} треуг. (LOD {1}) · ливрея {2}×{3} · кадр {4}×{5}, MSAA {6}× · {7:F1} мс</value>
+  </data>
+  <data name="ViewerNoOpenGl" xml:space="preserve">
+    <value>3D-просмотр недоступен: не удалось запустить OpenGL.</value>
+  </data>
+  <data name="ViewerQualityLow" xml:space="preserve">
+    <value>Низкое</value>
+  </data>
+  <data name="ViewerQualityMedium" xml:space="preserve">
+    <value>Среднее</value>
+  </data>
+  <data name="ViewerQualityHigh" xml:space="preserve">
+    <value>Высокое</value>
+  </data>
+  <data name="ViewerQualityUltra" xml:space="preserve">
+    <value>Ультра</value>
+  </data>
+  <data name="ViewerResetView" xml:space="preserve">
+    <value>Сбросить вид</value>
+  </data>
+  <data name="ViewerTitleFormat" xml:space="preserve">
+    <value>{0} — 3D</value>
+  </data>
+  <data name="GameFolderNotSetHint" xml:space="preserve">
+    <value>Папка игры нужна для 3D-просмотра ливрей</value>
+  </data>
+  <data name="GameFolderChecking" xml:space="preserve">
+    <value>Проверка папки игры…</value>
+  </data>
+  <data name="GameFolderInvalidFormat" xml:space="preserve">
+    <value>Папка игры не подходит: {0}</value>
+  </data>
+  <data name="GameFolderValidFormat" xml:space="preserve">
+    <value>Папка игры найдена, машин: {0}</value>
+  </data>
+  <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
+    <value>Папка игры найдена, машин: {0}. Но: {1}</value>
+  </data>
+  <data name="ViewerControlsHint" xml:space="preserve">
+    <value>ЛКМ: вращать · ПКМ: сдвигать · Колесо: приблизить/отдалить · Двойной щелчок: сбросить</value>
+  </data>
+  <data name="AuctionBadgeLabel" xml:space="preserve">
+    <value>Аукцион</value>
+  </data>
+  <data name="AuctionBadgeTooltip" xml:space="preserve">
+    <value>Куплена на аукционе.
+Аукционные ливреи нельзя перемещать в архив.</value>
+  </data>
+  <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
+    <value>Аукционные ливреи нельзя перемещать в архив</value>
+  </data>
+  <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
+    <value>Аукционные ливреи нельзя перемещать в архив, поэтому выбранных ливрей осталось в игре: {0}.</value>
+  </data>
+  <data name="ContextMenuOnlyThisCar" xml:space="preserve">
+    <value>Только эта машина</value>
+  </data>
+  <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
+    <value>Только этот производитель</value>
+  </data>
+  <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
+    <value>Только этот автор</value>
+  </data>
+  <data name="ContextMenuClearQuickFilters" xml:space="preserve">
+    <value>Снова показать все</value>
+  </data>
+  <data name="QuickFiltersLabel" xml:space="preserve">
+    <value>Только:</value>
+  </data>
+  <data name="QuickFilterCarFormat" xml:space="preserve">
+    <value>Машина: {0}</value>
+  </data>
+  <data name="QuickFilterManufacturerFormat" xml:space="preserve">
+    <value>Производитель: {0}</value>
+  </data>
+  <data name="QuickFilterAuthorFormat" xml:space="preserve">
+    <value>Автор: {0}</value>
+  </data>
+  <data name="QuickFilterRemoveTooltip" xml:space="preserve">
+    <value>Убрать этот фильтр</value>
+  </data>
+  <data name="StatusAutoRefreshedFormat" xml:space="preserve">
+    <value>Сохранения изменились: +{0} / −{1}, галерея обновлена</value>
+  </data>
+  <data name="FilterAuctionLabel" xml:space="preserve">
+    <value>Аукцион</value>
+  </data>
+  <data name="AuctionFilterAll" xml:space="preserve">
+    <value>Все ливреи</value>
+  </data>
+  <data name="AuctionFilterSeparately" xml:space="preserve">
+    <value>Показывать аукционные отдельно</value>
+  </data>
+  <data name="AuctionFilterOnly" xml:space="preserve">
+    <value>Только аукционные</value>
+  </data>
+  <data name="AuctionFilterHide" xml:space="preserve">
+    <value>Скрыть аукционные</value>
+  </data>
+  <data name="SeparateAuctionGroupName" xml:space="preserve">
+    <value>Аукцион</value>
+  </data>
+  <data name="AuthorInferredTooltip" xml:space="preserve">
+    <value>В ливрее нет имени автора — оно взято из других ливрей этого же автора</value>
+  </data>
+  <data name="AuthorUnknownMessage" xml:space="preserve">
+    <value>В этой ливрее нет имени автора, и в галерее нет других ливрей этого автора, из которых его можно было бы взять.</value>
+  </data>
+  <data name="QuickFilterAddButton" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
+  <data name="QuickFilterAddTooltip" xml:space="preserve">
+    <value>Показать только одного производителя, машину или автора</value>
+  </data>
+  <data name="QuickFilterKindManufacturer" xml:space="preserve">
+    <value>Производитель</value>
+  </data>
+  <data name="QuickFilterKindCar" xml:space="preserve">
+    <value>Машина</value>
+  </data>
+  <data name="QuickFilterKindAuthor" xml:space="preserve">
+    <value>Автор</value>
+  </data>
+  <data name="QuickFilterSearchWatermark" xml:space="preserve">
+    <value>Поиск…</value>
+  </data>
+  <data name="QuickFilterPickerEmpty" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+  <data name="GroupShowOnlyButton" xml:space="preserve">
+    <value>Показать только</value>
+  </data>
+  <data name="GroupShowOnlyTooltip" xml:space="preserve">
+    <value>Показать только эту группу</value>
+  </data>
+  <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
+    <value>Машины производителя {0}</value>
+  </data>
+  <data name="SettingsSectionDuplicates" xml:space="preserve">
+    <value>Дубликаты</value>
+  </data>
+  <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
+    <value>Считать возможным дубликатом при сходстве от</value>
+  </data>
+  <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
+    <value>Менее похожие совпадения не показываются. Точные дубликаты показываются всегда. Применяется сразу, без пересканирования.</value>
+  </data>
+  <data name="LiveryRenderPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Package: {0}</value>
+  </data>
+  <data name="LiveryRenderAvaloniaPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Avalonia Package: {0}</value>
+  </data>
+  <data name="View3DDifferenceNote" xml:space="preserve">
+    <value>3D-просмотр приблизительный: цвета, материалы, освещение и некоторые детали могут выглядеть иначе, чем в игре.</value>
+  </data>
+  <data name="ServerStatusChecking" xml:space="preserve">
+    <value>Сервер: подключение…</value>
+  </data>
+  <data name="ServerStatusOnline" xml:space="preserve">
+    <value>Сервер: подключено</value>
+  </data>
+  <data name="ServerStatusSyncing" xml:space="preserve">
+    <value>Сервер: чтение сохранения…</value>
+  </data>
+  <data name="ServerStatusSaveNotSupported" xml:space="preserve">
+    <value>Сервер: сохранение пока не поддерживается</value>
+  </data>
+  <data name="ServerStatusDegraded" xml:space="preserve">
+    <value>Сервер: работает ограниченно</value>
+  </data>
+  <data name="ServerStatusMaintenance" xml:space="preserve">
+    <value>Сервер: обслуживание</value>
+  </data>
+  <data name="ServerStatusUnreachable" xml:space="preserve">
+    <value>Сервер недоступен</value>
+  </data>
+  <data name="ServerStatusNoInternet" xml:space="preserve">
+    <value>Нет подключения к интернету</value>
+  </data>
+  <data name="ServerStatusRateLimited" xml:space="preserve">
+    <value>Сервер: слишком много запросов</value>
+  </data>
+  <data name="ServerStatusUpdateRequired" xml:space="preserve">
+    <value>Сервер: обновите приложение</value>
+  </data>
+  <data name="ServerStatusAppRejected" xml:space="preserve">
+    <value>Сервер: эта сборка не принята</value>
+  </data>
+  <data name="ServerStatusCertificateError" xml:space="preserve">
+    <value>Сервер: ошибка защищённого соединения</value>
+  </data>
+  <data name="ServerStatusServerError" xml:space="preserve">
+    <value>Ошибка сервера</value>
+  </data>
+  <data name="ServerStatusNotConfigured" xml:space="preserve">
+    <value>Сервер не задан в этой сборке</value>
+  </data>
+  <data name="ServerStatusVersionFormat" xml:space="preserve">
+    <value>Сервер {0}</value>
+  </data>
+  <data name="ServerStatusRetryHint" xml:space="preserve">
+    <value>Приложение повторит попытку автоматически.</value>
+  </data>
+  <data name="ServerStatusRetryInFormat" xml:space="preserve">
+    <value>Следующая попытка через {0} с.</value>
+  </data>
+  <data name="ServerStatusUpdateHint" xml:space="preserve">
+    <value>Серверу нужна более новая версия приложения. Обновите его.</value>
+  </data>
+  <data name="ServerStatusAppRejectedHint" xml:space="preserve">
+    <value>Сервер не принимает эту сборку приложения. Используйте официальный релиз.</value>
+  </data>
+  <data name="ServerStatusCertificateHint" xml:space="preserve">
+    <value>Сертификат сервера не прошёл проверку: соединение может перехватываться (например, антивирусом или прокси). Само приложение повторять не будет.</value>
+  </data>
+  <data name="ServerStatusClickToRecheck" xml:space="preserve">
+    <value>Нажмите, чтобы проверить статус сервера</value>
+  </data>
+  <data name="ServerSyncDoneFormat" xml:space="preserve">
+    <value>Ливрей установлено на машины: {0}
+Обновлено в {1}</value>
+  </data>
+  <data name="ServerSyncProfileNotFound" xml:space="preserve">
+    <value>Файл профиля (C_ProfileData) не найден в папке сохранения.</value>
+  </data>
+  <data name="ServerSyncSaveNotSupported" xml:space="preserve">
+    <value>Сервер пока не может прочитать это сохранение — вероятно, игра обновилась. Поддержка скоро появится.</value>
+  </data>
+  <data name="ServerSyncSaveRejected" xml:space="preserve">
+    <value>Сервер сообщил, что этот файл не является корректным сохранением профиля.</value>
+  </data>
+  <data name="ServerSyncFailed" xml:space="preserve">
+    <value>Не удалось обновить установленные ливреи; приложение повторит попытку.</value>
+  </data>
+  <data name="InstalledBadgeLabel" xml:space="preserve">
+    <value>Установлена</value>
+  </data>
+  <data name="InstalledBadgeTooltip" xml:space="preserve">
+    <value>Установлена на машину в игре</value>
+  </data>
+  <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
+    <value>Установлена на машины в игре: {0}</value>
+  </data>
+  <data name="SettingsSectionServer" xml:space="preserve">
+    <value>Сервер данных ливрей</value>
+  </data>
+  <data name="ServerConnectionLabel" xml:space="preserve">
+    <value>Подключаться к серверу для определения установленных ливрей</value>
+  </data>
+  <data name="ServerConnectionDescription" xml:space="preserve">
+    <value>Для определения ливрей, установленных на автомобили, приложение передаёт файл сохранения (C_ProfileData) на сервер. Файл обрабатывается исключительно для получения информации об установленных ливреях и не сохраняется на сервере.
+
+Данные из файла сохранения не сохраняются и не используются в иных целях. Сервер используется для безопасного хранения ключей, необходимых для расшифровки файла сохранения.
+
+Сервер не связан с официальными серверами Forza Horizon, Xbox или Microsoft.</value>
+  </data>
+  <data name="ServerConsentMessage" xml:space="preserve">
+    <value>Для определения ливрей, установленных на автомобили, приложение передаёт файл сохранения (C_ProfileData) на сервер. Файл обрабатывается исключительно для получения информации об установленных ливреях и не сохраняется на сервере.
+
+Данные из файла сохранения не сохраняются и не используются в иных целях. Сервер используется для безопасного хранения ключей, необходимых для расшифровки файла сохранения.
+
+Сервер не связан с официальными серверами Forza Horizon, Xbox или Microsoft.
+
+Данные передаются на сервер только с вашего согласия. Включить подключение к серверу?</value>
+  </data>
+  <data name="ServerConsentTitle" xml:space="preserve">
+    <value>Подключение к серверу данных ливрей</value>
+  </data>
+  <data name="ServerConsentAccept" xml:space="preserve">
+    <value>Да, я всё понимаю и хочу продолжить</value>
+  </data>
+  <data name="FilterInstalledLabel" xml:space="preserve">
+    <value>Установленные ливреи</value>
+  </data>
+  <data name="InstalledAllToggle" xml:space="preserve">
+    <value>Все ливреи</value>
+  </data>
+  <data name="InstalledFirstToggle" xml:space="preserve">
+    <value>Сначала установленные</value>
+  </data>
+  <data name="OnlyInstalledToggle" xml:space="preserve">
+    <value>Только установленные</value>
+  </data>
+  <data name="FilterValueUnavailable" xml:space="preserve">
+    <value>Выкл.</value>
+  </data>
+  <data name="InstalledFilterNeedsServer" xml:space="preserve">
+    <value>Включите в настройках подключение к серверу данных ливрей, чтобы определить установленные ливреи.</value>
+  </data>
+  <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
+    <value>Некоторые папки не удалось удалить из прежнего места — вероятно, какой-то файл в них занят (запущена игра?). Ничего не потеряно: актуальная копия полная. Эти остатки больше не нужны, их можно удалить:
+{0}</value>
+  </data>
+  <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Ливреи, установленные на машины в игре, нельзя перемещать в архив</value>
+  </data>
+  <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
+    <value>Ливреи, установленные на машины в игре, нельзя перемещать в архив, поэтому выбранных ливрей осталось в игре: {0}.</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
+    <value>Приложению неизвестно, какие ливреи установлены на машины. Отправка ливреи в архив небезопасна, так как ливрея может быть установлена на машину в игре.
+
+Вы хотите отправить ливрею в архив?</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
+    <value>Приложению неизвестно, какие ливреи установлены на машины. Отправка ливрей в архив небезопасна, так как ливреи могут быть установлены на машины в игре.
+
+Вы хотите отправить ливреи в архив?</value>
+  </data>
+  <data name="DontShowAgainCheckBox" xml:space="preserve">
+    <value>Не показывать снова</value>
+  </data>
+  <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Аукционные ливреи и ливреи, установленные на машины в игре, нельзя перемещать в архив</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
+    <value>Файл сохранения изменился после последней синхронизации, и новые данные ещё не были отправлены на сервер ливрей. Список установленных ливрей может быть устаревшим, поэтому отправка ливреи в архив небезопасна: ливрея может быть установлена на машину в игре.
+
+Рекомендуем дождаться синхронизации (она выполняется автоматически и может занять несколько минут) и повторить попытку. Вы хотите отправить ливрею в архив сейчас?</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
+    <value>Файл сохранения изменился после последней синхронизации, и новые данные ещё не были отправлены на сервер ливрей. Список установленных ливрей может быть устаревшим, поэтому отправка ливрей в архив небезопасна: ливреи могут быть установлены на машины в игре.
+
+Рекомендуем дождаться синхронизации (она выполняется автоматически и может занять несколько минут) и повторить попытку. Вы хотите отправить ливреи в архив сейчас?</value>
   </data>
 </root>

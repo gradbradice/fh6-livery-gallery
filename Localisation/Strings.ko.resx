@@ -307,10 +307,10 @@
     <value>알 수 없음</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser(네이티브): {0}</value>
+    <value>ForzaToolkit Formats Native: {0}</value>
   </data>
   <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser(패키지): {0}</value>
+    <value>ForzaToolkit Formats Package: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>설정</value>
@@ -842,5 +842,419 @@
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
     <value>리버리를 읽었지만 파일의 일부를 분석하지 못했습니다. 주요 데이터는 표시되며, 일부 검사(생성, 중복)는 사용할 수 없을 수 있습니다.</value>
+  </data>
+  <data name="GameFolderProblemNotSet" xml:space="preserve">
+    <value>게임 폴더가 설정되지 않았습니다</value>
+  </data>
+  <data name="GameFolderProblemNotFound" xml:space="preserve">
+    <value>폴더가 존재하지 않습니다</value>
+  </data>
+  <data name="GameFolderProblemAccessDenied" xml:space="preserve">
+    <value>폴더에 접근할 수 없습니다</value>
+  </data>
+  <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
+    <value>게임 폴더가 아닙니다(media 폴더 없음)</value>
+  </data>
+  <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
+    <value>media\cars를 찾을 수 없습니다</value>
+  </data>
+  <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
+    <value>media\cars에 차량이 없습니다</value>
+  </data>
+  <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
+    <value>media\Livery를 찾을 수 없습니다</value>
+  </data>
+  <data name="GameFolderProblemNoVinyls" xml:space="preserve">
+    <value>게임의 비닐을 찾을 수 없습니다(media\Livery\Vinyls.zip)</value>
+  </data>
+  <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
+    <value>게임의 비닐을 읽을 수 없습니다</value>
+  </data>
+  <data name="GameFolderProblemNoDecals" xml:space="preserve">
+    <value>로고를 찾을 수 없어 일부 데칼이 그려지지 않습니다</value>
+  </data>
+  <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
+    <value>일부 차량을 읽을 수 없습니다</value>
+  </data>
+  <data name="GameFolderProblemUnknown" xml:space="preserve">
+    <value>이 폴더는 사용할 수 없습니다</value>
+  </data>
+  <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
+    <value>게임의 비닐을 찾을 수 없습니다. 게임 폴더(media\Livery)를 확인하세요.</value>
+  </data>
+  <data name="RenderErrorGamePathInvalid" xml:space="preserve">
+    <value>게임 폴더가 설정되지 않았거나 찾을 수 없습니다.</value>
+  </data>
+  <data name="RenderErrorCarNotFound" xml:space="preserve">
+    <value>이 리버리의 차량이 게임 폴더에 없습니다.</value>
+  </data>
+  <data name="RenderErrorCarFormat" xml:space="preserve">
+    <value>차량 파일을 읽을 수 없습니다.</value>
+  </data>
+  <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
+    <value>이 차량에는 리버리 레이아웃이 없습니다.</value>
+  </data>
+  <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
+    <value>그려지지 않은 도형: {0}</value>
+  </data>
+  <data name="RenderErrorRasterLogosSkippedFormat" xml:space="preserve">
+    <value>그려지지 않은 로고: {0}</value>
+  </data>
+  <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
+    <value>섹션이 없는 도형: {0}</value>
+  </data>
+  <data name="RenderErrorGeneric" xml:space="preserve">
+    <value>리버리를 그릴 수 없습니다.</value>
+  </data>
+  <data name="View3DGameFolderChecking" xml:space="preserve">
+    <value>아직 3D를 사용할 수 없습니다: 게임 폴더 확인 중</value>
+  </data>
+  <data name="View3DTooltip" xml:space="preserve">
+    <value>3D로 보기</value>
+  </data>
+  <data name="View3DNoCLivery" xml:space="preserve">
+    <value>3D를 사용할 수 없습니다: 리버리에 C_livery 파일이 없습니다</value>
+  </data>
+  <data name="View3DParseError" xml:space="preserve">
+    <value>3D를 사용할 수 없습니다: 리버리를 읽을 수 없습니다</value>
+  </data>
+  <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
+    <value>3D를 사용할 수 없습니다: {0}. 설정에서 게임 폴더를 지정하세요.</value>
+  </data>
+  <data name="View3DDialogTitle" xml:space="preserve">
+    <value>3D 보기</value>
+  </data>
+  <data name="View3DReadFailed" xml:space="preserve">
+    <value>리버리 파일을 읽을 수 없습니다. 자세한 내용은 로그를 확인하세요.</value>
+  </data>
+  <data name="View3DParseFailedFormat" xml:space="preserve">
+    <value>리버리를 읽을 수 없습니다: {0}</value>
+  </data>
+  <data name="ViewerStatsFormat" xml:space="preserve">
+    <value>삼각형 {0:N0}개 (LOD {1}) · 리버리 {2}×{3} · 프레임 {4}×{5}, MSAA {6}× · {7:F1} ms</value>
+  </data>
+  <data name="ViewerNoOpenGl" xml:space="preserve">
+    <value>3D 보기를 사용할 수 없습니다: OpenGL을 초기화할 수 없습니다.</value>
+  </data>
+  <data name="ViewerQualityLow" xml:space="preserve">
+    <value>낮음</value>
+  </data>
+  <data name="ViewerQualityMedium" xml:space="preserve">
+    <value>보통</value>
+  </data>
+  <data name="ViewerQualityHigh" xml:space="preserve">
+    <value>높음</value>
+  </data>
+  <data name="ViewerQualityUltra" xml:space="preserve">
+    <value>울트라</value>
+  </data>
+  <data name="ViewerResetView" xml:space="preserve">
+    <value>보기 초기화</value>
+  </data>
+  <data name="ViewerTitleFormat" xml:space="preserve">
+    <value>{0} — 3D</value>
+  </data>
+  <data name="GameFolderNotSetHint" xml:space="preserve">
+    <value>리버리 3D 보기에는 게임 폴더가 필요합니다</value>
+  </data>
+  <data name="GameFolderChecking" xml:space="preserve">
+    <value>게임 폴더 확인 중…</value>
+  </data>
+  <data name="GameFolderInvalidFormat" xml:space="preserve">
+    <value>이 게임 폴더는 사용할 수 없습니다: {0}</value>
+  </data>
+  <data name="GameFolderValidFormat" xml:space="preserve">
+    <value>게임 폴더를 찾았습니다. 차량: {0}</value>
+  </data>
+  <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
+    <value>게임 폴더를 찾았습니다. 차량: {0}. 단: {1}</value>
+  </data>
+  <data name="ViewerControlsHint" xml:space="preserve">
+    <value>왼쪽 드래그: 회전 · 오른쪽 드래그: 이동 · 휠: 확대/축소 · 더블 클릭: 초기화</value>
+  </data>
+  <data name="AuctionBadgeLabel" xml:space="preserve">
+    <value>경매</value>
+  </data>
+  <data name="AuctionBadgeTooltip" xml:space="preserve">
+    <value>경매장에서 구매한 도장입니다.
+경매 도장은 보관함으로 이동할 수 없습니다.</value>
+  </data>
+  <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
+    <value>경매 도장은 보관함으로 이동할 수 없습니다</value>
+  </data>
+  <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
+    <value>경매 도장은 보관함으로 이동할 수 없어 선택한 도장 중 {0}개는 게임에 남아 있습니다.</value>
+  </data>
+  <data name="ContextMenuOnlyThisCar" xml:space="preserve">
+    <value>이 차량만</value>
+  </data>
+  <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
+    <value>이 제조사만</value>
+  </data>
+  <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
+    <value>이 작성자만</value>
+  </data>
+  <data name="ContextMenuClearQuickFilters" xml:space="preserve">
+    <value>다시 모두 표시</value>
+  </data>
+  <data name="QuickFiltersLabel" xml:space="preserve">
+    <value>필터:</value>
+  </data>
+  <data name="QuickFilterCarFormat" xml:space="preserve">
+    <value>차량: {0}</value>
+  </data>
+  <data name="QuickFilterManufacturerFormat" xml:space="preserve">
+    <value>제조사: {0}</value>
+  </data>
+  <data name="QuickFilterAuthorFormat" xml:space="preserve">
+    <value>작성자: {0}</value>
+  </data>
+  <data name="QuickFilterRemoveTooltip" xml:space="preserve">
+    <value>이 필터 제거</value>
+  </data>
+  <data name="StatusAutoRefreshedFormat" xml:space="preserve">
+    <value>저장 데이터 변경: +{0} / −{1}, 갤러리를 새로 고쳤습니다</value>
+  </data>
+  <data name="FilterAuctionLabel" xml:space="preserve">
+    <value>경매</value>
+  </data>
+  <data name="AuctionFilterAll" xml:space="preserve">
+    <value>모든 도장</value>
+  </data>
+  <data name="AuctionFilterSeparately" xml:space="preserve">
+    <value>경매 도장 따로 표시</value>
+  </data>
+  <data name="AuctionFilterOnly" xml:space="preserve">
+    <value>경매 도장만</value>
+  </data>
+  <data name="AuctionFilterHide" xml:space="preserve">
+    <value>경매 도장 숨기기</value>
+  </data>
+  <data name="SeparateAuctionGroupName" xml:space="preserve">
+    <value>경매</value>
+  </data>
+  <data name="AuthorInferredTooltip" xml:space="preserve">
+    <value>이 도장에는 작성자 이름이 없어 같은 작성자의 다른 도장에서 가져왔습니다</value>
+  </data>
+  <data name="AuthorUnknownMessage" xml:space="preserve">
+    <value>이 도장에는 작성자 이름이 없으며, 갤러리에 같은 작성자의 다른 도장도 없어 이름을 가져올 수 없습니다.</value>
+  </data>
+  <data name="QuickFilterAddButton" xml:space="preserve">
+    <value>필터</value>
+  </data>
+  <data name="QuickFilterAddTooltip" xml:space="preserve">
+    <value>제조사, 차량 또는 작성자 하나만 표시</value>
+  </data>
+  <data name="QuickFilterKindManufacturer" xml:space="preserve">
+    <value>제조사</value>
+  </data>
+  <data name="QuickFilterKindCar" xml:space="preserve">
+    <value>차량</value>
+  </data>
+  <data name="QuickFilterKindAuthor" xml:space="preserve">
+    <value>작성자</value>
+  </data>
+  <data name="QuickFilterSearchWatermark" xml:space="preserve">
+    <value>검색…</value>
+  </data>
+  <data name="QuickFilterPickerEmpty" xml:space="preserve">
+    <value>결과 없음</value>
+  </data>
+  <data name="GroupShowOnlyButton" xml:space="preserve">
+    <value>이것만</value>
+  </data>
+  <data name="GroupShowOnlyTooltip" xml:space="preserve">
+    <value>이 그룹만 표시</value>
+  </data>
+  <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
+    <value>{0} 차량</value>
+  </data>
+  <data name="SettingsSectionDuplicates" xml:space="preserve">
+    <value>중복</value>
+  </data>
+  <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
+    <value>중복 가능으로 표시할 유사도 기준</value>
+  </data>
+  <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
+    <value>이보다 유사도가 낮은 항목은 표시되지 않습니다. 완전한 중복은 항상 표시됩니다. 다시 스캔하지 않아도 바로 적용됩니다.</value>
+  </data>
+  <data name="LiveryRenderPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Package: {0}</value>
+  </data>
+  <data name="LiveryRenderAvaloniaPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Avalonia Package: {0}</value>
+  </data>
+  <data name="View3DDifferenceNote" xml:space="preserve">
+    <value>3D 보기는 근사치입니다. 색상, 재질, 조명 및 일부 세부 사항이 게임과 다르게 보일 수 있습니다.</value>
+  </data>
+  <data name="ServerStatusChecking" xml:space="preserve">
+    <value>서버: 연결 중…</value>
+  </data>
+  <data name="ServerStatusOnline" xml:space="preserve">
+    <value>서버: 연결됨</value>
+  </data>
+  <data name="ServerStatusSyncing" xml:space="preserve">
+    <value>서버: 저장 데이터 읽는 중…</value>
+  </data>
+  <data name="ServerStatusSaveNotSupported" xml:space="preserve">
+    <value>서버: 저장 데이터 아직 미지원</value>
+  </data>
+  <data name="ServerStatusDegraded" xml:space="preserve">
+    <value>서버: 제한적 작동</value>
+  </data>
+  <data name="ServerStatusMaintenance" xml:space="preserve">
+    <value>서버: 점검 중</value>
+  </data>
+  <data name="ServerStatusUnreachable" xml:space="preserve">
+    <value>서버에 연결할 수 없음</value>
+  </data>
+  <data name="ServerStatusNoInternet" xml:space="preserve">
+    <value>인터넷 연결 없음</value>
+  </data>
+  <data name="ServerStatusRateLimited" xml:space="preserve">
+    <value>서버: 요청이 너무 많음</value>
+  </data>
+  <data name="ServerStatusUpdateRequired" xml:space="preserve">
+    <value>서버: 앱을 업데이트하세요</value>
+  </data>
+  <data name="ServerStatusAppRejected" xml:space="preserve">
+    <value>서버: 이 빌드는 허용되지 않음</value>
+  </data>
+  <data name="ServerStatusCertificateError" xml:space="preserve">
+    <value>서버: 보안 연결 실패</value>
+  </data>
+  <data name="ServerStatusServerError" xml:space="preserve">
+    <value>서버 오류</value>
+  </data>
+  <data name="ServerStatusNotConfigured" xml:space="preserve">
+    <value>이 빌드에는 서버가 설정되지 않음</value>
+  </data>
+  <data name="ServerStatusVersionFormat" xml:space="preserve">
+    <value>서버 {0}</value>
+  </data>
+  <data name="ServerStatusRetryHint" xml:space="preserve">
+    <value>자동으로 다시 시도합니다.</value>
+  </data>
+  <data name="ServerStatusRetryInFormat" xml:space="preserve">
+    <value>{0}초 후 다시 시도합니다.</value>
+  </data>
+  <data name="ServerStatusUpdateHint" xml:space="preserve">
+    <value>서버에 더 새로운 앱 버전이 필요합니다. 업데이트하세요.</value>
+  </data>
+  <data name="ServerStatusAppRejectedHint" xml:space="preserve">
+    <value>서버가 이 앱 빌드를 허용하지 않습니다. 공식 릴리스를 사용하세요.</value>
+  </data>
+  <data name="ServerStatusCertificateHint" xml:space="preserve">
+    <value>서버 인증서 확인에 실패했습니다. 연결이 가로채지고 있을 수 있습니다(예: 백신 프로그램, 프록시). 자동으로 다시 시도하지 않습니다.</value>
+  </data>
+  <data name="ServerStatusClickToRecheck" xml:space="preserve">
+    <value>클릭하여 서버 상태 확인</value>
+  </data>
+  <data name="ServerSyncDoneFormat" xml:space="preserve">
+    <value>차량에 적용된 도장: {0}
+{1}에 업데이트</value>
+  </data>
+  <data name="ServerSyncProfileNotFound" xml:space="preserve">
+    <value>저장 폴더에서 프로필 파일(C_ProfileData)을 찾을 수 없습니다.</value>
+  </data>
+  <data name="ServerSyncSaveNotSupported" xml:space="preserve">
+    <value>서버가 아직 이 저장 데이터를 읽을 수 없습니다. 게임이 업데이트된 것 같습니다. 곧 지원될 예정입니다.</value>
+  </data>
+  <data name="ServerSyncSaveRejected" xml:space="preserve">
+    <value>서버에 따르면 이 파일은 올바른 프로필 저장 데이터가 아닙니다.</value>
+  </data>
+  <data name="ServerSyncFailed" xml:space="preserve">
+    <value>적용된 도장을 업데이트하지 못했습니다. 다시 시도합니다.</value>
+  </data>
+  <data name="InstalledBadgeLabel" xml:space="preserve">
+    <value>적용됨</value>
+  </data>
+  <data name="InstalledBadgeTooltip" xml:space="preserve">
+    <value>게임에서 차량에 적용됨</value>
+  </data>
+  <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
+    <value>게임에서 차량 {0}대에 적용됨</value>
+  </data>
+  <data name="SettingsSectionServer" xml:space="preserve">
+    <value>도장 데이터 서버</value>
+  </data>
+  <data name="ServerConnectionLabel" xml:space="preserve">
+    <value>서버에 연결하여 적용된 도장 확인</value>
+  </data>
+  <data name="ServerConnectionDescription" xml:space="preserve">
+    <value>차량에 적용된 도장을 확인하기 위해 애플리케이션은 저장 파일(C_ProfileData)을 서버로 전송합니다. 파일은 적용된 도장 정보를 얻기 위한 목적으로만 처리되며 서버에 저장되지 않습니다.
+
+저장 파일의 데이터는 저장되거나 다른 목적으로 사용되지 않습니다. 서버는 저장 파일 복호화에 필요한 키를 안전하게 보관하기 위해 사용됩니다.
+
+이 서버는 Forza Horizon, Xbox 또는 Microsoft의 공식 서버와 관련이 없습니다.</value>
+  </data>
+  <data name="ServerConsentMessage" xml:space="preserve">
+    <value>차량에 적용된 도장을 확인하기 위해 애플리케이션은 저장 파일(C_ProfileData)을 서버로 전송합니다. 파일은 적용된 도장 정보를 얻기 위한 목적으로만 처리되며 서버에 저장되지 않습니다.
+
+저장 파일의 데이터는 저장되거나 다른 목적으로 사용되지 않습니다. 서버는 저장 파일 복호화에 필요한 키를 안전하게 보관하기 위해 사용됩니다.
+
+이 서버는 Forza Horizon, Xbox 또는 Microsoft의 공식 서버와 관련이 없습니다.
+
+데이터는 사용자의 동의가 있는 경우에만 서버로 전송됩니다. 서버 연결을 활성화하시겠습니까?</value>
+  </data>
+  <data name="ServerConsentTitle" xml:space="preserve">
+    <value>도장 데이터 서버 연결</value>
+  </data>
+  <data name="ServerConsentAccept" xml:space="preserve">
+    <value>네, 모두 이해했으며 계속하겠습니다</value>
+  </data>
+  <data name="FilterInstalledLabel" xml:space="preserve">
+    <value>적용된 도장</value>
+  </data>
+  <data name="InstalledAllToggle" xml:space="preserve">
+    <value>모든 도장</value>
+  </data>
+  <data name="InstalledFirstToggle" xml:space="preserve">
+    <value>적용된 도장 먼저</value>
+  </data>
+  <data name="OnlyInstalledToggle" xml:space="preserve">
+    <value>적용된 도장만</value>
+  </data>
+  <data name="FilterValueUnavailable" xml:space="preserve">
+    <value>꺼짐</value>
+  </data>
+  <data name="InstalledFilterNeedsServer" xml:space="preserve">
+    <value>적용된 도장을 확인하려면 설정에서 도장 데이터 서버 연결을 활성화하세요.</value>
+  </data>
+  <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
+    <value>일부 폴더를 이전 위치에서 삭제하지 못했습니다. 폴더 안의 파일이 사용 중인 것 같습니다(게임이 실행 중인가요?). 손실된 데이터는 없으며 유효한 사본은 완전합니다. 다음 남은 폴더는 더 이상 필요 없으므로 삭제해도 됩니다:
+{0}</value>
+  </data>
+  <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>게임에서 차량에 적용된 도장은 보관함으로 이동할 수 없습니다</value>
+  </data>
+  <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
+    <value>게임에서 차량에 적용된 도장은 보관함으로 이동할 수 없어 선택한 도장 중 {0}개는 게임에 남아 있습니다.</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
+    <value>어떤 도장이 차량에 적용되어 있는지 알 수 없으므로 이 도장을 보관함으로 이동하는 것은 안전하지 않습니다. 게임에서 차량에 적용되어 있을 수 있습니다.
+
+도장을 보관함으로 이동할까요?</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
+    <value>어떤 도장이 차량에 적용되어 있는지 알 수 없으므로 이 도장들을 보관함으로 이동하는 것은 안전하지 않습니다. 일부가 게임에서 차량에 적용되어 있을 수 있습니다.
+
+도장을 보관함으로 이동할까요?</value>
+  </data>
+  <data name="DontShowAgainCheckBox" xml:space="preserve">
+    <value>다시 표시하지 않음</value>
+  </data>
+  <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>경매 도장과 게임에서 차량에 적용된 도장은 보관함으로 이동할 수 없습니다</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
+    <value>마지막 동기화 이후 저장 파일이 변경되었지만 새 데이터가 아직 도장 서버로 전송되지 않았습니다. 차량에 적용된 도장 목록이 최신이 아닐 수 있으므로 이 도장을 보관함으로 이동하는 것은 안전하지 않습니다. 게임에서 차량에 적용되어 있을 수 있습니다.
+
+동기화(자동으로 진행되며 몇 분 걸릴 수 있음)를 기다린 후 다시 시도하는 것이 좋습니다. 지금 도장을 보관함으로 이동할까요?</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
+    <value>마지막 동기화 이후 저장 파일이 변경되었지만 새 데이터가 아직 도장 서버로 전송되지 않았습니다. 차량에 적용된 도장 목록이 최신이 아닐 수 있으므로 이 도장들을 보관함으로 이동하는 것은 안전하지 않습니다. 일부가 게임에서 차량에 적용되어 있을 수 있습니다.
+
+동기화(자동으로 진행되며 몇 분 걸릴 수 있음)를 기다린 후 다시 시도하는 것이 좋습니다. 지금 도장을 보관함으로 이동할까요?</value>
   </data>
 </root>

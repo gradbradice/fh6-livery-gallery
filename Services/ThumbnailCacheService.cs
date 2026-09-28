@@ -26,28 +26,39 @@ internal static class ThumbnailCacheService
 
     private enum LeaseState { Pending, Holding, Empty, Released }
 
-    private sealed class Lease(string thumbnailPath)
+    private sealed class Lease(string thumbnailPath, Control control)
     {
         public string ThumbnailPath { get; } = thumbnailPath;
+        public WeakReference<Control> Owner { get; } = new(control);
         public LeaseState State = LeaseState.Pending;
         public PendingLoad? Pending;
-
-        ~Lease()
-        {
-            if (State is LeaseState.Released or LeaseState.Empty) return;
-            var lease = this;
-            Dispatcher.UIThread.Post(() => ReleaseLease(lease), DispatcherPriority.Background);
-        }
     }
 
+    private readonly record struct RecentBitmap(string Path, Bitmap Bitmap, long Bytes);
     private const int RecentlyReleasedCapacity = 48;
+    private const long RecentlyReleasedMaxBytes = 32L * 1024 * 1024;
+    private const int UrgentDisposalThreshold = 16;
+    private static readonly List<Bitmap> _pendingDisposal = [];
+    private static bool _disposalScheduled;
     private const int MaxDecodeWidth = 400;
 
     private static readonly Dictionary<string, CacheEntry> _cache = [];
-    private static readonly LinkedList<(string Path, Bitmap Bitmap)> _recentlyReleased = new();
-    private static readonly Dictionary<string, LinkedListNode<(string Path, Bitmap Bitmap)>> _recentlyReleasedByPath = [];
+    private static readonly LinkedList<RecentBitmap> _recentlyReleased = new();
+    private static readonly Dictionary<string, LinkedListNode<RecentBitmap>> _recentlyReleasedByPath = [];
+    private static long _recentlyReleasedBytes;
     private static readonly Dictionary<string, PendingLoad> _inFlightLoads = [];
     private static readonly ConditionalWeakTable<Control, Lease> _leaseByControl = [];
+    private static readonly HashSet<Lease> _activeLeases = [];
+    private static volatile bool _shuttingDown;
+
+    public readonly record struct Statistics(
+        int CachedBitmaps, int ActiveLeases, int InFlightLoads, int RecentlyReleased, long RecentlyReleasedBytes);
+
+    public static Statistics GetStatistics()
+    {
+        Dispatcher.UIThread.VerifyAccess();
+        return new Statistics(_cache.Count, _activeLeases.Count, _inFlightLoads.Count, _recentlyReleased.Count, _recentlyReleasedBytes);
+    }
 
     public static async Task<(bool WasSuperseded, Bitmap? Bitmap)> AcquireForAsync(Control control, string? thumbnailPath)
     {
@@ -55,14 +66,15 @@ internal static class ThumbnailCacheService
         _leaseByControl.TryGetValue(control, out var previousLease);
         _leaseByControl.Remove(control);
 
-        if (string.IsNullOrEmpty(thumbnailPath))
+        if (string.IsNullOrEmpty(thumbnailPath) || _shuttingDown)
         {
             if (previousLease is not null) ReleaseLease(previousLease);
             return (false, null);
         }
 
-        var lease = new Lease(thumbnailPath);
+        var lease = new Lease(thumbnailPath, control);
         _leaseByControl.AddOrUpdate(control, lease);
+        _activeLeases.Add(lease);
 
         while (true)
         {
@@ -123,8 +135,34 @@ internal static class ThumbnailCacheService
             }
 
             lease.State = LeaseState.Empty;
+            _activeLeases.Remove(lease);
             return (false, null);
         }
+    }
+
+    public static (List<Control> Released, int Collected) ReleaseOrphanedLeases(Func<Control, string, bool> isStillShowing)
+    {
+        Dispatcher.UIThread.VerifyAccess();
+        if (_activeLeases.Count == 0) return ([], 0);
+
+        List<Control> released = [];
+        int collected = 0;
+        foreach (var lease in _activeLeases.ToList())
+        {
+            if (!lease.Owner.TryGetTarget(out var control))
+            {
+                ReleaseLease(lease);
+                collected++;
+                continue;
+            }
+
+            if (isStillShowing(control, lease.ThumbnailPath)) continue;
+            if (_leaseByControl.TryGetValue(control, out var mapped) && ReferenceEquals(mapped, lease))
+                _leaseByControl.Remove(control);
+            ReleaseLease(lease);
+            released.Add(control);
+        }
+        return (released, collected);
     }
 
     public static void ReleaseFor(Control control)
@@ -134,6 +172,8 @@ internal static class ThumbnailCacheService
         _leaseByControl.Remove(control);
         ReleaseLease(lease);
     }
+
+    public static void BeginShutdown() => _shuttingDown = true;
 
     private static void Publish(string thumbnailPath, PendingLoad pending, Bitmap? loaded)
     {
@@ -180,6 +220,7 @@ internal static class ThumbnailCacheService
 
         lease.State = LeaseState.Released;
         lease.Pending = null;
+        _activeLeases.Remove(lease);
     }
 
     private static void Release(string thumbnailPath)
@@ -195,28 +236,26 @@ internal static class ThumbnailCacheService
 
     private static void AddRecentlyReleased(string thumbnailPath, Bitmap bitmap)
     {
-        if (_recentlyReleasedByPath.Remove(thumbnailPath, out var stale))
-        {
-            _recentlyReleased.Remove(stale);
-            if (!ReferenceEquals(stale.Value.Bitmap, bitmap)) DisposeLater(stale.Value.Bitmap);
-        }
+        if (_recentlyReleasedByPath.TryGetValue(thumbnailPath, out var stale))
+            RemoveRecent(stale, dispose: !ReferenceEquals(stale.Value.Bitmap, bitmap));
 
-        _recentlyReleasedByPath[thumbnailPath] = _recentlyReleased.AddLast((thumbnailPath, bitmap));
+        var recent = new RecentBitmap(thumbnailPath, bitmap, EstimateBytes(bitmap));
+        _recentlyReleasedByPath[thumbnailPath] = _recentlyReleased.AddLast(recent);
+        _recentlyReleasedBytes += recent.Bytes;
 
-        while (_recentlyReleased.Count > RecentlyReleasedCapacity && _recentlyReleased.First is { } oldest)
+        while ((_recentlyReleased.Count > RecentlyReleasedCapacity || _recentlyReleasedBytes > RecentlyReleasedMaxBytes)
+            && _recentlyReleased.First is { } oldest)
         {
-            _recentlyReleased.RemoveFirst();
-            _recentlyReleasedByPath.Remove(oldest.Value.Path);
-            DisposeLater(oldest.Value.Bitmap);
+            RemoveRecent(oldest, dispose: true);
         }
     }
 
     private static bool TryTakeRecentlyReleased(string thumbnailPath, out Bitmap bitmap)
     {
-        if (_recentlyReleasedByPath.Remove(thumbnailPath, out var node))
+        if (_recentlyReleasedByPath.TryGetValue(thumbnailPath, out var node))
         {
-            _recentlyReleased.Remove(node);
             bitmap = node.Value.Bitmap;
+            RemoveRecent(node, dispose: false);
             return true;
         }
 
@@ -224,8 +263,61 @@ internal static class ThumbnailCacheService
         return false;
     }
 
-    private static void DisposeLater(Bitmap bitmap) =>
-        Dispatcher.UIThread.Post(bitmap.Dispose, DispatcherPriority.Background);
+    private static void RemoveRecent(LinkedListNode<RecentBitmap> node, bool dispose)
+    {
+        _recentlyReleased.Remove(node);
+        _recentlyReleasedByPath.Remove(node.Value.Path);
+        _recentlyReleasedBytes -= node.Value.Bytes;
+        if (dispose) DisposeLater(node.Value.Bitmap);
+    }
+
+    private static long EstimateBytes(Bitmap bitmap)
+    {
+        try
+        {
+            var size = bitmap.PixelSize;
+            return (long)size.Width * size.Height * 4; // decoded as 32 bpp
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogErrorThrottled("ThumbnailCacheService.EstimateBytes", "Failed to read the size of a preview bitmap", ex);
+            return (long)MaxDecodeWidth * MaxDecodeWidth * 4;
+        }
+    }
+
+    private static void DisposeLater(Bitmap bitmap)
+    {
+        _pendingDisposal.Add(bitmap);
+        if (!_disposalScheduled)
+        {
+            _disposalScheduled = true;
+            Dispatcher.UIThread.Post(FlushPendingDisposals, DispatcherPriority.Background);
+        }
+        else if (_pendingDisposal.Count == UrgentDisposalThreshold)
+        {
+            Dispatcher.UIThread.Post(FlushPendingDisposals, DispatcherPriority.Normal);
+        }
+    }
+
+    private static void FlushPendingDisposals()
+    {
+        _disposalScheduled = false;
+        if (_pendingDisposal.Count == 0) return;
+
+        var batch = _pendingDisposal.ToArray();
+        _pendingDisposal.Clear();
+        foreach (var bitmap in batch)
+        {
+            try
+            {
+                bitmap.Dispose();
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogErrorThrottled("ThumbnailCacheService.Dispose", "Failed to dispose a preview bitmap", ex);
+            }
+        }
+    }
 
     private static async Task<LoadResult> LoadWhenStillNeededAsync(string path, PendingLoad pending)
     {
@@ -233,6 +325,7 @@ internal static class ThumbnailCacheService
         try
         {
             if (Volatile.Read(ref pending.Reservations) <= 0) return new LoadResult(null, Skipped: true);
+            if (_shuttingDown) return new LoadResult(null, Skipped: false);
             return new LoadResult(LoadBitmap(path), Skipped: false);
         }
         finally

@@ -1,0 +1,60 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:LiveryGallery.Views"
+        x:Class="LiveryGallery.Views.LiveryViewerWindow"
+        Width="1100" Height="700" MinWidth="640" MinHeight="420"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource BgBrush}"
+        WindowDecorations="BorderOnly"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1">
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <Border Grid.Row="0" Background="{DynamicResource ToolbarBrush}" Height="36"
+                PointerPressed="TitleBar_PointerPressed">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <TextBlock x:Name="TitleBarText" Grid.Column="0" Margin="12,0,0,0" FontSize="12"
+                           VerticalAlignment="Center" IsHitTestVisible="False"
+                           TextTrimming="CharacterEllipsis"
+                           Foreground="{DynamicResource TextSecondaryBrush}" />
+                <Button Grid.Column="1" Classes="titlebar" Click="MaximizeButton_Click">
+                    <TextBlock x:Name="MaximizeIcon" Text="&#xE922;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                </Button>
+                <Button Grid.Column="2" Classes="titlebar close" Click="CloseButton_Click">
+                    <TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*" Margin="12,10,12,6">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+            <ComboBox x:Name="QualityBox" Classes="modern" Width="180" VerticalAlignment="Center">
+                <ComboBoxItem x:Name="QualityLowItem" />
+                <ComboBoxItem x:Name="QualityMediumItem" />
+                <ComboBoxItem x:Name="QualityHighItem" />
+                <ComboBoxItem x:Name="QualityUltraItem" />
+            </ComboBox>
+            <Button x:Name="ResetViewButton" Classes="secondary" VerticalAlignment="Center" Click="ResetViewButton_Click" />
+            <ProgressBar x:Name="Busy" IsIndeterminate="True" IsVisible="False" Width="120" VerticalAlignment="Center" />
+        </StackPanel>
+        <TextBlock x:Name="ControlsHintText" Grid.Column="1" Margin="16,0,0,0" FontSize="11.5"
+                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis"
+                   Foreground="{DynamicResource TextSecondaryBrush}" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <views:InteractiveLiveryViewer x:Name="Viewer" AutoRotate="False" />
+            <TextBlock x:Name="ErrorText" IsVisible="False" TextWrapping="Wrap" MaxWidth="560"
+                       TextAlignment="Center" FontSize="14"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Foreground="{DynamicResource TextSecondaryBrush}" />
+        </Grid>
+
+        <StackPanel Grid.Row="3" Margin="12,4,12,8" Spacing="2">
+            <TextBlock x:Name="WarningText" IsVisible="False" FontSize="11.5" TextWrapping="Wrap"
+                       Foreground="{DynamicResource WarningBrush}" />
+            <TextBlock x:Name="StatusText" FontSize="11.5" TextTrimming="CharacterEllipsis"
+                       Foreground="{DynamicResource TextSecondaryBrush}" />
+        </StackPanel>
+    </Grid>
+</Window>

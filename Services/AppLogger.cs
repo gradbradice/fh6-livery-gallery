@@ -26,6 +26,19 @@ internal static class AppLogger
         }
         catch
         {
+            // The logger is the error channel itself
+        }
+    }
+
+    public static void LogWarning(string context)
+    {
+        if (_isShutdown) return;
+        try
+        {
+            _logger.Warning("{Context}", context);
+        }
+        catch
+        {
             
         }
     }

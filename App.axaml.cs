@@ -27,13 +27,15 @@ internal partial class App : Application
             var authorCardService = new AuthorCardService();
             var saveFolderLock = new SaveFolderLock();
             var archiveService = new LiveryArchiveService(saveFolderLock);
-            var backupService = new LiveryBackupService(saveFolderLock);
+            var backupService = new LiveryBackupService(saveFolderLock, favoriteService, tagService);
             var liveryIdService = new LiveryIdService();
             var scanService = new LiveryScanner(cacheService, carDatabase, favoriteService, tagService, authorCardService, archiveService, saveFolderLock, liveryIdService);
             var updateService = new AppUpdateCheckService(AppHttpClient.Instance);
+            var renderService = new LiveryRenderService();
             desktop.MainWindow = new MainWindow(
                 settings, carDatabase, tagService, favoriteService, authorCardService, archiveService, backupService,
-                scanService, updateService);
+                scanService, updateService, renderService, saveFolderLock);
+            desktop.Exit += (_, _) => renderService.Dispose();
         }
 
         base.OnFrameworkInitializationCompleted();

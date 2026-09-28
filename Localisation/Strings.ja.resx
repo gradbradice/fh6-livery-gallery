@@ -307,10 +307,10 @@
     <value>不明</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser（ネイティブ）: {0}</value>
+    <value>ForzaToolkit Formats Native: {0}</value>
   </data>
   <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser（パッケージ）: {0}</value>
+    <value>ForzaToolkit Formats Package: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>設定</value>
@@ -842,5 +842,419 @@
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
     <value>リバリーは読み込めましたが、ファイルの一部を解析できませんでした。主要なデータは表示されますが、一部のチェック(生成・重複)が利用できない場合があります。</value>
+  </data>
+  <data name="GameFolderProblemNotSet" xml:space="preserve">
+    <value>ゲームフォルダーが設定されていません</value>
+  </data>
+  <data name="GameFolderProblemNotFound" xml:space="preserve">
+    <value>フォルダーが存在しません</value>
+  </data>
+  <data name="GameFolderProblemAccessDenied" xml:space="preserve">
+    <value>フォルダーにアクセスできません</value>
+  </data>
+  <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
+    <value>ゲームフォルダーではありません(media フォルダーがありません)</value>
+  </data>
+  <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
+    <value>media\cars が見つかりません</value>
+  </data>
+  <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
+    <value>media\cars に車がありません</value>
+  </data>
+  <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
+    <value>media\Livery が見つかりません</value>
+  </data>
+  <data name="GameFolderProblemNoVinyls" xml:space="preserve">
+    <value>ゲームのビニールが見つかりません(media\Livery\Vinyls.zip)</value>
+  </data>
+  <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
+    <value>ゲームのビニールを読み込めません</value>
+  </data>
+  <data name="GameFolderProblemNoDecals" xml:space="preserve">
+    <value>ロゴが見つからないため、一部のデカールは描画されません</value>
+  </data>
+  <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
+    <value>一部の車を読み込めませんでした</value>
+  </data>
+  <data name="GameFolderProblemUnknown" xml:space="preserve">
+    <value>このフォルダーは使用できません</value>
+  </data>
+  <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
+    <value>ゲームのビニールが見つかりません。ゲームフォルダー(media\Livery)を確認してください。</value>
+  </data>
+  <data name="RenderErrorGamePathInvalid" xml:space="preserve">
+    <value>ゲームフォルダーが設定されていないか、見つかりません。</value>
+  </data>
+  <data name="RenderErrorCarNotFound" xml:space="preserve">
+    <value>このリバリーの車がゲームフォルダーにありません。</value>
+  </data>
+  <data name="RenderErrorCarFormat" xml:space="preserve">
+    <value>車のファイルを読み込めませんでした。</value>
+  </data>
+  <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
+    <value>この車にはリバリーのレイアウトがありません。</value>
+  </data>
+  <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
+    <value>描画されなかった図形: {0}</value>
+  </data>
+  <data name="RenderErrorRasterLogosSkippedFormat" xml:space="preserve">
+    <value>描画されなかったロゴ: {0}</value>
+  </data>
+  <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
+    <value>セクションのない図形: {0}</value>
+  </data>
+  <data name="RenderErrorGeneric" xml:space="preserve">
+    <value>リバリーを描画できませんでした。</value>
+  </data>
+  <data name="View3DGameFolderChecking" xml:space="preserve">
+    <value>3D はまだ使用できません: ゲームフォルダーを確認中</value>
+  </data>
+  <data name="View3DTooltip" xml:space="preserve">
+    <value>3D で表示</value>
+  </data>
+  <data name="View3DNoCLivery" xml:space="preserve">
+    <value>3D は使用できません: リバリーに C_livery ファイルがありません</value>
+  </data>
+  <data name="View3DParseError" xml:space="preserve">
+    <value>3D は使用できません: リバリーを読み込めませんでした</value>
+  </data>
+  <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
+    <value>3D は使用できません: {0}。設定でゲームフォルダーを指定してください。</value>
+  </data>
+  <data name="View3DDialogTitle" xml:space="preserve">
+    <value>3D 表示</value>
+  </data>
+  <data name="View3DReadFailed" xml:space="preserve">
+    <value>リバリーのファイルを読み込めませんでした。詳細はログを確認してください。</value>
+  </data>
+  <data name="View3DParseFailedFormat" xml:space="preserve">
+    <value>リバリーを読み込めませんでした: {0}</value>
+  </data>
+  <data name="ViewerStatsFormat" xml:space="preserve">
+    <value>三角形 {0:N0} (LOD {1}) · リバリー {2}×{3} · フレーム {4}×{5}, MSAA {6}× · {7:F1} ms</value>
+  </data>
+  <data name="ViewerNoOpenGl" xml:space="preserve">
+    <value>3D 表示は使用できません: OpenGL を初期化できませんでした。</value>
+  </data>
+  <data name="ViewerQualityLow" xml:space="preserve">
+    <value>低</value>
+  </data>
+  <data name="ViewerQualityMedium" xml:space="preserve">
+    <value>中</value>
+  </data>
+  <data name="ViewerQualityHigh" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="ViewerQualityUltra" xml:space="preserve">
+    <value>ウルトラ</value>
+  </data>
+  <data name="ViewerResetView" xml:space="preserve">
+    <value>表示をリセット</value>
+  </data>
+  <data name="ViewerTitleFormat" xml:space="preserve">
+    <value>{0} — 3D</value>
+  </data>
+  <data name="GameFolderNotSetHint" xml:space="preserve">
+    <value>リバリーの 3D 表示にはゲームフォルダーが必要です</value>
+  </data>
+  <data name="GameFolderChecking" xml:space="preserve">
+    <value>ゲームフォルダーを確認中…</value>
+  </data>
+  <data name="GameFolderInvalidFormat" xml:space="preserve">
+    <value>このゲームフォルダーは使用できません: {0}</value>
+  </data>
+  <data name="GameFolderValidFormat" xml:space="preserve">
+    <value>ゲームフォルダーが見つかりました。車: {0}</value>
+  </data>
+  <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
+    <value>ゲームフォルダーが見つかりました。車: {0}。ただし: {1}</value>
+  </data>
+  <data name="ViewerControlsHint" xml:space="preserve">
+    <value>左ドラッグ: 回転 · 右ドラッグ: 移動 · ホイール: ズーム · ダブルクリック: リセット</value>
+  </data>
+  <data name="AuctionBadgeLabel" xml:space="preserve">
+    <value>オークション</value>
+  </data>
+  <data name="AuctionBadgeTooltip" xml:space="preserve">
+    <value>オークションハウスで購入したリバリーです。
+オークションのリバリーはアーカイブに移動できません。</value>
+  </data>
+  <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
+    <value>オークションのリバリーはアーカイブに移動できません</value>
+  </data>
+  <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
+    <value>オークションのリバリーはアーカイブに移動できないため、選択したうち {0} 件はゲームに残りました。</value>
+  </data>
+  <data name="ContextMenuOnlyThisCar" xml:space="preserve">
+    <value>この車のみ</value>
+  </data>
+  <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
+    <value>このメーカーのみ</value>
+  </data>
+  <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
+    <value>この作者のみ</value>
+  </data>
+  <data name="ContextMenuClearQuickFilters" xml:space="preserve">
+    <value>すべて表示に戻す</value>
+  </data>
+  <data name="QuickFiltersLabel" xml:space="preserve">
+    <value>絞り込み:</value>
+  </data>
+  <data name="QuickFilterCarFormat" xml:space="preserve">
+    <value>車: {0}</value>
+  </data>
+  <data name="QuickFilterManufacturerFormat" xml:space="preserve">
+    <value>メーカー: {0}</value>
+  </data>
+  <data name="QuickFilterAuthorFormat" xml:space="preserve">
+    <value>作者: {0}</value>
+  </data>
+  <data name="QuickFilterRemoveTooltip" xml:space="preserve">
+    <value>このフィルターを解除</value>
+  </data>
+  <data name="StatusAutoRefreshedFormat" xml:space="preserve">
+    <value>セーブデータが変更されました: +{0} / −{1}、ギャラリーを更新しました</value>
+  </data>
+  <data name="FilterAuctionLabel" xml:space="preserve">
+    <value>オークション</value>
+  </data>
+  <data name="AuctionFilterAll" xml:space="preserve">
+    <value>すべてのリバリー</value>
+  </data>
+  <data name="AuctionFilterSeparately" xml:space="preserve">
+    <value>オークションのリバリーを別に表示</value>
+  </data>
+  <data name="AuctionFilterOnly" xml:space="preserve">
+    <value>オークションのリバリーのみ</value>
+  </data>
+  <data name="AuctionFilterHide" xml:space="preserve">
+    <value>オークションのリバリーを非表示</value>
+  </data>
+  <data name="SeparateAuctionGroupName" xml:space="preserve">
+    <value>オークション</value>
+  </data>
+  <data name="AuthorInferredTooltip" xml:space="preserve">
+    <value>このリバリーには作者名がないため、同じ作者の他のリバリーから取得しました</value>
+  </data>
+  <data name="AuthorUnknownMessage" xml:space="preserve">
+    <value>このリバリーには作者名がなく、ギャラリーに同じ作者の他のリバリーもないため、作者名を取得できません。</value>
+  </data>
+  <data name="QuickFilterAddButton" xml:space="preserve">
+    <value>絞り込み</value>
+  </data>
+  <data name="QuickFilterAddTooltip" xml:space="preserve">
+    <value>メーカー・車・作者で絞り込む</value>
+  </data>
+  <data name="QuickFilterKindManufacturer" xml:space="preserve">
+    <value>メーカー</value>
+  </data>
+  <data name="QuickFilterKindCar" xml:space="preserve">
+    <value>車</value>
+  </data>
+  <data name="QuickFilterKindAuthor" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="QuickFilterSearchWatermark" xml:space="preserve">
+    <value>検索…</value>
+  </data>
+  <data name="QuickFilterPickerEmpty" xml:space="preserve">
+    <value>見つかりません</value>
+  </data>
+  <data name="GroupShowOnlyButton" xml:space="preserve">
+    <value>これのみ</value>
+  </data>
+  <data name="GroupShowOnlyTooltip" xml:space="preserve">
+    <value>このグループのみ表示</value>
+  </data>
+  <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
+    <value>{0} の車</value>
+  </data>
+  <data name="SettingsSectionDuplicates" xml:space="preserve">
+    <value>重複</value>
+  </data>
+  <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
+    <value>重複の可能性とみなす類似度</value>
+  </data>
+  <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
+    <value>これより類似度が低い一致は表示されません。完全な重複は常に表示されます。再スキャンなしですぐに反映されます。</value>
+  </data>
+  <data name="LiveryRenderPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Package: {0}</value>
+  </data>
+  <data name="LiveryRenderAvaloniaPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Avalonia Package: {0}</value>
+  </data>
+  <data name="View3DDifferenceNote" xml:space="preserve">
+    <value>3D表示はおおよそのイメージです。色、質感、ライティング、一部の細部はゲーム内と異なる場合があります。</value>
+  </data>
+  <data name="ServerStatusChecking" xml:space="preserve">
+    <value>サーバー: 接続中…</value>
+  </data>
+  <data name="ServerStatusOnline" xml:space="preserve">
+    <value>サーバー: 接続済み</value>
+  </data>
+  <data name="ServerStatusSyncing" xml:space="preserve">
+    <value>サーバー: セーブデータを読み込み中…</value>
+  </data>
+  <data name="ServerStatusSaveNotSupported" xml:space="preserve">
+    <value>サーバー: セーブデータ未対応</value>
+  </data>
+  <data name="ServerStatusDegraded" xml:space="preserve">
+    <value>サーバー: 一部制限中</value>
+  </data>
+  <data name="ServerStatusMaintenance" xml:space="preserve">
+    <value>サーバー: メンテナンス中</value>
+  </data>
+  <data name="ServerStatusUnreachable" xml:space="preserve">
+    <value>サーバーに接続できません</value>
+  </data>
+  <data name="ServerStatusNoInternet" xml:space="preserve">
+    <value>インターネットに接続されていません</value>
+  </data>
+  <data name="ServerStatusRateLimited" xml:space="preserve">
+    <value>サーバー: リクエストが多すぎます</value>
+  </data>
+  <data name="ServerStatusUpdateRequired" xml:space="preserve">
+    <value>サーバー: アプリを更新してください</value>
+  </data>
+  <data name="ServerStatusAppRejected" xml:space="preserve">
+    <value>サーバー: このビルドは受け付けられません</value>
+  </data>
+  <data name="ServerStatusCertificateError" xml:space="preserve">
+    <value>サーバー: 安全な接続に失敗しました</value>
+  </data>
+  <data name="ServerStatusServerError" xml:space="preserve">
+    <value>サーバーエラー</value>
+  </data>
+  <data name="ServerStatusNotConfigured" xml:space="preserve">
+    <value>このビルドにはサーバーが設定されていません</value>
+  </data>
+  <data name="ServerStatusVersionFormat" xml:space="preserve">
+    <value>サーバー {0}</value>
+  </data>
+  <data name="ServerStatusRetryHint" xml:space="preserve">
+    <value>自動的に再試行します。</value>
+  </data>
+  <data name="ServerStatusRetryInFormat" xml:space="preserve">
+    <value>{0} 秒後に再試行します。</value>
+  </data>
+  <data name="ServerStatusUpdateHint" xml:space="preserve">
+    <value>サーバーはより新しいバージョンのアプリを必要としています。更新してください。</value>
+  </data>
+  <data name="ServerStatusAppRejectedHint" xml:space="preserve">
+    <value>サーバーはこのビルドを受け付けません。公式リリースを使用してください。</value>
+  </data>
+  <data name="ServerStatusCertificateHint" xml:space="preserve">
+    <value>サーバー証明書の検証に失敗しました。通信が傍受されている可能性があります（ウイルス対策ソフトやプロキシなど）。自動では再試行しません。</value>
+  </data>
+  <data name="ServerStatusClickToRecheck" xml:space="preserve">
+    <value>クリックしてサーバーの状態を確認</value>
+  </data>
+  <data name="ServerSyncDoneFormat" xml:space="preserve">
+    <value>車に適用中のリバリー: {0}
+{1} に更新</value>
+  </data>
+  <data name="ServerSyncProfileNotFound" xml:space="preserve">
+    <value>セーブフォルダにプロフィールファイル（C_ProfileData）が見つかりません。</value>
+  </data>
+  <data name="ServerSyncSaveNotSupported" xml:space="preserve">
+    <value>サーバーはまだこのセーブデータを読み込めません。ゲームが更新された可能性があります。近日対応予定です。</value>
+  </data>
+  <data name="ServerSyncSaveRejected" xml:space="preserve">
+    <value>サーバーによると、このファイルは有効なプロフィールのセーブデータではありません。</value>
+  </data>
+  <data name="ServerSyncFailed" xml:space="preserve">
+    <value>適用中のリバリーを更新できませんでした。再試行します。</value>
+  </data>
+  <data name="InstalledBadgeLabel" xml:space="preserve">
+    <value>適用中</value>
+  </data>
+  <data name="InstalledBadgeTooltip" xml:space="preserve">
+    <value>ゲーム内で車に適用されています</value>
+  </data>
+  <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
+    <value>ゲーム内で {0} 台の車に適用されています</value>
+  </data>
+  <data name="SettingsSectionServer" xml:space="preserve">
+    <value>リバリーデータサーバー</value>
+  </data>
+  <data name="ServerConnectionLabel" xml:space="preserve">
+    <value>サーバーに接続して適用中のリバリーを特定する</value>
+  </data>
+  <data name="ServerConnectionDescription" xml:space="preserve">
+    <value>車に適用されているリバリーを特定するため、アプリケーションはセーブファイル（C_ProfileData）をサーバーに送信します。ファイルは適用中のリバリーに関する情報を取得する目的でのみ処理され、サーバーには保存されません。
+
+セーブファイルのデータが保存されたり、その他の目的に使用されたりすることはありません。サーバーは、セーブファイルの復号に必要な鍵を安全に保管するために使用されます。
+
+本サーバーは、Forza Horizon、Xbox、Microsoft の公式サーバーとは一切関係ありません。</value>
+  </data>
+  <data name="ServerConsentMessage" xml:space="preserve">
+    <value>車に適用されているリバリーを特定するため、アプリケーションはセーブファイル（C_ProfileData）をサーバーに送信します。ファイルは適用中のリバリーに関する情報を取得する目的でのみ処理され、サーバーには保存されません。
+
+セーブファイルのデータが保存されたり、その他の目的に使用されたりすることはありません。サーバーは、セーブファイルの復号に必要な鍵を安全に保管するために使用されます。
+
+本サーバーは、Forza Horizon、Xbox、Microsoft の公式サーバーとは一切関係ありません。
+
+データはお客様の同意がある場合にのみサーバーへ送信されます。サーバーへの接続を有効にしますか？</value>
+  </data>
+  <data name="ServerConsentTitle" xml:space="preserve">
+    <value>リバリーデータサーバーへの接続</value>
+  </data>
+  <data name="ServerConsentAccept" xml:space="preserve">
+    <value>はい、理解したうえで続行します</value>
+  </data>
+  <data name="FilterInstalledLabel" xml:space="preserve">
+    <value>適用中のリバリー</value>
+  </data>
+  <data name="InstalledAllToggle" xml:space="preserve">
+    <value>すべてのリバリー</value>
+  </data>
+  <data name="InstalledFirstToggle" xml:space="preserve">
+    <value>適用中を先に</value>
+  </data>
+  <data name="OnlyInstalledToggle" xml:space="preserve">
+    <value>適用中のみ</value>
+  </data>
+  <data name="FilterValueUnavailable" xml:space="preserve">
+    <value>オフ</value>
+  </data>
+  <data name="InstalledFilterNeedsServer" xml:space="preserve">
+    <value>適用中のリバリーを特定するには、設定でリバリーデータサーバーへの接続を有効にしてください。</value>
+  </data>
+  <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
+    <value>一部のフォルダーを元の場所から削除できませんでした。フォルダー内のファイルが使用中の可能性があります（ゲームが起動していませんか？）。データは失われていません。有効なコピーは完全です。次の残りのフォルダーは不要なので削除できます:
+{0}</value>
+  </data>
+  <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>ゲーム内で車に適用されているリバリーはアーカイブに移動できません</value>
+  </data>
+  <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
+    <value>ゲーム内で車に適用されているリバリーはアーカイブに移動できないため、選択したうち {0} 件はゲームに残りました。</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
+    <value>どのリバリーが車に適用されているか分からないため、このリバリーをアーカイブに移動するのは安全ではありません。ゲーム内で車に適用されている可能性があります。
+
+リバリーをアーカイブに移動しますか？</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
+    <value>どのリバリーが車に適用されているか分からないため、これらのリバリーをアーカイブに移動するのは安全ではありません。一部がゲーム内で車に適用されている可能性があります。
+
+リバリーをアーカイブに移動しますか？</value>
+  </data>
+  <data name="DontShowAgainCheckBox" xml:space="preserve">
+    <value>今後は表示しない</value>
+  </data>
+  <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>オークションのリバリーと、ゲーム内で車に適用されているリバリーはアーカイブに移動できません</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
+    <value>前回の同期後にセーブファイルが変更されましたが、新しいデータはまだリバリーサーバーに送信されていません。車に適用中のリバリーの一覧が古い可能性があるため、このリバリーをアーカイブに移動するのは安全ではありません。ゲーム内で車に適用されている可能性があります。
+
+同期（自動で行われ、数分かかる場合があります）を待ってから、もう一度お試しください。今すぐリバリーをアーカイブに移動しますか？</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
+    <value>前回の同期後にセーブファイルが変更されましたが、新しいデータはまだリバリーサーバーに送信されていません。車に適用中のリバリーの一覧が古い可能性があるため、これらのリバリーをアーカイブに移動するのは安全ではありません。一部がゲーム内で車に適用されている可能性があります。
+
+同期（自動で行われ、数分かかる場合があります）を待ってから、もう一度お試しください。今すぐリバリーをアーカイブに移動しますか？</value>
   </data>
 </root>

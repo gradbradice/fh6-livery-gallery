@@ -27,8 +27,23 @@
                     ContextRequested="Card_ContextRequested">
                 <Border.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="{x:Static loc:Strings.ContextMenuMoveToArchive}"
-                                  Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).MoveSelectedToArchiveCommand}" />
+                        <MenuItem Header="{DynamicResource Loc_ContextMenuOnlyThisCar}"
+                                  Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).FilterBar.ShowOnlyCarCommand}"
+                                  CommandParameter="{Binding}" />
+                        <MenuItem Header="{DynamicResource Loc_ContextMenuOnlyThisManufacturer}"
+                                  Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).FilterBar.ShowOnlyManufacturerCommand}"
+                                  CommandParameter="{Binding}" />
+                        <MenuItem Header="{DynamicResource Loc_ContextMenuOnlyThisAuthor}"
+                                  Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).FilterBar.ShowOnlyAuthorCommand}"
+                                  CommandParameter="{Binding}" />
+                        <MenuItem Header="{DynamicResource Loc_ContextMenuClearQuickFilters}"
+                                  Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).FilterBar.ClearQuickFiltersCommand}"
+                                  IsVisible="{Binding $parent[Window].((vm:MainViewModel)DataContext).FilterBar.HasQuickFilters}" />
+                        <Separator />
+                        <MenuItem Header="{DynamicResource Loc_ContextMenuMoveToArchive}"
+                                  Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).MoveSelectedToArchiveCommand}"
+                                  ToolTip.ShowOnDisabled="True"
+                                  ToolTip.Tip="{Binding $parent[Window].((vm:MainViewModel)DataContext).ArchiveBlockedTooltip}" />
                     </ContextMenu>
                 </Border.ContextMenu>
                 <StackPanel>
@@ -66,14 +81,31 @@
                             <TextBlock Text="{Binding PossibleDuplicateBadgeText}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
-                        <Border IsVisible="{Binding ShowMineBadge}"
-                                Background="{DynamicResource AccentBrush}"
+                        <Border IsVisible="{Binding IsAuction}"
+                                Background="{DynamicResource AuctionBrush}"
                                 CornerRadius="6" Padding="7,3"
-                                HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8"
-                                ToolTip.Tip="{DynamicResource Loc_MyLiveryBadgeTooltip}">
-                            <TextBlock Text="{DynamicResource Loc_MyLiveryBadgeLabel}" FontSize="10.5"
+                                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,8,0"
+                                ToolTip.Tip="{DynamicResource Loc_AuctionBadgeTooltip}">
+                            <TextBlock Text="{DynamicResource Loc_AuctionBadgeLabel}" FontSize="10.5"
                                        FontWeight="SemiBold" Foreground="White" />
                         </Border>
+                        <StackPanel Orientation="Horizontal" Spacing="4"
+                                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8">
+                            <Border IsVisible="{Binding IsInstalled}"
+                                    Background="{DynamicResource SuccessBrush}"
+                                    CornerRadius="6" Padding="7,3"
+                                    ToolTip.Tip="{Binding InstalledBadgeTooltip}">
+                                <TextBlock Text="{DynamicResource Loc_InstalledBadgeLabel}" FontSize="10.5"
+                                           FontWeight="SemiBold" Foreground="White" />
+                            </Border>
+                            <Border IsVisible="{Binding ShowMineBadge}"
+                                    Background="{DynamicResource AccentBrush}"
+                                    CornerRadius="6" Padding="7,3"
+                                    ToolTip.Tip="{DynamicResource Loc_MyLiveryBadgeTooltip}">
+                                <TextBlock Text="{DynamicResource Loc_MyLiveryBadgeLabel}" FontSize="10.5"
+                                           FontWeight="SemiBold" Foreground="White" />
+                            </Border>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="4"
                                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8,0,0,8">
                             <Border IsVisible="{Binding IsPossiblyGenerated}"
@@ -142,6 +174,16 @@
 									  Stretch="Uniform"
 									  Fill="{DynamicResource TextPrimaryBrush}" />
 							</Button>
+
+							<Button Classes="cardIconButton view3d"
+									Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.View3DCommand}"
+									CommandParameter="{Binding}"
+									IsEnabled="{Binding CanView3D}"
+									ToolTip.ShowOnDisabled="True"
+									ToolTip.Tip="{Binding View3DTooltip}">
+								<TextBlock Text="3D" FontSize="10.5" FontWeight="Bold"
+										   Foreground="{DynamicResource TextPrimaryBrush}" />
+							</Button>
 						</StackPanel>
 
 						<Button Grid.Column="1"
@@ -193,7 +235,7 @@
                         <Button Classes="rowLink"
                                 Command="{Binding $parent[Window].((vm:MainViewModel)DataContext).Gallery.ShowAuthorRowCommand}"
                                 CommandParameter="{Binding}" Margin="0,9,0,0"
-                                ToolTip.Tip="{DynamicResource Loc_AuthorLabel}">
+                                ToolTip.Tip="{Binding AuthorTooltip}">
                             <StackPanel Orientation="Horizontal">
                                 <Path Data="{StaticResource IconUser}" Width="11" Height="11" Stretch="Uniform"
                                       Fill="{DynamicResource TextSecondaryBrush}" Margin="2,0,3,0" />
@@ -251,6 +293,9 @@
                     <PathIcon Data="{StaticResource IconUser}" Width="13" Height="13"
                           Foreground="{DynamicResource AccentBrush}" Margin="0,0,7,0" VerticalAlignment="Center"
                           IsVisible="{Binding IsMineGroup}" />
+                    <Path Data="{StaticResource IconCircleFilled}" Width="11" Height="11" Stretch="Uniform"
+                          Fill="{DynamicResource AuctionBrush}" Margin="0,0,7,0" VerticalAlignment="Center"
+                          IsVisible="{Binding IsAuctionGroup}" />
                     <TextBlock Text="{Binding Key}" FontSize="15" FontWeight="SemiBold" />
                     <TextBlock Text="{Binding CountText}" FontSize="13" Margin="7,0,0,0"
                                Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
@@ -286,6 +331,15 @@
                         <TextBlock Text="{Binding PossibleDuplicateCount}" FontSize="13"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
                     </StackPanel>
+
+                    <Button Classes="groupOnly" Margin="12,0,0,0" VerticalAlignment="Center"
+                            IsVisible="{Binding HasGroupFilter}" Click="GroupShowOnlyButton_Click"
+                            ToolTip.Tip="{DynamicResource Loc_GroupShowOnlyTooltip}">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <PathIcon Data="{StaticResource IconFilter}" Width="11" Height="11" />
+                            <TextBlock Text="{DynamicResource Loc_GroupShowOnlyButton}" FontSize="12" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </ToggleButton>
         </DataTemplate>
@@ -346,7 +400,8 @@
                              DataContext="{Binding FilterBar}"
                              Margin="0,0,10,0" Text="{Binding SearchText, Mode=TwoWay}"
                              TextChanged="SearchBox_TextChanged" />
-					<Button x:Name="DisplayFilterButton" Grid.Column="1" Classes="icon" Margin="0,0,8,0"
+					<StackPanel Grid.Column="1" Orientation="Horizontal">
+					<Button x:Name="DisplayFilterButton" Classes="icon" Margin="0,0,8,0"
                             DataContext="{Binding FilterBar}"
                             ToolTip.Tip="{x:Static loc:Strings.DisplayFilterTooltip}">
 						    <PathIcon Data="{StaticResource IconFilter}" Width="16" Height="16"
@@ -408,8 +463,8 @@
                                               Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.FavoritesFirst}">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Path Data="{StaticResource IconStar}" Width="11" Height="11"
-                                                      Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
+                                                <Path Classes="menuIcon star" Data="{StaticResource IconStar}" Width="11" Height="11"
+                                                      Stretch="Uniform" Margin="0,0,6,0"
                                                       VerticalAlignment="Center" />
                                                 <TextBlock x:Name="FavFirstItemText" VerticalAlignment="Center" />
                                             </StackPanel>
@@ -420,22 +475,57 @@
                                               Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.OnlyFavorites}">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Path Data="{StaticResource IconStar}" Width="11" Height="11"
-                                                      Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
+                                                <Path Classes="menuIcon star" Data="{StaticResource IconStar}" Width="11" Height="11"
+                                                      Stretch="Uniform" Margin="0,0,6,0"
                                                       VerticalAlignment="Center" />
                                                 <TextBlock x:Name="FavOnlyItemText" VerticalAlignment="Center" />
                                             </StackPanel>
                                         </MenuItem.Header>
                                     </MenuItem>
-                                    <MenuItem x:Name="FavSeparateItem" ToggleType="Radio" GroupName="FavGroup"
+                                    <MenuItem x:Name="FavSeparateItem" Classes="separateOption" ToggleType="Radio" GroupName="FavGroup"
                                               IsChecked="{Binding IsFavSeparate}" IsEnabled="{Binding IsFavSeparateEnabled}"
                                               Command="{Binding SetFavoriteModeCommand}" CommandParameter="{x:Static enums:FavoriteMode.FavoritesSeparately}">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Path Data="{StaticResource IconStar}" Width="11" Height="11"
-                                                      Stretch="Uniform" Fill="#FFD54F" Margin="0,0,6,0"
+                                                <Path Classes="menuIcon star" Data="{StaticResource IconStar}" Width="11" Height="11"
+                                                      Stretch="Uniform" Margin="0,0,6,0"
                                                       VerticalAlignment="Center" />
                                                 <TextBlock x:Name="FavSeparateItemText" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                </MenuItem>
+                                <MenuItem x:Name="InstalledMenuItem" IsEnabled="{Binding IsInstalledFilterAvailable}"
+                                          ToolTip.Tip="{Binding InstalledMenuTooltip}" ToolTip.ShowOnDisabled="True">
+                                    <MenuItem.Header>
+                                        <Grid ColumnDefinitions="*,Auto" MinWidth="240">
+                                            <TextBlock x:Name="InstalledLabelText" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding InstalledValueText}" Margin="24,0,0,0"
+                                                       VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                        </Grid>
+                                    </MenuItem.Header>
+                                    <MenuItem x:Name="InstalledNoneItem" ToggleType="Radio" GroupName="InstalledGroup"
+                                              IsChecked="{Binding IsInstalledNone}"
+                                              Command="{Binding SetInstalledModeCommand}" CommandParameter="{x:Static enums:InstalledMode.None}" />
+                                    <MenuItem x:Name="InstalledFirstItem" ToggleType="Radio" GroupName="InstalledGroup"
+                                              IsChecked="{Binding IsInstalledFirst}"
+                                              Command="{Binding SetInstalledModeCommand}" CommandParameter="{x:Static enums:InstalledMode.InstalledFirst}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Classes="menuIcon installed" Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
+                                                      Margin="1,0,7,0" VerticalAlignment="Center" />
+                                                <TextBlock x:Name="InstalledFirstItemText" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem x:Name="InstalledOnlyItem" ToggleType="Radio" GroupName="InstalledGroup"
+                                              IsChecked="{Binding IsInstalledOnly}"
+                                              Command="{Binding SetInstalledModeCommand}" CommandParameter="{x:Static enums:InstalledMode.OnlyInstalled}">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Classes="menuIcon installed" Data="{StaticResource IconCircleFilled}" Width="9" Height="9" Stretch="Uniform"
+                                                      Margin="1,0,7,0" VerticalAlignment="Center" />
+                                                <TextBlock x:Name="InstalledOnlyItemText" VerticalAlignment="Center" />
                                             </StackPanel>
                                         </MenuItem.Header>
                                     </MenuItem>
@@ -456,8 +546,8 @@
                                               Command="{Binding SetMineModeCommand}" CommandParameter="{x:Static enums:MineMode.MineFirst}">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <PathIcon Data="{StaticResource IconUser}" Width="11" Height="11"
-                                                          Foreground="{DynamicResource AccentBrush}" Margin="0,0,6,0"
+                                                <PathIcon Classes="menuIcon mine" Data="{StaticResource IconUser}" Width="11" Height="11"
+                                                          Margin="0,0,6,0"
                                                           VerticalAlignment="Center" />
                                                 <TextBlock x:Name="MineFirstItemText" VerticalAlignment="Center" />
                                             </StackPanel>
@@ -468,20 +558,20 @@
                                               Command="{Binding SetMineModeCommand}" CommandParameter="{x:Static enums:MineMode.OnlyMine}">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <PathIcon Data="{StaticResource IconUser}" Width="11" Height="11"
-                                                          Foreground="{DynamicResource AccentBrush}" Margin="0,0,6,0"
+                                                <PathIcon Classes="menuIcon mine" Data="{StaticResource IconUser}" Width="11" Height="11"
+                                                          Margin="0,0,6,0"
                                                           VerticalAlignment="Center" />
                                                 <TextBlock x:Name="MineOnlyItemText" VerticalAlignment="Center" />
                                             </StackPanel>
                                         </MenuItem.Header>
                                     </MenuItem>
-                                    <MenuItem x:Name="MineSeparateItem" ToggleType="Radio" GroupName="MineGroup"
+                                    <MenuItem x:Name="MineSeparateItem" Classes="separateOption" ToggleType="Radio" GroupName="MineGroup"
                                               IsChecked="{Binding IsMineSeparate}" IsEnabled="{Binding IsMineSeparateEnabled}"
                                               Command="{Binding SetMineModeCommand}" CommandParameter="{x:Static enums:MineMode.MineSeparately}">
                                         <MenuItem.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <PathIcon Data="{StaticResource IconUser}" Width="11" Height="11"
-                                                          Foreground="{DynamicResource AccentBrush}" Margin="0,0,6,0"
+                                                <PathIcon Classes="menuIcon mine" Data="{StaticResource IconUser}" Width="11" Height="11"
+                                                          Margin="0,0,6,0"
                                                           VerticalAlignment="Center" />
                                                 <TextBlock x:Name="MineSeparateItemText" VerticalAlignment="Center" />
                                             </StackPanel>
@@ -532,16 +622,87 @@
                                     <MenuItem x:Name="PaintAllItem" ToggleType="Radio" GroupName="PaintGroup"
                                               IsChecked="{Binding IsPaintAll}"
                                               Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.All}" />
-                                    <MenuItem x:Name="PaintHideItem" ToggleType="Radio" GroupName="PaintGroup"
-                                              IsChecked="{Binding IsPaintHidden}"
-                                              Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.HidePaint}" />
                                     <MenuItem x:Name="PaintOnlyItem" ToggleType="Radio" GroupName="PaintGroup"
                                               IsChecked="{Binding IsPaintOnly}"
                                               Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.PaintOnly}" />
+                                    <MenuItem x:Name="PaintHideItem" ToggleType="Radio" GroupName="PaintGroup"
+                                              IsChecked="{Binding IsPaintHidden}"
+                                              Command="{Binding SetPaintFilterModeCommand}" CommandParameter="{x:Static enums:PaintFilterMode.HidePaint}" />
+                                </MenuItem>
+                                <MenuItem x:Name="AuctionMenuItem">
+                                    <MenuItem.Header>
+                                        <Grid ColumnDefinitions="*,Auto" MinWidth="240">
+                                            <TextBlock x:Name="AuctionLabelText" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding AuctionValueText}" Margin="24,0,0,0"
+                                                       VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                        </Grid>
+                                    </MenuItem.Header>
+                                    <MenuItem x:Name="AuctionAllItem" ToggleType="Radio" GroupName="AuctionGroup"
+                                              IsChecked="{Binding IsAuctionAll}"
+                                              Command="{Binding SetAuctionFilterModeCommand}" CommandParameter="{x:Static enums:AuctionFilterMode.All}" />
+                                    <MenuItem x:Name="AuctionOnlyItem" ToggleType="Radio" GroupName="AuctionGroup"
+                                              IsChecked="{Binding IsAuctionOnly}"
+                                              Command="{Binding SetAuctionFilterModeCommand}" CommandParameter="{x:Static enums:AuctionFilterMode.OnlyAuction}" />
+                                    <MenuItem x:Name="AuctionSeparateItem" ToggleType="Radio" GroupName="AuctionGroup"
+                                              IsChecked="{Binding IsAuctionSeparate}" IsEnabled="{Binding IsAuctionSeparateEnabled}"
+                                              Command="{Binding SetAuctionFilterModeCommand}" CommandParameter="{x:Static enums:AuctionFilterMode.AuctionSeparately}" />
+                                    <MenuItem x:Name="AuctionHideItem" ToggleType="Radio" GroupName="AuctionGroup"
+                                              IsChecked="{Binding IsAuctionHidden}"
+                                              Command="{Binding SetAuctionFilterModeCommand}" CommandParameter="{x:Static enums:AuctionFilterMode.HideAuction}" />
                                 </MenuItem>
                             </MenuFlyout>
                         </Button.Flyout>
                     </Button>
+
+                    <Button x:Name="AddQuickFilterButton" Classes="toolbarText" Margin="0,0,8,0"
+                            x:DataType="vm:QuickFilterPickerViewModel" DataContext="{Binding QuickFilterPicker}"
+                            ToolTip.Tip="{DynamicResource Loc_QuickFilterAddTooltip}">
+                        <StackPanel Orientation="Horizontal" Spacing="7">
+                            <Path Data="M 5,0 L 5,10 M 0,5 L 10,5" Width="10" Height="10" Stretch="Uniform"
+                                  Stroke="{DynamicResource TextPrimaryBrush}" StrokeThickness="1.6" VerticalAlignment="Center" />
+                            <TextBlock x:Name="AddQuickFilterLabel" VerticalAlignment="Center" FontSize="13" />
+                        </StackPanel>
+                        <Button.Flyout>
+                            <Flyout Placement="BottomEdgeAlignedLeft"
+                                    Opening="QuickFilterPickerFlyout_Opening" Opened="QuickFilterPickerFlyout_Opened">
+                                <StackPanel Width="380" Spacing="10" Margin="4" x:DataType="vm:QuickFilterPickerViewModel">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <ToggleButton Classes="tagChip" Content="{DynamicResource Loc_QuickFilterKindManufacturer}"
+                                                      IsChecked="{Binding IsManufacturerKind, Mode=TwoWay}" />
+                                        <ToggleButton Classes="tagChip" Content="{DynamicResource Loc_QuickFilterKindCar}"
+                                                      IsChecked="{Binding IsCarKind, Mode=TwoWay}" />
+                                        <ToggleButton Classes="tagChip" Content="{DynamicResource Loc_QuickFilterKindAuthor}"
+                                                      IsChecked="{Binding IsAuthorKind, Mode=TwoWay}" />
+                                    </StackPanel>
+                                    <TextBox x:Name="QuickFilterSearchBox" Classes="search"
+                                             Text="{Binding SearchText, Mode=TwoWay}"
+                                             Watermark="{DynamicResource Loc_QuickFilterSearchWatermark}"
+                                             KeyDown="QuickFilterSearchBox_KeyDown" />
+                                    <TextBlock Text="{Binding CarScopeText}" IsVisible="{Binding HasCarScope}"
+                                               FontSize="12" Margin="4,0" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                    <Panel>
+                                        <ListBox x:Name="QuickFilterOptionsList" ItemsSource="{Binding Options}" MaxHeight="380"
+                                                 SelectionMode="Single" Tapped="QuickFilterOptionsList_Tapped"
+                                                 KeyDown="QuickFilterOptionsList_KeyDown"
+                                                 Background="Transparent">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate x:DataType="vm:QuickFilterOption">
+                                                    <Grid ColumnDefinitions="*,Auto">
+                                                        <TextBlock Text="{Binding Label}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                                        <TextBlock Grid.Column="1" Text="{Binding CountText}" Margin="12,0,0,0" VerticalAlignment="Center"
+                                                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <TextBlock Text="{DynamicResource Loc_QuickFilterPickerEmpty}" IsVisible="{Binding HasNoOptions}"
+                                                   Margin="4,12" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                    </Panel>
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+					</StackPanel>
 
 					<Button x:Name="RefreshButton" Grid.Column="2" Classes="icon" Margin="0,0,8,0" x:DataType="vm:MainViewModel"
                             IsEnabled="{Binding Status.CanRefresh}" Command="{Binding RefreshCommand}">
@@ -588,6 +749,33 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </Grid>
+                <Grid x:Name="QuickFiltersRow" Margin="0,12,0,0" ColumnDefinitions="Auto,*" x:DataType="vm:FilterBarViewModel"
+                      DataContext="{Binding FilterBar}" IsVisible="{Binding HasQuickFilters}">
+                    <TextBlock Grid.Column="0" x:Name="QuickFiltersLabel" FontSize="12" Margin="0,5,10,0"
+                               VerticalAlignment="Top" Foreground="{DynamicResource TextSecondaryBrush}" />
+                    <ItemsControl Grid.Column="1" ItemsSource="{Binding QuickFilters}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:QuickFilterChipViewModel">
+                                <Button Classes="quickFilterChip" Margin="0,0,8,8"
+                                        Command="{Binding $parent[ItemsControl].((vm:FilterBarViewModel)DataContext).RemoveQuickFilterCommand}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip.Tip="{DynamicResource Loc_QuickFilterRemoveTooltip}">
+                                    <StackPanel Orientation="Horizontal" Spacing="7">
+                                        <TextBlock Text="{Binding Text}" VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis" MaxWidth="360" />
+                                        <Path Data="M 0,0 L 8,8 M 8,0 L 0,8" Width="8" Height="8" Stretch="Uniform"
+                                              Stroke="White" StrokeThickness="1.6" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
             </StackPanel>
         </Border>
         <Border x:Name="StatusBar" Grid.Row="2" Background="{DynamicResource BgBrush}" Padding="20,10" x:DataType="vm:GalleryStatusViewModel"
@@ -595,6 +783,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
@@ -617,13 +806,26 @@
                         </Button>
                     </StackPanel>
                 </StackPanel>
-                <Button x:Name="UpdateBanner" Grid.Column="1" Classes="pill" x:DataType="vm:UpdateViewModel"
+                <Button x:Name="ServerStatusIndicator" Grid.Column="1" Classes="rowLink" Margin="0,0,14,0"
+                        x:DataType="vm:ServerStatusViewModel"
+                        DataContext="{Binding $parent[Window].((vm:MainViewModel)DataContext).ServerStatus}"
+                        IsVisible="{Binding IsVisible}" VerticalAlignment="Center"
+                        ToolTip.Tip="{Binding Tooltip}" Click="ServerStatusIndicator_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Ellipse Classes="serverDot" Width="8" Height="8" VerticalAlignment="Center"
+                                 Classes.green="{Binding IsGreen}" Classes.yellow="{Binding IsYellow}"
+                                 Classes.blue="{Binding IsBlue}" Classes.red="{Binding IsRed}" Classes.gray="{Binding IsGray}" />
+                        <TextBlock Text="{Binding Text}" FontSize="12" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="UpdateBanner" Grid.Column="2" Classes="pill" x:DataType="vm:UpdateViewModel"
                         DataContext="{Binding $parent[Window].((vm:MainViewModel)DataContext).Update}"
                         Margin="0,0,12,0" Padding="10,4" FontSize="11.5" IsVisible="{Binding IsUpdateAvailable}"
                         Click="UpdateBanner_Click">
                     <TextBlock x:Name="UpdateBannerText" Text="{Binding BannerText}" />
                 </Button>
-                <StackPanel x:Name="CountPanel" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <StackPanel x:Name="CountPanel" Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock x:Name="CountBaseText" Text="{Binding CountText}" FontSize="12"
                                Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" />
 

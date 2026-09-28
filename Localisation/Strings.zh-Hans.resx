@@ -307,10 +307,10 @@
     <value>未知</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser（原生库）: {0}</value>
+    <value>ForzaToolkit Formats Native: {0}</value>
   </data>
   <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser（包）: {0}</value>
+    <value>ForzaToolkit Formats Package: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>设置</value>
@@ -415,7 +415,7 @@
     <value>可能重复</value>
   </data>
   <data name="MyLiveryBadgeTooltip" xml:space="preserve">
-    <value>你的涂装</value>
+    <value>您的涂装</value>
   </data>
   <data name="MyLiveryBadgeLabel" xml:space="preserve">
     <value>我的</value>
@@ -614,7 +614,7 @@
     <value>昵称</value>
   </data>
   <data name="AuthorCardAliasesHint" xml:space="preserve">
-    <value>选择一个或多个昵称——同一个人可能用不同账号发布彩绘。</value>
+    <value>选择一个或多个昵称——同一个人可能用不同账号发布涂装。</value>
   </data>
   <data name="AuthorCardCustomNameLabel" xml:space="preserve">
     <value>显示名称</value>
@@ -731,7 +731,7 @@
     <value>归档于 {0}</value>
   </data>
   <data name="ArchiveNoSavePathMessage" xml:space="preserve">
-    <value>恢复车漆前，请先在设置中选择存档文件夹</value>
+    <value>恢复涂装前，请先在设置中选择存档文件夹</value>
   </data>
   <data name="FileOperationFailedMessage" xml:space="preserve">
     <value>执行此操作时出现问题。请查看日志了解详细信息。</value>
@@ -842,5 +842,419 @@
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
     <value>已读取涂装，但其文件的一部分无法解析。已显示主要数据；部分检查（生成、重复）可能不可用。</value>
+  </data>
+  <data name="GameFolderProblemNotSet" xml:space="preserve">
+    <value>未设置游戏文件夹</value>
+  </data>
+  <data name="GameFolderProblemNotFound" xml:space="preserve">
+    <value>文件夹不存在</value>
+  </data>
+  <data name="GameFolderProblemAccessDenied" xml:space="preserve">
+    <value>无法访问文件夹</value>
+  </data>
+  <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
+    <value>这不是游戏文件夹（没有 media 文件夹）</value>
+  </data>
+  <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
+    <value>未找到 media\cars</value>
+  </data>
+  <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
+    <value>media\cars 中没有车辆</value>
+  </data>
+  <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
+    <value>未找到 media\Livery</value>
+  </data>
+  <data name="GameFolderProblemNoVinyls" xml:space="preserve">
+    <value>未找到游戏贴纸（media\Livery\Vinyls.zip）</value>
+  </data>
+  <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
+    <value>无法读取游戏贴纸</value>
+  </data>
+  <data name="GameFolderProblemNoDecals" xml:space="preserve">
+    <value>未找到标志，部分贴花将不会绘制</value>
+  </data>
+  <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
+    <value>部分车辆无法读取</value>
+  </data>
+  <data name="GameFolderProblemUnknown" xml:space="preserve">
+    <value>该文件夹不可用</value>
+  </data>
+  <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
+    <value>未找到游戏贴纸。请检查游戏文件夹（media\Livery）。</value>
+  </data>
+  <data name="RenderErrorGamePathInvalid" xml:space="preserve">
+    <value>未设置或未找到游戏文件夹。</value>
+  </data>
+  <data name="RenderErrorCarNotFound" xml:space="preserve">
+    <value>游戏文件夹中没有此涂装的车辆。</value>
+  </data>
+  <data name="RenderErrorCarFormat" xml:space="preserve">
+    <value>无法读取车辆文件。</value>
+  </data>
+  <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
+    <value>此车辆没有涂装布局。</value>
+  </data>
+  <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
+    <value>未绘制的图形：{0}</value>
+  </data>
+  <data name="RenderErrorRasterLogosSkippedFormat" xml:space="preserve">
+    <value>未绘制的标志：{0}</value>
+  </data>
+  <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
+    <value>没有分区的图形：{0}</value>
+  </data>
+  <data name="RenderErrorGeneric" xml:space="preserve">
+    <value>无法绘制涂装。</value>
+  </data>
+  <data name="View3DGameFolderChecking" xml:space="preserve">
+    <value>3D 暂不可用：正在检查游戏文件夹</value>
+  </data>
+  <data name="View3DTooltip" xml:space="preserve">
+    <value>以 3D 查看</value>
+  </data>
+  <data name="View3DNoCLivery" xml:space="preserve">
+    <value>3D 不可用：涂装没有 C_livery 文件</value>
+  </data>
+  <data name="View3DParseError" xml:space="preserve">
+    <value>3D 不可用：无法读取涂装</value>
+  </data>
+  <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
+    <value>3D 不可用：{0}。请在设置中指定游戏文件夹。</value>
+  </data>
+  <data name="View3DDialogTitle" xml:space="preserve">
+    <value>3D 查看</value>
+  </data>
+  <data name="View3DReadFailed" xml:space="preserve">
+    <value>无法读取涂装文件。详情请查看日志。</value>
+  </data>
+  <data name="View3DParseFailedFormat" xml:space="preserve">
+    <value>无法读取涂装：{0}</value>
+  </data>
+  <data name="ViewerStatsFormat" xml:space="preserve">
+    <value>{0:N0} 个三角形（LOD {1}）· 涂装 {2}×{3} · 画面 {4}×{5}，MSAA {6}× · {7:F1} 毫秒</value>
+  </data>
+  <data name="ViewerNoOpenGl" xml:space="preserve">
+    <value>3D 查看不可用：无法初始化 OpenGL。</value>
+  </data>
+  <data name="ViewerQualityLow" xml:space="preserve">
+    <value>低</value>
+  </data>
+  <data name="ViewerQualityMedium" xml:space="preserve">
+    <value>中</value>
+  </data>
+  <data name="ViewerQualityHigh" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="ViewerQualityUltra" xml:space="preserve">
+    <value>超高</value>
+  </data>
+  <data name="ViewerResetView" xml:space="preserve">
+    <value>重置视图</value>
+  </data>
+  <data name="ViewerTitleFormat" xml:space="preserve">
+    <value>{0} — 3D</value>
+  </data>
+  <data name="GameFolderNotSetHint" xml:space="preserve">
+    <value>3D 查看涂装需要游戏文件夹</value>
+  </data>
+  <data name="GameFolderChecking" xml:space="preserve">
+    <value>正在检查游戏文件夹…</value>
+  </data>
+  <data name="GameFolderInvalidFormat" xml:space="preserve">
+    <value>该游戏文件夹不可用：{0}</value>
+  </data>
+  <data name="GameFolderValidFormat" xml:space="preserve">
+    <value>已找到游戏文件夹，车辆：{0}</value>
+  </data>
+  <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
+    <value>已找到游戏文件夹，车辆：{0}。但是：{1}</value>
+  </data>
+  <data name="ViewerControlsHint" xml:space="preserve">
+    <value>左键拖动：旋转 · 右键拖动：移动 · 滚轮：缩放 · 双击：重置</value>
+  </data>
+  <data name="AuctionBadgeLabel" xml:space="preserve">
+    <value>拍卖</value>
+  </data>
+  <data name="AuctionBadgeTooltip" xml:space="preserve">
+    <value>在拍卖行购买。
+拍卖涂装无法移至归档。</value>
+  </data>
+  <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
+    <value>拍卖涂装无法移至归档</value>
+  </data>
+  <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
+    <value>拍卖涂装无法移至归档，所选涂装中有 {0} 个仍保留在游戏中。</value>
+  </data>
+  <data name="ContextMenuOnlyThisCar" xml:space="preserve">
+    <value>仅显示该车型</value>
+  </data>
+  <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
+    <value>仅显示该厂牌</value>
+  </data>
+  <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
+    <value>仅显示该作者</value>
+  </data>
+  <data name="ContextMenuClearQuickFilters" xml:space="preserve">
+    <value>重新显示全部</value>
+  </data>
+  <data name="QuickFiltersLabel" xml:space="preserve">
+    <value>仅显示:</value>
+  </data>
+  <data name="QuickFilterCarFormat" xml:space="preserve">
+    <value>车型: {0}</value>
+  </data>
+  <data name="QuickFilterManufacturerFormat" xml:space="preserve">
+    <value>厂牌: {0}</value>
+  </data>
+  <data name="QuickFilterAuthorFormat" xml:space="preserve">
+    <value>作者: {0}</value>
+  </data>
+  <data name="QuickFilterRemoveTooltip" xml:space="preserve">
+    <value>移除此筛选</value>
+  </data>
+  <data name="StatusAutoRefreshedFormat" xml:space="preserve">
+    <value>存档已变化: +{0} / −{1}，图库已刷新</value>
+  </data>
+  <data name="FilterAuctionLabel" xml:space="preserve">
+    <value>拍卖</value>
+  </data>
+  <data name="AuctionFilterAll" xml:space="preserve">
+    <value>所有涂装</value>
+  </data>
+  <data name="AuctionFilterSeparately" xml:space="preserve">
+    <value>单独显示拍卖涂装</value>
+  </data>
+  <data name="AuctionFilterOnly" xml:space="preserve">
+    <value>仅拍卖涂装</value>
+  </data>
+  <data name="AuctionFilterHide" xml:space="preserve">
+    <value>隐藏拍卖涂装</value>
+  </data>
+  <data name="SeparateAuctionGroupName" xml:space="preserve">
+    <value>拍卖</value>
+  </data>
+  <data name="AuthorInferredTooltip" xml:space="preserve">
+    <value>此涂装未保存作者名称，已从同一作者的其他涂装中获取</value>
+  </data>
+  <data name="AuthorUnknownMessage" xml:space="preserve">
+    <value>此涂装未保存作者名称，图库中也没有该作者的其他涂装可供获取。</value>
+  </data>
+  <data name="QuickFilterAddButton" xml:space="preserve">
+    <value>筛选</value>
+  </data>
+  <data name="QuickFilterAddTooltip" xml:space="preserve">
+    <value>仅显示某个厂牌、车型或作者</value>
+  </data>
+  <data name="QuickFilterKindManufacturer" xml:space="preserve">
+    <value>厂牌</value>
+  </data>
+  <data name="QuickFilterKindCar" xml:space="preserve">
+    <value>车型</value>
+  </data>
+  <data name="QuickFilterKindAuthor" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="QuickFilterSearchWatermark" xml:space="preserve">
+    <value>搜索…</value>
+  </data>
+  <data name="QuickFilterPickerEmpty" xml:space="preserve">
+    <value>未找到</value>
+  </data>
+  <data name="GroupShowOnlyButton" xml:space="preserve">
+    <value>仅此项</value>
+  </data>
+  <data name="GroupShowOnlyTooltip" xml:space="preserve">
+    <value>仅显示此组</value>
+  </data>
+  <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
+    <value>{0} 的车型</value>
+  </data>
+  <data name="SettingsSectionDuplicates" xml:space="preserve">
+    <value>重复</value>
+  </data>
+  <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
+    <value>相似度达到以下值时视为可能重复</value>
+  </data>
+  <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
+    <value>相似度更低的匹配不会显示。完全重复始终显示。立即生效，无需重新扫描。</value>
+  </data>
+  <data name="LiveryRenderPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Package: {0}</value>
+  </data>
+  <data name="LiveryRenderAvaloniaPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Avalonia Package: {0}</value>
+  </data>
+  <data name="View3DDifferenceNote" xml:space="preserve">
+    <value>3D 预览仅供参考：颜色、材质、光照和部分细节可能与游戏中不同。</value>
+  </data>
+  <data name="ServerStatusChecking" xml:space="preserve">
+    <value>服务器：正在连接…</value>
+  </data>
+  <data name="ServerStatusOnline" xml:space="preserve">
+    <value>服务器：已连接</value>
+  </data>
+  <data name="ServerStatusSyncing" xml:space="preserve">
+    <value>服务器：正在读取存档…</value>
+  </data>
+  <data name="ServerStatusSaveNotSupported" xml:space="preserve">
+    <value>服务器：暂不支持此存档</value>
+  </data>
+  <data name="ServerStatusDegraded" xml:space="preserve">
+    <value>服务器：功能受限</value>
+  </data>
+  <data name="ServerStatusMaintenance" xml:space="preserve">
+    <value>服务器：维护中</value>
+  </data>
+  <data name="ServerStatusUnreachable" xml:space="preserve">
+    <value>服务器不可用</value>
+  </data>
+  <data name="ServerStatusNoInternet" xml:space="preserve">
+    <value>无网络连接</value>
+  </data>
+  <data name="ServerStatusRateLimited" xml:space="preserve">
+    <value>服务器：请求过多</value>
+  </data>
+  <data name="ServerStatusUpdateRequired" xml:space="preserve">
+    <value>服务器：请更新应用</value>
+  </data>
+  <data name="ServerStatusAppRejected" xml:space="preserve">
+    <value>服务器：不接受此版本</value>
+  </data>
+  <data name="ServerStatusCertificateError" xml:space="preserve">
+    <value>服务器：安全连接失败</value>
+  </data>
+  <data name="ServerStatusServerError" xml:space="preserve">
+    <value>服务器错误</value>
+  </data>
+  <data name="ServerStatusNotConfigured" xml:space="preserve">
+    <value>此版本未配置服务器</value>
+  </data>
+  <data name="ServerStatusVersionFormat" xml:space="preserve">
+    <value>服务器 {0}</value>
+  </data>
+  <data name="ServerStatusRetryHint" xml:space="preserve">
+    <value>应用将自动重试。</value>
+  </data>
+  <data name="ServerStatusRetryInFormat" xml:space="preserve">
+    <value>{0} 秒后重试。</value>
+  </data>
+  <data name="ServerStatusUpdateHint" xml:space="preserve">
+    <value>服务器需要更新版本的应用，请更新。</value>
+  </data>
+  <data name="ServerStatusAppRejectedHint" xml:space="preserve">
+    <value>服务器不接受此应用版本，请使用官方发布版。</value>
+  </data>
+  <data name="ServerStatusCertificateHint" xml:space="preserve">
+    <value>服务器证书未通过验证：连接可能被拦截（例如杀毒软件或代理）。应用不会自动重试。</value>
+  </data>
+  <data name="ServerStatusClickToRecheck" xml:space="preserve">
+    <value>点击检查服务器状态</value>
+  </data>
+  <data name="ServerSyncDoneFormat" xml:space="preserve">
+    <value>已应用到车辆的涂装：{0}
+更新于 {1}</value>
+  </data>
+  <data name="ServerSyncProfileNotFound" xml:space="preserve">
+    <value>在存档文件夹中找不到配置文件存档（C_ProfileData）。</value>
+  </data>
+  <data name="ServerSyncSaveNotSupported" xml:space="preserve">
+    <value>服务器暂时无法读取此存档，可能是游戏已更新。即将支持。</value>
+  </data>
+  <data name="ServerSyncSaveRejected" xml:space="preserve">
+    <value>服务器提示此文件不是有效的配置文件存档。</value>
+  </data>
+  <data name="ServerSyncFailed" xml:space="preserve">
+    <value>无法更新已应用的涂装，应用将重试。</value>
+  </data>
+  <data name="InstalledBadgeLabel" xml:space="preserve">
+    <value>已应用</value>
+  </data>
+  <data name="InstalledBadgeTooltip" xml:space="preserve">
+    <value>已在游戏中应用到车辆</value>
+  </data>
+  <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
+    <value>已在游戏中应用到 {0} 辆车</value>
+  </data>
+  <data name="SettingsSectionServer" xml:space="preserve">
+    <value>涂装数据服务器</value>
+  </data>
+  <data name="ServerConnectionLabel" xml:space="preserve">
+    <value>连接服务器以确定已应用的涂装</value>
+  </data>
+  <data name="ServerConnectionDescription" xml:space="preserve">
+    <value>为确定已应用到车辆的涂装，应用程序会将存档文件（C_ProfileData）传输至服务器。该文件仅用于获取已应用涂装的信息，不会保存在服务器上。
+
+存档文件中的数据不会被保存，也不会用于任何其他目的。服务器用于安全保管解密存档文件所需的密钥。
+
+该服务器与 Forza Horizon、Xbox 或 Microsoft 的官方服务器无关。</value>
+  </data>
+  <data name="ServerConsentMessage" xml:space="preserve">
+    <value>为确定已应用到车辆的涂装，应用程序会将存档文件（C_ProfileData）传输至服务器。该文件仅用于获取已应用涂装的信息，不会保存在服务器上。
+
+存档文件中的数据不会被保存，也不会用于任何其他目的。服务器用于安全保管解密存档文件所需的密钥。
+
+该服务器与 Forza Horizon、Xbox 或 Microsoft 的官方服务器无关。
+
+仅在您同意的情况下才会向服务器发送数据。是否启用服务器连接？</value>
+  </data>
+  <data name="ServerConsentTitle" xml:space="preserve">
+    <value>连接涂装数据服务器</value>
+  </data>
+  <data name="ServerConsentAccept" xml:space="preserve">
+    <value>是的，我已了解并希望继续</value>
+  </data>
+  <data name="FilterInstalledLabel" xml:space="preserve">
+    <value>已应用的涂装</value>
+  </data>
+  <data name="InstalledAllToggle" xml:space="preserve">
+    <value>所有涂装</value>
+  </data>
+  <data name="InstalledFirstToggle" xml:space="preserve">
+    <value>已应用的优先</value>
+  </data>
+  <data name="OnlyInstalledToggle" xml:space="preserve">
+    <value>仅已应用</value>
+  </data>
+  <data name="FilterValueUnavailable" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="InstalledFilterNeedsServer" xml:space="preserve">
+    <value>请在设置中启用涂装数据服务器连接，以确定已应用的涂装。</value>
+  </data>
+  <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
+    <value>部分文件夹无法从原位置删除——其中的文件可能正在被使用（游戏是否正在运行？）。没有丢失任何数据：有效的副本是完整的。以下残留文件夹已不再需要，可以删除：
+{0}</value>
+  </data>
+  <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>已在游戏中应用到车辆的涂装无法移至归档</value>
+  </data>
+  <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
+    <value>已在游戏中应用到车辆的涂装无法移至归档，所选涂装中有 {0} 个仍保留在游戏中。</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
+    <value>目前无法得知哪些涂装已应用到车辆，因此将此涂装移至归档并不安全：它可能已在游戏中应用到车辆。
+
+要将涂装移至归档吗？</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
+    <value>目前无法得知哪些涂装已应用到车辆，因此将这些涂装移至归档并不安全：其中一些可能已在游戏中应用到车辆。
+
+要将涂装移至归档吗？</value>
+  </data>
+  <data name="DontShowAgainCheckBox" xml:space="preserve">
+    <value>不再显示</value>
+  </data>
+  <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>拍卖涂装和已在游戏中应用到车辆的涂装无法移至归档</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
+    <value>存档文件在上次同步后已发生变化，新数据尚未发送到涂装服务器。已应用到车辆的涂装列表可能已过时，因此将此涂装移至归档并不安全：它可能已在游戏中应用到车辆。
+
+建议等待同步完成（同步会自动进行，可能需要几分钟）后再试。现在就将涂装移至归档吗？</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
+    <value>存档文件在上次同步后已发生变化，新数据尚未发送到涂装服务器。已应用到车辆的涂装列表可能已过时，因此将这些涂装移至归档并不安全：其中一些可能已在游戏中应用到车辆。
+
+建议等待同步完成（同步会自动进行，可能需要几分钟）后再试。现在就将涂装移至归档吗？</value>
   </data>
 </root>

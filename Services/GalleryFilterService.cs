@@ -1,4 +1,5 @@
 using LiveryGallery.Enums;
+using LiveryGallery.Models;
 using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Services;
@@ -14,9 +15,22 @@ internal static class GalleryFilterService
         DuplicatesFilterMode duplicatesFilterMode,
         GeneratedFilterMode generatedFilterMode,
         PaintFilterMode paintFilterMode,
-        bool searchByFolderName)
+        bool searchByFolderName,
+        IReadOnlyList<QuickFilter>? quickFilters = null,
+        AuctionFilterMode auctionFilterMode = AuctionFilterMode.All,
+        bool onlyInstalled = false)
     {
         IEnumerable<LiveryEntry> query = allEntries;
+
+        query = auctionFilterMode switch
+        {
+            AuctionFilterMode.OnlyAuction => query.Where(x => x.IsAuction),
+            AuctionFilterMode.HideAuction => query.Where(x => !x.IsAuction),
+            _ => query
+        };
+
+        if (quickFilters is { Count: > 0 })
+            query = query.Where(x => quickFilters.All(f => f.Matches(x)));
 
         string trimmedSearch = search?.Trim() ?? "";
         if (trimmedSearch.Length > 0)
@@ -30,6 +44,9 @@ internal static class GalleryFilterService
 
         if (onlyFavorites)
             query = query.Where(x => x.IsFavorite);
+
+        if (onlyInstalled)
+            query = query.Where(x => x.IsInstalled);
 
         if (onlyMine)
             query = query.Where(x => x.IsMine);

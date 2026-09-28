@@ -11,9 +11,9 @@ internal sealed partial class ArchivedLiveryRowViewModel(ArchivedLiveryEntry ent
     public ArchivedLiveryEntry Entry { get; } = entry;
 
     public string FolderName => Entry.Data.FolderName;
-    public string LiveryName => Entry.Data.LiveryName;
+    public string LiveryName => Entry.Data.DisplayLiveryName;
     public string LiveryIdText => LiveryRestoreConflicts.FormatLiveryId(Entry.Data.LiveryId);
-    public string AuthorRaw => Entry.Data.AuthorRaw;
+    public string AuthorRaw => Entry.Data.DisplayAuthorRaw;
     public string CarManufacturer => Entry.Data.CarManufacturerRaw;
     public string CarModelName => Entry.Data.CarModelNameRaw;
     public string? ThumbnailPath => Entry.Data.ThumbnailPath;

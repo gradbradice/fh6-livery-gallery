@@ -217,7 +217,7 @@
     <value>Versión</value>
   </data>
   <data name="AboutDescription" xml:space="preserve">
-    <value>Una galería para tus liveries guardados de Forza Horizon 6.</value>
+    <value>Una galería para sus liveries guardados de Forza Horizon 6.</value>
   </data>
   <data name="ButtonClose" xml:space="preserve">
     <value>Cerrar</value>
@@ -307,10 +307,10 @@
     <value>Desconocido</value>
   </data>
   <data name="HeaderParserVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser (nativo): {0}</value>
+    <value>ForzaToolkit Formats Native: {0}</value>
   </data>
   <data name="ForzaDataPackageVersionFormat" xml:space="preserve">
-    <value>FH6 Data Parser (paquete): {0}</value>
+    <value>ForzaToolkit Formats Package: {0}</value>
   </data>
   <data name="SettingsToggleTooltip" xml:space="preserve">
     <value>Configuración</value>
@@ -415,7 +415,7 @@
     <value>Posible duplicado</value>
   </data>
   <data name="MyLiveryBadgeTooltip" xml:space="preserve">
-    <value>Tu diseño</value>
+    <value>Su diseño</value>
   </data>
   <data name="MyLiveryBadgeLabel" xml:space="preserve">
     <value>Mía</value>
@@ -614,7 +614,7 @@ Cree una para unificar los apodos de un autor bajo un solo nombre.</value>
     <value>Apodos</value>
   </data>
   <data name="AuthorCardAliasesHint" xml:space="preserve">
-    <value>Selecciona uno o más apodos — una misma persona puede publicar libreas desde varias cuentas.</value>
+    <value>Seleccione uno o más apodos — una misma persona puede publicar libreas desde varias cuentas.</value>
   </data>
   <data name="AuthorCardCustomNameLabel" xml:space="preserve">
     <value>Nombre a mostrar</value>
@@ -731,10 +731,10 @@ Cree una para unificar los apodos de un autor bajo un solo nombre.</value>
     <value>Archivado {0}</value>
   </data>
   <data name="ArchiveNoSavePathMessage" xml:space="preserve">
-    <value>Elige primero una carpeta de guardado (Configuración) antes de restaurar libreas</value>
+    <value>Elija primero una carpeta de guardado (Configuración) antes de restaurar libreas</value>
   </data>
   <data name="FileOperationFailedMessage" xml:space="preserve">
-    <value>Algo salió mal durante esta operación. Consulta los registros para obtener más información.</value>
+    <value>Algo salió mal durante esta operación. Consulte los registros para obtener más información.</value>
   </data>
   <data name="PreviewDialogTitle" xml:space="preserve">
     <value>Vista previa</value>
@@ -810,7 +810,7 @@ Cree una para unificar los apodos de un autor bajo un solo nombre.</value>
 {0}</value>
   </data>
   <data name="RestoreFailedMessage" xml:space="preserve">
-    <value>No se pudieron restaurar estas libreas. Consulta los registros para obtener más información:
+    <value>No se pudieron restaurar estas libreas. Consulte los registros para obtener más información:
 {0}</value>
   </data>
   <data name="RestoreListMoreFormat" xml:space="preserve">
@@ -842,5 +842,419 @@ Cree una para unificar los apodos de un autor bajo un solo nombre.</value>
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
     <value>La librea se leyó, pero no se pudo analizar parte de su archivo. Se muestran los datos principales; algunas comprobaciones (generación, duplicados) pueden no estar disponibles.</value>
+  </data>
+  <data name="GameFolderProblemNotSet" xml:space="preserve">
+    <value>la carpeta del juego no está configurada</value>
+  </data>
+  <data name="GameFolderProblemNotFound" xml:space="preserve">
+    <value>la carpeta no existe</value>
+  </data>
+  <data name="GameFolderProblemAccessDenied" xml:space="preserve">
+    <value>no hay acceso a la carpeta</value>
+  </data>
+  <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
+    <value>no es la carpeta del juego (no hay carpeta media)</value>
+  </data>
+  <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
+    <value>no se encontró media\cars</value>
+  </data>
+  <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
+    <value>no hay coches en media\cars</value>
+  </data>
+  <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
+    <value>no se encontró media\Livery</value>
+  </data>
+  <data name="GameFolderProblemNoVinyls" xml:space="preserve">
+    <value>no se encontraron los vinilos del juego (media\Livery\Vinyls.zip)</value>
+  </data>
+  <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
+    <value>no se pudieron leer los vinilos del juego</value>
+  </data>
+  <data name="GameFolderProblemNoDecals" xml:space="preserve">
+    <value>no se encontraron los logotipos, algunas calcomanías no se dibujarán</value>
+  </data>
+  <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
+    <value>no se pudieron leer algunos coches</value>
+  </data>
+  <data name="GameFolderProblemUnknown" xml:space="preserve">
+    <value>la carpeta no es válida</value>
+  </data>
+  <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
+    <value>No se encontraron los vinilos del juego. Revise la carpeta del juego (media\Livery).</value>
+  </data>
+  <data name="RenderErrorGamePathInvalid" xml:space="preserve">
+    <value>La carpeta del juego no está configurada o no se encontró.</value>
+  </data>
+  <data name="RenderErrorCarNotFound" xml:space="preserve">
+    <value>El coche de esta librea no está en la carpeta del juego.</value>
+  </data>
+  <data name="RenderErrorCarFormat" xml:space="preserve">
+    <value>No se pudieron leer los archivos del coche.</value>
+  </data>
+  <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
+    <value>Este coche no tiene diseño de librea.</value>
+  </data>
+  <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
+    <value>Formas sin dibujar: {0}</value>
+  </data>
+  <data name="RenderErrorRasterLogosSkippedFormat" xml:space="preserve">
+    <value>Logotipos sin dibujar: {0}</value>
+  </data>
+  <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
+    <value>Formas sin sección: {0}</value>
+  </data>
+  <data name="RenderErrorGeneric" xml:space="preserve">
+    <value>No se pudo dibujar la librea.</value>
+  </data>
+  <data name="View3DGameFolderChecking" xml:space="preserve">
+    <value>El 3D aún no está disponible: comprobando la carpeta del juego</value>
+  </data>
+  <data name="View3DTooltip" xml:space="preserve">
+    <value>Ver en 3D</value>
+  </data>
+  <data name="View3DNoCLivery" xml:space="preserve">
+    <value>3D no disponible: la librea no tiene archivo C_livery</value>
+  </data>
+  <data name="View3DParseError" xml:space="preserve">
+    <value>3D no disponible: no se pudo leer la librea</value>
+  </data>
+  <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
+    <value>3D no disponible: {0}. Configura la carpeta del juego en los ajustes.</value>
+  </data>
+  <data name="View3DDialogTitle" xml:space="preserve">
+    <value>Vista 3D</value>
+  </data>
+  <data name="View3DReadFailed" xml:space="preserve">
+    <value>No se pudo leer el archivo de la librea. Consulte el registro para más detalles.</value>
+  </data>
+  <data name="View3DParseFailedFormat" xml:space="preserve">
+    <value>No se pudo leer la librea: {0}</value>
+  </data>
+  <data name="ViewerStatsFormat" xml:space="preserve">
+    <value>{0:N0} triángulos (LOD {1}) · librea {2}×{3} · fotograma {4}×{5}, MSAA {6}× · {7:F1} ms</value>
+  </data>
+  <data name="ViewerNoOpenGl" xml:space="preserve">
+    <value>Vista 3D no disponible: no se pudo inicializar OpenGL.</value>
+  </data>
+  <data name="ViewerQualityLow" xml:space="preserve">
+    <value>Baja</value>
+  </data>
+  <data name="ViewerQualityMedium" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="ViewerQualityHigh" xml:space="preserve">
+    <value>Alta</value>
+  </data>
+  <data name="ViewerQualityUltra" xml:space="preserve">
+    <value>Ultra</value>
+  </data>
+  <data name="ViewerResetView" xml:space="preserve">
+    <value>Restablecer vista</value>
+  </data>
+  <data name="ViewerTitleFormat" xml:space="preserve">
+    <value>{0} — 3D</value>
+  </data>
+  <data name="GameFolderNotSetHint" xml:space="preserve">
+    <value>La carpeta del juego es necesaria para ver libreas en 3D</value>
+  </data>
+  <data name="GameFolderChecking" xml:space="preserve">
+    <value>Comprobando la carpeta del juego…</value>
+  </data>
+  <data name="GameFolderInvalidFormat" xml:space="preserve">
+    <value>La carpeta del juego no es válida: {0}</value>
+  </data>
+  <data name="GameFolderValidFormat" xml:space="preserve">
+    <value>Carpeta del juego encontrada, coches: {0}</value>
+  </data>
+  <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
+    <value>Carpeta del juego encontrada, coches: {0}. Sin embargo: {1}</value>
+  </data>
+  <data name="ViewerControlsHint" xml:space="preserve">
+    <value>Clic izquierdo y arrastrar: girar · Clic derecho: mover · Rueda: zoom · Doble clic: restablecer</value>
+  </data>
+  <data name="AuctionBadgeLabel" xml:space="preserve">
+    <value>Subasta</value>
+  </data>
+  <data name="AuctionBadgeTooltip" xml:space="preserve">
+    <value>Comprado en la casa de subastas.
+Los diseños de subasta no se pueden mover al archivo.</value>
+  </data>
+  <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
+    <value>Los diseños de subasta no se pueden mover al archivo</value>
+  </data>
+  <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
+    <value>Los diseños de subasta no se pueden mover al archivo, así que {0} de los seleccionados siguen en el juego.</value>
+  </data>
+  <data name="ContextMenuOnlyThisCar" xml:space="preserve">
+    <value>Solo este coche</value>
+  </data>
+  <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
+    <value>Solo esta marca</value>
+  </data>
+  <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
+    <value>Solo este autor</value>
+  </data>
+  <data name="ContextMenuClearQuickFilters" xml:space="preserve">
+    <value>Volver a mostrar todo</value>
+  </data>
+  <data name="QuickFiltersLabel" xml:space="preserve">
+    <value>Solo:</value>
+  </data>
+  <data name="QuickFilterCarFormat" xml:space="preserve">
+    <value>Coche: {0}</value>
+  </data>
+  <data name="QuickFilterManufacturerFormat" xml:space="preserve">
+    <value>Marca: {0}</value>
+  </data>
+  <data name="QuickFilterAuthorFormat" xml:space="preserve">
+    <value>Autor: {0}</value>
+  </data>
+  <data name="QuickFilterRemoveTooltip" xml:space="preserve">
+    <value>Quitar este filtro</value>
+  </data>
+  <data name="StatusAutoRefreshedFormat" xml:space="preserve">
+    <value>Partida guardada modificada: +{0} / −{1}, galería actualizada</value>
+  </data>
+  <data name="FilterAuctionLabel" xml:space="preserve">
+    <value>Subasta</value>
+  </data>
+  <data name="AuctionFilterAll" xml:space="preserve">
+    <value>Todos los diseños</value>
+  </data>
+  <data name="AuctionFilterSeparately" xml:space="preserve">
+    <value>Mostrar los diseños de subasta por separado</value>
+  </data>
+  <data name="AuctionFilterOnly" xml:space="preserve">
+    <value>Solo diseños de subasta</value>
+  </data>
+  <data name="AuctionFilterHide" xml:space="preserve">
+    <value>Ocultar diseños de subasta</value>
+  </data>
+  <data name="SeparateAuctionGroupName" xml:space="preserve">
+    <value>Subasta</value>
+  </data>
+  <data name="AuthorInferredTooltip" xml:space="preserve">
+    <value>El diseño no guarda el nombre de su autor: se ha tomado de otros diseños del mismo autor</value>
+  </data>
+  <data name="AuthorUnknownMessage" xml:space="preserve">
+    <value>Este diseño no guarda el nombre de su autor y en la galería no hay otros diseños de este autor de los que tomarlo.</value>
+  </data>
+  <data name="QuickFilterAddButton" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="QuickFilterAddTooltip" xml:space="preserve">
+    <value>Mostrar solo una marca, un coche o un autor</value>
+  </data>
+  <data name="QuickFilterKindManufacturer" xml:space="preserve">
+    <value>Marca</value>
+  </data>
+  <data name="QuickFilterKindCar" xml:space="preserve">
+    <value>Coche</value>
+  </data>
+  <data name="QuickFilterKindAuthor" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="QuickFilterSearchWatermark" xml:space="preserve">
+    <value>Buscar…</value>
+  </data>
+  <data name="QuickFilterPickerEmpty" xml:space="preserve">
+    <value>No se encontró nada</value>
+  </data>
+  <data name="GroupShowOnlyButton" xml:space="preserve">
+    <value>Solo esta</value>
+  </data>
+  <data name="GroupShowOnlyTooltip" xml:space="preserve">
+    <value>Mostrar solo este grupo</value>
+  </data>
+  <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
+    <value>Coches de {0}</value>
+  </data>
+  <data name="SettingsSectionDuplicates" xml:space="preserve">
+    <value>Duplicados</value>
+  </data>
+  <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
+    <value>Marcar como posible duplicado a partir de una similitud de</value>
+  </data>
+  <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
+    <value>Las coincidencias menos parecidas no se muestran. Los duplicados exactos se muestran siempre. Se aplica al instante, sin volver a escanear.</value>
+  </data>
+  <data name="LiveryRenderPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Package: {0}</value>
+  </data>
+  <data name="LiveryRenderAvaloniaPackageVersionFormat" xml:space="preserve">
+    <value>ForzaToolkit LiveryRender Avalonia Package: {0}</value>
+  </data>
+  <data name="View3DDifferenceNote" xml:space="preserve">
+    <value>La vista 3D es una aproximación: los colores, materiales, la iluminación y algunos detalles pueden verse distintos que en el juego.</value>
+  </data>
+  <data name="ServerStatusChecking" xml:space="preserve">
+    <value>Servidor: conectando…</value>
+  </data>
+  <data name="ServerStatusOnline" xml:space="preserve">
+    <value>Servidor: conectado</value>
+  </data>
+  <data name="ServerStatusSyncing" xml:space="preserve">
+    <value>Servidor: leyendo la partida guardada…</value>
+  </data>
+  <data name="ServerStatusSaveNotSupported" xml:space="preserve">
+    <value>Servidor: partida aún no compatible</value>
+  </data>
+  <data name="ServerStatusDegraded" xml:space="preserve">
+    <value>Servidor: limitado</value>
+  </data>
+  <data name="ServerStatusMaintenance" xml:space="preserve">
+    <value>Servidor: mantenimiento</value>
+  </data>
+  <data name="ServerStatusUnreachable" xml:space="preserve">
+    <value>Servidor no disponible</value>
+  </data>
+  <data name="ServerStatusNoInternet" xml:space="preserve">
+    <value>Sin conexión a Internet</value>
+  </data>
+  <data name="ServerStatusRateLimited" xml:space="preserve">
+    <value>Servidor: demasiadas solicitudes</value>
+  </data>
+  <data name="ServerStatusUpdateRequired" xml:space="preserve">
+    <value>Servidor: actualice la aplicación</value>
+  </data>
+  <data name="ServerStatusAppRejected" xml:space="preserve">
+    <value>Servidor: esta compilación no se acepta</value>
+  </data>
+  <data name="ServerStatusCertificateError" xml:space="preserve">
+    <value>Servidor: falló la conexión segura</value>
+  </data>
+  <data name="ServerStatusServerError" xml:space="preserve">
+    <value>Error del servidor</value>
+  </data>
+  <data name="ServerStatusNotConfigured" xml:space="preserve">
+    <value>Servidor no configurado en esta compilación</value>
+  </data>
+  <data name="ServerStatusVersionFormat" xml:space="preserve">
+    <value>Servidor {0}</value>
+  </data>
+  <data name="ServerStatusRetryHint" xml:space="preserve">
+    <value>La aplicación lo volverá a intentar automáticamente.</value>
+  </data>
+  <data name="ServerStatusRetryInFormat" xml:space="preserve">
+    <value>Próximo intento en {0} s.</value>
+  </data>
+  <data name="ServerStatusUpdateHint" xml:space="preserve">
+    <value>El servidor necesita una versión más reciente de la aplicación. Actualícela.</value>
+  </data>
+  <data name="ServerStatusAppRejectedHint" xml:space="preserve">
+    <value>El servidor no acepta esta compilación de la aplicación. Use la versión oficial.</value>
+  </data>
+  <data name="ServerStatusCertificateHint" xml:space="preserve">
+    <value>El certificado del servidor no superó la verificación: la conexión podría estar interceptada (por ejemplo, por un antivirus o un proxy). La aplicación no lo reintentará sola.</value>
+  </data>
+  <data name="ServerStatusClickToRecheck" xml:space="preserve">
+    <value>Haga clic para comprobar el estado del servidor</value>
+  </data>
+  <data name="ServerSyncDoneFormat" xml:space="preserve">
+    <value>Diseños aplicados a coches: {0}
+Actualizado a las {1}</value>
+  </data>
+  <data name="ServerSyncProfileNotFound" xml:space="preserve">
+    <value>No se encontró el archivo de perfil (C_ProfileData) en la carpeta de guardado.</value>
+  </data>
+  <data name="ServerSyncSaveNotSupported" xml:space="preserve">
+    <value>El servidor aún no puede leer esta partida: probablemente el juego se actualizó. El soporte llegará pronto.</value>
+  </data>
+  <data name="ServerSyncSaveRejected" xml:space="preserve">
+    <value>El servidor indica que este archivo no es una partida de perfil válida.</value>
+  </data>
+  <data name="ServerSyncFailed" xml:space="preserve">
+    <value>No se pudieron actualizar los diseños aplicados; la aplicación lo volverá a intentar.</value>
+  </data>
+  <data name="InstalledBadgeLabel" xml:space="preserve">
+    <value>Aplicado</value>
+  </data>
+  <data name="InstalledBadgeTooltip" xml:space="preserve">
+    <value>Aplicado a un coche en el juego</value>
+  </data>
+  <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
+    <value>Aplicado a {0} coches en el juego</value>
+  </data>
+  <data name="SettingsSectionServer" xml:space="preserve">
+    <value>Servidor de datos de diseños</value>
+  </data>
+  <data name="ServerConnectionLabel" xml:space="preserve">
+    <value>Conectarse al servidor para determinar los diseños aplicados</value>
+  </data>
+  <data name="ServerConnectionDescription" xml:space="preserve">
+    <value>Para determinar los diseños aplicados a los coches, la aplicación envía el archivo de guardado (C_ProfileData) al servidor. El archivo se procesa exclusivamente para obtener información sobre los diseños aplicados y no se almacena en el servidor.
+
+Los datos del archivo de guardado no se almacenan ni se utilizan con ningún otro fin. El servidor se utiliza para almacenar de forma segura las claves necesarias para descifrar el archivo de guardado.
+
+El servidor no está vinculado a los servidores oficiales de Forza Horizon, Xbox o Microsoft.</value>
+  </data>
+  <data name="ServerConsentMessage" xml:space="preserve">
+    <value>Para determinar los diseños aplicados a los coches, la aplicación envía el archivo de guardado (C_ProfileData) al servidor. El archivo se procesa exclusivamente para obtener información sobre los diseños aplicados y no se almacena en el servidor.
+
+Los datos del archivo de guardado no se almacenan ni se utilizan con ningún otro fin. El servidor se utiliza para almacenar de forma segura las claves necesarias para descifrar el archivo de guardado.
+
+El servidor no está vinculado a los servidores oficiales de Forza Horizon, Xbox o Microsoft.
+
+Los datos se envían al servidor únicamente con su consentimiento. ¿Desea activar la conexión con el servidor?</value>
+  </data>
+  <data name="ServerConsentTitle" xml:space="preserve">
+    <value>Conexión con el servidor de datos de diseños</value>
+  </data>
+  <data name="ServerConsentAccept" xml:space="preserve">
+    <value>Sí, lo entiendo y quiero continuar</value>
+  </data>
+  <data name="FilterInstalledLabel" xml:space="preserve">
+    <value>Diseños aplicados</value>
+  </data>
+  <data name="InstalledAllToggle" xml:space="preserve">
+    <value>Todos los diseños</value>
+  </data>
+  <data name="InstalledFirstToggle" xml:space="preserve">
+    <value>Primero los aplicados</value>
+  </data>
+  <data name="OnlyInstalledToggle" xml:space="preserve">
+    <value>Solo los aplicados</value>
+  </data>
+  <data name="FilterValueUnavailable" xml:space="preserve">
+    <value>Desactivado</value>
+  </data>
+  <data name="InstalledFilterNeedsServer" xml:space="preserve">
+    <value>Active la conexión con el servidor de datos de diseños en los ajustes para determinar los diseños aplicados.</value>
+  </data>
+  <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
+    <value>Algunas carpetas no se pudieron eliminar de su ubicación anterior; probablemente un archivo está en uso (¿está abierto el juego?). No se ha perdido nada: la copia válida está completa. Estos restos ya no son necesarios y se pueden eliminar:
+{0}</value>
+  </data>
+  <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Los diseños aplicados a coches en el juego no se pueden mover al archivo</value>
+  </data>
+  <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
+    <value>Los diseños aplicados a coches en el juego no se pueden mover al archivo, así que {0} de los seleccionados siguen en el juego.</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
+    <value>No se sabe qué diseños están aplicados a coches, así que mover este diseño al archivo no es seguro: podría estar aplicado a un coche en el juego.
+
+¿Mover el diseño al archivo?</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
+    <value>No se sabe qué diseños están aplicados a coches, así que mover estos diseños al archivo no es seguro: algunos podrían estar aplicados a coches en el juego.
+
+¿Mover los diseños al archivo?</value>
+  </data>
+  <data name="DontShowAgainCheckBox" xml:space="preserve">
+    <value>No volver a mostrar</value>
+  </data>
+  <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Los diseños de subasta y los aplicados a coches en el juego no se pueden mover al archivo</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
+    <value>El archivo de guardado ha cambiado desde la última sincronización y los nuevos datos aún no se han enviado al servidor de diseños. La lista de diseños aplicados a coches puede estar desactualizada, así que mover este diseño al archivo no es seguro: podría estar aplicado a un coche en el juego.
+
+Es mejor esperar a la sincronización (se hace automáticamente y puede tardar unos minutos) y volver a intentarlo. ¿Mover el diseño al archivo ahora?</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
+    <value>El archivo de guardado ha cambiado desde la última sincronización y los nuevos datos aún no se han enviado al servidor de diseños. La lista de diseños aplicados a coches puede estar desactualizada, así que mover estos diseños al archivo no es seguro: algunos podrían estar aplicados a coches en el juego.
+
+Es mejor esperar a la sincronización (se hace automáticamente y puede tardar unos minutos) y volver a intentarlo. ¿Mover los diseños al archivo ahora?</value>
   </data>
 </root>

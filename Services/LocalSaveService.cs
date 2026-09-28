@@ -159,9 +159,10 @@ internal static partial class LocalSaveService
         foreach (var dir in Directory.GetDirectories(path))
         {
             string name = Path.GetFileName(dir);
-            if (!name.StartsWith(dataDirName, StringComparison.Ordinal)) continue;
+            bool isAuction = dataType == DataType.Livery && LiveryFolders.IsAuction(name);
+            if (!isAuction && !name.StartsWith(dataDirName, StringComparison.Ordinal)) continue;
             if (!File.Exists(Path.Combine(dir, "header"))) continue;
-            if (!File.Exists(Path.Combine(dir, dataFileName))) continue;
+            if (!isAuction && !File.Exists(Path.Combine(dir, dataFileName))) continue;
             result.Add(name);
         }
         return result;

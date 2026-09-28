@@ -18,12 +18,12 @@ internal static class GalleryStatisticsService
         var (popManufacturer, popManufacturerCount) = TopString(allEntries, x => x.CarManufacturer);
         var (popModel, popModelCount) = TopModel(allEntries, includeYear: false);
         var (popCar, popCarCount) = TopModel(allEntries, includeYear: true);
-        var (popAuthor, popAuthorCount) = TopString(allEntries, x => x.Author);
+        var (popAuthor, popAuthorCount) = TopString([.. allEntries.Where(x => !x.Data.IsAuthorUnknown)], x => x.Author);
 
         var (favManufacturer, favManufacturerCount) = TopString(favorites, x => x.CarManufacturer);
         var (favModel, favModelCount) = TopModel(favorites, includeYear: false);
         var (favCar, favCarCount) = TopModel(favorites, includeYear: true);
-        var (favAuthor, favAuthorCount) = TopString(favorites, x => x.Author);
+        var (favAuthor, favAuthorCount) = TopString([.. favorites.Where(x => !x.Data.IsAuthorUnknown)], x => x.Author);
 
         return new GalleryOverallStatistics(
             allEntries.Count,
