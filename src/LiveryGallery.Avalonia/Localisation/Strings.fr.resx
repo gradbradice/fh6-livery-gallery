@@ -1,0 +1,1636 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SavePathNotChosen" xml:space="preserve">
+    <value>Dossier de sauvegarde non sélectionné</value>
+  </data>
+  <data name="RefreshTooltip" xml:space="preserve">
+    <value>Actualiser (rescanner les modifications)</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Rechercher par véhicule (marque, modèle, année), nom de livrée ou par auteur…</value>
+  </data>
+  <data name="UnknownDownloadDate" xml:space="preserve">
+    <value>Date inconnue</value>
+  </data>
+  <data name="StatusProcessed" xml:space="preserve">
+    <value>Traité : {0} nouveaux/modifiés, {1} depuis le cache</value>
+  </data>
+  <data name="StatusErrors" xml:space="preserve">
+    <value>, {0} en erreur</value>
+  </data>
+  <data name="StatusRemoved" xml:space="preserve">
+    <value>, {0} supprimés</value>
+  </data>
+  <data name="StatusScanError" xml:space="preserve">
+    <value>Erreur d'analyse : {0}</value>
+  </data>
+  <data name="CountShowing" xml:space="preserve">
+    <value>{0} affichés sur {1}</value>
+  </data>
+  <data name="EmptyNoLiveries" xml:space="preserve">
+    <value>Aucune livrée (Livery_*) trouvée dans le dossier sélectionné</value>
+  </data>
+  <data name="EmptyNoResults" xml:space="preserve">
+    <value>Aucun résultat pour « {0} »</value>
+  </data>
+  <data name="LoadingScanning" xml:space="preserve">
+    <value>Analyse en cours…</value>
+  </data>
+  <data name="LoadingSavingCache" xml:space="preserve">
+    <value>Enregistrement du cache...</value>
+  </data>
+  <data name="ParsingProgress" xml:space="preserve">
+    <value>Analyse {0}/{1} : {2}</value>
+  </data>
+  <data name="UnknownManufacturer" xml:space="preserve">
+    <value>Marque inconnue</value>
+  </data>
+  <data name="UnknownCarIdFormat" xml:space="preserve">
+    <value>ID {0}</value>
+  </data>
+  <data name="FolderNotFoundTitle" xml:space="preserve">
+    <value>Dossier de sauvegarde introuvable</value>
+  </data>
+  <data name="ButtonYes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="ButtonNo" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="SelectFolderDialogTitle" xml:space="preserve">
+    <value>Sélectionnez le dossier de sauvegarde (le dossier dont le nom commence par « u_ »)</value>
+  </data>
+  <data name="CarDbUpdating" xml:space="preserve">
+    <value>Vérification des mises à jour de la base de données des véhicules…</value>
+  </data>
+  <data name="CarDbUpdated" xml:space="preserve">
+    <value>Base de données des véhicules mise à jour ({0})</value>
+  </data>
+  <data name="CarDbUpToDate" xml:space="preserve">
+    <value>Base de données des véhicules à jour ({0})</value>
+  </data>
+  <data name="CarDbDownloadFailed" xml:space="preserve">
+    <value>Impossible de télécharger la base de données des véhicules — utilisation des dernières données enregistrées ({0})</value>
+  </data>
+  <data name="CarDbNoDataAtAll" xml:space="preserve">
+    <value>Impossible de télécharger la base de données des véhicules, aucune copie locale non plus — les noms des véhicules seront indisponibles</value>
+  </data>
+  <data name="CarDbCarsWord" xml:space="preserve">
+    <value>véhicules</value>
+  </data>
+  <data name="AuthorLabel" xml:space="preserve">
+    <value>Auteur</value>
+  </data>
+  <data name="DateLabel" xml:space="preserve">
+    <value>Date de création</value>
+  </data>
+  <data name="AboutVersionLabel" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="ButtonClose" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="TagsDialogTitle" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagsDialogHint" xml:space="preserve">
+    <value>Séparés par des virgules, ex. : drift, anime, favori</value>
+  </data>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="ButtonCancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="EditTagsTooltip" xml:space="preserve">
+    <value>Modifier les tags</value>
+  </data>
+  <data name="ClearSelectionLabel" xml:space="preserve">
+    <value>Effacer</value>
+  </data>
+  <data name="SelectedCountLabel" xml:space="preserve">
+    <value>{0} sélectionné(s)</value>
+  </data>
+  <data name="TagsFilterLabel" xml:space="preserve">
+    <value>Tags :</value>
+  </data>
+  <data name="OnlyFavoritesToggle" xml:space="preserve">
+    <value>Favoris uniquement</value>
+  </data>
+  <data name="FavoritesFirstToggle" xml:space="preserve">
+    <value>Favoris en premier</value>
+  </data>
+  <data name="NormalOrderToggle" xml:space="preserve">
+    <value>Ordre normal</value>
+  </data>
+  <data name="FavoriteToggleTooltip" xml:space="preserve">
+    <value>Ajouter/retirer des favoris</value>
+  </data>
+  <data name="SeparateFavoritesToggle" xml:space="preserve">
+    <value>Afficher les favoris séparément</value>
+  </data>
+  <data name="SeparateFavoritesGroupName" xml:space="preserve">
+    <value>Favoris</value>
+  </data>
+  <data name="MineFirstToggle" xml:space="preserve">
+    <value>Les miens d'abord</value>
+  </data>
+  <data name="OnlyMineToggle" xml:space="preserve">
+    <value>Seulement les miens</value>
+  </data>
+  <data name="SeparateMineToggle" xml:space="preserve">
+    <value>Afficher les miens séparément</value>
+  </data>
+  <data name="SeparateMineGroupName" xml:space="preserve">
+    <value>Les miens</value>
+  </data>
+  <data name="UpdateAvailableFormat" xml:space="preserve">
+    <value>Nouvelle version {0} disponible →</value>
+  </data>
+  <data name="ButtonUpdateDownload" xml:space="preserve">
+    <value>Télécharger</value>
+  </data>
+  <data name="WhatsNewTitleFormat" xml:space="preserve">
+    <value>Nouveautés de la version {0}</value>
+  </data>
+  <data name="ChangelogNotAvailable" xml:space="preserve">
+    <value>Le journal des modifications détaillé n'est pas disponible. Ouvrez la page de version sur GitHub pour plus de détails.</value>
+  </data>
+  <data name="ChangelogSectionHeader" xml:space="preserve">
+    <value>Français</value>
+  </data>
+  <data name="MinimizeTooltip" xml:space="preserve">
+    <value>Réduire</value>
+  </data>
+  <data name="MaximizeTooltip" xml:space="preserve">
+    <value>Agrandir / Restaurer</value>
+  </data>
+  <data name="CloseTooltip" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="LiveryNoName" xml:space="preserve">
+    <value>(Sans nom)</value>
+  </data>
+  <data name="UnknownAuthor" xml:space="preserve">
+    <value>Inconnu</value>
+  </data>
+  <data name="SettingsToggleTooltip" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="SettingsMenuGamePath" xml:space="preserve">
+    <value>Chemin du jeu</value>
+  </data>
+  <data name="SelectGameFolderDialogTitle" xml:space="preserve">
+    <value>Sélectionnez le dossier d'installation du jeu</value>
+  </data>
+  <data name="SettingsMenuPaths" xml:space="preserve">
+    <value>Chemins</value>
+  </data>
+  <data name="SavePathFieldLabel" xml:space="preserve">
+    <value>Chemin des sauvegardes</value>
+  </data>
+  <data name="PathFieldAutoHint" xml:space="preserve">
+    <value>Laissez vide pour une détection automatique du chemin</value>
+  </data>
+  <data name="SaveFolderValidationFailed" xml:space="preserve">
+    <value>Données de sauvegarde introuvables</value>
+  </data>
+  <data name="ButtonRetry" xml:space="preserve">
+    <value>Réessayer</value>
+  </data>
+  <data name="SaveFolderValidationFailedTitle" xml:space="preserve">
+    <value>Aucune livrée trouvée</value>
+  </data>
+  <data name="SavedPathNotFoundNotice" xml:space="preserve">
+    <value>Le dossier de sauvegarde indiqué est introuvable — recherche automatique en cours.</value>
+  </data>
+  <data name="ButtonOk" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="StatsToggleTooltip" xml:space="preserve">
+    <value>Statistiques</value>
+  </data>
+  <data name="StatsTitle" xml:space="preserve">
+    <value>Statistiques</value>
+  </data>
+  <data name="StatsTotalLiveries" xml:space="preserve">
+    <value>Total des livrées</value>
+  </data>
+  <data name="StatsFavoriteManufacturer" xml:space="preserve">
+    <value>Constructeur préféré</value>
+  </data>
+  <data name="StatsFavoriteAuthor" xml:space="preserve">
+    <value>Auteur préféré</value>
+  </data>
+  <data name="StatsTotalDuplicates" xml:space="preserve">
+    <value>Total des doublons</value>
+  </data>
+  <data name="StatsPossibleDuplicates" xml:space="preserve">
+    <value>Total des doublons possibles</value>
+  </data>
+  <data name="StatsFavoritesCount" xml:space="preserve">
+    <value>Dans les favoris</value>
+  </data>
+  <data name="SettingsMenuContacts" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
+  <data name="ContactsGithubLabel" xml:space="preserve">
+    <value>Dépôt GitHub</value>
+  </data>
+  <data name="DuplicateBadgeLabel" xml:space="preserve">
+    <value>Doublon</value>
+  </data>
+  <data name="DuplicateBadgeTooltip" xml:space="preserve">
+    <value>Cet auteur a une livrée identique pour cette voiture</value>
+  </data>
+  <data name="DuplicateMatchScoreHeader" xml:space="preserve">
+    <value>Correspondances :</value>
+  </data>
+  <data name="DuplicateMatchRelationFormat" xml:space="preserve">
+    <value>{0} : {1} %</value>
+  </data>
+  <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
+    <value>Doublon possible ({0})</value>
+  </data>
+  <data name="DuplicatesFilterAll" xml:space="preserve">
+    <value>Toutes les livrées</value>
+  </data>
+  <data name="DuplicatesFilterAndPossible" xml:space="preserve">
+    <value>Doublons et doublons possibles</value>
+  </data>
+  <data name="DuplicatesFilterOnly" xml:space="preserve">
+    <value>Doublons uniquement</value>
+  </data>
+  <data name="GeneratedFilterAll" xml:space="preserve">
+    <value>Toutes les livrées</value>
+  </data>
+  <data name="GeneratedFilterOnly" xml:space="preserve">
+    <value>Seulement possiblement générées</value>
+  </data>
+  <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
+    <value>Doublon possible</value>
+  </data>
+  <data name="MyLiveryBadgeTooltip" xml:space="preserve">
+    <value>Votre livrée</value>
+  </data>
+  <data name="MyLiveryBadgeLabel" xml:space="preserve">
+    <value>La mienne</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeLabel" xml:space="preserve">
+    <value>Possiblement généré</value>
+  </data>
+  <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
+    <value>Le motif de cette livrée semble avoir été créé de façon programmatique (par ex. à partir d'une photo/image), pas dessiné à la main.</value>
+  </data>
+  <data name="PaintBadgeLabel" xml:space="preserve">
+    <value>Peinture</value>
+  </data>
+  <data name="PaintBadgeTooltip" xml:space="preserve">
+    <value>Cette livrée n'a aucun autocollant — juste une couleur repeinte.</value>
+  </data>
+  <data name="ParseErrorBadgeLabel" xml:space="preserve">
+    <value>Erreur de lecture</value>
+  </data>
+  <data name="ParseErrorBadgeTooltip" xml:space="preserve">
+    <value>Le fichier de cette livrée n'a pas pu être lu correctement — il est peut-être corrompu ou dans un format non pris en charge.</value>
+  </data>
+  <data name="PaintFilterAll" xml:space="preserve">
+    <value>Toutes les livrées</value>
+  </data>
+  <data name="PaintFilterHide" xml:space="preserve">
+    <value>Masquer peinture</value>
+  </data>
+  <data name="PaintFilterOnly" xml:space="preserve">
+    <value>Peinture uniquement</value>
+  </data>
+  <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
+    <value>Cet auteur a une livrée similaire pour cette voiture (la plupart des sections de décalcomanies correspondent, mais pas tout le contenu)</value>
+  </data>
+  <data name="DisplayFilterTooltip" xml:space="preserve">
+    <value>Affichage (favoris, doublons)</value>
+  </data>
+  <data name="FilterMenuTitle" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="FilterSortLabel" xml:space="preserve">
+    <value>Trier par</value>
+  </data>
+  <data name="FilterGroupingLabel" xml:space="preserve">
+    <value>Regroupement</value>
+  </data>
+  <data name="FilterFavoritesLabel" xml:space="preserve">
+    <value>Favoris</value>
+  </data>
+  <data name="FilterMineLabel" xml:space="preserve">
+    <value>Mes livrées</value>
+  </data>
+  <data name="FilterDuplicatesLabel" xml:space="preserve">
+    <value>Doublons</value>
+  </data>
+  <data name="FilterGeneratedLabel" xml:space="preserve">
+    <value>Générées</value>
+  </data>
+  <data name="FilterPaintLabel" xml:space="preserve">
+    <value>Peinture</value>
+  </data>
+  <data name="SortOptionManufacturer" xml:space="preserve">
+    <value>Marque</value>
+  </data>
+  <data name="SortOptionAuthor" xml:space="preserve">
+    <value>Auteur</value>
+  </data>
+  <data name="SortOptionDownloadDate" xml:space="preserve">
+    <value>Date de téléchargement</value>
+  </data>
+  <data name="GroupingOptionNone" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="GroupingOptionByManufacturer" xml:space="preserve">
+    <value>Par marque</value>
+  </data>
+  <data name="GroupingOptionByAuthor" xml:space="preserve">
+    <value>Par auteur</value>
+  </data>
+  <data name="GroupingOptionByMonth" xml:space="preserve">
+    <value>Par mois</value>
+  </data>
+  <data name="FilterValueAll" xml:space="preserve">
+    <value>Toutes</value>
+  </data>
+  <data name="FilterValueFirst" xml:space="preserve">
+    <value>En premier</value>
+  </data>
+  <data name="FilterValueOnly" xml:space="preserve">
+    <value>Uniquement</value>
+  </data>
+  <data name="FilterValueSeparately" xml:space="preserve">
+    <value>Séparément</value>
+  </data>
+  <data name="FilterValueHide" xml:space="preserve">
+    <value>Masquer</value>
+  </data>
+  <data name="FilterValueWithPossible" xml:space="preserve">
+    <value>Avec possibles</value>
+  </data>
+  <data name="AllLiveriesGroupName" xml:space="preserve">
+    <value>Toutes les livrées</value>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="SettingsSectionTheme" xml:space="preserve">
+    <value>Thème</value>
+  </data>
+  <data name="SettingsSectionLanguage" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="ThemeLightLabel" xml:space="preserve">
+    <value>Claire</value>
+  </data>
+  <data name="ThemeDarkLabel" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>Modifications non enregistrées</value>
+  </data>
+  <data name="UnsavedChangesMessage" xml:space="preserve">
+    <value>Vous avez apporté des modifications qui n'ont pas été enregistrées. Si vous quittez maintenant, elles seront perdues.</value>
+  </data>
+  <data name="ButtonBack" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="ButtonSaveAndExit" xml:space="preserve">
+    <value>Enregistrer et quitter</value>
+  </data>
+  <data name="ButtonExitWithoutSaving" xml:space="preserve">
+    <value>Quitter sans enregistrer</value>
+  </data>
+  <data name="ThemeSystemLabel" xml:space="preserve">
+    <value>Système</value>
+  </data>
+  <data name="SettingsSectionScanning" xml:space="preserve">
+    <value>Analyse</value>
+  </data>
+  <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
+    <value>Actualiser automatiquement les livrées</value>
+  </data>
+  <data name="SearchByFolderNameLabel" xml:space="preserve">
+    <value>Afficher et rechercher par nom de dossier</value>
+  </data>
+  <data name="RefreshOnButtonClickLabel" xml:space="preserve">
+    <value>Actualiser les livrées en cliquant sur le bouton</value>
+  </data>
+  <data name="SettingsSaveFailedTitle" xml:space="preserve">
+    <value>Échec de l'enregistrement</value>
+  </data>
+  <data name="SettingsSaveFailedNotice" xml:space="preserve">
+    <value>Impossible d'écrire les paramètres sur le disque. Les modifications n'ont pas été appliquées. Veuillez réessayer.</value>
+  </data>
+  <data name="StatsPopularManufacturer" xml:space="preserve">
+    <value>Fabricant populaire</value>
+  </data>
+  <data name="StatsPopularModel" xml:space="preserve">
+    <value>Modèle populaire</value>
+  </data>
+  <data name="StatsPopularCar" xml:space="preserve">
+    <value>Voiture populaire</value>
+  </data>
+  <data name="StatsPopularAuthor" xml:space="preserve">
+    <value>Auteur populaire</value>
+  </data>
+  <data name="StatsFavoriteModel" xml:space="preserve">
+    <value>Modèle préféré</value>
+  </data>
+  <data name="StatsFavoriteCar" xml:space="preserve">
+    <value>Voiture préférée</value>
+  </data>
+  <data name="AuthorsButtonTooltip" xml:space="preserve">
+    <value>Auteurs</value>
+  </data>
+  <data name="AuthorsDialogTitle" xml:space="preserve">
+    <value>Fiches des auteurs</value>
+  </data>
+  <data name="AuthorsAddCardButton" xml:space="preserve">
+    <value>+ Nouvelle fiche</value>
+  </data>
+  <data name="AuthorsEmptyHint" xml:space="preserve">
+    <value>Aucune fiche d'auteur pour l'instant.
+Créez-en une pour regrouper les pseudos d'un même auteur sous un seul nom.</value>
+  </data>
+  <data name="AuthorCardNewTitle" xml:space="preserve">
+    <value>Nouvelle fiche d'auteur</value>
+  </data>
+  <data name="AuthorCardEditTitle" xml:space="preserve">
+    <value>Modifier la fiche d'auteur</value>
+  </data>
+  <data name="AuthorCardAliasesLabel" xml:space="preserve">
+    <value>Pseudos</value>
+  </data>
+  <data name="AuthorCardAliasesHint" xml:space="preserve">
+    <value>Sélectionnez un ou plusieurs pseudos — une même personne peut publier des livrées depuis différents comptes.</value>
+  </data>
+  <data name="AuthorCardCustomNameLabel" xml:space="preserve">
+    <value>Nom affiché</value>
+  </data>
+  <data name="AuthorCardCustomNameHint" xml:space="preserve">
+    <value>Facultatif — par défaut, le premier pseudo sélectionné</value>
+  </data>
+  <data name="AuthorCardDescriptionLabel" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="AuthorCardTwitterLabel" xml:space="preserve">
+    <value>Twitter/X</value>
+  </data>
+  <data name="AuthorCardYouTubeLabel" xml:space="preserve">
+    <value>YouTube</value>
+  </data>
+  <data name="AuthorCardNoAliasesError" xml:space="preserve">
+    <value>Sélectionnez au moins un pseudo</value>
+  </data>
+  <data name="AuthorCardAliasTakenError" xml:space="preserve">
+    <value>Le pseudo « {0} » appartient déjà à une autre fiche</value>
+  </data>
+  <data name="AuthorCardAutoGeneratedNotice" xml:space="preserve">
+    <value>Cette fiche a été créée automatiquement après la détection d'un changement de pseudo. L'enregistrement la rendra manuelle — la détection automatique ne la modifiera plus.</value>
+  </data>
+  <data name="AuthorCardAutoGeneratedBadge" xml:space="preserve">
+    <value>Détecté automatiquement</value>
+  </data>
+  <data name="AuthorCardAliasesFormat" xml:space="preserve">
+    <value>Pseudos : {0}</value>
+  </data>
+  <data name="AuthorCardLiveriesCountFormat" xml:space="preserve">
+    <value>Livrées : {0}</value>
+  </data>
+  <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
+    <value>Favoris : {0}</value>
+  </data>
+  <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
+    <value>Doublons : {0}</value>
+  </data>
+  <data name="AuthorCardPossibleDuplicatesCountFormat" xml:space="preserve">
+    <value>Doublons possibles : {0}</value>
+  </data>
+  <data name="AuthorCardDeleteTitle" xml:space="preserve">
+    <value>Supprimer la fiche ?</value>
+  </data>
+  <data name="AuthorCardDeleteMessage" xml:space="preserve">
+    <value>Supprimer la fiche « {0} » ? Ses pseudos redeviendront disponibles pour une nouvelle fiche.</value>
+  </data>
+  <data name="ButtonEdit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="AuthorsSearchPlaceholder" xml:space="preserve">
+    <value>Rechercher par nom ou pseudo...</value>
+  </data>
+  <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
+    <value>Aucun résultat trouvé</value>
+  </data>
+  <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
+    <value>Le nom affiché « {0} » est déjà utilisé par une autre fiche</value>
+  </data>
+  <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
+    <value>Rechercher des pseudos...</value>
+  </data>
+  <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
+    <value>Il faut un lien vers un profil (par ex. x.com/username), pas vers un tweet précis ou une autre page</value>
+  </data>
+  <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
+    <value>Il faut un lien vers une chaîne YouTube (par ex. youtube.com/@username), pas vers une vidéo</value>
+  </data>
+  <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
+    <value>Aucune fiche créée</value>
+  </data>
+  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
+    <value>Aucune fiche n'a été créée pour l'auteur « {0} »</value>
+  </data>
+  <data name="AuthorCardCreateButton" xml:space="preserve">
+    <value>Créer une fiche</value>
+  </data>
+  <data name="ContextMenuMoveToArchive" xml:space="preserve">
+    <value>Déplacer vers l'archive</value>
+  </data>
+  <data name="MenuOpenArchive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="MenuOpenBackups" xml:space="preserve">
+    <value>Sauvegardes</value>
+  </data>
+  <data name="ArchiveDialogTitle" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="ArchiveEmptyHint" xml:space="preserve">
+    <value>L'archive est vide</value>
+  </data>
+  <data name="ArchiveSelectedCountFormat" xml:space="preserve">
+    <value>{0} sélectionné(s)</value>
+  </data>
+  <data name="ArchiveRestoreButton" xml:space="preserve">
+    <value>Restaurer</value>
+  </data>
+  <data name="ArchiveDeleteButton" xml:space="preserve">
+    <value>Supprimer définitivement</value>
+  </data>
+  <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
+    <value>Supprimer définitivement ?</value>
+  </data>
+  <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
+    <value>{0} seront déplacés vers la Corbeille. Cette action est irréversible depuis l'application.</value>
+  </data>
+  <data name="ArchivedOnFormat" xml:space="preserve">
+    <value>Archivé {0}</value>
+  </data>
+  <data name="ArchiveNoSavePathMessage" xml:space="preserve">
+    <value>Choisissez d'abord un dossier de sauvegarde (Paramètres) avant de restaurer des liveries</value>
+  </data>
+  <data name="FileOperationFailedMessage" xml:space="preserve">
+    <value>Une erreur s'est produite lors de cette opération. Consultez les journaux pour plus de détails.</value>
+  </data>
+  <data name="PreviewDialogTitle" xml:space="preserve">
+    <value>Aperçu</value>
+  </data>
+  <data name="PreviewNotFoundMessage" xml:space="preserve">
+    <value>Impossible de trouver l'image d'aperçu originale de cette livrée.</value>
+  </data>
+  <data name="ViewPreviewTooltip" xml:space="preserve">
+    <value>Voir l'aperçu original</value>
+  </data>
+  <data name="LoadingMovingToArchive" xml:space="preserve">
+    <value>Déplacement vers l'archive...</value>
+  </data>
+  <data name="ArchiveSelectAllButton" xml:space="preserve">
+    <value>Tout sélectionner</value>
+  </data>
+  <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
+    <value>Inconnu (entrée récupérée)</value>
+  </data>
+  <data name="BackupUnknownDate" xml:space="preserve">
+    <value>Date inconnue</value>
+  </data>
+  <data name="BackupEntryCountFormat" xml:space="preserve">
+    <value>Livrées : {0}</value>
+  </data>
+  <data name="BackupNothingToBackUpMessage" xml:space="preserve">
+    <value>Rien à sauvegarder — la galerie est vide</value>
+  </data>
+  <data name="BackupsDialogTitle" xml:space="preserve">
+    <value>Sauvegardes</value>
+  </data>
+  <data name="BackupsEmptyHint" xml:space="preserve">
+    <value>Aucune sauvegarde pour l'instant</value>
+  </data>
+  <data name="BackupDiffFormat" xml:space="preserve">
+    <value>(+{0} / -{1})</value>
+  </data>
+  <data name="BackupCreateButton" xml:space="preserve">
+    <value>Créer une sauvegarde</value>
+  </data>
+  <data name="BackupOpenButton" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="BackupDeleteButton" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="BackupDeleteConfirmTitle" xml:space="preserve">
+    <value>Supprimer cette sauvegarde ?</value>
+  </data>
+  <data name="BackupDeleteConfirmMessage" xml:space="preserve">
+    <value>La sauvegarde du {0} ({1}) sera déplacée vers la Corbeille.</value>
+  </data>
+  <data name="BackupUnreadableMessage" xml:space="preserve">
+    <value>Le contenu de cette sauvegarde n'a pas pu être lu — le fichier est peut-être corrompu ou n'est pas une sauvegarde valide</value>
+  </data>
+  <data name="BackupDetailTitleFormat" xml:space="preserve">
+    <value>Sauvegarde du {0}</value>
+  </data>
+  <data name="BackupRemovedSectionLabel" xml:space="preserve">
+    <value>Supprimées depuis cette sauvegarde</value>
+  </data>
+  <data name="BackupAddedSectionLabel" xml:space="preserve">
+    <value>Ajoutées depuis cette sauvegarde</value>
+  </data>
+  <data name="BackupNoneRemovedHint" xml:space="preserve">
+    <value>Rien n'a été supprimé depuis cette sauvegarde</value>
+  </data>
+  <data name="BackupNoneAddedHint" xml:space="preserve">
+    <value>Rien n'a été ajouté depuis cette sauvegarde</value>
+  </data>
+  <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
+    <value>Ces livrées n'ont pas été restaurées car exactement les mêmes livrées (mêmes dossiers) sont déjà dans le jeu :
+{0}</value>
+  </data>
+  <data name="RestoreFailedMessage" xml:space="preserve">
+    <value>Impossible de restaurer ces livrées. Consultez les journaux pour plus de détails :
+{0}</value>
+  </data>
+  <data name="RestoreListMoreFormat" xml:space="preserve">
+    <value>…et {0} de plus</value>
+  </data>
+  <data name="RestoreDuplicateTitle" xml:space="preserve">
+    <value>Doublons trouvés</value>
+  </data>
+  <data name="RestoreDuplicateMessage" xml:space="preserve">
+    <value>La galerie contient déjà des doublons de ces livrées (même voiture, données de livrée identiques) :
+{0}
+
+Les restaurer quand même ?</value>
+  </data>
+  <data name="RestoreDuplicateLineFormat" xml:space="preserve">
+    <value>• {0} — doublon : {1}</value>
+  </data>
+  <data name="RestoreDuplicateOthersNote" xml:space="preserve">
+    <value>Les autres livrées sélectionnées seront restaurées dans tous les cas.</value>
+  </data>
+  <data name="RestoreAnywayButton" xml:space="preserve">
+    <value>Restaurer quand même</value>
+  </data>
+  <data name="RestoreSkipDuplicatesButton" xml:space="preserve">
+    <value>Ignorer</value>
+  </data>
+  <data name="ParsePartialBadgeLabel" xml:space="preserve">
+    <value>Lue partiellement</value>
+  </data>
+  <data name="ParsePartialBadgeTooltip" xml:space="preserve">
+    <value>La livrée a été lue, mais une partie de son fichier n'a pas pu être analysée. Les données principales sont affichées ; certaines vérifications (génération, doublons) peuvent être indisponibles.</value>
+  </data>
+  <data name="GameFolderProblemNotSet" xml:space="preserve">
+    <value>le dossier du jeu n'est pas défini</value>
+  </data>
+  <data name="GameFolderProblemNotFound" xml:space="preserve">
+    <value>le dossier n'existe pas</value>
+  </data>
+  <data name="GameFolderProblemAccessDenied" xml:space="preserve">
+    <value>pas d'accès au dossier</value>
+  </data>
+  <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
+    <value>ce n'est pas le dossier du jeu (pas de dossier media)</value>
+  </data>
+  <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
+    <value>media\cars introuvable</value>
+  </data>
+  <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
+    <value>aucune voiture dans media\cars</value>
+  </data>
+  <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
+    <value>media\Livery introuvable</value>
+  </data>
+  <data name="GameFolderProblemNoVinyls" xml:space="preserve">
+    <value>les vinyles du jeu sont introuvables (media\Livery\Vinyls.zip)</value>
+  </data>
+  <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
+    <value>impossible de lire les vinyles du jeu</value>
+  </data>
+  <data name="GameFolderProblemNoDecals" xml:space="preserve">
+    <value>logos introuvables, certains autocollants ne seront pas dessinés</value>
+  </data>
+  <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
+    <value>certaines voitures n'ont pas pu être lues</value>
+  </data>
+  <data name="GameFolderProblemUnknown" xml:space="preserve">
+    <value>le dossier ne convient pas</value>
+  </data>
+  <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
+    <value>Les vinyles du jeu sont introuvables. Vérifiez le dossier du jeu (media\Livery).</value>
+  </data>
+  <data name="RenderErrorGamePathInvalid" xml:space="preserve">
+    <value>Le dossier du jeu n'est pas défini ou est introuvable.</value>
+  </data>
+  <data name="RenderErrorCarNotFound" xml:space="preserve">
+    <value>La voiture de cette livrée n'est pas dans le dossier du jeu.</value>
+  </data>
+  <data name="RenderErrorCarFormat" xml:space="preserve">
+    <value>Impossible de lire les fichiers de la voiture.</value>
+  </data>
+  <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
+    <value>Cette voiture n'a pas de disposition de livrée.</value>
+  </data>
+  <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
+    <value>Formes non dessinées : {0}</value>
+  </data>
+  <data name="RenderErrorRasterLogosSkippedFormat" xml:space="preserve">
+    <value>Logos non dessinés : {0}</value>
+  </data>
+  <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
+    <value>Formes sans section : {0}</value>
+  </data>
+  <data name="RenderErrorGeneric" xml:space="preserve">
+    <value>Impossible de dessiner la livrée.</value>
+  </data>
+  <data name="View3DGameFolderChecking" xml:space="preserve">
+    <value>La 3D n'est pas encore disponible : vérification du dossier du jeu</value>
+  </data>
+  <data name="View3DTooltip" xml:space="preserve">
+    <value>Voir en 3D</value>
+  </data>
+  <data name="View3DNoCLivery" xml:space="preserve">
+    <value>3D indisponible : la livrée n'a pas de fichier C_livery</value>
+  </data>
+  <data name="View3DParseError" xml:space="preserve">
+    <value>3D indisponible : la livrée n'a pas pu être lue</value>
+  </data>
+  <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
+    <value>3D indisponible : {0}. Définissez le dossier du jeu dans les paramètres.</value>
+  </data>
+  <data name="View3DDialogTitle" xml:space="preserve">
+    <value>Vue 3D</value>
+  </data>
+  <data name="View3DReadFailed" xml:space="preserve">
+    <value>Impossible de lire le fichier de la livrée. Détails dans le journal.</value>
+  </data>
+  <data name="View3DParseFailedFormat" xml:space="preserve">
+    <value>La livrée n'a pas pu être lue : {0}</value>
+  </data>
+  <data name="ViewerStatsFormat" xml:space="preserve">
+    <value>{0:N0} triangles (LOD {1}) · livrée {2}×{3} · image {4}×{5}, MSAA {6}× · {7:F1} ms</value>
+  </data>
+  <data name="ViewerNoOpenGl" xml:space="preserve">
+    <value>Vue 3D indisponible : impossible d'initialiser OpenGL.</value>
+  </data>
+  <data name="ViewerQualityLow" xml:space="preserve">
+    <value>Faible</value>
+  </data>
+  <data name="ViewerQualityMedium" xml:space="preserve">
+    <value>Moyenne</value>
+  </data>
+  <data name="ViewerQualityHigh" xml:space="preserve">
+    <value>Élevée</value>
+  </data>
+  <data name="ViewerQualityUltra" xml:space="preserve">
+    <value>Ultra</value>
+  </data>
+  <data name="ViewerResetView" xml:space="preserve">
+    <value>Réinitialiser la vue</value>
+  </data>
+  <data name="ViewerTitleFormat" xml:space="preserve">
+    <value>{0} — 3D</value>
+  </data>
+  <data name="GameFolderNotSetHint" xml:space="preserve">
+    <value>Le dossier du jeu est nécessaire pour la vue 3D des livrées</value>
+  </data>
+  <data name="GameFolderChecking" xml:space="preserve">
+    <value>Vérification du dossier du jeu…</value>
+  </data>
+  <data name="GameFolderInvalidFormat" xml:space="preserve">
+    <value>Le dossier du jeu ne convient pas : {0}</value>
+  </data>
+  <data name="GameFolderValidFormat" xml:space="preserve">
+    <value>Dossier du jeu trouvé, voitures : {0}</value>
+  </data>
+  <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
+    <value>Dossier du jeu trouvé, voitures : {0}. Cependant : {1}</value>
+  </data>
+  <data name="ViewerControlsHint" xml:space="preserve">
+    <value>Clic gauche : pivoter · Clic droit : déplacer · Molette : zoom · Double-clic : réinitialiser</value>
+  </data>
+  <data name="AuctionBadgeLabel" xml:space="preserve">
+    <value>Enchères</value>
+  </data>
+  <data name="AuctionBadgeTooltip" xml:space="preserve">
+    <value>Achetée à l'hôtel des ventes.
+Elle ne peut être déplacée vers l'archive qu'une fois que le serveur de livrées a confirmé qu'aucune voiture ne l'utilise.</value>
+  </data>
+  <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
+    <value>Les livrées d'enchères ne peuvent être déplacées vers l'archive qu'une fois que le serveur de livrées a confirmé qu'aucune voiture ne les utilise</value>
+  </data>
+  <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
+    <value>{0} des livrées d'enchères sélectionnées restent dans le jeu : il n'est pas confirmé qu'aucune voiture ne les utilise. Elles pourront être déplacées quand le serveur de livrées aura la sauvegarde actuelle.</value>
+  </data>
+  <data name="ContextMenuOnlyThisCar" xml:space="preserve">
+    <value>Uniquement cette voiture</value>
+  </data>
+  <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
+    <value>Uniquement cette marque</value>
+  </data>
+  <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
+    <value>Uniquement cet auteur</value>
+  </data>
+  <data name="ContextMenuClearQuickFilters" xml:space="preserve">
+    <value>Tout afficher à nouveau</value>
+  </data>
+  <data name="QuickFiltersLabel" xml:space="preserve">
+    <value>Uniquement :</value>
+  </data>
+  <data name="QuickFilterCarFormat" xml:space="preserve">
+    <value>Voiture : {0}</value>
+  </data>
+  <data name="QuickFilterManufacturerFormat" xml:space="preserve">
+    <value>Marque : {0}</value>
+  </data>
+  <data name="QuickFilterAuthorFormat" xml:space="preserve">
+    <value>Auteur : {0}</value>
+  </data>
+  <data name="QuickFilterRemoveTooltip" xml:space="preserve">
+    <value>Retirer ce filtre</value>
+  </data>
+  <data name="StatusAutoRefreshedFormat" xml:space="preserve">
+    <value>Sauvegarde modifiée : +{0} / −{1}, galerie mise à jour</value>
+  </data>
+  <data name="FilterAuctionLabel" xml:space="preserve">
+    <value>Enchères</value>
+  </data>
+  <data name="AuctionFilterAll" xml:space="preserve">
+    <value>Toutes les livrées</value>
+  </data>
+  <data name="AuctionFilterSeparately" xml:space="preserve">
+    <value>Afficher les livrées d'enchères séparément</value>
+  </data>
+  <data name="AuctionFilterOnly" xml:space="preserve">
+    <value>Livrées d'enchères uniquement</value>
+  </data>
+  <data name="AuctionFilterHide" xml:space="preserve">
+    <value>Masquer les livrées d'enchères</value>
+  </data>
+  <data name="SeparateAuctionGroupName" xml:space="preserve">
+    <value>Enchères</value>
+  </data>
+  <data name="AuthorInferredTooltip" xml:space="preserve">
+    <value>La livrée ne contient pas le nom de son auteur : il provient d'autres livrées du même auteur</value>
+  </data>
+  <data name="AuthorUnknownMessage" xml:space="preserve">
+    <value>Cette livrée ne contient pas le nom de son auteur, et la galerie ne contient aucune autre livrée de cet auteur d'où le reprendre.</value>
+  </data>
+  <data name="QuickFilterAddButton" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="QuickFilterAddTooltip" xml:space="preserve">
+    <value>Afficher une seule marque, voiture ou un seul auteur</value>
+  </data>
+  <data name="QuickFilterKindManufacturer" xml:space="preserve">
+    <value>Marque</value>
+  </data>
+  <data name="QuickFilterKindCar" xml:space="preserve">
+    <value>Voiture</value>
+  </data>
+  <data name="QuickFilterKindAuthor" xml:space="preserve">
+    <value>Auteur</value>
+  </data>
+  <data name="QuickFilterSearchWatermark" xml:space="preserve">
+    <value>Rechercher…</value>
+  </data>
+  <data name="QuickFilterPickerEmpty" xml:space="preserve">
+    <value>Aucun résultat</value>
+  </data>
+  <data name="GroupShowOnlyButton" xml:space="preserve">
+    <value>Uniquement</value>
+  </data>
+  <data name="GroupShowOnlyTooltip" xml:space="preserve">
+    <value>Afficher uniquement ce groupe</value>
+  </data>
+  <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
+    <value>Voitures {0}</value>
+  </data>
+  <data name="SettingsSectionDuplicates" xml:space="preserve">
+    <value>Doublons</value>
+  </data>
+  <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
+    <value>Considérer comme doublon possible à partir d'une similarité de</value>
+  </data>
+  <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
+    <value>Les correspondances moins similaires ne sont pas affichées. Les doublons exacts sont toujours affichés. S'applique immédiatement, sans nouvelle analyse.</value>
+  </data>
+  <data name="View3DDifferenceNote" xml:space="preserve">
+    <value>La vue 3D est une approximation : les couleurs, les matériaux, l'éclairage et certains détails peuvent différer du jeu.</value>
+  </data>
+  <data name="ServerStatusChecking" xml:space="preserve">
+    <value>Serveur : connexion…</value>
+  </data>
+  <data name="ServerStatusOnline" xml:space="preserve">
+    <value>Serveur : connecté</value>
+  </data>
+  <data name="ServerStatusSyncing" xml:space="preserve">
+    <value>Serveur : lecture de la sauvegarde…</value>
+  </data>
+  <data name="ServerStatusSaveNotSupported" xml:space="preserve">
+    <value>Serveur : sauvegarde pas encore prise en charge</value>
+  </data>
+  <data name="ServerStatusDegraded" xml:space="preserve">
+    <value>Serveur : fonctionnement limité</value>
+  </data>
+  <data name="ServerStatusMaintenance" xml:space="preserve">
+    <value>Serveur : maintenance</value>
+  </data>
+  <data name="ServerStatusUnreachable" xml:space="preserve">
+    <value>Serveur indisponible</value>
+  </data>
+  <data name="ServerStatusNoInternet" xml:space="preserve">
+    <value>Pas de connexion Internet</value>
+  </data>
+  <data name="ServerStatusRateLimited" xml:space="preserve">
+    <value>Serveur : trop de requêtes</value>
+  </data>
+  <data name="ServerStatusUpdateRequired" xml:space="preserve">
+    <value>Serveur : mettez l'application à jour</value>
+  </data>
+  <data name="ServerStatusAppRejected" xml:space="preserve">
+    <value>Serveur : cette version n'est pas acceptée</value>
+  </data>
+  <data name="ServerStatusCertificateError" xml:space="preserve">
+    <value>Serveur : échec de la connexion sécurisée</value>
+  </data>
+  <data name="ServerStatusServerError" xml:space="preserve">
+    <value>Erreur du serveur</value>
+  </data>
+  <data name="ServerStatusNotConfigured" xml:space="preserve">
+    <value>Serveur non configuré dans cette version</value>
+  </data>
+  <data name="ServerStatusVersionFormat" xml:space="preserve">
+    <value>Serveur {0}</value>
+  </data>
+  <data name="ServerStatusRetryHint" xml:space="preserve">
+    <value>L'application réessaiera automatiquement.</value>
+  </data>
+  <data name="ServerStatusRetryInFormat" xml:space="preserve">
+    <value>Nouvel essai dans {0} s.</value>
+  </data>
+  <data name="ServerStatusUpdateHint" xml:space="preserve">
+    <value>Le serveur nécessite une version plus récente de l'application. Veuillez la mettre à jour.</value>
+  </data>
+  <data name="ServerStatusAppRejectedHint" xml:space="preserve">
+    <value>Le serveur n'accepte pas cette version de l'application. Utilisez la version officielle.</value>
+  </data>
+  <data name="ServerStatusCertificateHint" xml:space="preserve">
+    <value>Le certificat du serveur n'a pas passé la vérification : la connexion est peut-être interceptée (antivirus, proxy…). L'application ne réessaiera pas d'elle-même.</value>
+  </data>
+  <data name="ServerStatusClickToRecheck" xml:space="preserve">
+    <value>Cliquez pour vérifier l'état du serveur</value>
+  </data>
+  <data name="ServerSyncDoneFormat" xml:space="preserve">
+    <value>Livrées appliquées aux voitures : {0}
+Mis à jour à {1}</value>
+  </data>
+  <data name="ServerSyncProfileNotFound" xml:space="preserve">
+    <value>Le fichier de profil (C_ProfileData) est introuvable dans le dossier de sauvegarde.</value>
+  </data>
+  <data name="ServerSyncSaveNotSupported" xml:space="preserve">
+    <value>Le serveur ne peut pas encore lire cette sauvegarde : le jeu a probablement été mis à jour. La prise en charge arrive bientôt.</value>
+  </data>
+  <data name="ServerSyncSaveRejected" xml:space="preserve">
+    <value>Selon le serveur, ce fichier n'est pas une sauvegarde de profil valide.</value>
+  </data>
+  <data name="ServerSyncFailed" xml:space="preserve">
+    <value>Impossible de mettre à jour les livrées appliquées ; l'application réessaiera.</value>
+  </data>
+  <data name="InstalledBadgeLabel" xml:space="preserve">
+    <value>Appliquée</value>
+  </data>
+  <data name="InstalledBadgeTooltip" xml:space="preserve">
+    <value>Appliquée à une voiture dans le jeu</value>
+  </data>
+  <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
+    <value>Appliquée à {0} voitures dans le jeu</value>
+  </data>
+  <data name="SettingsSectionServer" xml:space="preserve">
+    <value>Serveur de données des livrées</value>
+  </data>
+  <data name="ServerConnectionLabel" xml:space="preserve">
+    <value>Se connecter au serveur pour déterminer les livrées appliquées</value>
+  </data>
+  <data name="ServerConnectionDescription" xml:space="preserve">
+    <value>Afin de déterminer les livrées appliquées aux voitures, l'application transmet le fichier de sauvegarde (C_ProfileData) au serveur. Le fichier est traité exclusivement pour obtenir les informations sur les livrées appliquées et n'est pas conservé sur le serveur.
+
+Les données du fichier de sauvegarde ne sont ni conservées ni utilisées à d'autres fins. Le serveur sert à stocker en toute sécurité les clés nécessaires au déchiffrement du fichier de sauvegarde.
+
+Le serveur n'est pas affilié aux serveurs officiels de Forza Horizon, Xbox ou Microsoft.</value>
+  </data>
+  <data name="ServerConsentMessage" xml:space="preserve">
+    <value>Afin de déterminer les livrées appliquées aux voitures, l'application transmet le fichier de sauvegarde (C_ProfileData) au serveur. Le fichier est traité exclusivement pour obtenir les informations sur les livrées appliquées et n'est pas conservé sur le serveur.
+
+Les données du fichier de sauvegarde ne sont ni conservées ni utilisées à d'autres fins. Le serveur sert à stocker en toute sécurité les clés nécessaires au déchiffrement du fichier de sauvegarde.
+
+Le serveur n'est pas affilié aux serveurs officiels de Forza Horizon, Xbox ou Microsoft.
+
+Les données ne sont transmises au serveur qu'avec votre consentement. Souhaitez-vous activer la connexion au serveur ?</value>
+  </data>
+  <data name="ServerConsentTitle" xml:space="preserve">
+    <value>Connexion au serveur de données des livrées</value>
+  </data>
+  <data name="ServerConsentAccept" xml:space="preserve">
+    <value>Oui, je comprends et je veux continuer</value>
+  </data>
+  <data name="FilterInstalledLabel" xml:space="preserve">
+    <value>Livrées appliquées</value>
+  </data>
+  <data name="InstalledAllToggle" xml:space="preserve">
+    <value>Toutes les livrées</value>
+  </data>
+  <data name="InstalledFirstToggle" xml:space="preserve">
+    <value>Appliquées d'abord</value>
+  </data>
+  <data name="OnlyInstalledToggle" xml:space="preserve">
+    <value>Appliquées uniquement</value>
+  </data>
+  <data name="FilterValueUnavailable" xml:space="preserve">
+    <value>Désactivé</value>
+  </data>
+  <data name="InstalledFilterNeedsServer" xml:space="preserve">
+    <value>Activez la connexion au serveur de données des livrées dans les paramètres pour déterminer les livrées appliquées.</value>
+  </data>
+  <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
+    <value>Certains dossiers n'ont pas pu être supprimés de leur ancien emplacement — un fichier est probablement en cours d'utilisation (le jeu est-il lancé ?). Rien n'a été perdu : la copie qui compte est complète. Ces restes ne sont plus nécessaires et peuvent être supprimés :
+{0}</value>
+  </data>
+  <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Les livrées appliquées à des voitures dans le jeu ne peuvent pas être déplacées vers l'archive</value>
+  </data>
+  <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
+    <value>Les livrées appliquées à des voitures dans le jeu ne peuvent pas être déplacées vers l'archive : {0} des livrées sélectionnées restent dans le jeu.</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
+    <value>On ne sait pas quelles livrées sont appliquées aux voitures : déplacer cette livrée vers l'archive n'est donc pas sûr, car elle peut être appliquée à une voiture dans le jeu.
+
+Déplacer la livrée vers l'archive ?</value>
+  </data>
+  <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
+    <value>On ne sait pas quelles livrées sont appliquées aux voitures : déplacer ces livrées vers l'archive n'est donc pas sûr, car certaines peuvent être appliquées à des voitures dans le jeu.
+
+Déplacer les livrées vers l'archive ?</value>
+  </data>
+  <data name="DontShowAgainCheckBox" xml:space="preserve">
+    <value>Ne plus afficher</value>
+  </data>
+  <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
+    <value>Les livrées appliquées à des voitures dans le jeu ne peuvent pas être déplacées vers l'archive, et les livrées d'enchères seulement une fois que le serveur de livrées a confirmé qu'aucune voiture ne les utilise</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
+    <value>Le fichier de sauvegarde a changé depuis la dernière synchronisation et les nouvelles données n'ont pas encore été envoyées au serveur de livrées. La liste des livrées appliquées aux voitures peut donc être obsolète, et déplacer cette livrée vers l'archive n'est pas sûr : elle peut être appliquée à une voiture dans le jeu.
+
+Mieux vaut attendre la synchronisation (elle se fait automatiquement et peut prendre quelques minutes) puis réessayer. Déplacer la livrée vers l'archive maintenant ?</value>
+  </data>
+  <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
+    <value>Le fichier de sauvegarde a changé depuis la dernière synchronisation et les nouvelles données n'ont pas encore été envoyées au serveur de livrées. La liste des livrées appliquées aux voitures peut donc être obsolète, et déplacer ces livrées vers l'archive n'est pas sûr : certaines peuvent être appliquées à des voitures dans le jeu.
+
+Mieux vaut attendre la synchronisation (elle se fait automatiquement et peut prendre quelques minutes) puis réessayer. Déplacer les livrées vers l'archive maintenant ?</value>
+  </data>
+  <data name="ContextMenuNavigateInGame" xml:space="preserve">
+    <value>Trouver dans le jeu</value>
+  </data>
+  <data name="GamePositionDescriptionFormat" xml:space="preserve">
+    <value>colonne {0}, rangée {1} sur {2} (n° {3} sur {4})</value>
+  </data>
+  <data name="GamePositionTooltipFormat" xml:space="preserve">
+    <value>Position dans « Mes designs » : {0}</value>
+  </data>
+  <data name="NavigateInGameTooltipFormat" xml:space="preserve">
+    <value>Trouver dans le jeu : déplace le curseur de « Mes designs » vers {0}.
+Ouvrez d'abord « Mes designs » dans le jeu, curseur sur le premier design et sans filtre. Échap annule.</value>
+  </data>
+  <data name="NavigateInGameAuctionTooltip" xml:space="preserve">
+    <value>Les livrées d'enchères n'apparaissent pas dans « Mes designs »</value>
+  </data>
+  <data name="NavigateInGameNoPositionTooltip" xml:space="preserve">
+    <value>La position dans « Mes designs » n'est pas encore connue</value>
+  </data>
+  <data name="NavigateInGameMultipleSelectedTooltip" xml:space="preserve">
+    <value>Sélectionnez une seule livrée pour la trouver dans le jeu</value>
+  </data>
+  <data name="NavigateFailedMessage" xml:space="preserve">
+    <value>Impossible de déplacer le curseur dans le jeu. Les détails sont dans le journal.</value>
+  </data>
+  <data name="NavigateNoSavePathMessage" xml:space="preserve">
+    <value>Le dossier de sauvegarde n'est pas défini. Choisissez-le dans les paramètres.</value>
+  </data>
+  <data name="NavigateGameFolderCheckingMessage" xml:space="preserve">
+    <value>Le dossier du jeu est encore en cours de vérification. Réessayez dans un instant.</value>
+  </data>
+  <data name="NavigateRowsUnknownMessage" xml:space="preserve">
+    <value>Impossible de déterminer le nombre de rangées de « Mes designs » : le fichier du menu a été modifié par un mod de façon inconnue. Choisissez le nombre de rangées dans Paramètres → Trouver dans le jeu.</value>
+  </data>
+  <data name="NavigateSaveReadFailedMessage" xml:space="preserve">
+    <value>Impossible de lire le dossier de sauvegarde.</value>
+  </data>
+  <data name="NavigateLiveryNotInSaveMessage" xml:space="preserve">
+    <value>Cette livrée n'est plus dans le dossier de sauvegarde. Actualisez la liste.</value>
+  </data>
+  <data name="NavigateProgressFormat" xml:space="preserve">
+    <value>Déplacement vers {0} dans le jeu : {1} touches sur {2} · Échap pour annuler</value>
+  </data>
+  <data name="NavigateCompletedFormat" xml:space="preserve">
+    <value>Le curseur a été déplacé vers {0}. Vérifiez la sélection dans le jeu.</value>
+  </data>
+  <data name="NavigateCursorParkedNote" xml:space="preserve">
+    <value>Le pointeur de la souris a été déplacé hors du jeu pour ne pas changer la sélection.</value>
+  </data>
+  <data name="NavigateCancelledByUserFormat" xml:space="preserve">
+    <value>Arrêté avec Échap après {0} touches sur {1}.</value>
+  </data>
+  <data name="NavigateFocusLostFormat" xml:space="preserve">
+    <value>Arrêté après {0} touches sur {1} : la fenêtre du jeu n'est plus active.</value>
+  </data>
+  <data name="NavigateMouseMovedFormat" xml:space="preserve">
+    <value>Arrêté après {0} touches sur {1} : la souris a bougé.</value>
+  </data>
+  <data name="NavigateActivationFailedMessage" xml:space="preserve">
+    <value>Impossible de mettre la fenêtre du jeu au premier plan. Aucune touche n'a été envoyée.</value>
+  </data>
+  <data name="NavigateCursorParkFailedMessage" xml:space="preserve">
+    <value>Impossible d'éloigner le pointeur de la souris de la fenêtre du jeu, aucune touche n'a donc été envoyée : un survol du jeu changerait la sélection.</value>
+  </data>
+  <data name="NavigateInputRejectedMessage" xml:space="preserve">
+    <value>Windows a refusé la saisie des touches. Si le jeu tourne en administrateur, lancez aussi la galerie en administrateur.</value>
+  </data>
+  <data name="NavigateSceneChangedMessage" xml:space="preserve">
+    <value>Le menu « Mes designs » a été modifié par un mod après le lancement du jeu, qui affiche donc encore l'ancienne disposition. Redémarrez le jeu et réessayez.</value>
+  </data>
+  <data name="SettingsSectionNavigation" xml:space="preserve">
+    <value>Trouver dans le jeu</value>
+  </data>
+  <data name="NavigationRowsLabel" xml:space="preserve">
+    <value>Rangées dans « Mes designs »</value>
+  </data>
+  <data name="NavigationRowsAuto" xml:space="preserve">
+    <value>Automatique</value>
+  </data>
+  <data name="NavigationRowsTwo" xml:space="preserve">
+    <value>2 rangées (standard)</value>
+  </data>
+  <data name="NavigationRowsThree" xml:space="preserve">
+    <value>3 rangées (mod de menu)</value>
+  </data>
+  <data name="NavigationRowsDetectedVanilla" xml:space="preserve">
+    <value>Détecté : 2 rangées, menu standard.</value>
+  </data>
+  <data name="NavigationRowsDetectedModFormat" xml:space="preserve">
+    <value>Détecté : {0} rangées, le menu est modifié par un mod.</value>
+  </data>
+  <data name="NavigationRowsDetectedNoGameFolder" xml:space="preserve">
+    <value>Le dossier du jeu n'est pas défini, 2 rangées sont donc supposées. Définissez le dossier du jeu pour détecter les mods de menu.</value>
+  </data>
+  <data name="NavigationRowsDetectedUnknown" xml:space="preserve">
+    <value>Impossible de détecter les rangées : le fichier du menu est modifié de façon inconnue. Choisissez 2 ou 3 rangées.</value>
+  </data>
+  <data name="NavigationKeyIntervalLabel" xml:space="preserve">
+    <value>Pause entre les appuis de touche</value>
+  </data>
+  <data name="NavigationKeyIntervalHint" xml:space="preserve">
+    <value>Augmentez-la si le curseur s'arrête avant la livrée : le jeu ignore les touches trop rapides.</value>
+  </data>
+  <data name="MillisecondsFormat" xml:space="preserve">
+    <value>{0} ms</value>
+  </data>
+  <data name="SortOptionGameOrder" xml:space="preserve">
+    <value>Comme dans le jeu</value>
+  </data>
+  <data name="GroupingOptionByCar" xml:space="preserve">
+    <value>Par voiture</value>
+  </data>
+  <data name="GroupNotInMyDesigns" xml:space="preserve">
+    <value>Absentes de « Mes designs »</value>
+  </data>
+  <data name="ChangesDialogTitle" xml:space="preserve">
+    <value>Changements depuis le dernier lancement</value>
+  </data>
+  <data name="ChangesSummaryFormat" xml:space="preserve">
+    <value>Pendant que la galerie était fermée : +{0} nouvelles, −{1} supprimées</value>
+  </data>
+  <data name="ChangesAddedTabFormat" xml:space="preserve">
+    <value>Nouvelles (+{0})</value>
+  </data>
+  <data name="ChangesRemovedTabFormat" xml:space="preserve">
+    <value>Supprimées (−{0})</value>
+  </data>
+  <data name="ChangesNoneAddedHint" xml:space="preserve">
+    <value>Aucune nouvelle livrée</value>
+  </data>
+  <data name="ChangesNoneRemovedHint" xml:space="preserve">
+    <value>Aucune livrée supprimée</value>
+  </data>
+  <data name="ChangesDontShowAgainCheckBox" xml:space="preserve">
+    <value>Ne plus afficher (réactivable dans les Paramètres)</value>
+  </data>
+  <data name="ShowChangesSinceLastLaunchLabel" xml:space="preserve">
+    <value>Afficher les changements depuis le dernier lancement</value>
+  </data>
+  <data name="DiagnosticsSectionLabel" xml:space="preserve">
+    <value>Diagnostic</value>
+  </data>
+  <data name="DiagnosticsHint" xml:space="preserve">
+    <value>Enregistre un ZIP contenant les journaux, les paramètres sans chemins ni ID et les erreurs de lecture des livrées, à joindre à un rapport de bug. Rien n'est envoyé.</value>
+  </data>
+  <data name="ExportDiagnosticsButton" xml:space="preserve">
+    <value>Exporter le diagnostic…</value>
+  </data>
+  <data name="DiagnosticsSaveDialogTitle" xml:space="preserve">
+    <value>Enregistrer le diagnostic</value>
+  </data>
+  <data name="DiagnosticsZipFileType" xml:space="preserve">
+    <value>Archive ZIP</value>
+  </data>
+  <data name="DiagnosticsExportedFormat" xml:space="preserve">
+    <value>Diagnostic enregistré : {0}</value>
+  </data>
+  <data name="DiagnosticsShowInFolderButton" xml:space="preserve">
+    <value>Afficher dans le dossier</value>
+  </data>
+  <data name="DiagnosticsExportFailedMessage" xml:space="preserve">
+    <value>Impossible d'enregistrer le fichier de diagnostic. Les détails figurent dans le journal.</value>
+  </data>
+  <data name="AccountSwitcherTooltip" xml:space="preserve">
+    <value>Compte de jeu : passer d'un compte à l'autre sur ce PC</value>
+  </data>
+  <data name="AccountUnnamedFormat" xml:space="preserve">
+    <value>Compte …{0}</value>
+  </data>
+  <data name="AccountLiveriesFormat" xml:space="preserve">
+    <value>{0} livrées</value>
+  </data>
+  <data name="AccountUnavailableMessage" xml:space="preserve">
+    <value>Le dossier de sauvegarde de ce compte n'est plus disponible.</value>
+  </data>
+  <data name="AccountSourceOtherFormat" xml:space="preserve">
+    <value>D'un autre compte : {0}</value>
+  </data>
+  <data name="RestoreFromOtherAccountTitle" xml:space="preserve">
+    <value>Restaurer dans ce compte ?</value>
+  </data>
+  <data name="RestoreFromOtherAccountMessage" xml:space="preserve">
+    <value>Livrées d'un autre compte ({1}) : {0}. Elles seront restaurées dans le compte actuel : {2}.</value>
+  </data>
+  <data name="RestoreIntoCurrentAccountButton" xml:space="preserve">
+    <value>Restaurer ici</value>
+  </data>
+  <data name="BackupOtherAccountNote" xml:space="preserve">
+    <value>Cette sauvegarde a été faite sur un autre compte ({0}). La comparaison ci-dessous porte sur le compte actuel ({1}), et les livrées restaurées y seront placées.</value>
+  </data>
+  <data name="AccountFilterOnlyCurrent" xml:space="preserve">
+    <value>Ce compte uniquement</value>
+  </data>
+  <data name="AccountFilterHiddenFormat" xml:space="preserve">
+    <value>Masquées d'autres comptes : {0}</value>
+  </data>
+  <data name="AuthorsSelectForMergeTooltip" xml:space="preserve">
+    <value>Sélectionner pour fusionner avec d'autres fiches</value>
+  </data>
+  <data name="AuthorCardSplitButton" xml:space="preserve">
+    <value>Séparer</value>
+  </data>
+  <data name="AuthorCardAccountsCountFormat" xml:space="preserve">
+    <value>Comptes : {0}</value>
+  </data>
+  <data name="AuthorsSuggestionMergeButton" xml:space="preserve">
+    <value>Fusionner</value>
+  </data>
+  <data name="AuthorsSuggestionDismissButton" xml:space="preserve">
+    <value>Auteurs différents</value>
+  </data>
+  <data name="AuthorsRestoreHiddenButton" xml:space="preserve">
+    <value>Rétablir</value>
+  </data>
+  <data name="AuthorsSuggestionsTitle" xml:space="preserve">
+    <value>Peut-être le même auteur</value>
+  </data>
+  <data name="AuthorsHiddenHeaderFormat" xml:space="preserve">
+    <value>Fiches automatiques masquées ({0})</value>
+  </data>
+  <data name="AuthorsMergeSelectedFormat" xml:space="preserve">
+    <value>Fusionner ({0})</value>
+  </data>
+  <data name="AuthorsUncardedAccountFormat" xml:space="preserve">
+    <value>compte « {0} »</value>
+  </data>
+  <data name="AuthorsSuggestionFormat" xml:space="preserve">
+    <value>{0} et {1} : nom commun « {2} »</value>
+  </data>
+  <data name="AuthorCardHideAutoMessage" xml:space="preserve">
+    <value>Masquer la fiche automatique « {0} » ? Elle ne sera plus recréée après la prochaine analyse. Vous pouvez la rétablir dans « Fiches automatiques masquées ».</value>
+  </data>
+  <data name="AuthorsMergeConfirmTitle" xml:space="preserve">
+    <value>Fusionner des fiches d'auteur</value>
+  </data>
+  <data name="AuthorsMergeConfirmMessage" xml:space="preserve">
+    <value>Fusionner en une seule fiche : {0} ?
+
+Tous les comptes et noms de ces auteurs appartiendront à une seule fiche. Vous pourrez la séparer plus tard.</value>
+  </data>
+  <data name="AuthorsMergeFailedMessage" xml:space="preserve">
+    <value>Fusion impossible : l'un des comptes appartient à une autre fiche, ou le nom de la fiche fusionnée est déjà utilisé par une autre fiche.</value>
+  </data>
+  <data name="AuthorCardSplitConfirmTitle" xml:space="preserve">
+    <value>Séparer une fiche d'auteur</value>
+  </data>
+  <data name="AuthorCardSplitConfirmMessage" xml:space="preserve">
+    <value>Séparer « {0} » en fiches distinctes ? La fiche garde le compte qui a le plus de livrées ; les autres comptes redeviennent séparés.</value>
+  </data>
+  <data name="AccountSourceGoneFormat" xml:space="preserve">
+    <value>D'un compte supprimé : {0}</value>
+  </data>
+  <data name="StatusGoneAccountsFormat" xml:space="preserve">
+    <value>Données de comptes supprimés : {0} ({1}). Vous pouvez les effacer dans les Paramètres.</value>
+  </data>
+  <data name="AccountDataSectionLabel" xml:space="preserve">
+    <value>Données des comptes</value>
+  </data>
+  <data name="AccountDataHint" xml:space="preserve">
+    <value>Chaque compte de jeu conserve son propre cache d'analyse et ses aperçus. Oublier un compte libère cet espace ; si le compte réapparaît, ses livrées sont analysées à nouveau. L'archive et les sauvegardes ne sont pas concernées.</value>
+  </data>
+  <data name="AccountDataCurrent" xml:space="preserve">
+    <value>Compte actuel</value>
+  </data>
+  <data name="AccountDataPresent" xml:space="preserve">
+    <value>Dossier de sauvegarde présent</value>
+  </data>
+  <data name="AccountDataGoneSinceFormat" xml:space="preserve">
+    <value>Introuvable depuis le {0}</value>
+  </data>
+  <data name="AccountDataGone" xml:space="preserve">
+    <value>Dossier de sauvegarde introuvable</value>
+  </data>
+  <data name="AccountDataForgetButton" xml:space="preserve">
+    <value>Oublier</value>
+  </data>
+  <data name="AccountDataForgetTitle" xml:space="preserve">
+    <value>Oublier le compte</value>
+  </data>
+  <data name="AccountDataForgetMessage" xml:space="preserve">
+    <value>Oublier « {0} » ? Son cache d'analyse et ses aperçus (environ {1}) seront supprimés. L'archive et les sauvegardes restent. Si le compte réapparaît, ses livrées seront analysées à nouveau.</value>
+  </data>
+  <data name="AccountDataForgetFailedMessage" xml:space="preserve">
+    <value>Impossible de supprimer les données du compte. Les détails figurent dans le journal.</value>
+  </data>
+  <data name="GameRunningFileChangeMessage" xml:space="preserve">
+    <value>Des liveries vont être déplacées dans le dossier de sauvegarde pendant que le jeu est ouvert. Le jeu peut garder des fichiers en cours d'utilisation ou ne voir le changement qu'après un redémarrage, et sa propre sauvegarde peut l'écraser. Il est plus sûr de fermer le jeu d'abord.</value>
+  </data>
+  <data name="GameRunningContinueButton" xml:space="preserve">
+    <value>Continuer quand même</value>
+  </data>
+  <data name="AboutOpenPackagesLabel" xml:space="preserve">
+    <value>Paquets open source</value>
+  </data>
+  <data name="AboutClosedComponentsLabel" xml:space="preserve">
+    <value>Composants propriétaires</value>
+  </data>
+  <data name="SettingsPageAppearance" xml:space="preserve">
+    <value>Apparence</value>
+  </data>
+  <data name="SettingsPageGallery" xml:space="preserve">
+    <value>Galerie</value>
+  </data>
+  <data name="SettingsPageData" xml:space="preserve">
+    <value>Données et diagnostic</value>
+  </data>
+  <data name="SortOptionCountry" xml:space="preserve">
+    <value>Pays</value>
+  </data>
+  <data name="SortOptionCarType" xml:space="preserve">
+    <value>Type de voiture</value>
+  </data>
+  <data name="GroupingOptionByCountry" xml:space="preserve">
+    <value>Par pays</value>
+  </data>
+  <data name="GroupingOptionByCarType" xml:space="preserve">
+    <value>Par type de voiture</value>
+  </data>
+  <data name="UnknownCountry" xml:space="preserve">
+    <value>Pays inconnu</value>
+  </data>
+  <data name="UnknownCarType" xml:space="preserve">
+    <value>Type de voiture inconnu</value>
+  </data>
+  <data name="CarCountryLabel" xml:space="preserve">
+    <value>Pays du constructeur</value>
+  </data>
+  <data name="CarTypeLabel" xml:space="preserve">
+    <value>Type de voiture dans le jeu</value>
+  </data>
+  <data name="SettingsSectionCarTextLanguage" xml:space="preserve">
+    <value>Langue des noms de voitures</value>
+  </data>
+  <data name="CarTextLanguageAsInterface" xml:space="preserve">
+    <value>Comme l’interface</value>
+  </data>
+  <data name="CarTextLanguageHint" xml:space="preserve">
+    <value>Les noms des voitures et des constructeurs, les pays et les types de voiture proviennent des fichiers du jeu dans cette langue.</value>
+  </data>
+  <data name="CarTextLanguageNoGameTexts" xml:space="preserve">
+    <value>Les fichiers du jeu n’ont pas encore été lus (dossier du jeu introuvable) : les noms sont affichés en anglais.</value>
+  </data>
+  <data name="ContextMenuOnlyThisCountry" xml:space="preserve">
+    <value>Uniquement les voitures de ce pays</value>
+  </data>
+  <data name="ContextMenuOnlyThisCarType" xml:space="preserve">
+    <value>Uniquement les voitures de ce type</value>
+  </data>
+  <data name="QuickFilterCountryFormat" xml:space="preserve">
+    <value>Pays : {0}</value>
+  </data>
+  <data name="QuickFilterCarTypeFormat" xml:space="preserve">
+    <value>Type de voiture : {0}</value>
+  </data>
+  <data name="CarTextsNoGameFolder" xml:space="preserve">
+    <value>Les noms dans la langue choisie ne sont pas disponibles : le dossier du jeu n’est pas indiqué ou introuvable. Les noms de la base de voitures sont affichés.</value>
+  </data>
+  <data name="CarTextsNoStringTables" xml:space="preserve">
+    <value>Les noms dans la langue choisie ne sont pas disponibles : le dossier du jeu ne contient pas de fichiers de langue (StringTables). Les noms de la base de voitures sont affichés.</value>
+  </data>
+  <data name="GameFolderProblemNoPaintMaterials" xml:space="preserve">
+    <value>pas de finitions de peinture (media\cars\_library\materials) : la vue 3D utilise celles intégrées</value>
+  </data>
+  <data name="GameFolderProblemNoPaintTextures" xml:space="preserve">
+    <value>pas de textures de finition (media\cars\_library\textures) : les finitions texturées s’affichent dans une couleur moyenne</value>
+  </data>
+  <data name="GameFolderProblemNoStringTables" xml:space="preserve">
+    <value>pas de fichiers de langue (StringTables) : les noms viennent de la base de voitures</value>
+  </data>
+  <data name="AboutTitleFormat" xml:space="preserve">
+    <value>À propos de {0}</value>
+  </data>
+  <data name="AboutDescriptionFormat" xml:space="preserve">
+    <value>Une galerie pour visualiser les livrées des sauvegardes de {0}.</value>
+  </data>
+  <data name="FolderNotFoundMessageFormat" xml:space="preserve">
+    <value>Impossible de trouver automatiquement le dossier de sauvegarde de {0}.
+
+Le choisir manuellement ?
+(Généralement : C:\XboxGames\GameSave\pgs\u_[numéro]_{1})</value>
+  </data>
+  <data name="NavigateGameNotFoundFormat" xml:space="preserve">
+    <value>La fenêtre de {0} est introuvable. Lancez le jeu et ouvrez « Mes designs ».</value>
+  </data>
+  <data name="NavigateMultipleWindowsFormat" xml:space="preserve">
+    <value>Plusieurs fenêtres de {0} ont été trouvées. Pour ne pas envoyer de touches à la mauvaise, rien n'a été envoyé. Fermez la fenêtre en trop et réessayez.</value>
+  </data>
+  <data name="NavigateGameElevatedFormat" xml:space="preserve">
+    <value>{0} est lancé en administrateur mais pas la galerie, Windows ignorerait donc les touches. Aucune touche n'a été envoyée. Lancez aussi la galerie en administrateur, ou lancez le jeu sans droits d'administrateur.</value>
+  </data>
+  <data name="DiagnosticsReadmeFormat" xml:space="preserve">
+    <value>Diagnostic de {0}
+
+- info.json : version de l'application, versions de Windows et de .NET, langue de l'interface, nombre de livrées en cache.
+- settings.json : paramètres ; les chemins et les ID sont remplacés par "&lt;removed&gt;".
+- parse-issues.json : livrées dont les fichiers n'ont pas pu être lus entièrement ou en partie, par nom de dossier.
+- logs/ : le journal de l'application des derniers jours ; les dossiers connus et l'ID du joueur sont remplacés par des repères comme &lt;save-folder&gt; ou &lt;user-id&gt;.
+
+Veuillez parcourir les fichiers avant de les envoyer : une valeur que l'application ne connaît pas (par exemple un nom saisi dans le chemin d'un dossier) n'est pas remplacée.</value>
+  </data>
+  <data name="GameRunningTitleFormat" xml:space="preserve">
+    <value>{0} est en cours d'exécution</value>
+  </data>
+  <data name="SaveFolderContentHintFormat" xml:space="preserve">
+    <value>Généralement : C:\XboxGames\GameSave\pgs\u_[numéro]_{0}</value>
+  </data>
+</root>

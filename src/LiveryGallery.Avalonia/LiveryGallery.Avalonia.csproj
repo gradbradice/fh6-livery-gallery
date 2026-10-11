@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The gallery itself, open: windows, view models, the gallery panel, scanning, archive, backups, settings and the game
+    profile. It uses the open ForzaToolkit packages only; the 3D viewer, the game folder check, the livery server client
+    and the parser of the game's files come from the host (LiveryGallery) through the interfaces in Viewer3D/,
+    ILiveryServerClient and LiveryScanParts.
+  -->
+  <PropertyGroup>
+    <AssemblyName>LiveryGallery.Avalonia</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="LiveryGallery" />
+    <InternalsVisibleTo Include="LiveryGallery.Render" />
+    <InternalsVisibleTo Include="LiveryGallery.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="ForzaToolkit.CarDatabase" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.Core" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.GameInput" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.Games" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.Liveries" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.Liveries.Server" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.Saves" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.StringTables" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.UI.Avalonia" Version="0.11.0" />
+    <PackageReference Include="MarkView.Avalonia" Version="12.2.0" />
+    <PackageReference Include="Serilog" Version="4.4.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Localisation\strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Localisation\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

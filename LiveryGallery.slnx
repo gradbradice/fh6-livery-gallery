@@ -1,3 +1,10 @@
 <Solution>
-  <Project Path="LiveryGallery.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/LiveryGallery/LiveryGallery.csproj" />
+    <Project Path="src/LiveryGallery.Avalonia/LiveryGallery.Avalonia.csproj" />
+    <Project Path="src/LiveryGallery.Render/LiveryGallery.Render.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LiveryGallery.Tests/LiveryGallery.Tests.csproj" />
+  </Folder>
 </Solution>

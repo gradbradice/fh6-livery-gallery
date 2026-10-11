@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The gallery's closed side: the 3D viewer and the game folder check on ForzaToolkit.LiveryRender, the livery server
+    client on ForzaToolkit.Crypto.Client, and the versions and parse error names of the closed components. The host
+    gives them to the open gallery (LiveryGallery.Avalonia) through its interfaces.
+  -->
+  <PropertyGroup>
+    <AssemblyName>LiveryGallery.Render</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="LiveryGallery" />
+    <InternalsVisibleTo Include="LiveryGallery.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.1" />
+    <PackageReference Include="ForzaToolkit.Crypto.Client" Version="1.2.2" />
+    <PackageReference Include="ForzaToolkit.Formats" Version="0.45.2" />
+    <PackageReference Include="ForzaToolkit.Liveries.Formats" Version="0.2.0" />
+    <PackageReference Include="ForzaToolkit.LiveryRender" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.LiveryRender.Avalonia" Version="0.5.2" />
+    <!-- The livery file as the renderer's input: one mapping for every app, none of its own here -->
+    <PackageReference Include="ForzaToolkit.LiveryRender.Formats" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LiveryGallery.Avalonia\LiveryGallery.Avalonia.csproj" />
+  </ItemGroup>
+
+</Project>
