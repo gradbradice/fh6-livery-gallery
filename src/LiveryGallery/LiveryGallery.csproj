@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    FH6 Livery Gallery, the program: composes the open gallery (LiveryGallery.Avalonia) with the closed side
+    (LiveryGallery.Render) for FH6 and starts it. Builds LiveryGallery.exe.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>LiveryGallery</AssemblyName>
+    <ApplicationIcon>Assets\app-icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="LiveryGallery.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
+    <!-- The game: FH6's profile (GameProfiles.cs) is built here, the gallery itself does not know the game -->
+    <PackageReference Include="ForzaToolkit.Games.FH6" Version="0.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LiveryGallery.Avalonia\LiveryGallery.Avalonia.csproj" />
+    <ProjectReference Include="..\LiveryGallery.Render\LiveryGallery.Render.csproj" />
+  </ItemGroup>
+
+</Project>

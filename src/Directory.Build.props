@@ -1,0 +1,38 @@
+<Project>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- Every class of the app is under LiveryGallery.*, whichever project holds it: resources and XAML keep their names -->
+  <PropertyGroup>
+    <RootNamespace>LiveryGallery</RootNamespace>
+  </PropertyGroup>
+
+  <!-- ForzaToolkit packages and the gallery's own namespaces used in nearly every file, without a using in each -->
+  <ItemGroup>
+    <Using Include="ForzaToolkit.CarDatabase" />
+    <Using Include="ForzaToolkit.Core.Diagnostics" />
+    <Using Include="ForzaToolkit.Core.IO" />
+    <Using Include="ForzaToolkit.Core.Net" />
+    <Using Include="ForzaToolkit.Core.Text" />
+    <Using Include="ForzaToolkit.Core.Threading" />
+    <Using Include="ForzaToolkit.GameInput" />
+    <Using Include="ForzaToolkit.Games" />
+    <Using Include="ForzaToolkit.Liveries" />
+    <Using Include="ForzaToolkit.Liveries.Authors" />
+    <Using Include="ForzaToolkit.Liveries.Cache" />
+    <Using Include="ForzaToolkit.Liveries.Gallery" />
+    <Using Include="ForzaToolkit.Liveries.Server" />
+    <Using Include="ForzaToolkit.Liveries.Storage" />
+    <Using Include="ForzaToolkit.Liveries.UserData" />
+    <Using Include="ForzaToolkit.Saves" />
+    <Using Include="ForzaToolkit.Saves.Accounts" />
+    <!-- The ForzaToolkit look: dialogs, title bar helpers, the work scope of a dialog -->
+    <Using Include="ForzaToolkit.UI" />
+    <Using Include="ForzaToolkit.UI.Dialogs" />
+    <!-- LiveryData lives in ForzaToolkit.Liveries; how the gallery shows it (LiveryDataDisplay) is here -->
+    <Using Include="LiveryGallery.Models" />
+    <!-- The game the gallery shows comes from its profile; FH6 itself is named only in the host (src/LiveryGallery) -->
+    <Using Include="LiveryGallery.Profiles" />
+  </ItemGroup>
+
+</Project>

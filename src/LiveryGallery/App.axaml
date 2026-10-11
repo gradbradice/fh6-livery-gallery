@@ -1,0 +1,39 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="LiveryGallery.App"
+             RequestedThemeVariant="Dark">
+    <Application.Styles>
+        <FluentTheme />
+        <!-- The ForzaToolkit look (buttons, inputs, title bar, tooltips), then the gallery's own styles -->
+        <StyleInclude Source="avares://ForzaToolkit.UI.Avalonia/Themes/Controls.axaml" />
+        <StyleInclude Source="avares://LiveryGallery.Avalonia/Themes/Styles.axaml" />
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- The ForzaToolkit colours; the gallery's own ones below -->
+                <ResourceInclude Source="avares://ForzaToolkit.UI.Avalonia/Themes/Colors.axaml" />
+                <ResourceInclude Source="avares://LiveryGallery.Avalonia/Themes/Icons.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="GroupBackgroundBrush" Color="#E9E9EC" />
+                    <SolidColorBrush x:Key="AuctionBrush" Color="#0E7490" />
+                    <SolidColorBrush x:Key="ThumbnailPlaceholderBrush" Color="#EEEFF3" />
+                    <SolidColorBrush x:Key="ThumbnailPlaceholderTextBrush" Color="#9AA0AC" />
+                    <SolidColorBrush x:Key="ChipBackgroundBrush" Color="#EEEDFC" />
+                    <SolidColorBrush x:Key="ChipTextBrush" Color="#4F46E5" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="GroupBackgroundBrush" Color="#2A2A2E" />
+                    <SolidColorBrush x:Key="AuctionBrush" Color="#0891B2" />
+                    <SolidColorBrush x:Key="ThumbnailPlaceholderBrush" Color="#2A2C34" />
+                    <SolidColorBrush x:Key="ThumbnailPlaceholderTextBrush" Color="#6E7280" />
+                    <SolidColorBrush x:Key="ChipBackgroundBrush" Color="#262445" />
+                    <SolidColorBrush x:Key="ChipTextBrush" Color="#A5A6F6" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
