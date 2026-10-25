@@ -2,12 +2,8 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
-using LiveryGallery.Controller;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
-using LiveryGallery.Services;
 using LiveryGallery.Services.Accounts;
 using LiveryGallery.Services.Diagnostics;
 using LiveryGallery.ViewModels;
@@ -26,8 +22,7 @@ internal partial class SettingsDialog : Window
     private readonly AccountDataActions? _accountData;
     private readonly BackgroundTaskTracker _tasks = new();
     private Task<bool>? _saveInProgress;
-    private bool _forceClose;
-    private bool _isClosing;
+    private readonly UnsavedChangesGuard _closeGuard;
     private bool _closed;
     private SettingsPage _page = _lastPage;
     private bool _updatingPageList;
@@ -62,7 +57,9 @@ internal partial class SettingsDialog : Window
             if (e.PropertyName is nameof(SettingsViewModel.GameFolderStatusIsError)) UpdateGameFolderStatusDisplay();
         };
 
-        Closing += SettingsDialog_Closing;
+        _closeGuard = new UnsavedChangesGuard(this, () => _viewModel.IsDirty, SaveOnceAsync,
+            () => Strings.UnsavedChangesTitle, () => Strings.UnsavedChangesMessage,
+            beforeChecking: () => _tasks.WaitAllAsync(Timeout.InfiniteTimeSpan));
         if (string.IsNullOrEmpty(_viewModel.GamePath))
             _ = PopulateDiscoveredGamePathAsync();
     }
@@ -79,7 +76,7 @@ internal partial class SettingsDialog : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Unhandled exception in PopulateDiscoveredGamePathAsync", ex);
+            AppLog.LogError("Unhandled exception in PopulateDiscoveredGamePathAsync", ex);
         }
     }
 
@@ -104,9 +101,16 @@ internal partial class SettingsDialog : Window
         DiagnosticsHint.Text = Strings.DiagnosticsHint;
         ExportDiagnosticsButton.Content = Strings.ExportDiagnosticsButton;
         ShowChangesSinceLastLaunchCheckBox.Content = Strings.ShowChangesSinceLastLaunchLabel;
+        WarnFewFreeSlotsCheckBox.Content = Strings.WarnFewFreeSlotsLabel;
         ServerConnectionCheckBox.Content = Strings.ServerConnectionLabel;
         ServerConnectionDescription.Text = Strings.ServerConnectionDescription;
         DuplicatesSectionLabel.Text = Strings.SettingsSectionDuplicates;
+        AutoBackupSectionLabel.Text = Strings.AutoBackupSectionLabel;
+        AutoBackupBeforeArchiveCheckBox.Content = Strings.AutoBackupBeforeArchiveLabel;
+        AutoBackupOnChangeCheckBox.Content = Strings.AutoBackupOnChangeLabel;
+        AutoBackupPeriodicCheckBox.Content = Strings.AutoBackupPeriodicLabel;
+        AutoBackupKeepLabel.Text = Strings.AutoBackupKeepLabel;
+        AutoBackupHint.Text = Strings.AutoBackupHint;
         PossibleDuplicateThresholdLabel.Text = Strings.PossibleDuplicateThresholdLabel;
         PossibleDuplicateThresholdHint.Text = Strings.PossibleDuplicateThresholdHint;
         NavigationRowsLabel.Text = Strings.NavigationRowsLabel;
@@ -128,6 +132,7 @@ internal partial class SettingsDialog : Window
             new(SettingsPage.Appearance, Strings.SettingsPageAppearance, this.GetThemeGeometry("IconPalette")),
             new(SettingsPage.Folders, Strings.SettingsMenuPaths, this.GetThemeGeometry("IconFolder")),
             new(SettingsPage.Gallery, Strings.SettingsPageGallery, this.GetThemeGeometry("IconPreview")),
+            new(SettingsPage.Backups, Strings.MenuOpenBackups, this.GetThemeGeometry("IconBackup")),
         };
         // Pages of what this game has
         if (_profile.MyDesigns is not null)
@@ -178,6 +183,7 @@ internal partial class SettingsDialog : Window
         AppearancePage.IsVisible = item.Page == SettingsPage.Appearance;
         FoldersPage.IsVisible = item.Page == SettingsPage.Folders;
         GalleryPage.IsVisible = item.Page == SettingsPage.Gallery;
+        BackupsPage.IsVisible = item.Page == SettingsPage.Backups;
         FindInGamePage.IsVisible = item.Page == SettingsPage.FindInGame;
         ServerPage.IsVisible = item.Page == SettingsPage.Server;
         DataPage.IsVisible = item.Page == SettingsPage.Data;
@@ -225,7 +231,7 @@ internal partial class SettingsDialog : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to show the livery server consent dialog", ex);
+            AppLog.LogError("Failed to show the livery server consent dialog", ex);
         }
         finally
         {
@@ -310,7 +316,7 @@ internal partial class SettingsDialog : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to export diagnostics", ex);
+            AppLog.LogError("Failed to export diagnostics", ex);
             await InfoDialog.ShowAsync(this, Strings.DiagnosticsSectionLabel, Strings.DiagnosticsExportFailedMessage);
             return;
         }
@@ -375,68 +381,9 @@ internal partial class SettingsDialog : Window
 
     private void SaveButton_Click(object? sender, RoutedEventArgs e) => _ = _tasks.Run(SaveOnceAsync, "save settings");
 
-    private void ExitButton_Click(object? sender, RoutedEventArgs e) => _ = RunCloseSafelyAsync();
+    private void ExitButton_Click(object? sender, RoutedEventArgs e) => _ = _closeGuard.RequestCloseAsync();
 
-    private void RequestClose(object? sender, RoutedEventArgs e) => _ = RunCloseSafelyAsync();
-
-    private async Task RunCloseSafelyAsync()
-    {
-        try
-        {
-            await TryCloseAsync();
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unhandled exception while closing settings dialog", ex);
-        }
-    }
-
-    private async Task TryCloseAsync()
-    {
-        if (_isClosing) return;
-        _isClosing = true;
-        try
-        {
-            await _tasks.WaitAllAsync(Timeout.InfiniteTimeSpan);
-
-            if (!_viewModel.IsDirty)
-            {
-                _forceClose = true;
-                Close();
-                return;
-            }
-
-            var choice = await UnsavedChangesDialog.AskAsync(this, Strings.UnsavedChangesTitle, Strings.UnsavedChangesMessage);
-            switch (choice)
-            {
-                case UnsavedChangesChoice.Back:
-                    return;
-                case UnsavedChangesChoice.SaveAndExit:
-                    if (!await SaveOnceAsync()) return;
-                    await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-                    break;
-                case UnsavedChangesChoice.ExitWithoutSaving:
-                    break;
-                default:
-                    return;
-            }
-
-            _forceClose = true;
-            Close();
-        }
-        finally
-        {
-            _isClosing = false;
-        }
-    }
-
-    private void SettingsDialog_Closing(object? sender, WindowClosingEventArgs e)
-    {
-        if (_forceClose) return;
-
-        e.Cancel = true;
-        _ = RunCloseSafelyAsync();
-    }
+    private void RequestClose(object? sender, RoutedEventArgs e) => _ = _closeGuard.RequestCloseAsync();
 
     protected override void OnClosed(EventArgs e)
     {

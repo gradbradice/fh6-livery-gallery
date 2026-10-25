@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using ForzaToolkit.GameInput;
-using LiveryGallery.Services;
 
 namespace LiveryGallery.Profiles;
 
@@ -29,7 +27,7 @@ internal sealed class GameRunningGuard(Func<ForzaGame> game)
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled("GameRunningGuard", "Failed to check whether the game is running", ex);
+            AppLog.LogErrorThrottled("GameRunningGuard", "Failed to check whether the game is running", ex);
             return false;
         }
         finally

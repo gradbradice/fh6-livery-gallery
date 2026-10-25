@@ -1,0 +1,98 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:LiveryGallery.Views"
+        xmlns:loc="clr-namespace:LiveryGallery.Localisation"
+        xmlns:vm="clr-namespace:LiveryGallery.ViewModels"
+        x:Class="LiveryGallery.Views.FreeSpaceDialog"
+        x:DataType="vm:FreeSpaceViewModel"
+        Width="620" Height="680" WindowStartupLocation="CenterOwner"
+        CanResize="False" ShowInTaskbar="False"
+        Background="{DynamicResource BgBrush}"
+        WindowDecorations="BorderOnly"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1">
+
+    <Window.Resources>
+        <!-- One copy: the tick (or why it stays), the preview, the name, number and download date -->
+        <DataTemplate x:Key="FreeSpaceRowTemplate" x:DataType="vm:FreeSpaceRowViewModel">
+            <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Padding="10,6" Margin="0,0,0,6"
+                    views:ThumbnailRows.Track="True">
+                <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                    <!-- The tick's room is there on every row, so the previews line up -->
+                    <Panel Grid.Column="0" Width="30" Margin="0,0,6,0">
+                        <CheckBox IsChecked="{Binding Goes, Mode=TwoWay}" IsVisible="{Binding CanGo}" VerticalAlignment="Center" />
+                    </Panel>
+                    <Border Grid.Column="1" Width="80" Height="45" CornerRadius="5" ClipToBounds="True"
+                            Background="{DynamicResource BgBrush}" Margin="0,0,12,0">
+                        <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
+                    </Border>
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding LiveryName}" FontSize="13" FontWeight="SemiBold"
+                                   TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding LiveryName}" />
+                        <TextBlock Text="{Binding DetailText}" FontSize="11" Margin="0,2,0,0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <TextBlock Text="{Binding StayText}" FontSize="11" Margin="0,2,0,0" FontWeight="SemiBold"
+                                   IsVisible="{Binding Stays}" Foreground="{DynamicResource AccentBrush}" />
+                    </StackPanel>
+                    <TextBlock Grid.Column="3" Text="{Binding LiveryIdText}" FontSize="11" FontWeight="SemiBold"
+                               Margin="8,0,0,0" VerticalAlignment="Top"
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FreeSpaceGroupTemplate" x:DataType="vm:FreeSpaceGroupViewModel">
+            <StackPanel Margin="0,0,0,12">
+                <Grid ColumnDefinitions="*,Auto" Margin="2,0,2,6">
+                    <TextBlock Text="{Binding Title}" FontSize="12.5" FontWeight="Bold" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Grid.Column="1" Text="{Binding CountText}" FontSize="11.5" Margin="8,0,0,0"
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+                </Grid>
+                <ItemsControl ItemsSource="{Binding Rows}" ItemTemplate="{StaticResource FreeSpaceRowTemplate}" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{DynamicResource ToolbarBrush}" Height="36"
+                PointerPressed="TitleBar_PointerPressed">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock x:Name="TitleBarText" Grid.Column="0" FontSize="12" Margin="12,0,0,0" VerticalAlignment="Center"
+                           IsHitTestVisible="False" Foreground="{DynamicResource TextSecondaryBrush}" />
+                <Button Grid.Column="1" Classes="titlebar close" Click="CloseButton_Click">
+                    <TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="20,14,20,20" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
+            <TextBlock x:Name="TitleText" Grid.Row="0" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+            <TextBlock x:Name="NoteText" Grid.Row="1" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"
+                       Foreground="{DynamicResource TextSecondaryBrush}" />
+            <TextBlock Grid.Row="2" Text="{Binding SummaryText}" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"
+                       Margin="0,0,0,10" IsVisible="{Binding HasGroups}" />
+            <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="8" Margin="0,0,0,10" IsVisible="{Binding HasGroups}">
+                <Button x:Name="TickAllButton" Classes="secondary" Padding="10,4" Click="TickAllButton_Click" />
+                <Button x:Name="UntickAllButton" Classes="secondary" Padding="10,4" Click="UntickAllButton_Click" />
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="4" Classes="edge" IsVisible="{Binding HasGroups}">
+                <ItemsControl ItemsSource="{Binding Groups}" ItemTemplate="{StaticResource FreeSpaceGroupTemplate}" />
+            </ScrollViewer>
+            <TextBlock Grid.Row="4" Text="{Binding EmptyText}" IsVisible="{Binding IsEmpty}" TextWrapping="Wrap"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" MaxWidth="440"
+                       FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" />
+
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,14,0,0">
+                <Button x:Name="CancelButton" Classes="secondary" MinWidth="120" Click="CloseButton_Click" />
+                <Button x:Name="ApplyButton" Classes="primary" MinWidth="180" Content="{Binding ApplyText}"
+                        IsVisible="{Binding HasGroups}" IsEnabled="{Binding CanApply}" Click="ApplyButton_Click" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

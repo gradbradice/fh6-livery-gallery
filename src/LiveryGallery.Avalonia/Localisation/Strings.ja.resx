@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SavePathNotChosen" xml:space="preserve">
-    <value>セーブフォルダが選択されていません</value>
+    <value>セーブフォルダーが選択されていません</value>
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
-    <value>更新(変更を再スキャン)</value>
+    <value>更新: 変更をもう一度スキャンします</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>車（メーカー・車種・年式）、リバリー名または作者で検索…</value>
+    <value>車、メーカー、年式、リバリー名、作者で検索…</value>
   </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>日付不明</value>
   </data>
   <data name="StatusProcessed" xml:space="preserve">
-    <value>処理済み: 新規/変更 {0} 件、キャッシュから {1} 件</value>
+    <value>処理済み: 新規または変更 {0} 件、キャッシュから {1} 件</value>
   </data>
   <data name="StatusErrors" xml:space="preserve">
     <value>、エラー {0} 件</value>
@@ -142,10 +142,10 @@
     <value>スキャンエラー: {0}</value>
   </data>
   <data name="CountShowing" xml:space="preserve">
-    <value>{1} 件中 {0} 件を表示</value>
+    <value>表示中: {1} 件中 {0} 件</value>
   </data>
   <data name="EmptyNoLiveries" xml:space="preserve">
-    <value>選択したフォルダにリバリー(Livery_*)が見つかりません</value>
+    <value>選択したフォルダーにリバリーがありません: Livery_* という名前のフォルダーがありません</value>
   </data>
   <data name="EmptyNoResults" xml:space="preserve">
     <value>「{0}」に一致する結果はありません</value>
@@ -154,10 +154,10 @@
     <value>スキャン中…</value>
   </data>
   <data name="LoadingSavingCache" xml:space="preserve">
-    <value>キャッシュを保存中...</value>
+    <value>キャッシュを保存中…</value>
   </data>
   <data name="ParsingProgress" xml:space="preserve">
-    <value>解析中 {0}/{1}: {2}</value>
+    <value>{1} 件中 {0} 件を読み込み中: {2}</value>
   </data>
   <data name="UnknownManufacturer" xml:space="preserve">
     <value>不明なメーカー</value>
@@ -166,31 +166,28 @@
     <value>ID {0}</value>
   </data>
   <data name="FolderNotFoundTitle" xml:space="preserve">
-    <value>セーブフォルダが見つかりません</value>
+    <value>セーブフォルダーが見つかりません</value>
   </data>
   <data name="ButtonYes" xml:space="preserve">
     <value>はい</value>
   </data>
-  <data name="ButtonNo" xml:space="preserve">
-    <value>いいえ</value>
-  </data>
   <data name="SelectFolderDialogTitle" xml:space="preserve">
-    <value>セーブフォルダを選択してください(「u_」で始まる名前のフォルダ)</value>
+    <value>セーブフォルダーを選択してください。名前は u_ で始まります</value>
   </data>
   <data name="CarDbUpdating" xml:space="preserve">
     <value>車データベースの更新を確認中…</value>
   </data>
   <data name="CarDbUpdated" xml:space="preserve">
-    <value>車データベースを更新しました ({0})</value>
+    <value>車データベースを更新しました: {0}</value>
   </data>
   <data name="CarDbUpToDate" xml:space="preserve">
-    <value>車データベースは最新です ({0})</value>
+    <value>車データベースは最新です: {0}</value>
   </data>
   <data name="CarDbDownloadFailed" xml:space="preserve">
-    <value>車データベースをダウンロードできませんでした — 最後に保存されたデータを使用します ({0})</value>
+    <value>車データベースをダウンロードできませんでした。最後に保存したコピーを使用します: {0}</value>
   </data>
   <data name="CarDbNoDataAtAll" xml:space="preserve">
-    <value>車データベースをダウンロードできず、ローカルコピーもありません — 車名は表示できません</value>
+    <value>車データベースをダウンロードできず、保存されたコピーもありません。車名は表示できません。</value>
   </data>
   <data name="CarDbCarsWord" xml:space="preserve">
     <value>台</value>
@@ -211,7 +208,7 @@
     <value>タグ</value>
   </data>
   <data name="TagsDialogHint" xml:space="preserve">
-    <value>カンマ区切り。例: ドリフト, アニメ, お気に入り</value>
+    <value>タグはカンマで区切ります。例: ドリフト, アニメ, レース</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
     <value>保存</value>
@@ -220,13 +217,13 @@
     <value>キャンセル</value>
   </data>
   <data name="EditTagsTooltip" xml:space="preserve">
-    <value>タグを編集</value>
+    <value>タグを編集します。ほかのリバリーと一緒に選択している場合は、選択したすべてのリバリーのタグを編集します。</value>
   </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
-    <value>クリア</value>
+    <value>選択を解除</value>
   </data>
   <data name="SelectedCountLabel" xml:space="preserve">
-    <value>{0}件選択中</value>
+    <value>選択中: {0} 件</value>
   </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>タグ:</value>
@@ -241,28 +238,28 @@
     <value>通常の順序</value>
   </data>
   <data name="FavoriteToggleTooltip" xml:space="preserve">
-    <value>お気に入りに追加/削除</value>
+    <value>お気に入りに追加、またはお気に入りから削除</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>お気に入りを別枠で表示</value>
+    <value>お気に入りを別に表示</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
     <value>お気に入り</value>
   </data>
   <data name="MineFirstToggle" xml:space="preserve">
-    <value>自分のを先に</value>
+    <value>自作のリバリーを先頭に</value>
   </data>
   <data name="OnlyMineToggle" xml:space="preserve">
-    <value>自分のみ</value>
+    <value>自作のリバリーのみ</value>
   </data>
   <data name="SeparateMineToggle" xml:space="preserve">
-    <value>自分のを別に表示</value>
+    <value>自作のリバリーを別に表示</value>
   </data>
   <data name="SeparateMineGroupName" xml:space="preserve">
-    <value>自分の</value>
+    <value>自作のリバリー</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
-    <value>新しいバージョン {0} が利用可能 →</value>
+    <value>バージョン {0} を利用できます</value>
   </data>
   <data name="ButtonUpdateDownload" xml:space="preserve">
     <value>ダウンロード</value>
@@ -271,7 +268,7 @@
     <value>バージョン {0} の新機能</value>
   </data>
   <data name="ChangelogNotAvailable" xml:space="preserve">
-    <value>詳細な変更履歴は利用できません。詳細はGitHubのリリースページをご覧ください。</value>
+    <value>詳しい変更内容はありません。GitHub のリリースページで確認できます。</value>
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>日本語</value>
@@ -280,13 +277,13 @@
     <value>最小化</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
-    <value>最大化 / 元に戻す</value>
+    <value>最大化または元に戻す</value>
   </data>
   <data name="CloseTooltip" xml:space="preserve">
     <value>閉じる</value>
   </data>
   <data name="LiveryNoName" xml:space="preserve">
-    <value>(名称未設定)</value>
+    <value>名前なし</value>
   </data>
   <data name="UnknownAuthor" xml:space="preserve">
     <value>不明</value>
@@ -295,19 +292,19 @@
     <value>設定</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
-    <value>ゲームのパス</value>
+    <value>ゲームフォルダー</value>
   </data>
   <data name="SelectGameFolderDialogTitle" xml:space="preserve">
-    <value>ゲームのインストールフォルダを選択</value>
+    <value>ゲームがインストールされているフォルダーを選択してください</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
-    <value>パス</value>
+    <value>フォルダー</value>
   </data>
   <data name="SavePathFieldLabel" xml:space="preserve">
-    <value>セーブデータのパス</value>
+    <value>セーブフォルダー</value>
   </data>
   <data name="PathFieldAutoHint" xml:space="preserve">
-    <value>空欄のままにすると自動的にパスが検出されます</value>
+    <value>空欄にすると、フォルダーを自動的に探します</value>
   </data>
   <data name="SaveFolderValidationFailed" xml:space="preserve">
     <value>セーブデータが見つかりません</value>
@@ -319,7 +316,7 @@
     <value>リバリーが見つかりません</value>
   </data>
   <data name="SavedPathNotFoundNotice" xml:space="preserve">
-    <value>指定されたセーブフォルダが見つかりません — 自動的に検索します。</value>
+    <value>指定したセーブフォルダーが見つかりません。ギャラリーが自動的に探します。</value>
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>OK</value>
@@ -330,24 +327,6 @@
   <data name="StatsTitle" xml:space="preserve">
     <value>統計</value>
   </data>
-  <data name="StatsTotalLiveries" xml:space="preserve">
-    <value>リバリー総数</value>
-  </data>
-  <data name="StatsFavoriteManufacturer" xml:space="preserve">
-    <value>お気に入りのメーカー</value>
-  </data>
-  <data name="StatsFavoriteAuthor" xml:space="preserve">
-    <value>お気に入りの作者</value>
-  </data>
-  <data name="StatsTotalDuplicates" xml:space="preserve">
-    <value>重複総数</value>
-  </data>
-  <data name="StatsPossibleDuplicates" xml:space="preserve">
-    <value>重複の可能性がある総数</value>
-  </data>
-  <data name="StatsFavoritesCount" xml:space="preserve">
-    <value>お気に入り登録数</value>
-  </data>
   <data name="SettingsMenuContacts" xml:space="preserve">
     <value>連絡先</value>
   </data>
@@ -355,28 +334,28 @@
     <value>連絡先</value>
   </data>
   <data name="ContactsGithubLabel" xml:space="preserve">
-    <value>GitHubリポジトリ</value>
+    <value>GitHub リポジトリ</value>
   </data>
   <data name="DuplicateBadgeLabel" xml:space="preserve">
     <value>重複</value>
   </data>
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
-    <value>この作者には、この車に対して同じリバリーがあります</value>
+    <value>この作者には、この車用の同じリバリーがほかにもあります</value>
   </data>
   <data name="DuplicateMatchScoreHeader" xml:space="preserve">
-    <value>一致率:</value>
+    <value>一致:</value>
   </data>
   <data name="DuplicateMatchRelationFormat" xml:space="preserve">
     <value>{0}: {1}%</value>
   </data>
   <data name="PossibleDuplicateBadgeWithScoreFormat" xml:space="preserve">
-    <value>重複の可能性あり（{0}）</value>
+    <value>重複の可能性（{0}）</value>
   </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
     <value>すべてのリバリー</value>
   </data>
   <data name="DuplicatesFilterAndPossible" xml:space="preserve">
-    <value>重複と重複の可能性があるもの</value>
+    <value>重複と重複の可能性</value>
   </data>
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>重複のみ</value>
@@ -385,55 +364,55 @@
     <value>すべてのリバリー</value>
   </data>
   <data name="GeneratedFilterOnly" xml:space="preserve">
-    <value>生成された可能性があるものだけ</value>
+    <value>生成の可能性があるもののみ</value>
   </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>重複の可能性</value>
   </data>
   <data name="MyLiveryBadgeTooltip" xml:space="preserve">
-    <value>自分のリバリー</value>
+    <value>あなたのリバリー</value>
   </data>
   <data name="MyLiveryBadgeLabel" xml:space="preserve">
-    <value>自分の</value>
+    <value>自作</value>
   </data>
   <data name="PossiblyGeneratedBadgeLabel" xml:space="preserve">
-    <value>生成された可能性</value>
+    <value>生成の可能性</value>
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
-    <value>このリバリーの模様は、手描きではなくプログラムで生成された(例:写真/画像から)ように見えます。</value>
+    <value>このリバリーの模様は、手描きではなく、写真などからプログラムで生成されたように見えます。</value>
   </data>
   <data name="PaintBadgeLabel" xml:space="preserve">
-    <value>塗装</value>
+    <value>塗装のみ</value>
   </data>
   <data name="PaintBadgeTooltip" xml:space="preserve">
-    <value>このリバリーにはデカールが一切ありません — 塗り直された色だけです。</value>
+    <value>このリバリーにはビニールがなく、塗装色だけが変更されています。</value>
   </data>
   <data name="ParseErrorBadgeLabel" xml:space="preserve">
-    <value>解析エラー</value>
+    <value>読み込みエラー</value>
   </data>
   <data name="ParseErrorBadgeTooltip" xml:space="preserve">
-    <value>このリバリーのファイルを正しく読み込めませんでした — 破損しているか、サポートされていない形式の可能性があります。</value>
+    <value>このリバリーのファイルを正しく読み込めませんでした。破損しているか、ギャラリーが対応していない形式の可能性があります。</value>
   </data>
   <data name="PaintFilterAll" xml:space="preserve">
     <value>すべてのリバリー</value>
   </data>
   <data name="PaintFilterHide" xml:space="preserve">
-    <value>塗装を非表示</value>
+    <value>塗装のみを非表示</value>
   </data>
   <data name="PaintFilterOnly" xml:space="preserve">
     <value>塗装のみ</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
-    <value>この作者には、この車に似たリバリーがあります(デカールのほとんどのセクションは一致しますが、全体は一致しません)</value>
+    <value>この作者には、この車用の似たリバリーがあります。ビニールのセクションの大部分は一致しますが、すべてではありません。</value>
   </data>
   <data name="DisplayFilterTooltip" xml:space="preserve">
-    <value>表示(お気に入り、重複)</value>
+    <value>表示する内容: お気に入り、重複など</value>
   </data>
   <data name="FilterMenuTitle" xml:space="preserve">
     <value>フィルター</value>
   </data>
   <data name="FilterSortLabel" xml:space="preserve">
-    <value>並び替え</value>
+    <value>並べ替え</value>
   </data>
   <data name="FilterGroupingLabel" xml:space="preserve">
     <value>グループ化</value>
@@ -442,7 +421,7 @@
     <value>お気に入り</value>
   </data>
   <data name="FilterMineLabel" xml:space="preserve">
-    <value>自分のリバリー</value>
+    <value>自作のリバリー</value>
   </data>
   <data name="FilterDuplicatesLabel" xml:space="preserve">
     <value>重複</value>
@@ -451,7 +430,7 @@
     <value>生成</value>
   </data>
   <data name="FilterPaintLabel" xml:space="preserve">
-    <value>塗装</value>
+    <value>塗装のみ</value>
   </data>
   <data name="SortOptionManufacturer" xml:space="preserve">
     <value>メーカー</value>
@@ -481,16 +460,16 @@
     <value>先頭</value>
   </data>
   <data name="FilterValueOnly" xml:space="preserve">
-    <value>該当のみ</value>
+    <value>のみ</value>
   </data>
   <data name="FilterValueSeparately" xml:space="preserve">
-    <value>別枠</value>
+    <value>別に表示</value>
   </data>
   <data name="FilterValueHide" xml:space="preserve">
     <value>非表示</value>
   </data>
   <data name="FilterValueWithPossible" xml:space="preserve">
-    <value>可能性含む</value>
+    <value>可能性を含む</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
     <value>すべてのリバリー</value>
@@ -517,55 +496,28 @@
     <value>未保存の変更</value>
   </data>
   <data name="UnsavedChangesMessage" xml:space="preserve">
-    <value>保存されていない変更があります。今終了すると、変更内容は失われます。</value>
-  </data>
-  <data name="ButtonBack" xml:space="preserve">
-    <value>戻る</value>
-  </data>
-  <data name="ButtonSaveAndExit" xml:space="preserve">
-    <value>保存して終了</value>
-  </data>
-  <data name="ButtonExitWithoutSaving" xml:space="preserve">
-    <value>保存せずに終了</value>
+    <value>保存されていない変更があります。今終了すると、変更は失われます。</value>
   </data>
   <data name="ThemeSystemLabel" xml:space="preserve">
-    <value>システム</value>
+    <value>Windows の設定に合わせる</value>
   </data>
   <data name="SettingsSectionScanning" xml:space="preserve">
     <value>スキャン</value>
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
-    <value>リバリーを自動更新</value>
+    <value>リバリーを自動的に更新</value>
   </data>
   <data name="SearchByFolderNameLabel" xml:space="preserve">
-    <value>フォルダ名を表示し、検索対象に含める</value>
+    <value>フォルダー名を表示して検索対象にする</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
-    <value>更新ボタンをクリックしたときにリバリーも更新</value>
+    <value>更新ボタンでリバリーを更新</value>
   </data>
   <data name="SettingsSaveFailedTitle" xml:space="preserve">
-    <value>保存に失敗しました</value>
+    <value>保存できませんでした</value>
   </data>
   <data name="SettingsSaveFailedNotice" xml:space="preserve">
-    <value>設定をディスクに書き込めませんでした。変更は適用されていません。もう一度保存してください。</value>
-  </data>
-  <data name="StatsPopularManufacturer" xml:space="preserve">
-    <value>人気のメーカー</value>
-  </data>
-  <data name="StatsPopularModel" xml:space="preserve">
-    <value>人気のモデル</value>
-  </data>
-  <data name="StatsPopularCar" xml:space="preserve">
-    <value>人気の車</value>
-  </data>
-  <data name="StatsPopularAuthor" xml:space="preserve">
-    <value>人気の作者</value>
-  </data>
-  <data name="StatsFavoriteModel" xml:space="preserve">
-    <value>お気に入りのモデル</value>
-  </data>
-  <data name="StatsFavoriteCar" xml:space="preserve">
-    <value>お気に入りの車</value>
+    <value>設定をディスクに書き込めなかったため、変更は適用されていません。もう一度保存してください。</value>
   </data>
   <data name="AuthorsButtonTooltip" xml:space="preserve">
     <value>作者</value>
@@ -578,7 +530,7 @@
   </data>
   <data name="AuthorsEmptyHint" xml:space="preserve">
     <value>作者カードはまだありません。
-複数のニックネームを1つの名前にまとめるには、カードを作成してください。</value>
+カードは、1 人の作者のニックネームを 1 つの名前にまとめます。</value>
   </data>
   <data name="AuthorCardNewTitle" xml:space="preserve">
     <value>新しい作者カード</value>
@@ -587,37 +539,34 @@
     <value>作者カードを編集</value>
   </data>
   <data name="AuthorCardAliasesLabel" xml:space="preserve">
-    <value>ニックネーム</value>
+    <value>アカウント</value>
   </data>
   <data name="AuthorCardAliasesHint" xml:space="preserve">
-    <value>1つ以上のニックネームを選択してください — 同じ人物が別のアカウントからリバリーを公開することがあります。</value>
+    <value>作者のアカウントを選択してください。同じ人が複数のアカウントからリバリーを公開していることも、別の人が同じニックネームを使っていることもあります。</value>
   </data>
   <data name="AuthorCardCustomNameLabel" xml:space="preserve">
     <value>表示名</value>
   </data>
   <data name="AuthorCardCustomNameHint" xml:space="preserve">
-    <value>任意 — 既定では最初に選択したニックネーム</value>
+    <value>省略可。既定では選択したアカウントの最新のニックネーム</value>
   </data>
   <data name="AuthorCardDescriptionLabel" xml:space="preserve">
     <value>説明</value>
   </data>
   <data name="AuthorCardTwitterLabel" xml:space="preserve">
-    <value>Twitter/X</value>
+    <value>X</value>
   </data>
   <data name="AuthorCardYouTubeLabel" xml:space="preserve">
     <value>YouTube</value>
   </data>
-  <data name="AuthorCardNoAliasesError" xml:space="preserve">
-    <value>少なくとも1つのニックネームを選択してください</value>
-  </data>
   <data name="AuthorCardAliasTakenError" xml:space="preserve">
-    <value>ニックネーム「{0}」は既に別のカードに登録されています</value>
+    <value>アカウント「{0}」はすでに別のカードにあります</value>
   </data>
   <data name="AuthorCardAutoGeneratedNotice" xml:space="preserve">
-    <value>このカードはニックネームの変更を検出して自動的に作成されました。保存すると手動扱いになり、以後自動検出では変更されません。</value>
+    <value>ニックネームの変更を検出したため、ギャラリーがこのカードを自動的に作成しました。保存すると、このカードは手動のカードになり、自動的に変更されなくなります。</value>
   </data>
   <data name="AuthorCardAutoGeneratedBadge" xml:space="preserve">
-    <value>自動検出</value>
+    <value>自動</value>
   </data>
   <data name="AuthorCardAliasesFormat" xml:space="preserve">
     <value>ニックネーム: {0}</value>
@@ -635,10 +584,10 @@
     <value>重複の可能性: {0}</value>
   </data>
   <data name="AuthorCardDeleteTitle" xml:space="preserve">
-    <value>カードを削除しますか？</value>
+    <value>カードを削除しますか?</value>
   </data>
   <data name="AuthorCardDeleteMessage" xml:space="preserve">
-    <value>カード「{0}」を削除しますか？そのニックネームは再び新しいカードで使用できるようになります。</value>
+    <value>カード「{0}」を削除しますか? そのニックネームは別のカードに追加できるようになります。</value>
   </data>
   <data name="ButtonEdit" xml:space="preserve">
     <value>編集</value>
@@ -647,31 +596,25 @@
     <value>削除</value>
   </data>
   <data name="AuthorsSearchPlaceholder" xml:space="preserve">
-    <value>名前またはニックネームで検索...</value>
+    <value>名前またはニックネームで検索…</value>
   </data>
   <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
     <value>見つかりませんでした</value>
   </data>
   <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
-    <value>表示名「{0}」は既に別のカードで使用されています</value>
+    <value>表示名「{0}」はすでに別のカードで使われています</value>
   </data>
   <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
-    <value>ニックネームを検索...</value>
+    <value>ニックネームを検索…</value>
   </data>
   <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
-    <value>特定のツイートや他のページではなく、プロフィールへのリンク（例：x.com/username）が必要です</value>
+    <value>プロフィールへのリンクを入力してください。例: x.com/username。投稿や他のページへのリンクは使えません</value>
   </data>
   <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
-    <value>動画へのリンクではなく、YouTubeチャンネルへのリンク（例：youtube.com/@username）が必要です</value>
+    <value>YouTube チャンネルへのリンクを入力してください。例: youtube.com/@username。動画へのリンクは使えません</value>
   </data>
   <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
-    <value>カードは作成されていません</value>
-  </data>
-  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
-    <value>作者「{0}」のカードはまだ作成されていません</value>
-  </data>
-  <data name="AuthorCardCreateButton" xml:space="preserve">
-    <value>カードを作成</value>
+    <value>作者カードはありません</value>
   </data>
   <data name="ContextMenuMoveToArchive" xml:space="preserve">
     <value>アーカイブに移動</value>
@@ -689,7 +632,7 @@
     <value>アーカイブは空です</value>
   </data>
   <data name="ArchiveSelectedCountFormat" xml:space="preserve">
-    <value>{0} 件選択中</value>
+    <value>選択中: {0} 件</value>
   </data>
   <data name="ArchiveRestoreButton" xml:space="preserve">
     <value>復元</value>
@@ -698,55 +641,55 @@
     <value>完全に削除</value>
   </data>
   <data name="ArchiveDeleteConfirmTitle" xml:space="preserve">
-    <value>完全に削除しますか？</value>
+    <value>完全に削除しますか?</value>
   </data>
   <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
-    <value>{0} がごみ箱に移動されます。アプリ内から元に戻すことはできません。</value>
+    <value>{0} をごみ箱に移動します。ギャラリーでは元に戻せません。</value>
   </data>
   <data name="ArchivedOnFormat" xml:space="preserve">
-    <value>アーカイブ日時: {0}</value>
+    <value>アーカイブ日: {0}</value>
   </data>
   <data name="ArchiveNoSavePathMessage" xml:space="preserve">
-    <value>リバリーを復元する前に、保存フォルダを設定で選択してください</value>
+    <value>リバリーを復元する前に、設定でセーブフォルダーを選択してください</value>
   </data>
   <data name="FileOperationFailedMessage" xml:space="preserve">
-    <value>この操作中にエラーが発生しました。詳細はログを確認してください。</value>
+    <value>操作に失敗しました。詳細はログに記録されています。</value>
   </data>
   <data name="PreviewDialogTitle" xml:space="preserve">
     <value>プレビュー</value>
   </data>
   <data name="PreviewNotFoundMessage" xml:space="preserve">
-    <value>このリバリーの元のプレビュー画像が見つかりませんでした。</value>
+    <value>このリバリーの元のプレビューが見つかりません。</value>
   </data>
   <data name="ViewPreviewTooltip" xml:space="preserve">
-    <value>元のプレビューを表示</value>
+    <value>元のプレビューを開く</value>
   </data>
   <data name="LoadingMovingToArchive" xml:space="preserve">
-    <value>アーカイブに移動しています...</value>
+    <value>アーカイブに移動中…</value>
   </data>
   <data name="ArchiveSelectAllButton" xml:space="preserve">
     <value>すべて選択</value>
   </data>
   <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
-    <value>不明（復元されたエントリ）</value>
+    <value>不明: 復元された項目</value>
   </data>
   <data name="BackupUnknownDate" xml:space="preserve">
-    <value>不明な日時</value>
+    <value>日付不明</value>
   </data>
   <data name="BackupEntryCountFormat" xml:space="preserve">
-    <value>ラッピング: {0}</value>
+    <value>リバリー: {0}</value>
   </data>
   <data name="BackupNothingToBackUpMessage" xml:space="preserve">
-    <value>バックアップするものがありません — ギャラリーは空です</value>
+    <value>バックアップするものがありません: ギャラリーは空です</value>
   </data>
   <data name="BackupsDialogTitle" xml:space="preserve">
     <value>バックアップ</value>
   </data>
   <data name="BackupsEmptyHint" xml:space="preserve">
-    <value>まだバックアップがありません</value>
+    <value>バックアップはまだありません</value>
   </data>
   <data name="BackupDiffFormat" xml:space="preserve">
-    <value>（+{0} / -{1}）</value>
+    <value>（+{0} / −{1}）</value>
   </data>
   <data name="BackupCreateButton" xml:space="preserve">
     <value>バックアップを作成</value>
@@ -758,13 +701,13 @@
     <value>削除</value>
   </data>
   <data name="BackupDeleteConfirmTitle" xml:space="preserve">
-    <value>このバックアップを削除しますか？</value>
+    <value>バックアップを削除しますか?</value>
   </data>
   <data name="BackupDeleteConfirmMessage" xml:space="preserve">
-    <value>{0} のバックアップ（{1}）がごみ箱に移動されます。</value>
+    <value>{0} のバックアップ、{1} をごみ箱に移動します。</value>
   </data>
   <data name="BackupUnreadableMessage" xml:space="preserve">
-    <value>このバックアップの内容を読み込めませんでした — ファイルが破損しているか、有効なバックアップではない可能性があります</value>
+    <value>バックアップを読み込めませんでした。ファイルが破損しているか、バックアップではない可能性があります。</value>
   </data>
   <data name="BackupDetailTitleFormat" xml:space="preserve">
     <value>{0} のバックアップ</value>
@@ -776,36 +719,36 @@
     <value>このバックアップ以降に追加</value>
   </data>
   <data name="BackupNoneRemovedHint" xml:space="preserve">
-    <value>このバックアップ以降、削除されたものはありません</value>
+    <value>このバックアップ以降に削除されたリバリーはありません</value>
   </data>
   <data name="BackupNoneAddedHint" xml:space="preserve">
-    <value>このバックアップ以降、追加されたものはありません</value>
+    <value>このバックアップ以降に追加されたリバリーはありません</value>
   </data>
   <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
-    <value>まったく同じリバリー(同じフォルダー)が既にゲーム内にあるため、次のリバリーは復元されませんでした:
+    <value>次のリバリーは、ゲームの同じフォルダーにすでにあるため復元されませんでした:
 {0}</value>
   </data>
   <data name="RestoreFailedMessage" xml:space="preserve">
-    <value>次のリバリーを復元できませんでした。詳細はログを確認してください:
+    <value>次のリバリーを復元できませんでした。詳細はログに記録されています:
 {0}</value>
   </data>
   <data name="RestoreListMoreFormat" xml:space="preserve">
-    <value>…他 {0} 件</value>
+    <value>ほか {0} 件</value>
   </data>
   <data name="RestoreDuplicateTitle" xml:space="preserve">
     <value>重複が見つかりました</value>
   </data>
   <data name="RestoreDuplicateMessage" xml:space="preserve">
-    <value>ギャラリーには既にこれらのリバリーの重複があります(同じ車、同一のリバリーデータ):
+    <value>ギャラリーには、同じ車用の同一のリバリーがすでにあります:
 {0}
 
-それでも復元しますか?</value>
+それでもこれらのリバリーを復元しますか?</value>
   </data>
   <data name="RestoreDuplicateLineFormat" xml:space="preserve">
-    <value>• {0} — 重複: {1}</value>
+    <value>{0}: {1} の重複</value>
   </data>
   <data name="RestoreDuplicateOthersNote" xml:space="preserve">
-    <value>選択した他のリバリーはいずれにしても復元されます。</value>
+    <value>選択したほかのリバリーは、いずれの場合も復元されます。</value>
   </data>
   <data name="RestoreAnywayButton" xml:space="preserve">
     <value>それでも復元</value>
@@ -817,7 +760,7 @@
     <value>一部のみ読み込み</value>
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
-    <value>リバリーは読み込めましたが、ファイルの一部を解析できませんでした。主要なデータは表示されますが、一部のチェック(生成・重複)が利用できない場合があります。</value>
+    <value>リバリーは読み込めましたが、ファイルの一部を読み込めませんでした。主なデータは表示されますが、生成や重複などのチェックを利用できない場合があります。</value>
   </data>
   <data name="GameFolderProblemNotSet" xml:space="preserve">
     <value>ゲームフォルダーが設定されていません</value>
@@ -829,7 +772,7 @@
     <value>フォルダーにアクセスできません</value>
   </data>
   <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
-    <value>ゲームフォルダーではありません(media フォルダーがありません)</value>
+    <value>ゲームフォルダーではありません: media フォルダーがありません</value>
   </data>
   <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
     <value>media\cars が見つかりません</value>
@@ -841,13 +784,13 @@
     <value>media\Livery が見つかりません</value>
   </data>
   <data name="GameFolderProblemNoVinyls" xml:space="preserve">
-    <value>ゲームのビニールが見つかりません(media\Livery\Vinyls.zip)</value>
+    <value>ゲームのビニールが見つかりません: media\Livery\Vinyls.zip</value>
   </data>
   <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
     <value>ゲームのビニールを読み込めません</value>
   </data>
   <data name="GameFolderProblemNoDecals" xml:space="preserve">
-    <value>ロゴが見つからないため、一部のデカールは描画されません</value>
+    <value>ロゴが見つからないため、一部のビニールは描画されません</value>
   </data>
   <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
     <value>一部の車を読み込めませんでした</value>
@@ -856,7 +799,7 @@
     <value>このフォルダーは使用できません</value>
   </data>
   <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
-    <value>ゲームのビニールが見つかりません。ゲームフォルダー(media\Livery)を確認してください。</value>
+    <value>ゲームのビニールが見つかりません。ゲームフォルダーを確認してください: media\Livery。</value>
   </data>
   <data name="RenderErrorGamePathInvalid" xml:space="preserve">
     <value>ゲームフォルダーが設定されていないか、見つかりません。</value>
@@ -883,34 +826,34 @@
     <value>リバリーを描画できませんでした。</value>
   </data>
   <data name="View3DGameFolderChecking" xml:space="preserve">
-    <value>3D はまだ使用できません: ゲームフォルダーを確認中</value>
+    <value>3D 表示はまだ使用できません: ゲームフォルダーを確認中です</value>
   </data>
   <data name="View3DTooltip" xml:space="preserve">
     <value>3D で表示</value>
   </data>
   <data name="View3DNoCLivery" xml:space="preserve">
-    <value>3D は使用できません: リバリーに C_livery ファイルがありません</value>
+    <value>3D 表示は使用できません: リバリーに C_livery ファイルがありません</value>
   </data>
   <data name="View3DParseError" xml:space="preserve">
-    <value>3D は使用できません: リバリーを読み込めませんでした</value>
+    <value>3D 表示は使用できません: リバリーを読み込めませんでした</value>
   </data>
   <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
-    <value>3D は使用できません: {0}。設定でゲームフォルダーを指定してください。</value>
+    <value>3D 表示は使用できません: {0}。設定でゲームフォルダーを指定してください。</value>
   </data>
   <data name="View3DDialogTitle" xml:space="preserve">
     <value>3D 表示</value>
   </data>
   <data name="View3DReadFailed" xml:space="preserve">
-    <value>リバリーのファイルを読み込めませんでした。詳細はログを確認してください。</value>
+    <value>リバリーのファイルを読み込めませんでした。詳細はログに記録されています。</value>
   </data>
   <data name="View3DParseFailedFormat" xml:space="preserve">
     <value>リバリーを読み込めませんでした: {0}</value>
   </data>
   <data name="ViewerStatsFormat" xml:space="preserve">
-    <value>三角形 {0:N0} (LOD {1}) · リバリー {2}×{3} · フレーム {4}×{5}, MSAA {6}× · {7:F1} ms</value>
+    <value>三角形 {0:N0}（LOD {1}）· リバリー {2}×{3} · フレーム {4}×{5}, MSAA {6}× · {7:F1} ms</value>
   </data>
   <data name="ViewerNoOpenGl" xml:space="preserve">
-    <value>3D 表示は使用できません: OpenGL を初期化できませんでした。</value>
+    <value>3D 表示は使用できません: OpenGL を開始できませんでした。</value>
   </data>
   <data name="ViewerQualityLow" xml:space="preserve">
     <value>低</value>
@@ -922,16 +865,16 @@
     <value>高</value>
   </data>
   <data name="ViewerQualityUltra" xml:space="preserve">
-    <value>ウルトラ</value>
+    <value>最高</value>
   </data>
   <data name="ViewerResetView" xml:space="preserve">
     <value>表示をリセット</value>
   </data>
   <data name="ViewerTitleFormat" xml:space="preserve">
-    <value>{0} — 3D</value>
+    <value>3D 表示: {0}</value>
   </data>
   <data name="GameFolderNotSetHint" xml:space="preserve">
-    <value>リバリーの 3D 表示にはゲームフォルダーが必要です</value>
+    <value>リバリーを 3D で表示するにはゲームフォルダーが必要です</value>
   </data>
   <data name="GameFolderChecking" xml:space="preserve">
     <value>ゲームフォルダーを確認中…</value>
@@ -946,20 +889,20 @@
     <value>ゲームフォルダーが見つかりました。車: {0}。ただし: {1}</value>
   </data>
   <data name="ViewerControlsHint" xml:space="preserve">
-    <value>左ドラッグ: 回転 · 右ドラッグ: 移動 · ホイール: ズーム · ダブルクリック: リセット</value>
+    <value>左ボタン: 回転。右ボタン: 移動。ホイール: ズーム。ダブルクリック: リセット。</value>
   </data>
   <data name="AuctionBadgeLabel" xml:space="preserve">
     <value>オークション</value>
   </data>
   <data name="AuctionBadgeTooltip" xml:space="preserve">
     <value>オークションハウスで購入したリバリーです。
-どの車にも適用されていないことをリバリーサーバーが確認した場合にのみアーカイブに移動できます。</value>
+どの車にも使われていないことをリバリーサーバーが確認した後でのみ、アーカイブに移動できます。</value>
   </data>
   <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
-    <value>オークションのリバリーは、どの車にも適用されていないことをリバリーサーバーが確認した場合にのみアーカイブに移動できます</value>
+    <value>オークションのリバリーは、どの車にも使われていないことをリバリーサーバーが確認した後でのみ、アーカイブに移動できます</value>
   </data>
   <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
-    <value>選択したオークションのリバリーのうち {0} 件はゲームに残りました。どの車にも適用されていないことが確認されていません。リバリーサーバーが現在のセーブを受け取ると移動できます。</value>
+    <value>選択したオークションのリバリーのうち、ゲームに残ったもの: {0} 件。どの車にも使われていないことが確認されていません。リバリーサーバーが現在のセーブデータを受け取ると移動できます。</value>
   </data>
   <data name="ContextMenuOnlyThisCar" xml:space="preserve">
     <value>この車のみ</value>
@@ -971,7 +914,7 @@
     <value>この作者のみ</value>
   </data>
   <data name="ContextMenuClearQuickFilters" xml:space="preserve">
-    <value>すべて表示に戻す</value>
+    <value>すべての表示に戻す</value>
   </data>
   <data name="QuickFiltersLabel" xml:space="preserve">
     <value>絞り込み:</value>
@@ -989,7 +932,7 @@
     <value>このフィルターを解除</value>
   </data>
   <data name="StatusAutoRefreshedFormat" xml:space="preserve">
-    <value>セーブデータが変更されました: +{0} / −{1}、ギャラリーを更新しました</value>
+    <value>セーブデータが変更されました: +{0} / −{1}。ギャラリーを更新しました</value>
   </data>
   <data name="FilterAuctionLabel" xml:space="preserve">
     <value>オークション</value>
@@ -1010,16 +953,16 @@
     <value>オークション</value>
   </data>
   <data name="AuthorInferredTooltip" xml:space="preserve">
-    <value>このリバリーには作者名がないため、同じ作者の他のリバリーから取得しました</value>
+    <value>このリバリーには作者名がありません。同じ作者のほかのリバリーから取得しました。</value>
   </data>
   <data name="AuthorUnknownMessage" xml:space="preserve">
-    <value>このリバリーには作者名がなく、ギャラリーに同じ作者の他のリバリーもないため、作者名を取得できません。</value>
+    <value>このリバリーには作者名がなく、作者名を取得できる同じ作者のほかのリバリーもギャラリーにありません。</value>
   </data>
   <data name="QuickFilterAddButton" xml:space="preserve">
     <value>絞り込み</value>
   </data>
   <data name="QuickFilterAddTooltip" xml:space="preserve">
-    <value>メーカー・車・作者で絞り込む</value>
+    <value>メーカー、車、作者のいずれかで絞り込む</value>
   </data>
   <data name="QuickFilterKindManufacturer" xml:space="preserve">
     <value>メーカー</value>
@@ -1034,7 +977,7 @@
     <value>検索…</value>
   </data>
   <data name="QuickFilterPickerEmpty" xml:space="preserve">
-    <value>見つかりません</value>
+    <value>見つかりませんでした</value>
   </data>
   <data name="GroupShowOnlyButton" xml:space="preserve">
     <value>これのみ</value>
@@ -1049,13 +992,13 @@
     <value>重複</value>
   </data>
   <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
-    <value>重複の可能性とみなす類似度</value>
+    <value>重複の可能性として扱う類似度</value>
   </data>
   <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
-    <value>これより類似度が低い一致は表示されません。完全な重複は常に表示されます。再スキャンなしですぐに反映されます。</value>
+    <value>これより類似度が低いリバリーは表示されません。完全な重複は常に表示されます。変更は再スキャンなしですぐに反映されます。</value>
   </data>
   <data name="View3DDifferenceNote" xml:space="preserve">
-    <value>3D表示はおおよそのイメージです。色、質感、ライティング、一部の細部はゲーム内と異なる場合があります。</value>
+    <value>3D 表示はおおよその見た目です。色、質感、ライティング、一部の細部はゲームと異なる場合があります。</value>
   </data>
   <data name="ServerStatusChecking" xml:space="preserve">
     <value>サーバー: 接続中…</value>
@@ -1067,7 +1010,7 @@
     <value>サーバー: セーブデータを読み込み中…</value>
   </data>
   <data name="ServerStatusSaveNotSupported" xml:space="preserve">
-    <value>サーバー: セーブデータ未対応</value>
+    <value>サーバー: このセーブデータにはまだ対応していません</value>
   </data>
   <data name="ServerStatusDegraded" xml:space="preserve">
     <value>サーバー: 一部制限中</value>
@@ -1076,7 +1019,7 @@
     <value>サーバー: メンテナンス中</value>
   </data>
   <data name="ServerStatusUnreachable" xml:space="preserve">
-    <value>サーバーに接続できません</value>
+    <value>サーバー: 接続できません</value>
   </data>
   <data name="ServerStatusNoInternet" xml:space="preserve">
     <value>インターネットに接続されていません</value>
@@ -1085,7 +1028,7 @@
     <value>サーバー: リクエストが多すぎます</value>
   </data>
   <data name="ServerStatusUpdateRequired" xml:space="preserve">
-    <value>サーバー: アプリを更新してください</value>
+    <value>サーバー: 新しいバージョンのギャラリーが必要です</value>
   </data>
   <data name="ServerStatusAppRejected" xml:space="preserve">
     <value>サーバー: このビルドは受け付けられません</value>
@@ -1094,232 +1037,233 @@
     <value>サーバー: 安全な接続に失敗しました</value>
   </data>
   <data name="ServerStatusServerError" xml:space="preserve">
-    <value>サーバーエラー</value>
+    <value>サーバー: エラー</value>
   </data>
   <data name="ServerStatusNotConfigured" xml:space="preserve">
-    <value>このビルドにはサーバーが設定されていません</value>
+    <value>サーバー: このビルドでは設定されていません</value>
   </data>
   <data name="ServerStatusVersionFormat" xml:space="preserve">
     <value>サーバー {0}</value>
   </data>
   <data name="ServerStatusRetryHint" xml:space="preserve">
-    <value>自動的に再試行します。</value>
+    <value>ギャラリーが自動的に再試行します。</value>
   </data>
   <data name="ServerStatusRetryInFormat" xml:space="preserve">
     <value>{0} 秒後に再試行します。</value>
   </data>
   <data name="ServerStatusUpdateHint" xml:space="preserve">
-    <value>サーバーはより新しいバージョンのアプリを必要としています。更新してください。</value>
+    <value>サーバーには新しいバージョンのギャラリーが必要です。ギャラリーを更新してください。</value>
   </data>
   <data name="ServerStatusAppRejectedHint" xml:space="preserve">
-    <value>サーバーはこのビルドを受け付けません。公式リリースを使用してください。</value>
+    <value>サーバーはこのビルドのギャラリーを受け付けません。公式リリースを使用してください。</value>
   </data>
   <data name="ServerStatusCertificateHint" xml:space="preserve">
-    <value>サーバー証明書の検証に失敗しました。通信が傍受されている可能性があります（ウイルス対策ソフトやプロキシなど）。自動では再試行しません。</value>
+    <value>サーバー証明書の検証に失敗しました。ウイルス対策ソフトやプロキシなどによって通信が傍受されている可能性があります。ギャラリーは自動では再試行しません。</value>
   </data>
   <data name="ServerStatusClickToRecheck" xml:space="preserve">
-    <value>クリックしてサーバーの状態を確認</value>
+    <value>クリックするとサーバーの状態を確認します</value>
   </data>
   <data name="ServerSyncDoneFormat" xml:space="preserve">
     <value>車に適用中のリバリー: {0}
-{1} に更新</value>
+更新時刻: {1}</value>
   </data>
   <data name="ServerSyncProfileNotFound" xml:space="preserve">
-    <value>セーブフォルダにプロフィールファイル（C_ProfileData）が見つかりません。</value>
+    <value>セーブフォルダーにプロフィールファイル C_ProfileData がありません。</value>
   </data>
   <data name="ServerSyncSaveNotSupported" xml:space="preserve">
-    <value>サーバーはまだこのセーブデータを読み込めません。ゲームが更新された可能性があります。近日対応予定です。</value>
+    <value>サーバーはまだこのセーブデータを読み込めません。ゲームが更新された可能性があります。今後対応します。</value>
   </data>
   <data name="ServerSyncSaveRejected" xml:space="preserve">
-    <value>サーバーによると、このファイルは有効なプロフィールのセーブデータではありません。</value>
+    <value>サーバーによると、このファイルは有効なプロフィールファイルではありません。</value>
   </data>
   <data name="ServerSyncFailed" xml:space="preserve">
-    <value>適用中のリバリーを更新できませんでした。再試行します。</value>
+    <value>車に適用中のリバリーを更新できませんでした。ギャラリーが再試行します。</value>
   </data>
   <data name="InstalledBadgeLabel" xml:space="preserve">
-    <value>適用中</value>
+    <value>車に適用中</value>
   </data>
   <data name="InstalledBadgeTooltip" xml:space="preserve">
-    <value>ゲーム内で車に適用されています</value>
+    <value>このリバリーはゲームで車に適用されています</value>
   </data>
   <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
-    <value>ゲーム内で {0} 台の車に適用されています</value>
+    <value>このリバリーはゲームで {0} 台の車に適用されています</value>
   </data>
   <data name="SettingsSectionServer" xml:space="preserve">
-    <value>リバリーデータサーバー</value>
+    <value>リバリーサーバー</value>
   </data>
   <data name="ServerConnectionLabel" xml:space="preserve">
-    <value>サーバーに接続して適用中のリバリーを特定する</value>
+    <value>サーバーを使って車に適用中のリバリーを調べる</value>
   </data>
   <data name="ServerConnectionDescription" xml:space="preserve">
-    <value>車に適用されているリバリーを特定するため、アプリケーションはセーブファイル（C_ProfileData）をサーバーに送信します。ファイルは適用中のリバリーに関する情報を取得する目的でのみ処理され、サーバーには保存されません。
+    <value>どのリバリーが車に適用されているかを調べるため、ギャラリーはセーブファイル C_ProfileData をサーバーに送信します。サーバーはこのファイルをこの目的にのみ使用し、保存しません。
 
-セーブファイルのデータが保存されたり、その他の目的に使用されたりすることはありません。サーバーは、セーブファイルの復号に必要な鍵を安全に保管するために使用されます。
+ファイルのデータが保管されたり、ほかの目的に使われたりすることはありません。サーバーは、セーブファイルの復号に必要な鍵を安全に保管しています。
 
-本サーバーは、Forza Horizon、Xbox、Microsoft の公式サーバーとは一切関係ありません。</value>
+このサーバーは、Forza Horizon、Xbox、Microsoft の公式サーバーとは関係ありません。</value>
   </data>
   <data name="ServerConsentMessage" xml:space="preserve">
-    <value>車に適用されているリバリーを特定するため、アプリケーションはセーブファイル（C_ProfileData）をサーバーに送信します。ファイルは適用中のリバリーに関する情報を取得する目的でのみ処理され、サーバーには保存されません。
+    <value>どのリバリーが車に適用されているかを調べるため、ギャラリーはセーブファイル C_ProfileData をサーバーに送信します。サーバーはこのファイルをこの目的にのみ使用し、保存しません。
 
-セーブファイルのデータが保存されたり、その他の目的に使用されたりすることはありません。サーバーは、セーブファイルの復号に必要な鍵を安全に保管するために使用されます。
+ファイルのデータが保管されたり、ほかの目的に使われたりすることはありません。サーバーは、セーブファイルの復号に必要な鍵を安全に保管しています。
 
-本サーバーは、Forza Horizon、Xbox、Microsoft の公式サーバーとは一切関係ありません。
+このサーバーは、Forza Horizon、Xbox、Microsoft の公式サーバーとは関係ありません。
 
-データはお客様の同意がある場合にのみサーバーへ送信されます。サーバーへの接続を有効にしますか？</value>
+データは同意した場合にのみサーバーに送信されます。サーバーへの接続をオンにしますか?</value>
   </data>
   <data name="ServerConsentTitle" xml:space="preserve">
-    <value>リバリーデータサーバーへの接続</value>
+    <value>リバリーサーバーへの接続</value>
   </data>
   <data name="ServerConsentAccept" xml:space="preserve">
-    <value>はい、理解したうえで続行します</value>
+    <value>はい、接続をオンにします</value>
   </data>
   <data name="FilterInstalledLabel" xml:space="preserve">
-    <value>適用中のリバリー</value>
+    <value>車に適用中</value>
   </data>
   <data name="InstalledAllToggle" xml:space="preserve">
     <value>すべてのリバリー</value>
   </data>
   <data name="InstalledFirstToggle" xml:space="preserve">
-    <value>適用中を先に</value>
+    <value>車に適用中のものを先頭に</value>
   </data>
   <data name="OnlyInstalledToggle" xml:space="preserve">
-    <value>適用中のみ</value>
+    <value>車に適用中のもののみ</value>
   </data>
   <data name="FilterValueUnavailable" xml:space="preserve">
     <value>オフ</value>
   </data>
   <data name="InstalledFilterNeedsServer" xml:space="preserve">
-    <value>適用中のリバリーを特定するには、設定でリバリーデータサーバーへの接続を有効にしてください。</value>
+    <value>車に適用中のリバリーを調べるには、設定でリバリーサーバーをオンにしてください。</value>
   </data>
   <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
-    <value>一部のフォルダーを元の場所から削除できませんでした。フォルダー内のファイルが使用中の可能性があります（ゲームが起動していませんか？）。データは失われていません。有効なコピーは完全です。次の残りのフォルダーは不要なので削除できます:
+    <value>一部のフォルダーを元の場所から削除できませんでした。起動中のゲームなどがファイルを使用している可能性があります。データは失われていません。新しいコピーはそろっています。次の残ったフォルダーは不要なので削除できます:
 {0}</value>
   </data>
   <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
-    <value>ゲーム内で車に適用されているリバリーはアーカイブに移動できません</value>
+    <value>ゲームで車に適用中のリバリーはアーカイブに移動できません</value>
   </data>
   <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
-    <value>ゲーム内で車に適用されているリバリーはアーカイブに移動できないため、選択したうち {0} 件はゲームに残りました。</value>
+    <value>ゲームで車に適用中のリバリーはアーカイブに移動できません。選択したうちゲームに残ったリバリー: {0} 件。</value>
   </data>
   <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
-    <value>どのリバリーが車に適用されているか分からないため、このリバリーをアーカイブに移動するのは安全ではありません。ゲーム内で車に適用されている可能性があります。
+    <value>どのリバリーが車に適用されているか分からないため、このリバリーをアーカイブに移動するのは安全ではありません。ゲームで車に適用されている可能性があります。
 
-リバリーをアーカイブに移動しますか？</value>
+リバリーをアーカイブに移動しますか?</value>
   </data>
   <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
-    <value>どのリバリーが車に適用されているか分からないため、これらのリバリーをアーカイブに移動するのは安全ではありません。一部がゲーム内で車に適用されている可能性があります。
+    <value>どのリバリーが車に適用されているか分からないため、これらのリバリーをアーカイブに移動するのは安全ではありません。一部がゲームで車に適用されている可能性があります。
 
-リバリーをアーカイブに移動しますか？</value>
+リバリーをアーカイブに移動しますか?</value>
   </data>
   <data name="DontShowAgainCheckBox" xml:space="preserve">
     <value>今後は表示しない</value>
   </data>
   <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
-    <value>ゲーム内で車に適用されているリバリーはアーカイブに移動できません。オークションのリバリーは、どの車にも適用されていないことをリバリーサーバーが確認した場合にのみ移動できます</value>
+    <value>ゲームで車に適用中のリバリーはアーカイブに移動できません。オークションのリバリーは、どの車にも使われていないことをリバリーサーバーが確認した後でのみ移動できます。</value>
   </data>
   <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
-    <value>前回の同期後にセーブファイルが変更されましたが、新しいデータはまだリバリーサーバーに送信されていません。車に適用中のリバリーの一覧が古い可能性があるため、このリバリーをアーカイブに移動するのは安全ではありません。ゲーム内で車に適用されている可能性があります。
+    <value>前回の同期の後にセーブデータが変更されましたが、新しいデータはまだリバリーサーバーに届いていません。車に適用中のリバリーの一覧が古い可能性があるため、このリバリーをアーカイブに移動するのは安全ではありません。ゲームで車に適用されている可能性があります。
 
-同期（自動で行われ、数分かかる場合があります）を待ってから、もう一度お試しください。今すぐリバリーをアーカイブに移動しますか？</value>
+自動で行われる同期を待ってから、もう一度試すことをおすすめします。同期には数分かかる場合があります。今すぐリバリーをアーカイブに移動しますか?</value>
   </data>
   <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
-    <value>前回の同期後にセーブファイルが変更されましたが、新しいデータはまだリバリーサーバーに送信されていません。車に適用中のリバリーの一覧が古い可能性があるため、これらのリバリーをアーカイブに移動するのは安全ではありません。一部がゲーム内で車に適用されている可能性があります。
+    <value>前回の同期の後にセーブデータが変更されましたが、新しいデータはまだリバリーサーバーに届いていません。車に適用中のリバリーの一覧が古い可能性があるため、これらのリバリーをアーカイブに移動するのは安全ではありません。一部がゲームで車に適用されている可能性があります。
 
-同期（自動で行われ、数分かかる場合があります）を待ってから、もう一度お試しください。今すぐリバリーをアーカイブに移動しますか？</value>
+自動で行われる同期を待ってから、もう一度試すことをおすすめします。同期には数分かかる場合があります。今すぐリバリーをアーカイブに移動しますか?</value>
   </data>
   <data name="ContextMenuNavigateInGame" xml:space="preserve">
     <value>ゲーム内で探す</value>
   </data>
   <data name="GamePositionDescriptionFormat" xml:space="preserve">
-    <value>{0} 列目・{2} 段中 {1} 段目（{4} 件中 {3} 番目）</value>
+    <value>{0} 列目、{1} 段目 / {2} 段（{3} / {4} 番目）</value>
   </data>
   <data name="GamePositionTooltipFormat" xml:space="preserve">
-    <value>マイデザインでの位置: {0}</value>
+    <value>「マイデザイン」での位置: {0}</value>
   </data>
   <data name="NavigateInGameTooltipFormat" xml:space="preserve">
-    <value>ゲーム内で探す: マイデザインのカーソルを {0} に移動します。
-先にゲームでマイデザインを開き、カーソルを最初のデザインに置き、フィルターを解除してください。Esc で中止します。</value>
+    <value>ゲーム内で探す: 「マイデザイン」のカーソルを {0} に合わせます。
+先にゲームで「マイデザイン」を開き、フィルターを解除してください。ギャラリーが自動でゲームに切り替え、マウスポインターをゲームの外へ移し、最初のリバリーから始めるためにメニューを開き直します。
+カーソルの移動中はマウスとキーボードに触れないでください。マウスを動かす、Esc を押す、別のウィンドウに切り替えると止まります。</value>
   </data>
   <data name="NavigateInGameAuctionTooltip" xml:space="preserve">
-    <value>オークションのリバリーはマイデザインに表示されません</value>
+    <value>オークションのリバリーは「マイデザイン」に表示されません</value>
   </data>
   <data name="NavigateInGameNoPositionTooltip" xml:space="preserve">
-    <value>マイデザインでの位置はまだ不明です</value>
+    <value>「マイデザイン」での位置はまだ分かりません</value>
   </data>
   <data name="NavigateInGameMultipleSelectedTooltip" xml:space="preserve">
     <value>ゲーム内で探すには、リバリーを 1 つだけ選択してください</value>
   </data>
   <data name="NavigateFailedMessage" xml:space="preserve">
-    <value>ゲーム内のカーソルを移動できませんでした。詳細はログを確認してください。</value>
+    <value>ゲーム内のカーソルを移動できませんでした。詳細はログに記録されています。</value>
   </data>
   <data name="NavigateNoSavePathMessage" xml:space="preserve">
-    <value>保存フォルダーが設定されていません。設定で選択してください。</value>
+    <value>セーブフォルダーが設定されていません。設定で選択してください。</value>
   </data>
   <data name="NavigateGameFolderCheckingMessage" xml:space="preserve">
-    <value>ゲームフォルダーを確認中です。少し待ってからもう一度お試しください。</value>
+    <value>ゲームフォルダーを確認中です。少し待ってからもう一度試してください。</value>
   </data>
   <data name="NavigateRowsUnknownMessage" xml:space="preserve">
-    <value>マイデザインの段数を判別できませんでした。メニューのファイルが MOD によって不明な形で変更されています。設定 → ゲーム内で探す で段数を選択してください。</value>
+    <value>「マイデザイン」の段数を判別できませんでした。MOD がメニューのファイルを不明な形で変更しています。設定の「ゲーム内で探す」で段数を選択してください。</value>
   </data>
   <data name="NavigateSaveReadFailedMessage" xml:space="preserve">
-    <value>保存フォルダーを読み込めませんでした。</value>
+    <value>セーブフォルダーを読み込めませんでした。</value>
   </data>
   <data name="NavigateLiveryNotInSaveMessage" xml:space="preserve">
-    <value>このリバリーは保存フォルダーにもうありません。一覧を更新してください。</value>
+    <value>このリバリーはセーブフォルダーにもうありません。一覧を更新してください。</value>
   </data>
   <data name="NavigateProgressFormat" xml:space="preserve">
-    <value>ゲーム内で {0} へ移動中: {2} 回中 {1} 回 · Esc で中止</value>
+    <value>ゲーム内で {0} へ移動中: {2} 回中 {1} 回。マウスを動かさないでください。Esc で中止します。</value>
   </data>
   <data name="NavigateCompletedFormat" xml:space="preserve">
-    <value>カーソルを {0} に移動しました。ゲーム内の選択を確認してください。</value>
+    <value>カーソルを {0} に合わせました。ゲームで選択位置を確認してください。</value>
   </data>
   <data name="NavigateCursorParkedNote" xml:space="preserve">
     <value>選択が変わらないように、マウスポインターをゲームの外へ移動しました。</value>
   </data>
   <data name="NavigateCancelledByUserFormat" xml:space="preserve">
-    <value>Esc で中止しました（{1} 回中 {0} 回送信）。</value>
+    <value>Esc で中止しました。送信したキー: {1} 回中 {0} 回。</value>
   </data>
   <data name="NavigateFocusLostFormat" xml:space="preserve">
-    <value>中止しました（{1} 回中 {0} 回送信）: ゲームのウィンドウがアクティブではなくなりました。</value>
+    <value>{1} 回中 {0} 回の時点で中止しました: ゲームのウィンドウがアクティブではなくなりました。</value>
   </data>
   <data name="NavigateMouseMovedFormat" xml:space="preserve">
-    <value>中止しました（{1} 回中 {0} 回送信）: マウスが動きました。</value>
+    <value>{1} 回中 {0} 回の時点で中止しました: マウスが動きました。</value>
   </data>
   <data name="NavigateActivationFailedMessage" xml:space="preserve">
     <value>ゲームのウィンドウを前面に表示できませんでした。キーは送信していません。</value>
   </data>
   <data name="NavigateCursorParkFailedMessage" xml:space="preserve">
-    <value>マウスポインターをゲームのウィンドウから移動できなかったため、キーは送信していません。ゲーム上にポインターがあると選択が変わってしまいます。</value>
+    <value>マウスポインターをゲームのウィンドウの外へ移動できなかったため、キーは送信していません。ポインターがゲーム上にあると選択が変わります。</value>
   </data>
   <data name="NavigateInputRejectedMessage" xml:space="preserve">
     <value>Windows がキー入力を拒否しました。ゲームを管理者として実行している場合は、ギャラリーも管理者として実行してください。</value>
   </data>
   <data name="NavigateSceneChangedMessage" xml:space="preserve">
-    <value>ゲームの起動後に MOD でマイデザインのメニューが変更されたため、ゲームはまだ古いレイアウトを表示しています。ゲームを再起動してもう一度お試しください。</value>
+    <value>ゲームの起動後に MOD が「マイデザイン」のメニューを変更したため、ゲームはまだ古いレイアウトを表示しています。ゲームを再起動してもう一度試してください。</value>
   </data>
   <data name="SettingsSectionNavigation" xml:space="preserve">
     <value>ゲーム内で探す</value>
   </data>
   <data name="NavigationRowsLabel" xml:space="preserve">
-    <value>マイデザインの段数</value>
+    <value>「マイデザイン」の段数</value>
   </data>
   <data name="NavigationRowsAuto" xml:space="preserve">
     <value>自動</value>
   </data>
   <data name="NavigationRowsTwo" xml:space="preserve">
-    <value>2 段（標準）</value>
+    <value>2 段、標準のメニュー</value>
   </data>
   <data name="NavigationRowsThree" xml:space="preserve">
-    <value>3 段（メニュー MOD）</value>
+    <value>3 段、メニュー MOD</value>
   </data>
   <data name="NavigationRowsDetectedVanilla" xml:space="preserve">
-    <value>検出結果: 2 段（標準のメニュー）。</value>
+    <value>検出結果: 2 段、標準のメニューです。</value>
   </data>
   <data name="NavigationRowsDetectedModFormat" xml:space="preserve">
-    <value>検出結果: {0} 段（MOD でメニューが変更されています）。</value>
+    <value>検出結果: {0} 段、MOD がメニューを変更しています。</value>
   </data>
   <data name="NavigationRowsDetectedNoGameFolder" xml:space="preserve">
-    <value>ゲームフォルダーが設定されていないため、2 段とみなします。メニュー MOD を検出するにはゲームフォルダーを設定してください。</value>
+    <value>ゲームフォルダーが設定されていないため、2 段とみなします。メニュー MOD を検出するには、ゲームフォルダーを設定してください。</value>
   </data>
   <data name="NavigationRowsDetectedUnknown" xml:space="preserve">
     <value>段数を検出できませんでした。メニューのファイルが不明な形で変更されています。2 段か 3 段を選択してください。</value>
@@ -1328,31 +1272,31 @@
     <value>キー入力の間隔</value>
   </data>
   <data name="NavigationKeyIntervalHint" xml:space="preserve">
-    <value>カーソルがリバリーの手前で止まる場合は長くしてください。速すぎるキー入力はゲームが取りこぼします。</value>
+    <value>カーソルがリバリーの手前で止まる場合は長くしてください。速すぎるキー入力はゲームが無視します。</value>
   </data>
   <data name="MillisecondsFormat" xml:space="preserve">
     <value>{0} ms</value>
   </data>
   <data name="SortOptionGameOrder" xml:space="preserve">
-    <value>ゲーム内の順</value>
+    <value>ゲームと同じ順</value>
   </data>
   <data name="GroupingOptionByCar" xml:space="preserve">
     <value>車別</value>
   </data>
   <data name="GroupNotInMyDesigns" xml:space="preserve">
-    <value>マイデザインにないもの</value>
+    <value>「マイデザイン」にないもの</value>
   </data>
   <data name="ChangesDialogTitle" xml:space="preserve">
     <value>前回の起動以降の変更</value>
   </data>
   <data name="ChangesSummaryFormat" xml:space="preserve">
-    <value>ギャラリーを閉じている間に: 新規 +{0}、削除 −{1}</value>
+    <value>ギャラリーを閉じている間: 新規 +{0}、削除 −{1}</value>
   </data>
   <data name="ChangesAddedTabFormat" xml:space="preserve">
-    <value>新規 (+{0})</value>
+    <value>新規（+{0}）</value>
   </data>
   <data name="ChangesRemovedTabFormat" xml:space="preserve">
-    <value>削除 (−{0})</value>
+    <value>削除（−{0}）</value>
   </data>
   <data name="ChangesNoneAddedHint" xml:space="preserve">
     <value>新しいリバリーはありません</value>
@@ -1361,7 +1305,7 @@
     <value>削除されたリバリーはありません</value>
   </data>
   <data name="ChangesDontShowAgainCheckBox" xml:space="preserve">
-    <value>今後は表示しない (設定で再度有効にできます)</value>
+    <value>今後は表示しない。設定で再びオンにできます。</value>
   </data>
   <data name="ShowChangesSinceLastLaunchLabel" xml:space="preserve">
     <value>前回の起動以降の変更を表示</value>
@@ -1370,7 +1314,7 @@
     <value>診断</value>
   </data>
   <data name="DiagnosticsHint" xml:space="preserve">
-    <value>ログ、パスと ID を除いた設定、リバリーの読み取りエラーを ZIP に保存します。不具合報告に添付できます。自動送信はされません。</value>
+    <value>ログ、パスと ID を除いた設定、リバリーの読み込みエラーを ZIP ファイルに保存します。不具合報告に添付できます。どこにも送信されません。</value>
   </data>
   <data name="ExportDiagnosticsButton" xml:space="preserve">
     <value>診断をエクスポート…</value>
@@ -1388,43 +1332,43 @@
     <value>フォルダーで表示</value>
   </data>
   <data name="DiagnosticsExportFailedMessage" xml:space="preserve">
-    <value>診断ファイルを保存できませんでした。詳細はログを確認してください。</value>
+    <value>診断ファイルを保存できませんでした。詳細はログに記録されています。</value>
   </data>
   <data name="AccountSwitcherTooltip" xml:space="preserve">
-    <value>ゲームアカウント: この PC 上のアカウントを切り替えます</value>
+    <value>ゲームアカウント: この PC で見つかったアカウントを切り替えます</value>
   </data>
   <data name="AccountUnnamedFormat" xml:space="preserve">
     <value>アカウント …{0}</value>
   </data>
   <data name="AccountLiveriesFormat" xml:space="preserve">
-    <value>{0} 件</value>
+    <value>リバリー: {0}</value>
   </data>
   <data name="AccountUnavailableMessage" xml:space="preserve">
-    <value>このアカウントのセーブフォルダーは利用できなくなりました。</value>
+    <value>このアカウントのセーブフォルダーは使用できなくなりました。</value>
   </data>
   <data name="AccountSourceOtherFormat" xml:space="preserve">
     <value>別のアカウントから: {0}</value>
   </data>
   <data name="RestoreFromOtherAccountTitle" xml:space="preserve">
-    <value>このアカウントに復元しますか？</value>
+    <value>このアカウントに復元しますか?</value>
   </data>
   <data name="RestoreFromOtherAccountMessage" xml:space="preserve">
-    <value>別のアカウント ({1}) のリバリー: {0} 件。現在のアカウント ({2}) に復元されます。</value>
+    <value>アカウント {1} のリバリー: {0} 件。現在のアカウント {2} に復元されます。</value>
   </data>
   <data name="RestoreIntoCurrentAccountButton" xml:space="preserve">
     <value>ここに復元</value>
   </data>
   <data name="BackupOtherAccountNote" xml:space="preserve">
-    <value>このバックアップは別のアカウント ({0}) で作成されました。下の比較は現在のアカウント ({1}) とのもので、復元したリバリーはこのアカウントに入ります。</value>
+    <value>このバックアップは別のアカウント {0} で作成されました。下の比較は現在のアカウント {1} とのもので、復元したリバリーはこのアカウントに入ります。</value>
   </data>
   <data name="AccountFilterOnlyCurrent" xml:space="preserve">
     <value>このアカウントのみ</value>
   </data>
   <data name="AccountFilterHiddenFormat" xml:space="preserve">
-    <value>他のアカウント分を非表示: {0}</value>
+    <value>非表示、ほかのアカウントのもの: {0}</value>
   </data>
   <data name="AuthorsSelectForMergeTooltip" xml:space="preserve">
-    <value>他のカードと統合するために選択</value>
+    <value>ほかのカードと統合するには選択します</value>
   </data>
   <data name="AuthorCardSplitButton" xml:space="preserve">
     <value>分割</value>
@@ -1439,54 +1383,54 @@
     <value>別の作者</value>
   </data>
   <data name="AuthorsRestoreHiddenButton" xml:space="preserve">
-    <value>元に戻す</value>
+    <value>再表示</value>
   </data>
   <data name="AuthorsSuggestionsTitle" xml:space="preserve">
     <value>同じ作者の可能性</value>
   </data>
   <data name="AuthorsHiddenHeaderFormat" xml:space="preserve">
-    <value>非表示の自動カード ({0})</value>
+    <value>非表示の自動カード（{0}）</value>
   </data>
   <data name="AuthorsMergeSelectedFormat" xml:space="preserve">
-    <value>統合 ({0})</value>
+    <value>統合（{0}）</value>
   </data>
   <data name="AuthorsUncardedAccountFormat" xml:space="preserve">
     <value>アカウント「{0}」</value>
   </data>
   <data name="AuthorsSuggestionFormat" xml:space="preserve">
-    <value>{0} と {1}: 共通の名前「{2}」</value>
+    <value>{0} と {1}: 同じニックネーム「{2}」</value>
   </data>
   <data name="AuthorCardHideAutoMessage" xml:space="preserve">
-    <value>自動カード「{0}」を非表示にしますか？ 次回のスキャン後も再作成されません。「非表示の自動カード」から元に戻せます。</value>
+    <value>自動カード「{0}」を非表示にしますか? 次回のスキャン後も再作成されません。「非表示の自動カード」から再表示できます。</value>
   </data>
   <data name="AuthorsMergeConfirmTitle" xml:space="preserve">
-    <value>作者カードの統合</value>
+    <value>作者カードを統合</value>
   </data>
   <data name="AuthorsMergeConfirmMessage" xml:space="preserve">
-    <value>1 枚のカードに統合しますか: {0}
+    <value>1 枚のカードに統合しますか: {0}?
 
-これらの作者のすべてのアカウントと名前が 1 枚のカードにまとまります。後で再び分割できます。</value>
+これらの作者のすべてのアカウントとニックネームが 1 枚のカードにまとまります。後で再び分割できます。</value>
   </data>
   <data name="AuthorsMergeFailedMessage" xml:space="preserve">
-    <value>統合できませんでした。いずれかのアカウントが別のカードに属しているか、統合後のカード名が別のカードで使われています。</value>
+    <value>統合できませんでした。いずれかのアカウントが別のカードにあるか、統合後のカード名を別のカードが使っています。</value>
   </data>
   <data name="AuthorCardSplitConfirmTitle" xml:space="preserve">
-    <value>作者カードの分割</value>
+    <value>作者カードを分割</value>
   </data>
   <data name="AuthorCardSplitConfirmMessage" xml:space="preserve">
-    <value>「{0}」を個別のカードに分割しますか？ カードにはリバリーが最も多いアカウントが残り、他のアカウントは再び別扱いになります。</value>
+    <value>「{0}」を個別のカードに分割しますか? カードにはリバリーが最も多いアカウントが残り、ほかのアカウントは再び別になります。</value>
   </data>
   <data name="AccountSourceGoneFormat" xml:space="preserve">
     <value>削除されたアカウントから: {0}</value>
   </data>
   <data name="StatusGoneAccountsFormat" xml:space="preserve">
-    <value>削除されたアカウントのデータ: {0} ({1})。設定から削除できます。</value>
+    <value>削除されたアカウントのデータ: {0}（{1}）。設定で削除できます。</value>
   </data>
   <data name="AccountDataSectionLabel" xml:space="preserve">
     <value>アカウントのデータ</value>
   </data>
   <data name="AccountDataHint" xml:space="preserve">
-    <value>ゲームアカウントごとにスキャンキャッシュとプレビューが保存されます。アカウントを忘れるとその領域が解放されます。アカウントが再び見つかった場合、リバリーは再スキャンされます。アーカイブとバックアップには影響しません。</value>
+    <value>ゲームアカウントごとにスキャンキャッシュとプレビューがあります。アカウントのデータを削除するとこの領域が空きます。アカウントが再び見つかった場合は、リバリーをもう一度スキャンします。アーカイブとバックアップには影響しません。</value>
   </data>
   <data name="AccountDataCurrent" xml:space="preserve">
     <value>現在のアカウント</value>
@@ -1495,25 +1439,25 @@
     <value>セーブフォルダーあり</value>
   </data>
   <data name="AccountDataGoneSinceFormat" xml:space="preserve">
-    <value>{0} から見つかりません</value>
+    <value>{0} 以降見つかりません</value>
   </data>
   <data name="AccountDataGone" xml:space="preserve">
     <value>セーブフォルダーが見つかりません</value>
   </data>
   <data name="AccountDataForgetButton" xml:space="preserve">
-    <value>忘れる</value>
+    <value>データを削除</value>
   </data>
   <data name="AccountDataForgetTitle" xml:space="preserve">
-    <value>アカウントを忘れる</value>
+    <value>アカウントのデータを削除</value>
   </data>
   <data name="AccountDataForgetMessage" xml:space="preserve">
-    <value>「{0}」を忘れますか？ スキャンキャッシュとプレビュー (約 {1}) が削除されます。アーカイブとバックアップは残ります。アカウントが再び見つかった場合、リバリーは再スキャンされます。</value>
+    <value>アカウント {0} のデータを削除しますか? スキャンキャッシュとプレビュー、約 {1} が削除されます。アーカイブとバックアップは残ります。アカウントが再び見つかった場合は、リバリーをもう一度スキャンします。</value>
   </data>
   <data name="AccountDataForgetFailedMessage" xml:space="preserve">
-    <value>アカウントのデータを削除できませんでした。詳細はログを確認してください。</value>
+    <value>アカウントのデータを削除できませんでした。詳細はログに記録されています。</value>
   </data>
   <data name="GameRunningFileChangeMessage" xml:space="preserve">
-    <value>ゲームが開いている間に、保存フォルダ内のリバリーを移動しようとしています。ゲームがファイルを使用中のままにしたり、再起動するまで変更を認識しなかったり、ゲーム自身の保存で上書きしたりすることがあります。先にゲームを閉じる方が安全です。</value>
+    <value>ゲームの実行中に、セーブフォルダー内のリバリーを移動しようとしています。ゲームがファイルを使用し続けたり、再起動するまで変更を認識しなかったり、ゲーム自身の保存で変更が元に戻ったりすることがあります。先にゲームを閉じる方が安全です。</value>
   </data>
   <data name="GameRunningContinueButton" xml:space="preserve">
     <value>それでも続行</value>
@@ -1537,25 +1481,25 @@
     <value>国</value>
   </data>
   <data name="SortOptionCarType" xml:space="preserve">
-    <value>車種</value>
+    <value>車両タイプ</value>
   </data>
   <data name="GroupingOptionByCountry" xml:space="preserve">
     <value>国別</value>
   </data>
   <data name="GroupingOptionByCarType" xml:space="preserve">
-    <value>車種別</value>
+    <value>車両タイプ別</value>
   </data>
   <data name="UnknownCountry" xml:space="preserve">
     <value>不明な国</value>
   </data>
   <data name="UnknownCarType" xml:space="preserve">
-    <value>不明な車種</value>
+    <value>不明な車両タイプ</value>
   </data>
   <data name="CarCountryLabel" xml:space="preserve">
     <value>メーカーの国</value>
   </data>
   <data name="CarTypeLabel" xml:space="preserve">
-    <value>ゲーム内の車種</value>
+    <value>ゲーム内の車両タイプ</value>
   </data>
   <data name="SettingsSectionCarTextLanguage" xml:space="preserve">
     <value>車名の言語</value>
@@ -1564,73 +1508,943 @@
     <value>インターフェースと同じ</value>
   </data>
   <data name="CarTextLanguageHint" xml:space="preserve">
-    <value>車名、メーカー名、国、車種はこの言語のゲームファイルから取得されます。</value>
+    <value>車名、メーカー名、国、車両タイプは、この言語のゲームファイルから取得します。</value>
   </data>
   <data name="CarTextLanguageNoGameTexts" xml:space="preserve">
-    <value>ゲームファイルはまだ読み込まれていません（ゲームフォルダーが見つかりません）。車名は英語で表示されます。</value>
+    <value>ゲームフォルダーが見つからないため、ゲームファイルはまだ読み込まれていません。車名は英語で表示されます。</value>
   </data>
   <data name="ContextMenuOnlyThisCountry" xml:space="preserve">
     <value>この国の車のみ</value>
   </data>
   <data name="ContextMenuOnlyThisCarType" xml:space="preserve">
-    <value>この車種のみ</value>
+    <value>この車両タイプのみ</value>
   </data>
   <data name="QuickFilterCountryFormat" xml:space="preserve">
     <value>国: {0}</value>
   </data>
   <data name="QuickFilterCarTypeFormat" xml:space="preserve">
-    <value>車種: {0}</value>
+    <value>車両タイプ: {0}</value>
   </data>
   <data name="CarTextsNoGameFolder" xml:space="preserve">
-    <value>選択した言語の名前は利用できません。ゲームフォルダーが指定されていないか、見つかりません。車両データベースの名前を表示しています。</value>
+    <value>選択した言語の名前は使用できません。ゲームフォルダーが設定されていないか、見つかりません。車データベースの名前を表示しています。</value>
   </data>
   <data name="CarTextsNoStringTables" xml:space="preserve">
-    <value>選択した言語の名前は利用できません。ゲームフォルダーに言語ファイル（StringTables）がありません。車両データベースの名前を表示しています。</value>
+    <value>選択した言語の名前は使用できません。ゲームフォルダーに言語ファイル StringTables がありません。車データベースの名前を表示しています。</value>
   </data>
   <data name="GameFolderProblemNoPaintMaterials" xml:space="preserve">
-    <value>塗装マテリアルがありません（media\cars\_library\materials）：3D では内蔵のものを使用します</value>
+    <value>media\cars\_library\materials に塗装の質感がありません: 3D 表示では内蔵のものを使います</value>
   </data>
   <data name="GameFolderProblemNoPaintTextures" xml:space="preserve">
-    <value>塗装テクスチャがありません（media\cars\_library\textures）：テクスチャ塗装は平均色で表示されます</value>
+    <value>media\cars\_library\textures に塗装のテクスチャがありません: テクスチャ付きの塗装は平均色で表示されます</value>
   </data>
   <data name="GameFolderProblemNoStringTables" xml:space="preserve">
-    <value>言語ファイルがありません（StringTables）：車名は車両データベースから取得します</value>
+    <value>言語ファイル StringTables がありません: 車名は車データベースから取得します</value>
   </data>
   <data name="AboutTitleFormat" xml:space="preserve">
-    <value>アプリについて</value>
+    <value>{0} について</value>
   </data>
   <data name="AboutDescriptionFormat" xml:space="preserve">
-    <value>{0}のセーブデータからリバリーを閲覧するギャラリーアプリです。</value>
+    <value>{0} のセーブデータにあるリバリーのギャラリーです。</value>
   </data>
   <data name="FolderNotFoundMessageFormat" xml:space="preserve">
-    <value>{0}のセーブフォルダを自動的に見つけられませんでした。
+    <value>{0} のセーブフォルダーを自動的に見つけられませんでした。
 
 手動で選択しますか?
-(通常: C:\XboxGames\GameSave\pgs\u_[番号]_{1})</value>
+通常は C:\XboxGames\GameSave\pgs\u_[番号]_{1} です</value>
   </data>
   <data name="NavigateGameNotFoundFormat" xml:space="preserve">
-    <value>{0} のウィンドウが見つかりません。ゲームを起動してマイデザインを開いてください。</value>
+    <value>{0} のウィンドウが見つかりません。ゲームを起動して「マイデザイン」を開いてください。</value>
   </data>
   <data name="NavigateMultipleWindowsFormat" xml:space="preserve">
-    <value>{0} のウィンドウが複数見つかりました。誤送信を防ぐため、何も送信していません。余分なウィンドウを閉じてもう一度お試しください。</value>
+    <value>{0} のウィンドウが複数見つかりました。違うウィンドウにキーを送らないよう、何も送信していません。余分なウィンドウを閉じてもう一度試してください。</value>
   </data>
   <data name="NavigateGameElevatedFormat" xml:space="preserve">
-    <value>{0} が管理者として実行されていますが、ギャラリーはそうではないため、Windows がキー入力を破棄します。キーは送信していません。ギャラリーも管理者として実行するか、ゲームを管理者権限なしで起動してください。</value>
+    <value>{0} は管理者として実行されていますが、ギャラリーはそうではないため、Windows がキー入力を破棄します。キーは送信していません。ギャラリーも管理者として実行するか、ゲームを管理者権限なしで起動してください。</value>
   </data>
   <data name="DiagnosticsReadmeFormat" xml:space="preserve">
     <value>{0} 診断情報
 
-- info.json: アプリのバージョン、Windows と .NET のバージョン、表示言語、キャッシュ内のリバリー数。
-- settings.json: 設定。パスと ID は "&lt;removed&gt;" に置き換えられています。
-- parse-issues.json: ファイルの全部または一部を読み取れなかったリバリー (フォルダー名で記載)。
-- logs/: 直近数日分のアプリのログ。既知のフォルダーとプレイヤー ID は &lt;save-folder&gt; や &lt;user-id&gt; などのプレースホルダーに置き換えられています。
+info.json: ギャラリーのバージョン、Windows と .NET のバージョン、表示言語、キャッシュ内のリバリー数。
+settings.json: 設定。パスと ID は &lt;removed&gt; に置き換えられています。
+parse-issues.json: ファイルの全部または一部を読み込めなかったリバリー。フォルダー名で記載しています。
+logs: 直近数日分のログ。既知のフォルダーとプレイヤー ID は &lt;save-folder&gt; や &lt;user-id&gt; などの目印に置き換えられています。
 
-送信する前にファイルの内容を確認してください。アプリが把握していない値 (フォルダーのパスに含まれる名前など) は置き換えられません。</value>
+送信する前にファイルの内容を確認してください。フォルダーのパスに入力した名前など、ギャラリーが把握していない値は置き換えられません。</value>
   </data>
   <data name="GameRunningTitleFormat" xml:space="preserve">
     <value>{0} が起動しています</value>
   </data>
   <data name="SaveFolderContentHintFormat" xml:space="preserve">
     <value>通常: C:\XboxGames\GameSave\pgs\u_[番号]_{0}</value>
+  </data>
+  <data name="RenderedThumbnailTooltip" xml:space="preserve">
+    <value>セーブデータにこのリバリーのプレビューがないため、ギャラリーが 3D モデルから描画しました。ゲームのプレビューとは見た目が異なる場合があり、セーブデータには書き込まれません。</value>
+  </data>
+  <data name="AuthorIdInvalidTooltip" xml:space="preserve">
+    <value>このリバリーの作者 ID は有効なアカウントではありません。ヘッダーが編集された可能性が高く、作者名も作られたものかもしれません。クリックすると作者を指定できます。</value>
+  </data>
+  <data name="AuthorIdNoneTooltip" xml:space="preserve">
+    <value>このリバリーには作者 ID がありません。純正のリバリー、作者を記録しないオークションで購入したリバリー、またはこの PC で作成して公開していないリバリーです。</value>
+  </data>
+  <data name="AuthorAssignedTooltip" xml:space="preserve">
+    <value>このリバリーの作者はあなたが指定しました。リバリー自体の作者 ID からは分かりません。</value>
+  </data>
+  <data name="AuthorHintsTooltipHeader" xml:space="preserve">
+    <value>作者の候補:</value>
+  </data>
+  <data name="AuthorHintReasonSameId" xml:space="preserve">
+    <value>この作者に割り当てたリバリーと同じ作者 ID</value>
+  </data>
+  <data name="AuthorHintReasonSameName" xml:space="preserve">
+    <value>同じ名前</value>
+  </data>
+  <data name="AuthorHintReasonArtworkFormat" xml:space="preserve">
+    <value>絵柄が「{1}」と {0}% 似ています</value>
+  </data>
+  <data name="ContextMenuAssignAuthor" xml:space="preserve">
+    <value>作者を指定…</value>
+  </data>
+  <data name="ContextMenuUnassignAuthor" xml:space="preserve">
+    <value>指定した作者を解除</value>
+  </data>
+  <data name="AssignAuthorDialogTitle" xml:space="preserve">
+    <value>誰のリバリーですか?</value>
+  </data>
+  <data name="AssignAuthorInvalidIdNote" xml:space="preserve">
+    <value>このリバリーの作者 ID は有効なアカウントではありません。ヘッダーが編集された可能性が高いです。作風やサインに見覚えがあるなど、確信がある場合だけ作者を指定してください。</value>
+  </data>
+  <data name="AssignAuthorNoIdNote" xml:space="preserve">
+    <value>このリバリーには作者 ID がありません。純正、オークション、または未公開のリバリーです。確信がある場合だけ作者を指定してください。</value>
+  </data>
+  <data name="AssignAuthorSearchWatermark" xml:space="preserve">
+    <value>作者を検索…</value>
+  </data>
+  <data name="AssignAuthorNewCardButton" xml:space="preserve">
+    <value>+ 新しい作者カード</value>
+  </data>
+  <data name="AssignAuthorConfirmCheckBox" xml:space="preserve">
+    <value>作者について確信があります</value>
+  </data>
+  <data name="AssignAuthorNoResults" xml:space="preserve">
+    <value>作者が見つかりません</value>
+  </data>
+  <data name="AssignAuthorFailedMessage" xml:space="preserve">
+    <value>保存できませんでした。作者カードがもう存在しないか、名前が使われています。</value>
+  </data>
+  <data name="AuthorCardAssignedSectionFormat" xml:space="preserve">
+    <value>手動で指定（{0}）</value>
+  </data>
+  <data name="AuthorCardRemoveAssignedTooltip" xml:space="preserve">
+    <value>このリバリーをカードから外す</value>
+  </data>
+  <data name="AuthorCardAccountHintsHeader" xml:space="preserve">
+    <value>この作者のアカウントの可能性</value>
+  </data>
+  <data name="AuthorCardAddAccountButton" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="AuthorCardNotThisButton" xml:space="preserve">
+    <value>この作者ではない</value>
+  </data>
+  <data name="AuthorCardNoAliasesOrNameError" xml:space="preserve">
+    <value>アカウントを選択するか、表示名を入力してください</value>
+  </data>
+  <data name="AuthorCardNoAccountNotice" xml:space="preserve">
+    <value>このカードにはまだアカウントがありません。リバリーは「作者を指定…」で手動で追加します。この作者のものらしいアカウントが見つかると、ギャラリーがお知らせします。</value>
+  </data>
+  <data name="AuthorCardImplicitNotice" xml:space="preserve">
+    <value>このカードはまだ保存されていません。何かを変更すると保存されます。</value>
+  </data>
+  <data name="AuthorsArtworkSuggestionFormat" xml:space="preserve">
+    <value>{0} と {1}: 同じ絵柄「{2}」</value>
+  </data>
+  <data name="AuthorsAccountHintFormat" xml:space="preserve">
+    <value>{0} は {1} のアカウントの可能性があります: {2}</value>
+  </data>
+  <data name="StatsScopeAll" xml:space="preserve">
+    <value>ギャラリー全体</value>
+  </data>
+  <data name="StatsScopeShownFormat" xml:space="preserve">
+    <value>表示中 · {0}</value>
+  </data>
+  <data name="StatsScopeShownTooltip" xml:space="preserve">
+    <value>ギャラリーに今表示されているものだけを数えます。数値はフィルターと検索に合わせて変わります。</value>
+  </data>
+  <data name="StatsScopeNoteFormat" xml:space="preserve">
+    <value>表示中: {1} 件中 {0} 件のリバリー</value>
+  </data>
+  <data name="StatsTabCollection" xml:space="preserve">
+    <value>コレクション</value>
+  </data>
+  <data name="StatsTabTime" xml:space="preserve">
+    <value>推移</value>
+  </data>
+  <data name="StatsTabAuthors" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="StatsTileLiveries" xml:space="preserve">
+    <value>リバリー</value>
+  </data>
+  <data name="StatsTileNewFormat" xml:space="preserve">
+    <value>30 日間で +{0}</value>
+  </data>
+  <data name="StatsTileLiveriesTooltip" xml:space="preserve">
+    <value>すべてのリバリーを表示: 検索とフィルターを解除します</value>
+  </data>
+  <data name="StatsTileAuthors" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="StatsTileWithoutAuthorFormat" xml:space="preserve">
+    <value>作者不明のリバリー: {0}</value>
+  </data>
+  <data name="StatsTileAuthorsTooltip" xml:space="preserve">
+    <value>ギャラリーを作者別にまとめる</value>
+  </data>
+  <data name="StatsTileCars" xml:space="preserve">
+    <value>車</value>
+  </data>
+  <data name="StatsTileManufacturersFormat" xml:space="preserve">
+    <value>メーカー: {0}</value>
+  </data>
+  <data name="StatsTileCarsTooltip" xml:space="preserve">
+    <value>ギャラリーをメーカー別にまとめる</value>
+  </data>
+  <data name="StatsTileFavorites" xml:space="preserve">
+    <value>お気に入り</value>
+  </data>
+  <data name="StatsTileShareFormat" xml:space="preserve">
+    <value>全体の {0}</value>
+  </data>
+  <data name="StatsTileFavoritesTooltip" xml:space="preserve">
+    <value>お気に入りのみ表示</value>
+  </data>
+  <data name="StatsTileInstalled" xml:space="preserve">
+    <value>車に適用中</value>
+  </data>
+  <data name="StatsTileInstalledCarsFormat" xml:space="preserve">
+    <value>{0} 台の車</value>
+  </data>
+  <data name="StatsTileInstalledTooltip" xml:space="preserve">
+    <value>車に適用中のリバリーのみ表示</value>
+  </data>
+  <data name="StatsTileInstalledUnknown" xml:space="preserve">
+    <value>リバリーサーバーが必要です</value>
+  </data>
+  <data name="StatsTileAuction" xml:space="preserve">
+    <value>オークション</value>
+  </data>
+  <data name="StatsTileAuctionTooltip" xml:space="preserve">
+    <value>オークションのリバリーのみ表示</value>
+  </data>
+  <data name="StatsSectionManufacturers" xml:space="preserve">
+    <value>メーカー</value>
+  </data>
+  <data name="StatsSectionCountries" xml:space="preserve">
+    <value>国</value>
+  </data>
+  <data name="StatsSectionCarTypes" xml:space="preserve">
+    <value>車両タイプ</value>
+  </data>
+  <data name="StatsSectionDecades" xml:space="preserve">
+    <value>車の年代</value>
+  </data>
+  <data name="StatsSectionTags" xml:space="preserve">
+    <value>タグ</value>
+  </data>
+  <data name="StatsSectionTraits" xml:space="preserve">
+    <value>リバリーの種類</value>
+  </data>
+  <data name="StatsUnknownValue" xml:space="preserve">
+    <value>不明</value>
+  </data>
+  <data name="StatsDecadeFormat" xml:space="preserve">
+    <value>{0} 年代</value>
+  </data>
+  <data name="StatsRowTooltip" xml:space="preserve">
+    <value>これらのリバリーのみ表示</value>
+  </data>
+  <data name="StatsMoreFormat" xml:space="preserve">
+    <value>ほか {0} 件</value>
+  </data>
+  <data name="StatsNothing" xml:space="preserve">
+    <value>集計するものがありません</value>
+  </data>
+  <data name="StatsNoTags" xml:space="preserve">
+    <value>タグはまだありません</value>
+  </data>
+  <data name="StatsTraitMine" xml:space="preserve">
+    <value>自作</value>
+  </data>
+  <data name="StatsTraitGenerated" xml:space="preserve">
+    <value>生成の可能性</value>
+  </data>
+  <data name="StatsTraitDuplicates" xml:space="preserve">
+    <value>重複と重複の可能性</value>
+  </data>
+  <data name="StatsTraitPaintOnly" xml:space="preserve">
+    <value>塗装のみ、レイヤーなし</value>
+  </data>
+  <data name="StatsNoJournal" xml:space="preserve">
+    <value>履歴は次回のスキャンから始まります。それまでは、グラフはダウンロード日でリバリーを表示します。</value>
+  </data>
+  <data name="StatsJournalSinceFormat" xml:space="preserve">
+    <value>履歴は {0} から記録されています。棒の薄い部分はそれ以前の期間で、ダウンロード日によるリバリーです。当時削除されたリバリーは分かりません。</value>
+  </data>
+  <data name="StatsShownHistoryNote" xml:space="preserve">
+    <value>表示中のリバリーだけを数えるため、削除されたものは含まれません。</value>
+  </data>
+  <data name="StatsLegendNew" xml:space="preserve">
+    <value>新規</value>
+  </data>
+  <data name="StatsLegendReturned" xml:space="preserve">
+    <value>復帰</value>
+  </data>
+  <data name="StatsLegendDeleted" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="StatsLegendArchived" xml:space="preserve">
+    <value>アーカイブ済み</value>
+  </data>
+  <data name="StatsSizeTooltipFormat" xml:space="preserve">
+    <value>月末のリバリー: {0}</value>
+  </data>
+  <data name="StatsSizeUnknown" xml:space="preserve">
+    <value>履歴以前: 不明</value>
+  </data>
+  <data name="StatsNewAuthorsTitle" xml:space="preserve">
+    <value>新しい作者</value>
+  </data>
+  <data name="StatsRangeYear" xml:space="preserve">
+    <value>12 か月</value>
+  </data>
+  <data name="StatsRangeTwoYears" xml:space="preserve">
+    <value>2 年</value>
+  </data>
+  <data name="StatsRangeAll" xml:space="preserve">
+    <value>全期間</value>
+  </data>
+  <data name="StatsFlowTitle" xml:space="preserve">
+    <value>追加と削除</value>
+  </data>
+  <data name="StatsSizeTitle" xml:space="preserve">
+    <value>セーブデータのリバリー</value>
+  </data>
+  <data name="StatsAuthorsTileUnique" xml:space="preserve">
+    <value>作者の数</value>
+  </data>
+  <data name="StatsAuthorsTileTopFormat" xml:space="preserve">
+    <value>上位 {0} 人の作者の割合</value>
+  </data>
+  <data name="StatsAuthorsTopDetail" xml:space="preserve">
+    <value>作者が分かるリバリーのうち</value>
+  </data>
+  <data name="StatsAuthorsTileSingle" xml:space="preserve">
+    <value>リバリー 1 件の作者</value>
+  </data>
+  <data name="StatsAuthorsSingleDetailFormat" xml:space="preserve">
+    <value>作者全体の {0}</value>
+  </data>
+  <data name="StatsAuthorsTileNew" xml:space="preserve">
+    <value>30 日間の新しい作者</value>
+  </data>
+  <data name="StatsAuthorsNewDetail" xml:space="preserve">
+    <value>コレクションに初めて登場</value>
+  </data>
+  <data name="StatsTopAuthorsTitleFormat" xml:space="preserve">
+    <value>上位 {0} 人の作者</value>
+  </data>
+  <data name="StatsAuthorRowTooltip" xml:space="preserve">
+    <value>作者カードを開く</value>
+  </data>
+  <data name="StatsAuthorsSearch" xml:space="preserve">
+    <value>作者を検索…</value>
+  </data>
+  <data name="StatsAuthorsNotFound" xml:space="preserve">
+    <value>作者が見つかりません</value>
+  </data>
+  <data name="StatsColumnAuthor" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="StatsColumnLiveries" xml:space="preserve">
+    <value>リバリー</value>
+  </data>
+  <data name="StatsColumnCars" xml:space="preserve">
+    <value>車</value>
+  </data>
+  <data name="StatsColumnFavorites" xml:space="preserve">
+    <value>お気に入り</value>
+  </data>
+  <data name="StatsColumnFirstDownload" xml:space="preserve">
+    <value>最初のダウンロード</value>
+  </data>
+  <data name="StatsColumnFirstDownloadTooltip" xml:space="preserve">
+    <value>コレクション内にあるこの作者のリバリーのうち、最も古いダウンロード日</value>
+  </data>
+  <data name="StatsColumnLast" xml:space="preserve">
+    <value>最新</value>
+  </data>
+  <data name="StatsColumnLastDownload" xml:space="preserve">
+    <value>最新のダウンロード</value>
+  </data>
+  <data name="StatsColumnLastDownloadTooltip" xml:space="preserve">
+    <value>コレクション内にあるこの作者のリバリーのうち、最も新しいダウンロード日</value>
+  </data>
+  <data name="StatsLegendEstimated" xml:space="preserve">
+    <value>履歴以前</value>
+  </data>
+  <data name="StatsEstimatedTooltipFormat" xml:space="preserve">
+    <value>うち履歴以前、ダウンロード日による: {0}</value>
+  </data>
+  <data name="AuthorCardStatLiveries" xml:space="preserve">
+    <value>リバリー</value>
+  </data>
+  <data name="AuthorCardStatCars" xml:space="preserve">
+    <value>車</value>
+  </data>
+  <data name="AuthorCardStatFavorites" xml:space="preserve">
+    <value>お気に入り</value>
+  </data>
+  <data name="AuthorCardStatFirstDownload" xml:space="preserve">
+    <value>最初のダウンロード</value>
+  </data>
+  <data name="AuthorCardStatLast" xml:space="preserve">
+    <value>最新のダウンロード</value>
+  </data>
+  <data name="AuthorCardDuplicatesLineFormat" xml:space="preserve">
+    <value>重複: {0}、重複の可能性: {1}</value>
+  </data>
+  <data name="AuthorCardMonthsTitle" xml:space="preserve">
+    <value>月別のダウンロード</value>
+  </data>
+  <data name="StatsPageOverview" xml:space="preserve">
+    <value>概要</value>
+  </data>
+  <data name="StatsPageHealth" xml:space="preserve">
+    <value>コレクションの状態</value>
+  </data>
+  <data name="StatsPageCars" xml:space="preserve">
+    <value>車</value>
+  </data>
+  <data name="StatsPageLiveries" xml:space="preserve">
+    <value>リバリー</value>
+  </data>
+  <data name="StatsScopeLabel" xml:space="preserve">
+    <value>集計の対象</value>
+  </data>
+  <data name="StatsAccountsTitle" xml:space="preserve">
+    <value>アカウント</value>
+  </data>
+  <data name="StatsSlotsTitle" xml:space="preserve">
+    <value>セーブデータの空き</value>
+  </data>
+  <data name="StatsSlotsFreeFormat" xml:space="preserve">
+    <value>空き: {0}</value>
+  </data>
+  <data name="StatsSlotsAlmostFormat" xml:space="preserve">
+    <value>ほぼ満杯: 残り {0}</value>
+  </data>
+  <data name="StatsSlotsFull" xml:space="preserve">
+    <value>満杯: ゲームでリバリーをダウンロードも作成もできません</value>
+  </data>
+  <data name="StatsSlotsNote" xml:space="preserve">
+    <value>上限に達すると、リバリーのダウンロードも作成もできなくなります。オークションのリバリーは車に付属するため数えません。</value>
+  </data>
+  <data name="StatsSlotsNoLimit" xml:space="preserve">
+    <value>このゲームの上限は不明です</value>
+  </data>
+  <data name="StatsHealthBackupsTitle" xml:space="preserve">
+    <value>バックアップ</value>
+  </data>
+  <data name="StatsHealthNotBackedUp" xml:space="preserve">
+    <value>どのバックアップにもない</value>
+  </data>
+  <data name="StatsHealthLastBackup" xml:space="preserve">
+    <value>最新のバックアップ</value>
+  </data>
+  <data name="StatsHealthBackupsNote" xml:space="preserve">
+    <value>今の状態のままバックアップにあるリバリーだけを数えます。バックアップ後に変更されたリバリーは数えません。</value>
+  </data>
+  <data name="StatsHealthNoBackups" xml:space="preserve">
+    <value>バックアップはまだありません。</value>
+  </data>
+  <data name="StatsHealthAllBackedUp" xml:space="preserve">
+    <value>すべてのリバリーがバックアップにあります。</value>
+  </data>
+  <data name="StatsHealthDuplicatesTitle" xml:space="preserve">
+    <value>重複</value>
+  </data>
+  <data name="StatsHealthDuplicatesNote" xml:space="preserve">
+    <value>それぞれ 1 つずつ残すと、セーブデータに空きができます。</value>
+  </data>
+  <data name="StatsHealthDuplicates" xml:space="preserve">
+    <value>重複、すべてのコピー</value>
+  </data>
+  <data name="StatsHealthFreeable" xml:space="preserve">
+    <value>空けられる枠</value>
+  </data>
+  <data name="StatsHealthPossible" xml:space="preserve">
+    <value>重複の可能性</value>
+  </data>
+  <data name="StatsHealthUnusedTitle" xml:space="preserve">
+    <value>未使用</value>
+  </data>
+  <data name="StatsHealthUnusedNote" xml:space="preserve">
+    <value>車に適用されておらず、お気に入りでもロック中でも自作でもオークションでもないリバリーです。アーカイブの最初の候補です。</value>
+  </data>
+  <data name="StatsHealthUnused" xml:space="preserve">
+    <value>未使用のリバリー</value>
+  </data>
+  <data name="StatsHealthArchiveTitle" xml:space="preserve">
+    <value>アーカイブ</value>
+  </data>
+  <data name="StatsHealthArchived" xml:space="preserve">
+    <value>アーカイブ内</value>
+  </data>
+  <data name="StatsHealthLastArchived" xml:space="preserve">
+    <value>最後の移動</value>
+  </data>
+  <data name="StatsShowTheseTooltip" xml:space="preserve">
+    <value>これらのリバリーをギャラリーに表示</value>
+  </data>
+  <data name="StatsCarsInGame" xml:space="preserve">
+    <value>ゲームの車</value>
+  </data>
+  <data name="StatsCarsCovered" xml:space="preserve">
+    <value>リバリーあり</value>
+  </data>
+  <data name="StatsCarsSingle" xml:space="preserve">
+    <value>リバリー 1 件</value>
+  </data>
+  <data name="StatsCarsSingleDetail" xml:space="preserve">
+    <value>リバリーのある車のうち</value>
+  </data>
+  <data name="StatsCoverageTitle" xml:space="preserve">
+    <value>メーカー別のカバー率</value>
+  </data>
+  <data name="StatsCoverageMoreFormat" xml:space="preserve">
+    <value>ほかのメーカー、リバリーあり: {0}、なし: {1}</value>
+  </data>
+  <data name="StatsCoverageSortLiveries" xml:space="preserve">
+    <value>リバリー</value>
+  </data>
+  <data name="StatsCoverageSortCars" xml:space="preserve">
+    <value>車</value>
+  </data>
+  <data name="StatsCoverageSortShare" xml:space="preserve">
+    <value>割合</value>
+  </data>
+  <data name="StatsCoverageSortLiveriesTooltip" xml:space="preserve">
+    <value>リバリーが多いメーカー順</value>
+  </data>
+  <data name="StatsCoverageSortCarsTooltip" xml:space="preserve">
+    <value>リバリーのある車が多いメーカー順</value>
+  </data>
+  <data name="StatsCoverageSortShareTooltip" xml:space="preserve">
+    <value>リバリーのある車の割合が高いメーカー順</value>
+  </data>
+  <data name="StatsLiveryCountOne" xml:space="preserve">
+    <value>リバリー {0} 件</value>
+  </data>
+  <data name="StatsLiveryCountFew" xml:space="preserve">
+    <value>リバリー {0} 件</value>
+  </data>
+  <data name="StatsLiveryCountMany" xml:space="preserve">
+    <value>リバリー {0} 件</value>
+  </data>
+  <data name="StatsTopCarsTitle" xml:space="preserve">
+    <value>リバリーが多い車</value>
+  </data>
+  <data name="StatsNoCarDatabase" xml:space="preserve">
+    <value>車のリストはまだ読み込まれていません</value>
+  </data>
+  <data name="StatsComparedTooltip" xml:space="preserve">
+    <value>過去 30 日間と、その前の 30 日間の比較</value>
+  </data>
+  <data name="StatsMoreThanBeforeFormat" xml:space="preserve">
+    <value>▲ {0}（前回 {1}）</value>
+  </data>
+  <data name="StatsLessThanBeforeFormat" xml:space="preserve">
+    <value>▼ {0}（前回 {1}）</value>
+  </data>
+  <data name="StatsSameAsBefore" xml:space="preserve">
+    <value>= 前回と同じ</value>
+  </data>
+  <data name="StatsCreatedTitle" xml:space="preserve">
+    <value>作成された時期</value>
+  </data>
+  <data name="StatsCreatedTooltipFormat" xml:space="preserve">
+    <value>この月に作成: {0}</value>
+  </data>
+  <data name="StatsAgeFormat" xml:space="preserve">
+    <value>作成からダウンロードまでの中央値: {0} か月。同じ月: {1}。1 年以上後: {2}。</value>
+  </data>
+  <data name="StatsCalendarTitle" xml:space="preserve">
+    <value>アクティビティ</value>
+  </data>
+  <data name="StatsCalendarNoteFormat" xml:space="preserve">
+    <value>過去 1 年のダウンロード: {0}、ダウンロードした日: {1}</value>
+  </data>
+  <data name="StatsCalendarTooltipFormat" xml:space="preserve">
+    <value>{0}: ダウンロード {1}</value>
+  </data>
+  <data name="StatsWeekdaysTitle" xml:space="preserve">
+    <value>曜日別</value>
+  </data>
+  <data name="StatsSharedTitle" xml:space="preserve">
+    <value>再アップロードの可能性</value>
+  </data>
+  <data name="StatsSharedNone" xml:space="preserve">
+    <value>同じ絵柄を持つ別の作者はいません</value>
+  </data>
+  <data name="StatsSharedRowTooltip" xml:space="preserve">
+    <value>両方のリバリーを表示: 2 人の作者に同じ絵柄</value>
+  </data>
+  <data name="StatsGeneratorsTitle" xml:space="preserve">
+    <value>ジェネレーターを使う作者</value>
+  </data>
+  <data name="StatsGeneratorsNone" xml:space="preserve">
+    <value>生成されたリバリーを持つ作者はいません</value>
+  </data>
+  <data name="StatsFavoriteAuthorsTitle" xml:space="preserve">
+    <value>お気に入りの割合が高い作者</value>
+  </data>
+  <data name="StatsDeparturesTitle" xml:space="preserve">
+    <value>よく削除する作者</value>
+  </data>
+  <data name="StatsDeparturesCellFormat" xml:space="preserve">
+    <value>{0} + アーカイブ {1}</value>
+  </data>
+  <data name="StatsNoJournalShort" xml:space="preserve">
+    <value>履歴にはまだ削除がありません</value>
+  </data>
+  <data name="StatsLayersMedian" xml:space="preserve">
+    <value>レイヤー数の中央値</value>
+  </data>
+  <data name="StatsLayersMedianDetail" xml:space="preserve">
+    <value>半数はこれより少ない</value>
+  </data>
+  <data name="StatsLayersMax" xml:space="preserve">
+    <value>最大レイヤー数</value>
+  </data>
+  <data name="StatsLayersMaxDetail" xml:space="preserve">
+    <value>1 件のリバリー</value>
+  </data>
+  <data name="StatsLayersKnown" xml:space="preserve">
+    <value>集計済み</value>
+  </data>
+  <data name="StatsLayersKnownDetailFormat" xml:space="preserve">
+    <value>{0} 件のリバリー中</value>
+  </data>
+  <data name="StatsLayersTitle" xml:space="preserve">
+    <value>レイヤー</value>
+  </data>
+  <data name="StatsLayersFilterFormat" xml:space="preserve">
+    <value>レイヤー数: {0}</value>
+  </data>
+  <data name="StatsLayersUnknown" xml:space="preserve">
+    <value>レイヤー数は次回のスキャン後に表示されます</value>
+  </data>
+  <data name="StatsMostComplexTitle" xml:space="preserve">
+    <value>最も複雑なリバリー</value>
+  </data>
+  <data name="StatsLayersByAuthorTitle" xml:space="preserve">
+    <value>平均レイヤー数が多い作者</value>
+  </data>
+  <data name="StatsRecordsTitle" xml:space="preserve">
+    <value>コレクションのデータ</value>
+  </data>
+  <data name="StatsRecordOldest" xml:space="preserve">
+    <value>最初にダウンロード</value>
+  </data>
+  <data name="StatsRecordNewest" xml:space="preserve">
+    <value>最後にダウンロード</value>
+  </data>
+  <data name="StatsRecordOldestMade" xml:space="preserve">
+    <value>最も古く作成</value>
+  </data>
+  <data name="StatsRecordMostLayers" xml:space="preserve">
+    <value>レイヤー数が最大</value>
+  </data>
+  <data name="StatsRecordBusiestCar" xml:space="preserve">
+    <value>リバリーが最も多い車</value>
+  </data>
+  <data name="StatsRecordBusiestMonth" xml:space="preserve">
+    <value>最も活発な月</value>
+  </data>
+  <data name="StatsUntaggedFormat" xml:space="preserve">
+    <value>タグなし: {0}</value>
+  </data>
+  <data name="StatsExport" xml:space="preserve">
+    <value>エクスポート</value>
+  </data>
+  <data name="StatsExportLiveries" xml:space="preserve">
+    <value>リバリーを CSV に…</value>
+  </data>
+  <data name="StatsExportAuthors" xml:space="preserve">
+    <value>作者を CSV に…</value>
+  </data>
+  <data name="StatsExportLiveriesFileName" xml:space="preserve">
+    <value>liveries</value>
+  </data>
+  <data name="StatsExportAuthorsFileName" xml:space="preserve">
+    <value>authors</value>
+  </data>
+  <data name="StatsExportFailed" xml:space="preserve">
+    <value>ファイルを保存できませんでした。</value>
+  </data>
+  <data name="StatsSaveChart" xml:space="preserve">
+    <value>PNG として保存…</value>
+  </data>
+  <data name="StatsAuthorsTopTooltipFormat" xml:space="preserve">
+    <value>作者が分かるリバリー {2} 件のうち {1} 件は、リバリーが最も多い作者 {0} 人のものです</value>
+  </data>
+  <data name="ContextMenuAddToFavorites" xml:space="preserve">
+    <value>お気に入りに追加</value>
+  </data>
+  <data name="ContextMenuRemoveFromFavorites" xml:space="preserve">
+    <value>お気に入りから外す</value>
+  </data>
+  <data name="ContextMenuEditTags" xml:space="preserve">
+    <value>タグを編集…</value>
+  </data>
+  <data name="TagChipTooltip" xml:space="preserve">
+    <value>クリックでこのタグのリバリーだけを表示し、右クリックで非表示にします。もう一度クリックすると解除します。</value>
+  </data>
+  <data name="TagsDialogManyTitleFormat" xml:space="preserve">
+    <value>選択したリバリーのタグ: {0} 件</value>
+  </data>
+  <data name="TagsDialogManyHint" xml:space="preserve">
+    <value>チェックを入れると選択したすべてのリバリーにタグを付け、空にするとすべてから外します。塗りつぶしの四角は一部のリバリーだけにあるタグです。そのまま残ります。</value>
+  </data>
+  <data name="TagsDialogNewTagsLabel" xml:space="preserve">
+    <value>新しいタグをカンマで区切って入力します。選択したすべてのリバリーに追加されます。</value>
+  </data>
+  <data name="TagsDialogPartialTooltipFormat" xml:space="preserve">
+    <value>選択した {1} 件中 {0} 件にあり</value>
+  </data>
+  <data name="ContextMenuLock" xml:space="preserve">
+    <value>ロック</value>
+  </data>
+  <data name="ContextMenuUnlock" xml:space="preserve">
+    <value>ロックを解除</value>
+  </data>
+  <data name="LockToggleTooltip" xml:space="preserve">
+    <value>リバリーをロックして、アーカイブに移動できないようにします</value>
+  </data>
+  <data name="LockedTooltip" xml:space="preserve">
+    <value>ロック中: このリバリーはアーカイブに移動できません。クリックするとロックを解除します。</value>
+  </data>
+  <data name="ArchiveLockedNotAllowedTooltip" xml:space="preserve">
+    <value>ロック中のリバリーはアーカイブに移動できません。先にロックを解除してください。</value>
+  </data>
+  <data name="ArchiveLockedSkippedFormat" xml:space="preserve">
+    <value>ロック中のリバリーはアーカイブに移動できません。ゲームに残った選択中のロック中リバリー: {0}。</value>
+  </data>
+  <data name="AuthorLabelOwnFormat" xml:space="preserve">
+    <value>{0}（あなた）</value>
+  </data>
+  <data name="AuthorLabelFormerNameFormat" xml:space="preserve">
+    <value>{0}（旧 {1}）</value>
+  </data>
+  <data name="AuthorLabelNoAccountFormat" xml:space="preserve">
+    <value>{0}（アカウントなし）</value>
+  </data>
+  <data name="AuthorLabelNumberFormat" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
+  <data name="AuthorDetailsNamesFormat" xml:space="preserve">
+    <value>ニックネーム: {0}</value>
+  </data>
+  <data name="AuthorDetailsLiveriesFormat" xml:space="preserve">
+    <value>リバリー: {0}</value>
+  </data>
+  <data name="AuthorDetailsFirstFormat" xml:space="preserve">
+    <value>最初のリバリー: {0}</value>
+  </data>
+  <data name="AuthorOwnUnpublishedTooltip" xml:space="preserve">
+    <value>この PC で作成して公開していないあなたのリバリーです。作者 ID がないため、あなたのアカウントのリバリーとして扱います。</value>
+  </data>
+  <data name="AuthorCardAccountWithoutName" xml:space="preserve">
+    <value>ニックネームのないアカウント</value>
+  </data>
+  <data name="AuthorCardTwitchLabel" xml:space="preserve">
+    <value>Twitch</value>
+  </data>
+  <data name="AuthorCardInvalidTwitchUrlError" xml:space="preserve">
+    <value>Twitch チャンネルへのリンクを入力してください。例: twitch.tv/username。動画やクリップへのリンクは使えません</value>
+  </data>
+  <data name="ArchiveSearchPlaceholder" xml:space="preserve">
+    <value>車、年式、名前、作者、番号で検索…</value>
+  </data>
+  <data name="ArchiveSearchPlaceholderWithFolder" xml:space="preserve">
+    <value>車、年式、名前、作者、番号、フォルダーで検索…</value>
+  </data>
+  <data name="ArchiveNoSearchResultsHint" xml:space="preserve">
+    <value>見つかりませんでした</value>
+  </data>
+  <data name="KeyCtrl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyShift" xml:space="preserve">
+    <value>Shift</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>スペース</value>
+  </data>
+  <data name="ShortcutSearch" xml:space="preserve">
+    <value>検索に移動</value>
+  </data>
+  <data name="ShortcutSelectAll" xml:space="preserve">
+    <value>表示中のリバリーをすべて選択</value>
+  </data>
+  <data name="ShortcutEscape" xml:space="preserve">
+    <value>検索をクリア、または選択を解除</value>
+  </data>
+  <data name="ShortcutLock" xml:space="preserve">
+    <value>ロック、またはロックを解除</value>
+  </data>
+  <data name="ShortcutTags" xml:space="preserve">
+    <value>タグを編集</value>
+  </data>
+  <data name="ShortcutsTitle" xml:space="preserve">
+    <value>キーボードショートカット</value>
+  </data>
+  <data name="ShortcutsGroupSearch" xml:space="preserve">
+    <value>検索と選択</value>
+  </data>
+  <data name="ShortcutsGroupSelected" xml:space="preserve">
+    <value>選択中のリバリー</value>
+  </data>
+  <data name="ShortcutsGroupWindows" xml:space="preserve">
+    <value>ウィンドウ</value>
+  </data>
+  <data name="ShortcutsNoteFormat" xml:space="preserve">
+    <value>カーソルがテキスト入力欄にある間は、文字、数字、{0}、{1} は使えません。{0}、3、G は、リバリーを 1 件だけ選択しているときに使えます。</value>
+  </data>
+  <data name="SlotsCounterClickHint" xml:space="preserve">
+    <value>クリックすると空きを作れます。重複したリバリーの余分なコピーをアーカイブに移動します。</value>
+  </data>
+  <data name="FreeSpaceMenuItem" xml:space="preserve">
+    <value>空きを作る…</value>
+  </data>
+  <data name="FreeSpaceTitle" xml:space="preserve">
+    <value>空きを作る</value>
+  </data>
+  <data name="FreeSpaceNote" xml:space="preserve">
+    <value>重複したリバリーごとに 1 件のコピーが残ります。タグ付きのものや自分のものが優先され、なければ最初にダウンロードしたものが残ります。ロック中、車に適用中、オークションのリバリーとお気に入りも残ります。残したいコピーはチェックを外してください。移動したものはアーカイブから戻せます。</value>
+  </data>
+  <data name="FreeSpaceDownloadedFormat" xml:space="preserve">
+    <value>ダウンロード日: {0}</value>
+  </data>
+  <data name="FreeSpaceStayBest" xml:space="preserve">
+    <value>残す: 最適なコピー</value>
+  </data>
+  <data name="FreeSpaceStayLocked" xml:space="preserve">
+    <value>残す: ロック中</value>
+  </data>
+  <data name="FreeSpaceStayInstalled" xml:space="preserve">
+    <value>残す: 車に適用中</value>
+  </data>
+  <data name="FreeSpaceStayAuction" xml:space="preserve">
+    <value>残す: オークションのリバリー</value>
+  </data>
+  <data name="FreeSpaceStayFavorite" xml:space="preserve">
+    <value>残す: お気に入り</value>
+  </data>
+  <data name="FreeSpaceCopiesFormat" xml:space="preserve">
+    <value>コピー: {0} 件</value>
+  </data>
+  <data name="FreeSpaceNothing" xml:space="preserve">
+    <value>空けられるものはありません。移動できる余分なコピーを持つリバリーはありません。ロック中、車に適用中、オークション、お気に入りのコピーは常に残ります。</value>
+  </data>
+  <data name="FreeSpaceNowFormat" xml:space="preserve">
+    <value>現在のセーブデータ: {1} 件中 {0} 件。</value>
+  </data>
+  <data name="FreeSpaceAfterFormat" xml:space="preserve">
+    <value>アーカイブへ: {0} 件、移動後の空き: {1}。</value>
+  </data>
+  <data name="FreeSpaceAfterNoLimitFormat" xml:space="preserve">
+    <value>アーカイブへ: {0} 件。</value>
+  </data>
+  <data name="FreeSpaceApplyFormat" xml:space="preserve">
+    <value>アーカイブに移動（{0}）</value>
+  </data>
+  <data name="FewFreeSlotsMessageFormat" xml:space="preserve">
+    <value>セーブデータの空きは {1} 枠中 残り {0} 枠です。上限に達すると、リバリーのダウンロードも作成もできません。重複したリバリーの余分なコピーをアーカイブに移動して、今すぐ空きを作りますか？</value>
+  </data>
+  <data name="FewFreeSlotsFullMessageFormat" xml:space="preserve">
+    <value>セーブデータが満杯です。{0} 枠すべてが使われていて、リバリーのダウンロードも作成もできません。重複したリバリーの余分なコピーをアーカイブに移動して、今すぐ空きを作りますか？</value>
+  </data>
+  <data name="AutoBackupFailedTitle" xml:space="preserve">
+    <value>バックアップ</value>
+  </data>
+  <data name="AutoBackupFailedMessage" xml:space="preserve">
+    <value>アーカイブに移動する前のバックアップを作成できませんでした。バックアップなしでリバリーをアーカイブに移動しますか？</value>
+  </data>
+  <data name="AutoBackupFailedContinueButton" xml:space="preserve">
+    <value>バックアップなしで移動</value>
+  </data>
+  <data name="LoadingBackupBeforeArchive" xml:space="preserve">
+    <value>アーカイブに移動する前にバックアップを作成しています…</value>
+  </data>
+  <data name="StatusAutoBackupMade" xml:space="preserve">
+    <value>自動バックアップを作成しました</value>
+  </data>
+  <data name="AutoBackupSectionLabel" xml:space="preserve">
+    <value>自動バックアップ</value>
+  </data>
+  <data name="AutoBackupBeforeArchiveLabel" xml:space="preserve">
+    <value>リバリーをアーカイブに移動する前</value>
+  </data>
+  <data name="AutoBackupOnChangeLabel" xml:space="preserve">
+    <value>セーブデータのリバリーが変わったとき（1 日 1 回まで）</value>
+  </data>
+  <data name="AutoBackupPeriodicLabel" xml:space="preserve">
+    <value>定期的に、間隔:</value>
+  </data>
+  <data name="AutoBackupDaysFormat" xml:space="preserve">
+    <value>{0} 日</value>
+  </data>
+  <data name="AutoBackupKeepLabel" xml:space="preserve">
+    <value>アカウントごとに保存する自動バックアップの数:</value>
+  </data>
+  <data name="AutoBackupHint" xml:space="preserve">
+    <value>最新のバックアップに現在のセーブデータがすでに含まれている場合は作成しません。この数を超えた古い自動バックアップは削除されます。自分で作成したバックアップは削除されません。</value>
+  </data>
+  <data name="BackupKindAutomatic" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="BackupKindBeforeArchive" xml:space="preserve">
+    <value>リバリーをアーカイブに移動する前に作成</value>
+  </data>
+  <data name="BackupKindSaveChanged" xml:space="preserve">
+    <value>セーブデータのリバリーが変わった後に作成</value>
+  </data>
+  <data name="BackupKindScheduled" xml:space="preserve">
+    <value>定期的に作成</value>
+  </data>
+  <data name="BackupKindPrunedNote" xml:space="preserve">
+    <value>設定した数を超えた古い自動バックアップは削除されます。</value>
+  </data>
+  <data name="AuthorIdMissingTooltip" xml:space="preserve">
+    <value>このリバリーには作者 ID がないため、名前は誰のものでもあり得ます。純正のリバリー、オークションのリバリー、または未公開のリバリーです。クリックすると作者を選べます。</value>
+  </data>
+  <data name="WarnFewFreeSlotsLabel" xml:space="preserve">
+    <value>起動時にセーブデータの空きが少ないと知らせる</value>
+  </data>
+  <data name="AssignAuthorDialogTitleSeveral" xml:space="preserve">
+    <value>誰のリバリーですか?</value>
+  </data>
+  <data name="AssignAuthorLiveriesFormat" xml:space="preserve">
+    <value>リバリー: {0} 件</value>
+  </data>
+  <data name="AssignAuthorSeveralNote" xml:space="preserve">
+    <value>これらのリバリーには作者 ID としてのアカウントがありません。選んだ作者がすべてに一度に指定されるので、確信がある場合だけ選んでください。</value>
+  </data>
+  <data name="AssignAuthorSkippedFormat" xml:space="preserve">
+    <value>作者 ID がアカウントの選択中リバリーは変わりません: {0} 件。</value>
   </data>
 </root>

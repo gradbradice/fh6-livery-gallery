@@ -21,4 +21,4 @@ internal sealed class ServerConnectionController(
         service, cache, status,
         () => profileData.FindProfileData(resolveSaveDataPath()),
         applyInstalled,
-        logger: AppLogger.LoggerFactory.CreateLogger<LiveryServerConnection>());
+        logger: AppLog.LoggerFactory.CreateLogger<LiveryServerConnection>());

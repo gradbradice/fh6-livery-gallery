@@ -1,7 +1,5 @@
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using LiveryGallery.Configuration;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 
 namespace LiveryGallery.ViewModels;

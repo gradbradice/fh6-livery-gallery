@@ -2,9 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
-using LiveryGallery.Services.Accounts;
 
 namespace LiveryGallery.ViewModels;
 
@@ -62,7 +60,7 @@ internal sealed partial class MainViewModel : ObservableObject
             Gallery.RefreshDuplicateTooltips();
         }
 
-        int threshold = AppSettingsData.ClampPossibleDuplicateThreshold(settings.PossibleDuplicateThresholdPercent);
+        int threshold = PossibleDuplicateThreshold.Clamp(settings.PossibleDuplicateThresholdPercent);
         if (LiveryEntry.PossibleDuplicateThresholdPercent != threshold)
         {
             LiveryEntry.PossibleDuplicateThresholdPercent = threshold;
@@ -74,10 +72,11 @@ internal sealed partial class MainViewModel : ObservableObject
         RefreshCarTextsIfLanguageChanged();
     }
 
-    /// <summary>The game languages whose car texts were read from the game</summary>
-    /// <summary>Empty without the game folder: car names then come from the car list, whatever is chosen</summary>
-    public IReadOnlyList<ForzaToolkit.StringTables.GameLanguage> CarTextLanguages =>
-        carTexts.State is GameTextsState.NoGameFolder or GameTextsState.NoStringTables ? [] : carTexts.Localization.Languages;
+    /// <summary>
+    /// The game languages there are car texts in: read from the game, else published with the car list; empty when
+    /// neither has any (car names then come from the car list, whatever is chosen)
+    /// </summary>
+    public IReadOnlyList<ForzaToolkit.StringTables.GameLanguage> CarTextLanguages => carTexts.Languages;
 
     /// <summary>The car texts again when their language changed (the setting, or the interface language it follows)</summary>
     public void RefreshCarTextsIfLanguageChanged()
@@ -100,8 +99,10 @@ internal sealed partial class MainViewModel : ObservableObject
         else RefreshCarTextsIfLanguageChanged(); // a chosen language may have just appeared
     }
 
+    private readonly ForzaToolkit.Liveries.History.LiveryHistoryStore? _history;
+    private readonly LiveryScanner _scanService;
+
     public bool WasSavedPathMissing => savePathService.WasSavedPathMissing;
-    public IReadOnlySet<string> SelectedTags => Gallery.SelectedTags;
     public void SetTagSelected(string tag, bool selected) => Gallery.SetTagSelected(tag, selected);
 
     public MainViewModel(
@@ -113,6 +114,7 @@ internal sealed partial class MainViewModel : ObservableObject
         TagService tagService,
         AuthorCardService authorCardService,
         FavoriteService favoriteService,
+        LockService lockService,
         LiveryArchive archiveService,
         LiveryScanner scanService,
         AppUpdateCheckService updateService,
@@ -122,7 +124,7 @@ internal sealed partial class MainViewModel : ObservableObject
         _accountRegistry = accountRegistry;
         LiveryEntry.ShowFolderNamesInTooltips = settings.SearchByFolderName;
         LiveryEntry.PossibleDuplicateThresholdPercent =
-            AppSettingsData.ClampPossibleDuplicateThreshold(settings.PossibleDuplicateThresholdPercent);
+            PossibleDuplicateThreshold.Clamp(settings.PossibleDuplicateThresholdPercent);
         this.savePathPrompter = savePathPrompter;
         this.savePathService = savePathService;
         this.carDatabase = carDatabase;
@@ -133,17 +135,23 @@ internal sealed partial class MainViewModel : ObservableObject
         this.archiveService = archiveService;
 
         scanController = new ScanController(scanService);
+        _scanService = scanService;
+        _history = scanService.History;
         FilterBar = new FilterBarViewModel(settings, savePathService.Profile);
         LiveryEntry.IsFindInGameAvailable = savePathService.Profile.MyDesigns is not null;
         Status = new GalleryStatusViewModel();
-        Gallery = new GalleryViewModel(favoriteService);
-        TagsBar = new TagsBarViewModel(SelectedTags, SetTagSelected);
+        Gallery = new GalleryViewModel(favoriteService, lockService);
+        TagsBar = new TagsBarViewModel(Gallery.TagState, Gallery.SetTagState);
         Gallery.SelectedTagsChanged += TagsBar.SyncSelection;
         Update = new UpdateViewModel(updateService);
         Gallery.CountsUpdated += snapshot =>
+        {
             Status.UpdateCountsAndEmptyState(snapshot.FilteredEntries, snapshot.TotalCount, snapshot.SearchText);
+            UpdateSlots();
+        };
         Gallery.SelectedEntries.CollectionChanged += (_, __) => RefreshArchiveAvailability();
         Gallery.InstalledCountsChanged += RefreshArchiveAvailability;
+        Gallery.LocksChanged += RefreshArchiveAvailability;
         FilterBar.FiltersChanged += RefreshGallery;
         RefreshCommand = new AsyncRelayCommand(RefreshButtonClickedAsync);
         InitializeNavigation();
@@ -156,53 +164,288 @@ internal sealed partial class MainViewModel : ObservableObject
 
     public void RefreshGallery() => Gallery.Refresh(CurrentFilterState());
 
-    public void RebuildTagsBar()
+    /// <summary>The row of tags again; true when a tag no livery has any more stopped filtering (the gallery is then shown again)</summary>
+    public bool RebuildTagsBar()
     {
         TagsBar.RecomputeAllTags(Gallery.AllEntries);
-        Gallery.SyncKnownTags([.. TagsBar.AllTags.Select(t => t.Tag)]);
+        return Gallery.SyncKnownTags([.. TagsBar.AllTags.Select(t => t.Tag)]);
     }
 
     public void ApplyTagsEdit(LiveryEntry entry, List<string> newTags)
     {
         entry.Tags = newTags;
         tagService.SetTags(entry.FolderName, newTags);
-        RebuildTagsBar();
-
-        if (Gallery.SelectedTags.Count > 0) RefreshGallery();
+        // The livery may leave (or join) what the tags filter; a tag nobody has any more stops filtering
+        if (!RebuildTagsBar() && Gallery.HasTagFilter) RefreshGallery();
     }
 
-    public AuthorCard? FindAuthorCard(LiveryEntry entry) =>
-        entry.AuthorIdentityTagHex is not null ? authorCardService.FindCardForIdentityTag(entry.AuthorIdentityTagHex) : null;
+    /// <summary>Several liveries at once: <paramref name="add"/> goes onto each, <paramref name="remove"/> off each</summary>
+    public void ApplyTagsChange(IReadOnlyList<LiveryEntry> entries, IReadOnlyCollection<string> add, IReadOnlyCollection<string> remove)
+    {
+        bool changed = false;
+        foreach (var entry in entries)
+        {
+            var tags = TagEdits.Change(entry.Tags, add, remove);
+            if (tags.SequenceEqual(entry.Tags, StringComparer.Ordinal)) continue;
+            entry.Tags = tags;
+            tagService.SetTags(entry.FolderName, tags);
+            changed = true;
+        }
+        if (!changed) return;
+        if (!RebuildTagsBar() && Gallery.HasTagFilter) RefreshGallery();
+    }
 
-    public (List<string> AvailableAliases, Dictionary<string, List<string>> NameToTags) BuildAuthorAliasIndex() =>
-        authorCardService.BuildAliasIndex(Gallery.AllEntries.AuthorObservations());
+    /// <summary>
+    /// The card of a livery's author: the one the user assigned it to, else its account's card, else a card made on the
+    /// fly for its account (not saved until the user changes it). Null when nothing tells the author
+    /// </summary>
+    public AuthorCard? FindAuthorCard(LiveryEntry entry)
+    {
+        if (entry.AssignedCardId is { } assigned && authorCardService.FindCard(assigned) is { } card) return card;
+        if (!AuthorAccounts.IsAccount(entry.AuthorIdentityTagHex)) return null;
+        var names = new AuthorInsights.AuthorNames(Gallery.AllEntries, authorCardService);
+        return authorCardService.GetCardForAccount(entry.AuthorIdentityTagHex!, names.NamesOf(entry.AuthorIdentityTagHex!));
+    }
+
+    /// <summary>The names authors are shown under, for the author dialogs</summary>
+    public AuthorInsights.AuthorNames AuthorNames() => new(Gallery.AllEntries, authorCardService);
+
+    /// <summary>
+    /// Every author a livery can be assigned to: the cards of this game's authors and those without an account, and
+    /// the accounts without a card (as cards made on the fly). By name
+    /// </summary>
+    public List<AuthorCard> AuthorChoices()
+    {
+        var names = AuthorNames();
+        var tagsHere = Gallery.AllEntries.Select(e => e.AuthorIdentityTagHex).Where(AuthorAccounts.IsAccount)
+            .OfType<string>().ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var assignedHere = Gallery.AllEntries.Select(e => e.AssignedCardId).OfType<string>().ToHashSet(StringComparer.Ordinal);
+        var cards = authorCardService.GetAll()
+            .Where(c => c.IdentityTags.Count == 0 || c.IdentityTags.Any(tagsHere.Contains) || assignedHere.Contains(c.Id))
+            .ToList();
+        var carded = cards.SelectMany(c => c.IdentityTags).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        foreach (var tag in tagsHere)
+            if (!carded.Contains(tag) && authorCardService.FindCardForIdentityTag(tag) is null)
+                cards.Add(AuthorCard.ForAccount(tag, names.NamesOf(tag)));
+        return [.. cards.OrderBy(c => c.DisplayName, StringComparer.CurrentCultureIgnoreCase)];
+    }
+
+    /// <summary>
+    /// Assigns the livery to the author (the user is sure): a card made on the fly is saved first. False when the card
+    /// could not be saved or is gone
+    /// </summary>
+    public Task<bool> AssignAuthorAsync(LiveryEntry entry, AuthorCard card) => AssignAuthorAsync([entry], card);
+
+    /// <summary>
+    /// Assigns several liveries to one author at once (the user is sure), with one save; liveries without a file hash
+    /// are left out. False when the card could not be saved or is gone, or nothing could be assigned
+    /// </summary>
+    public async Task<bool> AssignAuthorAsync(IReadOnlyList<LiveryEntry> entries, AuthorCard card)
+    {
+        var liveries = entries
+            .Where(e => e.CLiveryHash is not null)
+            .Select(e => new AuthorAssignmentTarget(e.CLiveryHash!, e.Data.AuthorIdentityTagHex, e.Data.LiveryName))
+            .ToList();
+        if (liveries.Count == 0) return false;
+        var target = card;
+        if (card.IsImplicit)
+        {
+            target = card with { Id = Guid.NewGuid().ToString("N"), IsImplicit = false };
+            if (!await authorCardService.TrySave(target)) return false;
+        }
+        if (!await authorCardService.AssignManyAsync(liveries, target.Id)) return false;
+        await RefreshAfterAuthorsChangedAsync();
+        Gallery.RefreshAuthorMenu();
+        return true;
+    }
+
+    /// <summary>Forgets the author the user set for the livery</summary>
+    public Task UnassignAuthorAsync(LiveryEntry entry) => UnassignAuthorAsync([entry]);
+
+    /// <summary>Forgets the author the user set for each of the liveries, with one save</summary>
+    public async Task UnassignAuthorAsync(IReadOnlyList<LiveryEntry> entries)
+    {
+        var hashes = entries.Select(e => e.CLiveryHash).OfType<string>().ToList();
+        if (hashes.Count > 0 && await authorCardService.UnassignManyAsync(hashes))
+        {
+            await RefreshAfterAuthorsChangedAsync();
+            Gallery.RefreshAuthorMenu();
+        }
+    }
+
+    /// <summary>The user said a hint is wrong: it is not given again</summary>
+    public async Task DismissAuthorHintAsync(AuthorHint hint)
+    {
+        await authorCardService.DismissHintAsync(hint.Key);
+        AuthorInsights.Apply(Gallery.AllEntries, authorCardService);
+    }
+
+    /// <summary>The hints for a card without an account: accounts that may be its author's</summary>
+    public IReadOnlyList<AuthorHintView> AccountHintsFor(AuthorCard card)
+    {
+        if (card.IdentityTags.Count > 0 || card.IsImplicit) return [];
+        var entries = Gallery.AllEntries;
+        var inputs = entries.Select(e => AuthorInsights.ToInput(e, authorCardService)).ToList();
+        var hints = AuthorHints.ForCardsWithoutAccounts(inputs, [card], authorCardService.GetDismissedHints());
+        if (!hints.TryGetValue(card.Id, out var found)) return [];
+        var names = AuthorNames();
+        var byKey = AuthorInsights.ByKey(entries);
+        return [.. found.Select(h => new AuthorHintView(h, names.Of(h.SubjectId), $"{names.Of(h.SubjectId)}: {AuthorInsights.Reason(h, byKey)}"))];
+    }
+
+    /// <summary>Adds an account to a card without one (the user accepted a hint)</summary>
+    public async Task<bool> AddAccountToCardAsync(AuthorCard card, string identityTag)
+    {
+        var names = AuthorNames().NamesOf(identityTag);
+        var updated = card with
+        {
+            IdentityTags = [.. card.IdentityTags, identityTag],
+            KnownNames = [.. card.KnownNames.Concat(names).Distinct(StringComparer.OrdinalIgnoreCase)],
+        };
+        return await TrySaveAuthorCard(updated);
+    }
 
     public async Task<bool> TrySaveAuthorCard(AuthorCard card)
     {
         if (!await authorCardService.TrySave(card)) return false;
-        await RefreshEntriesFromCacheAsync();
+        await RefreshAfterAuthorsChangedAsync();
         return true;
     }
 
-    public string GetOverallStatsMessage()
+    /// <summary>What the statistics window reads from the gallery and asks it to do</summary>
+    /// <param name="openAuthor">Opens a livery's author window over the statistics window</param>
+    /// <param name="backups">The backups' manifests</param>
+    public StatisticsHost StatisticsHost(Action<LiveryEntry> openAuthor, Func<IReadOnlyList<LiveryBackupManifest?>>? backups) => new(
+        All: () => Gallery.AllEntries,
+        Shown: Gallery.GetFilteredEntries,
+        History: ReadHistory,
+        Source: _statisticsSource ??= new StatisticsSource(authorCardService, () => _scanService.Authors.Own),
+        IsInstalledKnown: () => Gallery.IsInstalledDataKnown,
+        Navigate: NavigateFromStatistics,
+        ApplyQuickFilter: FilterBar.ApplyQuickFilter,
+        SelectTag: tag => SetTagSelected(tag, true),
+        OpenAuthor: openAuthor)
     {
-        var stats = GalleryStatisticsService.CalculateOverall([.. Gallery.AllEntries]);
-        return GalleryStatisticsService.FormatOverallMessage(stats);
+        MaxLiveries = savePathService.Profile.MaxLiveries,
+        Backups = backups,
+        Archive = () => [.. archiveService.GetAll().Where(a =>
+            a.SourceAccount is null || string.Equals(a.SourceAccount.Key, _appliedAccountKey, StringComparison.OrdinalIgnoreCase))],
+        GameCars = () => [.. carDatabase.GetAll().Select(c => (c.Id, c.Manufacturer))],
+        ManufacturerLabel = ManufacturerLabel,
+        Accounts = AccountSummariesAsync,
+    };
+
+    private Dictionary<string, string>? _manufacturerLabels;
+
+    /// <summary>A manufacturer in the language the car names are shown in (the texts of one of its cars)</summary>
+    private string? ManufacturerLabel(string raw)
+    {
+        if (_manufacturerLabels is null)
+        {
+            _manufacturerLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var car in carDatabase.GetAll())
+                if (!_manufacturerLabels.ContainsKey(car.Manufacturer) && carTexts.For(car.Id)?.Texts.Manufacturer is { Length: > 0 } label)
+                    _manufacturerLabels[car.Manufacturer] = label;
+        }
+        return _manufacturerLabels.GetValueOrDefault(raw);
+    }
+
+    /// <summary>Every account this PC keeps data of, at a glance: its liveries from its scan cache (the shown one from the gallery)</summary>
+    private async Task<IReadOnlyList<AccountSummary>> AccountSummariesAsync()
+    {
+        var stored = await ListStoredAccountsAsync();
+        var profile = savePathService.Profile;
+        var current = Gallery.AllEntries;
+        return await Task.Run(() => (IReadOnlyList<AccountSummary>)[.. stored.Select(account =>
+        {
+            if (account.IsCurrent)
+                return new AccountSummary(account.Title, true, current.Count(e => !e.IsAuction),
+                    current.Select(e => e.AuthorIdentityTagHex).OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase).Count(),
+                    current.Max(e => e.DownloadDate));
+            var entries = _scanService.CacheOf(account.Key);
+            return new AccountSummary(account.Title, false, entries.Count(e => !profile.IsAuction(e.FolderName)),
+                entries.Select(e => e.AuthorIdentityTagHex).OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase).Count(),
+                entries.Max(e => e.DownloadDate));
+        })]);
+    }
+
+    private StatisticsSource? _statisticsSource;
+
+    /// <summary>
+    /// The author window's numbers for one author's liveries: the same calculation as the statistics window's authors'
+    /// table (liveries, cars, favorites, the first and the latest download)
+    /// </summary>
+    public ForzaToolkit.Liveries.Statistics.AuthorStatisticsRow? AuthorStatisticsFor(IReadOnlyList<LiveryEntry> entries)
+    {
+        if (entries.Count == 0) return null;
+        const string Author = "author";
+        return ForzaToolkit.Liveries.Statistics.AuthorStatisticsCalculator.Calculate(entries, _ => Author).Rows.FirstOrDefault();
+    }
+
+    /// <summary>The journal of the account shown; empty without one</summary>
+    public IReadOnlyList<ForzaToolkit.Liveries.History.LiveryHistoryEvent> ReadHistory() =>
+        _history is not null && _appliedAccountKey is { } key ? _history.Read(key) : [];
+
+    /// <summary>A statistics tile or row: the gallery shows what it counted</summary>
+    private void NavigateFromStatistics(StatisticsTarget target)
+    {
+        switch (target)
+        {
+            case StatisticsTarget.Everything:
+                FilterBar.ShowEverything();
+                Gallery.ClearTagFilter();
+                break;
+            case StatisticsTarget.ByAuthor:
+                FilterBar.SortMode = SortMode.Author;
+                FilterBar.GroupingEnabled = true;
+                break;
+            case StatisticsTarget.ByManufacturer:
+                FilterBar.SortMode = SortMode.Manufacture;
+                FilterBar.GroupingEnabled = true;
+                break;
+            case StatisticsTarget.Favorites:
+                FilterBar.FavoriteMode = FavoriteMode.OnlyFavorites;
+                break;
+            case StatisticsTarget.Installed:
+                FilterBar.InstalledMode = InstalledMode.OnlyInstalled;
+                break;
+            case StatisticsTarget.Auction:
+                FilterBar.AuctionFilterMode = AuctionFilterMode.OnlyAuction;
+                break;
+            case StatisticsTarget.Mine:
+                FilterBar.MineMode = MineMode.OnlyMine;
+                break;
+            case StatisticsTarget.Generated:
+                FilterBar.GeneratedFilterMode = GeneratedFilterMode.GeneratedOnly;
+                break;
+            case StatisticsTarget.Duplicates:
+                FilterBar.DuplicatesFilterMode = DuplicatesFilterMode.DuplicatesAndPossible;
+                break;
+            case StatisticsTarget.PaintOnly:
+                FilterBar.PaintFilterMode = PaintFilterMode.PaintOnly;
+                break;
+        }
     }
 
     private void OnEntriesChanged()
     {
-        RebuildTagsBar();
-        RefreshGallery();
+        if (!RebuildTagsBar()) RefreshGallery();
     }
 
     public async Task RunScanAsyncTracked(bool isUserInitiated) => await RunScanCoreAsync(isUserInitiated);
 
     public Task<bool> RunAutoRefreshAsync(CancellationToken ct = default) => RunScanCoreAsync(isUserInitiated: false, ct);
 
+    /// <summary>
+    /// A scan that makes the previews the gallery has just drawn the liveries' previews (<see cref="RenderedThumbnails"/>),
+    /// whether or not automatic refresh is on. False when another scan was running: ask again after it.
+    /// </summary>
+    public Task<bool> RunScanForDrawnPreviewsAsync(CancellationToken ct = default) =>
+        RunScanCoreAsync(isUserInitiated: false, ct, evenWithoutAutoRefresh: true);
+
     public event Action? SavePathChanged;
 
-    private async Task<bool> RunScanCoreAsync(bool isUserInitiated, CancellationToken ct = default)
+    private async Task<bool> RunScanCoreAsync(bool isUserInitiated, CancellationToken ct = default, bool evenWithoutAutoRefresh = false)
     {
         if (ShutdownToken.IsCancellationRequested || ct.IsCancellationRequested) return true;
         string? saveDataPath = savePathService.ResolveSaveDataPath();
@@ -216,7 +459,7 @@ internal sealed partial class MainViewModel : ObservableObject
         }
         savePathService.ResetLostNotification();
 
-        if (!isUserInitiated && !settings.AutoRefreshLiveries) return true;
+        if (!isUserInitiated && !evenWithoutAutoRefresh && !settings.AutoRefreshLiveries) return true;
 
         var progress = isUserInitiated ? new Progress<string>(msg => Status.SetLoading(true, msg)) : null;
         using var scanCts = CancellationTokenSource.CreateLinkedTokenSource(ShutdownToken, ct);
@@ -275,6 +518,8 @@ internal sealed partial class MainViewModel : ObservableObject
                 Status.SetStatusText(string.Format(Strings.StatusAutoRefreshedFormat, result.Added, result.Removed));
             ScanCompleted?.Invoke();
             RecordCurrentAccount();
+            CheckRoomOnce();
+            _ = BackUpAfterScanAsync();
 
             _changesSinceLastLaunchChecked = true;
             if (result.ChangesSinceLastLaunch is { IsEmpty: false } changes) ChangesSinceLastLaunchFound?.Invoke(changes);
@@ -282,11 +527,26 @@ internal sealed partial class MainViewModel : ObservableObject
 
         if (scanError is not null)
         {
-            AppLogger.LogErrorThrottled(saveDataPath, $"Scan failed: '{saveDataPath}'", scanError);
+            AppLog.LogErrorThrottled(saveDataPath, $"Scan failed: '{saveDataPath}'", scanError);
             if (isUserInitiated)
                 Status.SetStatusText(string.Format(Strings.StatusScanError, scanError.Message));
         }
         return true;
+    }
+
+    /// <summary>
+    /// After the user changed who liveries are by (a livery assigned to an author or taken off, a card saved, merged,
+    /// split or deleted): the entries from the cache at once, then the duplicates looked for again. Duplicates are looked
+    /// for among one author's liveries on one car, so new authors make new groups, and the cache's statuses were made
+    /// with the old ones: a livery of an unknown author assigned to an author was not checked against his liveries until
+    /// the next scan. The scan reuses everything it parsed; the authors' signature it keeps tells it to compare again
+    /// </summary>
+    public async Task RefreshAfterAuthorsChangedAsync()
+    {
+        await RefreshEntriesFromCacheAsync();
+        // A scan already running may have taken the authors before the change: ask again once it is done
+        for (int attempt = 0; attempt < 2; attempt++)
+            if (await RunScanCoreAsync(isUserInitiated: false, evenWithoutAutoRefresh: true)) return;
     }
 
     public async Task RefreshEntriesFromCacheAsync()
@@ -302,6 +562,7 @@ internal sealed partial class MainViewModel : ObservableObject
     private void ApplyFreshEntries(List<LiveryEntry> entries)
     {
         Gallery.ReplaceEntries(Gallery.MergeWithLocalState(entries));
+        AuthorInsights.Apply(Gallery.AllEntries, authorCardService);
         RefreshGamePositions(refreshGallery: false); // OnEntriesChanged rebuilds the gallery
         OnEntriesChanged();
     }
@@ -371,7 +632,7 @@ internal sealed partial class MainViewModel : ObservableObject
     public Func<Task<bool>>? ConfirmWhileGameRunningAsync { get; set; }
 
     private ArchiveBlock ArchiveBlockOf(LiveryEntry entry) =>
-        ArchiveRules.Check(entry.IsAuction, entry.IsInstalled, Gallery.IsInstalledDataKnown);
+        ArchiveRules.Check(entry.IsLocked, entry.IsAuction, entry.IsInstalled, Gallery.IsInstalledDataKnown);
 
     private bool CanArchive(LiveryEntry entry) => ArchiveBlockOf(entry) == ArchiveBlock.None;
 
@@ -386,28 +647,37 @@ internal sealed partial class MainViewModel : ObservableObject
     public string? ArchiveBlockedTooltip =>
         Gallery.HasSelection && !CanMoveSelectedToArchive() ? ArchiveBlockedReason(Gallery.SelectedEntries) : null;
 
+    /// <summary>Why none of <paramref name="blocked"/> can go: one line per kind of block among them</summary>
     private string ArchiveBlockedReason(IEnumerable<LiveryEntry> blocked)
     {
-        bool anyAuction = false, anyInstalled = false;
+        bool anyLocked = false, anyAuction = false, anyInstalled = false;
         foreach (var entry in blocked)
         {
             switch (ArchiveBlockOf(entry))
             {
+                case ArchiveBlock.Locked: anyLocked = true; break;
                 case ArchiveBlock.AuctionNeedsInstalledList: anyAuction = true; break;
                 case ArchiveBlock.Installed: anyInstalled = true; break;
             }
         }
-        return (anyAuction, anyInstalled) switch
+        string? other = (anyAuction, anyInstalled) switch
         {
             (true, true) => Strings.ArchiveAuctionOrInstalledNotAllowedTooltip,
             (false, true) => Strings.ArchiveInstalledNotAllowedTooltip,
-            _ => Strings.ArchiveAuctionNotAllowedTooltip,
+            (true, false) => Strings.ArchiveAuctionNotAllowedTooltip,
+            _ => null,
+        };
+        return (anyLocked, other) switch
+        {
+            (true, null) => Strings.ArchiveLockedNotAllowedTooltip,
+            (true, _) => Strings.ArchiveLockedNotAllowedTooltip + Environment.NewLine + other,
+            _ => other ?? Strings.ArchiveAuctionNotAllowedTooltip,
         };
     }
 
-    private async Task<bool> ConfirmArchiveRiskAsync()
+    private async Task<bool> ConfirmArchiveRiskAsync(IReadOnlyList<LiveryEntry> entries)
     {
-        int CountToArchive() => Gallery.SelectedEntries.Count(CanArchive);
+        int CountToArchive() => entries.Count(CanArchive);
 
         if (!Gallery.IsInstalledDataKnown)
         {
@@ -432,7 +702,7 @@ internal sealed partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to check whether the installed liveries are up to date", ex);
+            AppLog.LogError("Failed to check whether the installed liveries are up to date", ex);
             outdated = true;
         }
         if (ShutdownToken.IsCancellationRequested) return false;
@@ -458,7 +728,7 @@ internal sealed partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to check whether the installed liveries are up to date", ex);
+            AppLog.LogError("Failed to check whether the installed liveries are up to date", ex);
             return false;
         }
     }
@@ -479,40 +749,64 @@ internal sealed partial class MainViewModel : ObservableObject
     private async Task MoveSelectedToArchiveAsync()
     {
         if (!Gallery.HasSelection) return;
+        await MoveToArchiveAsync(Gallery.SelectedEntries.ToList());
+    }
+
+    /// <summary>
+    /// The gallery's automatic backups; set by the window. Asked before liveries go to the archive and after each scan
+    /// </summary>
+    public AutoBackups? AutoBackups { get; set; }
+
+    /// <summary>Asked when the backup before an archive could not be written; true to archive without it</summary>
+    public Func<Task<bool>>? ConfirmArchiveWithoutBackupAsync { get; set; }
+
+    /// <summary>
+    /// Moves <paramref name="entries"/> to the archive with every check of the context menu's command: the warnings
+    /// about the list of applied liveries, the running game, the automatic backup before it, and what was skipped and why.
+    /// The selection or "free up room" asks for it
+    /// </summary>
+    /// <returns>True when liveries went</returns>
+    public async Task<bool> MoveToArchiveAsync(IReadOnlyList<LiveryEntry> entries)
+    {
+        if (entries.Count == 0) return false;
         string? savePath = savePathService.ResolveSaveDataPath();
         if (savePath is null)
         {
             ErrorMessageRequested?.Invoke(Strings.ArchiveNoSavePathMessage);
-            return;
+            return false;
         }
 
-        if (!Gallery.SelectedEntries.Any(CanArchive))
+        if (!entries.Any(CanArchive))
         {
-            ErrorMessageRequested?.Invoke(ArchiveBlockedReason(Gallery.SelectedEntries));
-            return;
+            ErrorMessageRequested?.Invoke(ArchiveBlockedReason(entries));
+            return false;
         }
 
-        if (!await ConfirmArchiveRiskAsync()) return;
-        if (!await savePathService.Profile.RunningGuard.ConfirmAsync(ConfirmWhileGameRunningAsync)) return;
-        var selected = Gallery.SelectedEntries.ToList();
+        if (!await ConfirmArchiveRiskAsync(entries)) return false;
+        if (!await savePathService.Profile.RunningGuard.ConfirmAsync(ConfirmWhileGameRunningAsync)) return false;
+        var selected = entries.ToList();
 
         // An auction livery goes only when the list of applied liveries is from the current save: a car may have
         // been given it since the last sync. Regular liveries keep the warning above, which the user can turn off
         bool auctionAllowed = !selected.Any(e => e.IsAuction && CanArchive(e)) || await IsInstalledListCurrentAsync();
-        if (ShutdownToken.IsCancellationRequested) return;
+        if (ShutdownToken.IsCancellationRequested) return false;
 
         var archivable = selected.Where(e => CanArchive(e) && (!e.IsAuction || auctionAllowed)).ToList();
         var toArchive = archivable.Select(e => e.Data).ToList();
-        int skippedInstalled = selected.Count(e => e.IsInstalled);
-        int skippedAuction = selected.Count(e => e.IsAuction && !e.IsInstalled && !archivable.Contains(e));
+        // Each skipped livery is counted once, under the first reason: the lock, then the car, then the auction
+        int skippedLocked = selected.Count(e => e.IsLocked);
+        int skippedInstalled = selected.Count(e => !e.IsLocked && e.IsInstalled);
+        int skippedAuction = selected.Count(e => !e.IsLocked && e.IsAuction && !e.IsInstalled && !archivable.Contains(e));
         if (toArchive.Count == 0)
         {
-            if (skippedAuction > 0 && skippedInstalled == 0 && Gallery.IsInstalledDataKnown)
+            if (skippedAuction > 0 && skippedInstalled == 0 && skippedLocked == 0 && Gallery.IsInstalledDataKnown)
                 ErrorMessageRequested?.Invoke(string.Format(Strings.ArchiveAuctionSkippedFormat, skippedAuction));
             else if (selected.Count > 0)
                 ErrorMessageRequested?.Invoke(ArchiveBlockedReason(selected));
-            return;
+            return false;
         }
+
+        if (!await BackUpBeforeArchiveAsync(savePath)) return false;
 
         Status.SetLoading(true, Strings.LoadingMovingToArchive);
         ArchiveOperationResult result;
@@ -524,21 +818,61 @@ internal sealed partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to move selected liveries to archive", ex);
+            AppLog.LogError("Failed to move selected liveries to archive", ex);
             ErrorMessageRequested?.Invoke(Strings.FileOperationFailedMessage);
-            return;
+            return false;
         }
         finally
         {
             Status.SetLoading(false);
         }
 
-        var notes = new List<string>(3);
+        var notes = new List<string>(4);
+        if (skippedLocked > 0) notes.Add(string.Format(Strings.ArchiveLockedSkippedFormat, skippedLocked));
         if (skippedAuction > 0) notes.Add(string.Format(Strings.ArchiveAuctionSkippedFormat, skippedAuction));
         if (skippedInstalled > 0) notes.Add(string.Format(Strings.ArchiveInstalledSkippedFormat, skippedInstalled));
         if (result.LeftoverPaths.Count > 0)
             notes.Add(string.Format(Strings.ArchiveLeftoverFoldersFormat, string.Join(Environment.NewLine, result.LeftoverPaths)));
         if (notes.Count > 0) ErrorMessageRequested?.Invoke(string.Join(Environment.NewLine + Environment.NewLine, notes));
+        return result.Completed.Count > 0;
+    }
+
+    /// <summary>
+    /// The automatic backup before an archive, when it is on and the newest backup does not already hold the save.
+    /// False when it failed and the user would rather not archive without it
+    /// </summary>
+    private async Task<bool> BackUpBeforeArchiveAsync(string savePath)
+    {
+        if (AutoBackups is not { } auto) return true;
+        Status.SetLoading(true, Strings.LoadingBackupBeforeArchive);
+        AutoBackupOutcome outcome;
+        try
+        {
+            outcome = await auto.RunAsync(AutoBackupMoment.BeforeArchive, [.. Gallery.AllEntries.Select(e => e.Data)], savePath,
+                GetAccountContext().Current);
+        }
+        finally
+        {
+            Status.SetLoading(false);
+        }
+        if (outcome != AutoBackupOutcome.Failed) return true;
+        return ConfirmArchiveWithoutBackupAsync is { } ask && await ask();
+    }
+
+    /// <summary>After a scan: the backup after a change of the save, or the scheduled one, in the background</summary>
+    private async Task BackUpAfterScanAsync()
+    {
+        if (AutoBackups is not { } auto || savePathService.ResolveSaveDataPath() is not { } savePath) return;
+        var entries = Gallery.AllEntries.Select(e => e.Data).ToList();
+        try
+        {
+            if (await auto.RunAsync(AutoBackupMoment.AfterScan, entries, savePath, GetAccountContext().Current) == AutoBackupOutcome.Made)
+                Status.SetStatusText(Strings.StatusAutoBackupMade);
+        }
+        catch (Exception ex)
+        {
+            AppLog.LogError("Automatic backup after a scan failed", ex);
+        }
     }
 
     private async Task RefreshButtonClickedAsync()
@@ -610,7 +944,7 @@ internal sealed partial class MainViewModel : ObservableObject
         bool allOk = await DebouncedFileWriter.Shared.FlushAsync();
         if (!allOk)
         {
-            AppLogger.LogError(
+            AppLog.LogError(
                 "Failed to flush one or more files on shutdown",
                 new IOException("DebouncedFileWriter.Shared.FlushAsync reported at least one failed write"));
         }
@@ -629,7 +963,7 @@ internal sealed partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"Background work '{what}' failed while shutting down", ex);
+            AppLog.LogError($"Background work '{what}' failed while shutting down", ex);
         }
     }
 
@@ -645,7 +979,7 @@ internal sealed partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"Unhandled exception in background task: {context}", ex);
+            AppLog.LogError($"Unhandled exception in background task: {context}", ex);
         }
     }
 }

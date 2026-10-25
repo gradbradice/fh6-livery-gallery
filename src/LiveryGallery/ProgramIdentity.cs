@@ -4,7 +4,7 @@ namespace LiveryGallery;
 
 /// <summary>
 /// This program, FH6 Livery Gallery: the names the open gallery (LiveryGallery.Avalonia) takes from the host. The game
-/// it shows is <see cref="GameProfiles.Fh6"/>; another program (an FH4 gallery) has its own identity here.
+/// it shows is <see cref="Profiles.GameProfiles.Fh6"/>; another program (an FH4 gallery) has its own identity here.
 /// </summary>
 internal static class ProgramIdentity
 {

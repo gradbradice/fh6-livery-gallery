@@ -65,12 +65,12 @@ internal static class BackupPreviews
             {
                 if (referenced.Contains(Path.GetFileName(file))) continue;
                 try { File.Delete(file); }
-                catch (Exception ex) { AppLogger.LogErrorThrottled(file, $"Failed to delete unused backup preview '{file}'", ex); }
+                catch (Exception ex) { AppLog.LogErrorThrottled(file, $"Failed to delete unused backup preview '{file}'", ex); }
             }
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to prune backup previews", ex);
+            AppLog.LogError("Failed to prune backup previews", ex);
         }
     }
 

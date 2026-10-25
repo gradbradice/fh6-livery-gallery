@@ -29,7 +29,7 @@ internal static class ThumbnailService
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled(sourceWebpPath, $"Failed to generate thumbnail from '{sourceWebpPath}'", ex);
+            AppLog.LogErrorThrottled(sourceWebpPath, $"Failed to generate thumbnail from '{sourceWebpPath}'", ex);
             return false;
         }
     }
@@ -51,7 +51,7 @@ internal static class ThumbnailService
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled(sourceDescription, $"Failed to generate thumbnail from '{sourceDescription}'", ex);
+            AppLog.LogErrorThrottled(sourceDescription, $"Failed to generate thumbnail from '{sourceDescription}'", ex);
             return false;
         }
         finally

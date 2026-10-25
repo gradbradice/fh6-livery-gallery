@@ -3,10 +3,11 @@ using System.Collections.ObjectModel;
 
 namespace LiveryGallery.ViewModels;
 
+/// <summary>The row of every tag in the gallery, each shown, hidden or off</summary>
 internal sealed partial class TagsBarViewModel : ObservableObject
 {
-    private readonly IReadOnlySet<string> _selectedTags;
-    private readonly Action<string, bool> _onTagToggled;
+    private readonly Func<string, TagFilterState> _stateOf;
+    private readonly Action<string, TagFilterState> _onStateChanged;
     private HashSet<string>? _lastAllTags;
 
     public ObservableCollection<TagChipViewModel> AllTags { get; } = [];
@@ -14,10 +15,10 @@ internal sealed partial class TagsBarViewModel : ObservableObject
     [ObservableProperty]
     private bool _hasTags;
 
-    public TagsBarViewModel(IReadOnlySet<string> selectedTags, Action<string, bool> onTagToggled)
+    public TagsBarViewModel(Func<string, TagFilterState> stateOf, Action<string, TagFilterState> onStateChanged)
     {
-        _selectedTags = selectedTags;
-        _onTagToggled = onTagToggled;
+        _stateOf = stateOf;
+        _onStateChanged = onStateChanged;
     }
 
     public bool RecomputeAllTags(IEnumerable<LiveryEntry> allEntries)
@@ -32,7 +33,7 @@ internal sealed partial class TagsBarViewModel : ObservableObject
 
         AllTags.Clear();
         foreach (var tag in allTagsSet.OrderBy(t => t, StringComparer.OrdinalIgnoreCase))
-            AllTags.Add(new TagChipViewModel(tag, _selectedTags.Contains(tag), _onTagToggled));
+            AllTags.Add(new TagChipViewModel(tag, _stateOf(tag), _onStateChanged));
 
         HasTags = AllTags.Count > 0;
         return true;
@@ -41,6 +42,6 @@ internal sealed partial class TagsBarViewModel : ObservableObject
     public void SyncSelection()
     {
         foreach (var chip in AllTags)
-            chip.IsSelected = _selectedTags.Contains(chip.Tag);
+            chip.State = _stateOf(chip.Tag);
     }
 }

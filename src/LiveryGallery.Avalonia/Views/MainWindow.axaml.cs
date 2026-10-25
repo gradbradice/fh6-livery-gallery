@@ -1,13 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.Services.Accounts;
 using LiveryGallery.Services.Diagnostics;
@@ -47,6 +44,7 @@ internal partial class MainWindow : Window
         CarTextProvider carTexts,
         TagService tagService,
         FavoriteService favoriteService,
+        LockService lockService,
         AuthorCardService authorCardService,
         LiveryArchive archiveService,
         LiveryBackups backupService,
@@ -60,6 +58,7 @@ internal partial class MainWindow : Window
         AccountRegistry accountRegistry)
     {
         InitializeComponent();
+        InitializeShortcuts();
 
         _saveFolderLock = saveFolderLock;
 
@@ -74,10 +73,22 @@ internal partial class MainWindow : Window
         _diagnosticsService = diagnosticsService;
         _savePathService = new SavePathService(settings, profile);
         var savePathPrompter = new SavePathPrompter(this, profile);
+        // A livery without a preview in the save gets one drawn from the 3D model, kept with the game's previews (never
+        // in the save); a scan then makes it the livery's preview, which the archive and backups take along
+        var rendered = new RenderedThumbnails(viewer3D.Thumbnails,
+            folderName => _savePathService.ResolveSaveDataPath() is { } saveData ? _profile.Liveries.GetFiles(saveData, folderName).LiveryPath : null,
+            Configuration.AppSettings.ThumbsPath, saveFolderLock);
+        rendered.Drawn += () => { _drawnPreviewsScanTimer.Stop(); _drawnPreviewsScanTimer.Start(); };
+        _drawnPreviewsScanTimer.Tick += (_, _) =>
+        {
+            _drawnPreviewsScanTimer.Stop();
+            RunUiTask(ScanForDrawnPreviewsAsync, "scan for drawn previews");
+        };
+        ThumbnailLifecycleController.Rendered = rendered;
 
         _mainViewModel = new MainViewModel(
             settings, savePathPrompter, _savePathService, carDatabase, carTexts, tagService, authorCardService,
-            favoriteService, archiveService, scanService, updateService, accountRegistry)
+            favoriteService, lockService, archiveService, scanService, updateService, accountRegistry)
         {
             ShutdownToken = _shutdownCts.Token
         };
@@ -111,7 +122,11 @@ internal partial class MainWindow : Window
                 _serverConnection.SetWindowVisible(WindowState != WindowState.Minimized);
         };
         _mainViewModel.Gallery.AuthorRowRequested += entry => RunUiTask(() => ShowAuthorRowAsync(entry), "author card");
-        _mainViewModel.Gallery.EditTagsRequested += entry => RunUiTask(() => ShowEditTagsAsync(entry), "edit tags");
+        _mainViewModel.Gallery.EditTagsRequested += entries => RunUiTask(() => ShowEditTagsAsync(entries), "edit tags");
+        // From the selection: the selected liveries left out (an account's id) are counted in the dialog
+        _mainViewModel.Gallery.AssignAuthorRequested += entries => RunUiTask(() => AssignAuthorAsync(entries, null,
+            entries.All(e => e.IsSelected) ? _mainViewModel.Gallery.SelectedCount - entries.Count : 0), "assign author");
+        _mainViewModel.Gallery.UnassignAuthorRequested += entries => RunUiTask(() => _mainViewModel.UnassignAuthorAsync(entries), "unassign author");
         _mainViewModel.Gallery.ViewPreviewRequested += entry => RunUiTask(() => ShowPreviewAsync(entry), "preview");
         _mainViewModel.Gallery.View3DRequested += entry =>
             RunUiTask(() => ShowLivery3DAsync(entry), $"3D viewer for '{entry.FolderName}'");
@@ -128,6 +143,7 @@ internal partial class MainWindow : Window
         _mainViewModel.ConfirmWhileGameRunningAsync = () => ConfirmDialog.AskAsync(
             this, string.Format(Strings.GameRunningTitleFormat, _profile.Game.Name), Strings.GameRunningFileChangeMessage, Strings.GameRunningContinueButton, Strings.ButtonCancel);
         _mainViewModel.GameFolderStateProvider = () => new GameFolderState(_viewer3D.IsChecking, _viewer3D.GameDirectory);
+        InitializeRoom();
 
         GalleryPanel.AnchorKeySelector = GetGalleryAnchorKeys;
         _mainViewModel.Gallery.GroupsReplaced += () => RebuildGalleryItems(preservePosition: true);
@@ -158,6 +174,10 @@ internal partial class MainWindow : Window
     }
 
     private bool _isClosing;
+    // The game folder the drawn previews on screen were drawn with (ThumbnailLifecycleController.Rendered)
+    private string? _renderedThumbnailsGameDirectory;
+    // Drawn previews become the liveries' previews with a scan, one for a run of them
+    private readonly DispatcherTimer _drawnPreviewsScanTimer = new() { Interval = TimeSpan.FromSeconds(2) };
     private bool _shutdownCompleted;
     private Task? _initializeTask;
     private Task? _shutdownTask;
@@ -179,11 +199,11 @@ internal partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Shutdown failed; closing anyway", ex);
+            AppLog.LogError("Shutdown failed; closing anyway", ex);
         }
         finally
         {
-            AppLogger.Shutdown();
+            AppLog.Shutdown();
             _shutdownCompleted = true;
             Close();
         }
@@ -197,6 +217,7 @@ internal partial class MainWindow : Window
         AppLocalisationService.LanguageChanged -= OnLanguageChanged;
         _searchDebounceTimer.Stop();
         _resizeDebounceTimer.Stop();
+        _drawnPreviewsScanTimer.Stop();
         ThumbnailLifecycleController.BeginShutdown();
         _viewer3D.BeginShutdown();
 
@@ -218,7 +239,7 @@ internal partial class MainWindow : Window
         }
         catch (TimeoutException)
         {
-            AppLogger.LogWarning($"Shutdown: '{name}' did not finish within {timeout.TotalSeconds:0.#} s, continuing without it");
+            AppLog.LogWarning($"Shutdown: '{name}' did not finish within {timeout.TotalSeconds:0.#} s, continuing without it");
         }
         catch (OperationCanceledException)
         {
@@ -226,7 +247,7 @@ internal partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"Shutdown: '{name}' failed", ex);
+            AppLog.LogError($"Shutdown: '{name}' failed", ex);
         }
     }
 
@@ -357,11 +378,11 @@ internal partial class MainWindow : Window
         try
         {
             if (await SharedAuthorCards.CompleteMoveAsync(_authorCardService, Configuration.AppSettings.BaseCachePath) is { Skipped: > 0 } result)
-                AppLogger.LogWarning($"Author cards: {result.Skipped} cards of this app clash with cards of another app and stay only in the old file");
+                AppLog.LogWarning($"Author cards: {result.Skipped} cards of this app clash with cards of another app and stay only in the old file");
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to join this app's author cards into the shared ones", ex);
+            AppLog.LogError("Failed to join this app's author cards into the shared ones", ex);
         }
     }
 
@@ -370,7 +391,7 @@ internal partial class MainWindow : Window
     {
         if (_isClosing || _initializeTask is not { IsCompleted: true }) return;
         if (_authorCardService.ReloadIfChanged())
-            RunUiTask(_mainViewModel.RefreshEntriesFromCacheAsync, "author cards changed elsewhere");
+            RunUiTask(_mainViewModel.RefreshAfterAuthorsChangedAsync, "author cards changed elsewhere");
     }
 
     private void ApplyServerConnectionSetting()
@@ -403,8 +424,16 @@ internal partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to apply the game folder", ex);
+            AppLog.LogError("Failed to apply the game folder", ex);
         }
+    }
+
+    private async Task ScanForDrawnPreviewsAsync()
+    {
+        if (_isClosing) return;
+        // Another scan was running: it may have missed the new previews, so try again after it
+        if (!await _mainViewModel.RunScanForDrawnPreviewsAsync(_shutdownCts.Token) && !_isClosing)
+            _drawnPreviewsScanTimer.Start();
     }
 
     private void OnViewer3DStateChanged()
@@ -418,6 +447,12 @@ internal partial class MainWindow : Window
         };
         _mainViewModel.Gallery.RefreshView3DAvailability();
         if (!_viewer3D.IsChecking) _mainViewModel.RefreshGamePositions(); // a menu mod may change the rows
+        if (!_viewer3D.IsChecking
+            && !string.Equals(_renderedThumbnailsGameDirectory, _viewer3D.GameDirectory, StringComparison.OrdinalIgnoreCase))
+        {
+            _renderedThumbnailsGameDirectory = _viewer3D.GameDirectory;
+            ThumbnailLifecycleController.RefreshRenderedThumbnails();
+        }
     }
 
     private async Task ShowLivery3DAsync(LiveryEntry entry)
@@ -494,43 +529,102 @@ internal partial class MainWindow : Window
         return Math.Max(columns * CardStep, CardStep);
     }
 
-    private async Task ShowAuthorRowAsync(LiveryEntry entry)
+    /// <param name="entry">A livery of the author</param>
+    /// <param name="owner">The window the dialogs open over (the statistics window); the gallery when null</param>
+    private async Task ShowAuthorRowAsync(LiveryEntry entry, Window? owner = null)
     {
-        var card = _mainViewModel.FindAuthorCard(entry);
-        if (card is null && entry.Data.IsAuthorUnknown)
+        owner ??= this;
+        // Every account has a card (made on the fly until the user changes it); a livery assigned by the user has its card
+        if (_mainViewModel.FindAuthorCard(entry) is { } card)
         {
-            await InfoDialog.ShowAsync(this, Strings.AuthorCardViewNoCardTitle, Strings.AuthorUnknownMessage);
+            await new AuthorCardViewDialog(card, AuthorCardActions()).ShowDialog(owner);
             return;
         }
-        if (card is null)
+        // Nothing tells the author (an edited header's id, or zeros): the user may say whose livery it is
+        if (entry.CanAssignAuthor && entry.CLiveryHash is not null)
         {
-            bool wantsToCreate = await InfoDialog.ShowWithActionAsync(this, Strings.AuthorCardViewNoCardTitle,
-                string.Format(Strings.AuthorCardViewNoCardMessage, entry.AuthorRaw), Strings.AuthorCardCreateButton);
-            if (wantsToCreate) await CreateAuthorCardAsync(entry);
+            await AssignAuthorAsync(entry, owner);
+            return;
+        }
+        await InfoDialog.ShowAsync(owner, Strings.AuthorCardViewNoCardTitle, Strings.AuthorUnknownMessage);
+    }
+
+    private AuthorCardViewActions AuthorCardActions() => new(
+        Edit: EditAuthorCardAsync,
+        Entries: () => _mainViewModel.Gallery.AllEntries,
+        Unassign: async hash =>
+        {
+            if (_mainViewModel.Gallery.AllEntries.FirstOrDefault(e => e.CLiveryHash == hash) is { } entry)
+                await _mainViewModel.UnassignAuthorAsync(entry);
+        },
+        AccountHints: _mainViewModel.AccountHintsFor,
+        AddAccount: async (card, tag) => await _mainViewModel.AddAccountToCardAsync(card, tag) ? _authorCardService.FindCard(card.Id) : null,
+        DismissHint: _mainViewModel.DismissAuthorHintAsync,
+        FindCard: _authorCardService.FindCard,
+        Statistics: _mainViewModel.AuthorStatisticsFor);
+
+    /// <summary>The card editor over <paramref name="owner"/>; the saved card, or null when cancelled or refused</summary>
+    private async Task<AuthorCard?> EditAuthorCardAsync(Window owner, AuthorCard? card)
+    {
+        var entries = _mainViewModel.Gallery.AllEntries;
+        var accounts = AuthorContext.LabelAccounts(
+            _authorCardService.BuildAccountIndex(entries.AuthorObservations(), card is { IsImplicit: false } ? card.Id : null),
+            entries, _authorCardService);
+        var dialog = new AuthorCardEditDialog(_authorCardService, accounts, card);
+        bool saved = await dialog.ShowDialog<bool>(owner);
+        if (!saved || dialog.Result is not { } result) return null;
+        if (!await _mainViewModel.TrySaveAuthorCard(result))
+        {
+            await InfoDialog.ShowAsync(owner, Strings.AssignAuthorDialogTitle, Strings.AssignAuthorFailedMessage);
+            return null;
+        }
+        return _authorCardService.FindCard(result.Id) ?? result;
+    }
+
+    /// <summary>"Whose livery is it?": the user picks an author (or makes a card) and says they are sure</summary>
+    private Task AssignAuthorAsync(LiveryEntry entry, Window? owner = null) => AssignAuthorAsync([entry], owner);
+
+    /// <summary>"Whose liveries are these?": one author for all of them</summary>
+    /// <param name="entries">The liveries</param>
+    /// <param name="owner">The window the dialog opens over; the gallery when null</param>
+    /// <param name="skipped">Selected liveries left out because their id is an account's</param>
+    private async Task AssignAuthorAsync(IReadOnlyList<LiveryEntry> entries, Window? owner = null, int skipped = 0)
+    {
+        owner ??= this;
+        var names = _mainViewModel.AuthorNames();
+        // Every livery's hints, the first of each author kept: the dialog shows one row per author
+        var hints = entries.SelectMany(e => e.AuthorHints).ToList();
+        var dialog = new AssignAuthorDialog(entries, _mainViewModel.AuthorChoices(), hints, names.CardOf,
+            over => EditAuthorCardAsync(over, null), skipped);
+        if (!await dialog.ShowDialog<bool>(owner) || dialog.Result is not { } card) return;
+        if (!await _mainViewModel.AssignAuthorAsync(entries, card))
+            await InfoDialog.ShowAsync(owner, Strings.AssignAuthorDialogTitle, Strings.AssignAuthorFailedMessage);
+    }
+
+    /// <summary>One livery: its tags as text. Several: every tag of the gallery, ticked on all, some or none of them</summary>
+    private async Task ShowEditTagsAsync(IReadOnlyList<LiveryEntry> entries)
+    {
+        if (entries.Count == 1)
+        {
+            var entry = entries[0];
+            var single = new TagEditDialog(entry.Tags);
+            if (await single.ShowDialog<bool>(this)) _mainViewModel.ApplyTagsEdit(entry, single.ResultTags);
             return;
         }
 
-        var dialog = new AuthorCardViewDialog(card, _mainViewModel.Gallery.AllEntries.ToList());
-        await dialog.ShowDialog(this);
+        var knownTags = _mainViewModel.TagsBar.AllTags.Select(t => t.Tag).ToList();
+        var dialog = new TagEditDialog(entries.Select(e => e.Tags).ToList(), knownTags);
+        if (await dialog.ShowDialog<bool>(this))
+            _mainViewModel.ApplyTagsChange(entries, dialog.TagsToAdd, dialog.TagsToRemove);
     }
 
-    private async Task CreateAuthorCardAsync(LiveryEntry entry)
+    /// <summary>A right click on a tag in the tags row hides its liveries (or shows them again)</summary>
+    private void TagChip_PointerReleased(object? sender, PointerReleasedEventArgs e)
     {
-        var (availableAliases, nameToTags) = _mainViewModel.BuildAuthorAliasIndex();
-
-        var dialog = new AuthorCardEditDialog(
-            _authorCardService, availableAliases, nameToTags, existingCard: null, preselectedAlias: entry.AuthorRaw);
-        bool saved = await dialog.ShowDialog<bool>(this);
-        if (!saved || dialog.Result is null) return;
-
-        await _mainViewModel.TrySaveAuthorCard(dialog.Result);
-    }
-
-    private async Task ShowEditTagsAsync(LiveryEntry entry)
-    {
-        var dialog = new TagEditDialog(entry.Tags);
-        var result = await dialog.ShowDialog<bool>(this);
-        if (result) _mainViewModel.ApplyTagsEdit(entry, dialog.ResultTags);
+        if (e.InitialPressMouseButton != MouseButton.Right) return;
+        if (sender is not StyledElement { DataContext: TagChipViewModel chip }) return;
+        chip.ToggleHideCommand.Execute(null);
+        e.Handled = true;
     }
 
     private async Task ShowPreviewAsync(LiveryEntry entry)
@@ -539,6 +633,10 @@ internal partial class MainWindow : Window
         string? webpPath = savePath is not null ? _profile.FindPreview(savePath, entry.FolderName) : null;
         if (webpPath is null && entry.Data.ExternalPreviewPath is { } externalPreview && File.Exists(externalPreview))
             webpPath = externalPreview;
+        // No preview in the save: the one the gallery drew from the 3D model
+        string? drawn = entry.Data.ThumbnailDrawn ? entry.ThumbnailPath : entry.ThumbnailPath is null ? entry.RenderedThumbnailPath : null;
+        if (webpPath is null && drawn is not null && File.Exists(drawn))
+            webpPath = drawn;
 
         if (webpPath is null)
         {
@@ -563,35 +661,6 @@ internal partial class MainWindow : Window
     {
         if (sender is not StyledElement element || element.DataContext is not LiveryEntry entry) return;
         if (!entry.IsSelected) _mainViewModel.Gallery.SelectOnlyCommand.Execute(entry);
-    }
-
-    private async void Card_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        try
-        {
-            if (sender is Control control) await ThumbnailLifecycleController.OnAttachedAsync(control);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unhandled exception in Card_AttachedToVisualTree", ex);
-        }
-    }
-
-    private void Card_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        if (sender is Control control) ThumbnailLifecycleController.OnDetached(control);
-    }
-
-    private async void Card_DataContextChanged(object? sender, EventArgs e)
-    {
-        try
-        {
-            if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unhandled exception in Card_DataContextChanged", ex);
-        }
     }
 
     private void ContactsMenuItem_Click(object? sender, RoutedEventArgs e)
@@ -640,7 +709,7 @@ internal partial class MainWindow : Window
     {
         var dialog = new AuthorsDialog(_authorCardService, _mainViewModel.Gallery.AllEntries.ToList(), async () =>
         {
-            await _mainViewModel.RefreshEntriesFromCacheAsync();
+            await _mainViewModel.RefreshAfterAuthorsChangedAsync();
             return _mainViewModel.Gallery.AllEntries.ToList();
         });
         RunUiTask(() => dialog.ShowDialog(this), "authors dialog");
@@ -652,7 +721,7 @@ internal partial class MainWindow : Window
         var dialog = new ArchiveDialog(_archiveService, _savePathService,
             () => [.. _mainViewModel.Gallery.AllEntries.Select(entry => entry.Data)],
             () => _mainViewModel.RunScanAsyncTracked(isUserInitiated: true),
-            _mainViewModel.GetAccountContext());
+            _mainViewModel.GetAccountContext(), _mainViewModel.ShowFolderNames);
         RunUiTask(() => dialog.ShowDialog(this), "archive dialog");
     }
 
@@ -667,10 +736,33 @@ internal partial class MainWindow : Window
         RunUiTask(() => dialog.ShowDialog(this), "backups dialog");
     }
 
+    private StatisticsWindow? _statisticsWindow;
+
+    /// <summary>One statistics window beside the gallery; the button brings it forward when it is open</summary>
     private void StatsButton_Click(object? sender, RoutedEventArgs e)
     {
-        string message = _mainViewModel.GetOverallStatsMessage();
-        RunUiTask(() => InfoDialog.ShowAsync(this, Strings.StatsTitle, message), "statistics");
+        if (_statisticsWindow is { } open)
+        {
+            open.Activate();
+            return;
+        }
+        StatisticsWindow? window = null;
+        var viewModel = new StatisticsViewModel(_mainViewModel.StatisticsHost(
+            entry => RunUiTask(() => ShowAuthorRowAsync(entry, window), "author card from statistics"),
+            () => [.. _backupService.GetAll().Select(b => b.Manifest)]));
+        window = new StatisticsWindow(viewModel);
+        void Refresh(GalleryCountsSnapshot _) => window.RequestRefresh();
+        void RefreshOnTags() => window.RequestRefresh();
+        _mainViewModel.Gallery.CountsUpdated += Refresh;
+        _mainViewModel.Gallery.SelectedTagsChanged += RefreshOnTags;
+        window.Closed += (_, _) =>
+        {
+            _mainViewModel.Gallery.CountsUpdated -= Refresh;
+            _mainViewModel.Gallery.SelectedTagsChanged -= RefreshOnTags;
+            _statisticsWindow = null;
+        };
+        _statisticsWindow = window;
+        window.Show(this);
     }
 
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e) =>

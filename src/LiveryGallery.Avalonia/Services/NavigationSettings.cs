@@ -1,4 +1,3 @@
-using LiveryGallery.Models;
 
 namespace LiveryGallery.Services;
 

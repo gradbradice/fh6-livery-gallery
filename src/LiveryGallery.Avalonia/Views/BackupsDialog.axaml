@@ -16,7 +16,16 @@
             <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="10" Padding="14,12" Margin="0,0,0,8">
                 <Grid ColumnDefinitions="*,Auto">
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding DateText}" FontSize="14" FontWeight="Bold" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="{Binding DateText}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
+                            <!-- Made by the gallery on its own: the oldest of these are removed beyond the kept number -->
+                            <Border Classes="kindChip" IsVisible="{Binding IsAutomatic}" ToolTip.Tip="{Binding KindTooltip}"
+                                    Background="{DynamicResource ChipBackgroundBrush}" CornerRadius="6" Padding="7,2"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="{Binding KindText}" FontSize="10.5" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource ChipTextBrush}" />
+                            </Border>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4,0,0">
                             <TextBlock Text="{Binding EntryCountText}" FontSize="11.5"
                                        Foreground="{DynamicResource TextSecondaryBrush}" />
@@ -27,7 +36,7 @@
                         </StackPanel>
                         <TextBlock Text="{Binding OtherAccountText}" FontSize="11.5" Margin="0,4,0,0"
                                    IsVisible="{Binding IsFromOtherAccount}" TextTrimming="CharacterEllipsis"
-                                   Foreground="{DynamicResource WarningBrush}" />
+                                   Foreground="{DynamicResource WarningTextBrush}" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                         <Button Content="{x:Static loc:Strings.BackupOpenButton}" Classes="secondary" Padding="10,4"
@@ -89,7 +98,7 @@
                 </StackPanel>
             </Grid>
 
-            <ScrollViewer Grid.Row="2" IsVisible="{Binding !ShowEmptyState}">
+            <ScrollViewer Grid.Row="2" Classes="edge" IsVisible="{Binding !ShowEmptyState}">
                 <ItemsControl ItemsSource="{Binding Backups}" ItemTemplate="{StaticResource BackupRowTemplate}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

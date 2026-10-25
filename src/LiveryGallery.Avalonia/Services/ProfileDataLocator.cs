@@ -19,7 +19,7 @@ internal sealed class ProfileDataLocator(PcGameSaveStore saves)
         {
             if (ResolveUserId(saveDataPath) is not { } userId)
             {
-                AppLogger.LogErrorThrottled($"{saveDataPath}|ProfileUserId",
+                AppLog.LogErrorThrottled($"{saveDataPath}|ProfileUserId",
                     $"Cannot determine the UserId for '{saveDataPath}', so {ProfileUserFolderPrefix}<hex> cannot be located",
                     new InvalidOperationException("ResolveSaveIdentity returned null"));
                 return null;
@@ -28,7 +28,7 @@ internal sealed class ProfileDataLocator(PcGameSaveStore saves)
             string? userDir = PcGameSaveStore.FindUserFolder(saveDataPath, userId);
             if (userDir is null)
             {
-                AppLogger.LogErrorThrottled($"{saveDataPath}|ProfileUserDir",
+                AppLog.LogErrorThrottled($"{saveDataPath}|ProfileUserDir",
                     $"Folder '{ProfileUserFolderPrefix}{userId:X}' (UserId {userId}) was not found in '{saveDataPath}'",
                     new DirectoryNotFoundException(Path.Combine(saveDataPath, $"{ProfileUserFolderPrefix}{userId:X}")));
                 return null;
@@ -39,7 +39,7 @@ internal sealed class ProfileDataLocator(PcGameSaveStore saves)
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled(saveDataPath, $"Failed to look for {ProfileDataFileName} in '{saveDataPath}'", ex);
+            AppLog.LogErrorThrottled(saveDataPath, $"Failed to look for {ProfileDataFileName} in '{saveDataPath}'", ex);
             return null;
         }
     }

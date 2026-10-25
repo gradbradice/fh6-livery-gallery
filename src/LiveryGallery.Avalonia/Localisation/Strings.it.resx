@@ -121,31 +121,31 @@
     <value>Cartella di salvataggio non selezionata</value>
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
-    <value>Aggiorna (rianalizza le modifiche)</value>
+    <value>Aggiorna: scansiona di nuovo le modifiche</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Cerca per veicolo (marca, modello, anno), nome della livrea o autore…</value>
+    <value>Cerca per auto, produttore, anno, nome della livrea o autore…</value>
   </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>Data sconosciuta</value>
   </data>
   <data name="StatusProcessed" xml:space="preserve">
-    <value>Elaborati: {0} nuovi/modificati, {1} dalla cache</value>
+    <value>Elaborate: {0} nuove o modificate, {1} dalla cache</value>
   </data>
   <data name="StatusErrors" xml:space="preserve">
-    <value>, {0} con errori</value>
+    <value>, con errori: {0}</value>
   </data>
   <data name="StatusRemoved" xml:space="preserve">
-    <value>, {0} rimossi</value>
+    <value>, rimosse: {0}</value>
   </data>
   <data name="StatusScanError" xml:space="preserve">
     <value>Errore di scansione: {0}</value>
   </data>
   <data name="CountShowing" xml:space="preserve">
-    <value>Mostrati {0} su {1}</value>
+    <value>Mostrate: {0} su {1}</value>
   </data>
   <data name="EmptyNoLiveries" xml:space="preserve">
-    <value>Nessuna livrea (Livery_*) trovata nella cartella selezionata</value>
+    <value>La cartella selezionata non contiene livree: nessuna cartella chiamata Livery_*</value>
   </data>
   <data name="EmptyNoResults" xml:space="preserve">
     <value>Nessun risultato per «{0}»</value>
@@ -154,13 +154,13 @@
     <value>Scansione in corso…</value>
   </data>
   <data name="LoadingSavingCache" xml:space="preserve">
-    <value>Salvataggio cache...</value>
+    <value>Salvataggio della cache…</value>
   </data>
   <data name="ParsingProgress" xml:space="preserve">
-    <value>Analisi {0}/{1}: {2}</value>
+    <value>Lettura {0} di {1}: {2}</value>
   </data>
   <data name="UnknownManufacturer" xml:space="preserve">
-    <value>Marca sconosciuta</value>
+    <value>Produttore sconosciuto</value>
   </data>
   <data name="UnknownCarIdFormat" xml:space="preserve">
     <value>ID {0}</value>
@@ -171,29 +171,26 @@
   <data name="ButtonYes" xml:space="preserve">
     <value>Sì</value>
   </data>
-  <data name="ButtonNo" xml:space="preserve">
-    <value>No</value>
-  </data>
   <data name="SelectFolderDialogTitle" xml:space="preserve">
-    <value>Selezioni la cartella di salvataggio (la cartella il cui nome inizia con "u_")</value>
+    <value>Selezioni la cartella di salvataggio, il suo nome inizia con u_</value>
   </data>
   <data name="CarDbUpdating" xml:space="preserve">
-    <value>Controllo aggiornamenti del database veicoli…</value>
+    <value>Ricerca di aggiornamenti del database delle auto…</value>
   </data>
   <data name="CarDbUpdated" xml:space="preserve">
-    <value>Database veicoli aggiornato ({0})</value>
+    <value>Database delle auto aggiornato: {0}</value>
   </data>
   <data name="CarDbUpToDate" xml:space="preserve">
-    <value>Database veicoli aggiornato ({0})</value>
+    <value>Database delle auto aggiornato all’ultima versione: {0}</value>
   </data>
   <data name="CarDbDownloadFailed" xml:space="preserve">
-    <value>Impossibile scaricare il database veicoli — verrà usata l'ultima copia salvata ({0})</value>
+    <value>Impossibile scaricare il database delle auto. Viene usata l’ultima copia salvata: {0}</value>
   </data>
   <data name="CarDbNoDataAtAll" xml:space="preserve">
-    <value>Impossibile scaricare il database veicoli e nessuna copia locale disponibile — i nomi dei veicoli non saranno disponibili</value>
+    <value>Impossibile scaricare il database delle auto e non esiste una copia salvata. I nomi delle auto non sono disponibili.</value>
   </data>
   <data name="CarDbCarsWord" xml:space="preserve">
-    <value>veicoli</value>
+    <value>auto</value>
   </data>
   <data name="AuthorLabel" xml:space="preserve">
     <value>Autore</value>
@@ -211,7 +208,7 @@
     <value>Tag</value>
   </data>
   <data name="TagsDialogHint" xml:space="preserve">
-    <value>Separati da virgole, es.: drift, anime, preferito</value>
+    <value>Separi i tag con virgole, ad esempio: drift, anime, corsa</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
     <value>Salva</value>
@@ -220,13 +217,13 @@
     <value>Annulla</value>
   </data>
   <data name="EditTagsTooltip" xml:space="preserve">
-    <value>Modifica tag</value>
+    <value>Modifica tag. Se la livrea è selezionata insieme ad altre, vengono modificati i tag di tutte le livree selezionate.</value>
   </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
-    <value>Cancella</value>
+    <value>Deseleziona</value>
   </data>
   <data name="SelectedCountLabel" xml:space="preserve">
-    <value>{0} selezionati</value>
+    <value>Selezionate: {0}</value>
   </data>
   <data name="TagsFilterLabel" xml:space="preserve">
     <value>Tag:</value>
@@ -241,28 +238,28 @@
     <value>Ordine normale</value>
   </data>
   <data name="FavoriteToggleTooltip" xml:space="preserve">
-    <value>Aggiungi/rimuovi dai preferiti</value>
+    <value>Aggiungi ai preferiti o rimuovi</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>Mostra i preferiti separatamente</value>
+    <value>Mostra i preferiti a parte</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
     <value>Preferiti</value>
   </data>
   <data name="MineFirstToggle" xml:space="preserve">
-    <value>Prima i miei</value>
+    <value>Prima le mie livree</value>
   </data>
   <data name="OnlyMineToggle" xml:space="preserve">
-    <value>Solo i miei</value>
+    <value>Solo le mie livree</value>
   </data>
   <data name="SeparateMineToggle" xml:space="preserve">
-    <value>Mostra i miei separatamente</value>
+    <value>Mostra le mie livree a parte</value>
   </data>
   <data name="SeparateMineGroupName" xml:space="preserve">
-    <value>Miei</value>
+    <value>Le mie livree</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
-    <value>Nuova versione {0} disponibile →</value>
+    <value>È disponibile la versione {0}</value>
   </data>
   <data name="ButtonUpdateDownload" xml:space="preserve">
     <value>Scarica</value>
@@ -271,7 +268,7 @@
     <value>Novità della versione {0}</value>
   </data>
   <data name="ChangelogNotAvailable" xml:space="preserve">
-    <value>Il changelog dettagliato non è disponibile. Apra la pagina della release su GitHub per i dettagli.</value>
+    <value>L’elenco dettagliato delle modifiche non è disponibile. Si trova nella pagina della versione su GitHub.</value>
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
     <value>Italiano</value>
@@ -280,13 +277,13 @@
     <value>Riduci a icona</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
-    <value>Ingrandisci / Ripristina</value>
+    <value>Ingrandisci o ripristina</value>
   </data>
   <data name="CloseTooltip" xml:space="preserve">
     <value>Chiudi</value>
   </data>
   <data name="LiveryNoName" xml:space="preserve">
-    <value>(Senza nome)</value>
+    <value>Senza nome</value>
   </data>
   <data name="UnknownAuthor" xml:space="preserve">
     <value>Sconosciuto</value>
@@ -295,22 +292,22 @@
     <value>Impostazioni</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
-    <value>Percorso del gioco</value>
+    <value>Cartella del gioco</value>
   </data>
   <data name="SelectGameFolderDialogTitle" xml:space="preserve">
-    <value>Selezioni la cartella di installazione del gioco</value>
+    <value>Selezioni la cartella in cui è installato il gioco</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
-    <value>Percorsi</value>
+    <value>Cartelle</value>
   </data>
   <data name="SavePathFieldLabel" xml:space="preserve">
-    <value>Percorso dei salvataggi</value>
+    <value>Cartella di salvataggio</value>
   </data>
   <data name="PathFieldAutoHint" xml:space="preserve">
-    <value>Lascia vuoto per rilevare automaticamente il percorso</value>
+    <value>Lasci vuoto per trovare la cartella automaticamente</value>
   </data>
   <data name="SaveFolderValidationFailed" xml:space="preserve">
-    <value>Dati di salvataggio non trovati</value>
+    <value>Nessun salvataggio trovato</value>
   </data>
   <data name="ButtonRetry" xml:space="preserve">
     <value>Riprova</value>
@@ -319,7 +316,7 @@
     <value>Nessuna livrea trovata</value>
   </data>
   <data name="SavedPathNotFoundNotice" xml:space="preserve">
-    <value>La cartella dei salvataggi specificata non è stata trovata; verrà cercata automaticamente.</value>
+    <value>La cartella di salvataggio indicata non è stata trovata. La galleria la cerca automaticamente.</value>
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>OK</value>
@@ -329,24 +326,6 @@
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>Statistiche</value>
-  </data>
-  <data name="StatsTotalLiveries" xml:space="preserve">
-    <value>Totale livree</value>
-  </data>
-  <data name="StatsFavoriteManufacturer" xml:space="preserve">
-    <value>Marca preferita</value>
-  </data>
-  <data name="StatsFavoriteAuthor" xml:space="preserve">
-    <value>Autore preferito</value>
-  </data>
-  <data name="StatsTotalDuplicates" xml:space="preserve">
-    <value>Totale duplicati</value>
-  </data>
-  <data name="StatsPossibleDuplicates" xml:space="preserve">
-    <value>Totale possibili duplicati</value>
-  </data>
-  <data name="StatsFavoritesCount" xml:space="preserve">
-    <value>Nei preferiti</value>
   </data>
   <data name="SettingsMenuContacts" xml:space="preserve">
     <value>Contatti</value>
@@ -385,7 +364,7 @@
     <value>Tutte le livree</value>
   </data>
   <data name="GeneratedFilterOnly" xml:space="preserve">
-    <value>Solo possibilmente generate</value>
+    <value>Solo forse generate</value>
   </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>Possibile duplicato</value>
@@ -397,37 +376,37 @@
     <value>Mia</value>
   </data>
   <data name="PossiblyGeneratedBadgeLabel" xml:space="preserve">
-    <value>Possibilmente generato</value>
+    <value>Forse generata</value>
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
-    <value>Il motivo di questa livrea sembra creato in modo programmatico (es. da una foto/immagine), non disegnato a mano.</value>
+    <value>Il disegno di questa livrea sembra generato da un programma, ad esempio da una foto, invece che disegnato a mano.</value>
   </data>
   <data name="PaintBadgeLabel" xml:space="preserve">
-    <value>Vernice</value>
+    <value>Solo vernice</value>
   </data>
   <data name="PaintBadgeTooltip" xml:space="preserve">
-    <value>Questa livrea non ha adesivi — solo un colore riverniciato.</value>
+    <value>Questa livrea non ha vinili, solo un nuovo colore di vernice.</value>
   </data>
   <data name="ParseErrorBadgeLabel" xml:space="preserve">
     <value>Errore di lettura</value>
   </data>
   <data name="ParseErrorBadgeTooltip" xml:space="preserve">
-    <value>Il file di questa livrea non è stato letto correttamente — potrebbe essere danneggiato o in un formato non supportato.</value>
+    <value>Non è stato possibile leggere correttamente il file di questa livrea. Potrebbe essere danneggiato o in un formato che la galleria non supporta.</value>
   </data>
   <data name="PaintFilterAll" xml:space="preserve">
     <value>Tutte le livree</value>
   </data>
   <data name="PaintFilterHide" xml:space="preserve">
-    <value>Nascondi vernice</value>
+    <value>Nascondi solo vernice</value>
   </data>
   <data name="PaintFilterOnly" xml:space="preserve">
     <value>Solo vernice</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
-    <value>Questo autore ha una livrea simile per questa auto (la maggior parte delle sezioni degli adesivi corrisponde, ma non tutto il contenuto)</value>
+    <value>Questo autore ha una livrea simile per questa auto: la maggior parte delle sezioni di vinili coincide, ma non tutte.</value>
   </data>
   <data name="DisplayFilterTooltip" xml:space="preserve">
-    <value>Visualizzazione (preferiti, duplicati)</value>
+    <value>Cosa mostrare: preferiti, duplicati e altro</value>
   </data>
   <data name="FilterMenuTitle" xml:space="preserve">
     <value>Filtri</value>
@@ -451,10 +430,10 @@
     <value>Generate</value>
   </data>
   <data name="FilterPaintLabel" xml:space="preserve">
-    <value>Vernice</value>
+    <value>Solo vernice</value>
   </data>
   <data name="SortOptionManufacturer" xml:space="preserve">
-    <value>Marca</value>
+    <value>Produttore</value>
   </data>
   <data name="SortOptionAuthor" xml:space="preserve">
     <value>Autore</value>
@@ -466,7 +445,7 @@
     <value>Nessuno</value>
   </data>
   <data name="GroupingOptionByManufacturer" xml:space="preserve">
-    <value>Per marca</value>
+    <value>Per produttore</value>
   </data>
   <data name="GroupingOptionByAuthor" xml:space="preserve">
     <value>Per autore</value>
@@ -484,10 +463,10 @@
     <value>Solo</value>
   </data>
   <data name="FilterValueSeparately" xml:space="preserve">
-    <value>Separatamente</value>
+    <value>A parte</value>
   </data>
   <data name="FilterValueHide" xml:space="preserve">
-    <value>Nascondi</value>
+    <value>Nascoste</value>
   </data>
   <data name="FilterValueWithPossible" xml:space="preserve">
     <value>Con possibili</value>
@@ -517,55 +496,28 @@
     <value>Modifiche non salvate</value>
   </data>
   <data name="UnsavedChangesMessage" xml:space="preserve">
-    <value>Ha apportato modifiche che non sono state salvate. Se esce ora, andranno perse.</value>
-  </data>
-  <data name="ButtonBack" xml:space="preserve">
-    <value>Indietro</value>
-  </data>
-  <data name="ButtonSaveAndExit" xml:space="preserve">
-    <value>Salva ed esci</value>
-  </data>
-  <data name="ButtonExitWithoutSaving" xml:space="preserve">
-    <value>Esci senza salvare</value>
+    <value>Alcune modifiche non sono salvate. Se esce ora, andranno perse.</value>
   </data>
   <data name="ThemeSystemLabel" xml:space="preserve">
-    <value>Sistema</value>
+    <value>Come in Windows</value>
   </data>
   <data name="SettingsSectionScanning" xml:space="preserve">
     <value>Scansione</value>
   </data>
   <data name="AutoRefreshLiveriesLabel" xml:space="preserve">
-    <value>Aggiorna automaticamente le livree</value>
+    <value>Aggiorna le livree automaticamente</value>
   </data>
   <data name="SearchByFolderNameLabel" xml:space="preserve">
-    <value>Mostra e cerca per nome della cartella</value>
+    <value>Mostra i nomi delle cartelle e cerca per nome</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
-    <value>Aggiorna le livree al clic sul pulsante</value>
+    <value>Aggiorna le livree con il pulsante di aggiornamento</value>
   </data>
   <data name="SettingsSaveFailedTitle" xml:space="preserve">
     <value>Salvataggio non riuscito</value>
   </data>
   <data name="SettingsSaveFailedNotice" xml:space="preserve">
-    <value>Impossibile scrivere le impostazioni su disco. Le modifiche non sono state applicate. Riprovi a salvare.</value>
-  </data>
-  <data name="StatsPopularManufacturer" xml:space="preserve">
-    <value>Produttore popolare</value>
-  </data>
-  <data name="StatsPopularModel" xml:space="preserve">
-    <value>Modello popolare</value>
-  </data>
-  <data name="StatsPopularCar" xml:space="preserve">
-    <value>Auto popolare</value>
-  </data>
-  <data name="StatsPopularAuthor" xml:space="preserve">
-    <value>Autore popolare</value>
-  </data>
-  <data name="StatsFavoriteModel" xml:space="preserve">
-    <value>Modello preferito</value>
-  </data>
-  <data name="StatsFavoriteCar" xml:space="preserve">
-    <value>Auto preferita</value>
+    <value>Impossibile scrivere le impostazioni sul disco, quindi le modifiche non sono state applicate. Riprovi a salvare.</value>
   </data>
   <data name="AuthorsButtonTooltip" xml:space="preserve">
     <value>Autori</value>
@@ -577,8 +529,8 @@
     <value>+ Nuova scheda</value>
   </data>
   <data name="AuthorsEmptyHint" xml:space="preserve">
-    <value>Nessuna scheda autore ancora.
-Creane una per unire i nickname di un autore sotto un unico nome.</value>
+    <value>Non ci sono ancora schede autore.
+Una scheda riunisce i nickname di un autore sotto un unico nome.</value>
   </data>
   <data name="AuthorCardNewTitle" xml:space="preserve">
     <value>Nuova scheda autore</value>
@@ -587,37 +539,34 @@ Creane una per unire i nickname di un autore sotto un unico nome.</value>
     <value>Modifica scheda autore</value>
   </data>
   <data name="AuthorCardAliasesLabel" xml:space="preserve">
-    <value>Nickname</value>
+    <value>Account</value>
   </data>
   <data name="AuthorCardAliasesHint" xml:space="preserve">
-    <value>Selezioni uno o più nickname — una persona può pubblicare livree da account diversi.</value>
+    <value>Selezioni gli account dell’autore. Una stessa persona può pubblicare livree da più account, e persone diverse possono avere lo stesso nickname.</value>
   </data>
   <data name="AuthorCardCustomNameLabel" xml:space="preserve">
     <value>Nome visualizzato</value>
   </data>
   <data name="AuthorCardCustomNameHint" xml:space="preserve">
-    <value>Opzionale — di default il primo nickname selezionato</value>
+    <value>Facoltativo. Per impostazione predefinita, il nickname più recente degli account selezionati</value>
   </data>
   <data name="AuthorCardDescriptionLabel" xml:space="preserve">
     <value>Descrizione</value>
   </data>
   <data name="AuthorCardTwitterLabel" xml:space="preserve">
-    <value>Twitter/X</value>
+    <value>X</value>
   </data>
   <data name="AuthorCardYouTubeLabel" xml:space="preserve">
     <value>YouTube</value>
   </data>
-  <data name="AuthorCardNoAliasesError" xml:space="preserve">
-    <value>Selezioni almeno un nickname</value>
-  </data>
   <data name="AuthorCardAliasTakenError" xml:space="preserve">
-    <value>Il nickname «{0}» appartiene già a un'altra scheda</value>
+    <value>L’account «{0}» appartiene già a un’altra scheda</value>
   </data>
   <data name="AuthorCardAutoGeneratedNotice" xml:space="preserve">
-    <value>Questa scheda è stata creata automaticamente dopo aver rilevato un cambio di nickname. Salvandola diventerà manuale: il rilevamento automatico non la toccherà più.</value>
+    <value>La galleria ha creato questa scheda automaticamente quando ha notato un cambio di nickname. Dopo il salvataggio la scheda diventa Sua e non viene più modificata automaticamente.</value>
   </data>
   <data name="AuthorCardAutoGeneratedBadge" xml:space="preserve">
-    <value>Rilevato automaticamente</value>
+    <value>Automatica</value>
   </data>
   <data name="AuthorCardAliasesFormat" xml:space="preserve">
     <value>Nickname: {0}</value>
@@ -626,7 +575,7 @@ Creane una per unire i nickname di un autore sotto un unico nome.</value>
     <value>Livree: {0}</value>
   </data>
   <data name="AuthorCardFavoritesCountFormat" xml:space="preserve">
-    <value>Preferiti: {0}</value>
+    <value>Nei preferiti: {0}</value>
   </data>
   <data name="AuthorCardDuplicatesCountFormat" xml:space="preserve">
     <value>Duplicati: {0}</value>
@@ -638,7 +587,7 @@ Creane una per unire i nickname di un autore sotto un unico nome.</value>
     <value>Eliminare la scheda?</value>
   </data>
   <data name="AuthorCardDeleteMessage" xml:space="preserve">
-    <value>Eliminare la scheda «{0}»? I suoi nickname torneranno disponibili per una nuova scheda.</value>
+    <value>Eliminare la scheda «{0}»? I suoi nickname potranno essere aggiunti a un’altra scheda.</value>
   </data>
   <data name="ButtonEdit" xml:space="preserve">
     <value>Modifica</value>
@@ -647,34 +596,28 @@ Creane una per unire i nickname di un autore sotto un unico nome.</value>
     <value>Elimina</value>
   </data>
   <data name="AuthorsSearchPlaceholder" xml:space="preserve">
-    <value>Cerca per nome o nickname...</value>
+    <value>Cerca per nome o nickname…</value>
   </data>
   <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
-    <value>Nessun risultato trovato</value>
+    <value>Nessun risultato</value>
   </data>
   <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
-    <value>Il nome visualizzato «{0}» è già usato da un'altra scheda</value>
+    <value>Il nome visualizzato «{0}» è già usato da un’altra scheda</value>
   </data>
   <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
-    <value>Cerca nickname...</value>
+    <value>Cerca nickname…</value>
   </data>
   <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
-    <value>Serve un link a un profilo (es. x.com/username), non a un tweet specifico o un'altra pagina</value>
+    <value>Inserisca un link a un profilo, ad esempio x.com/username, non a un post o a un’altra pagina</value>
   </data>
   <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
-    <value>Serve un link a un canale YouTube (es. youtube.com/@username), non a un video</value>
+    <value>Inserisca un link a un canale YouTube, ad esempio youtube.com/@username, non a un video</value>
   </data>
   <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
-    <value>Nessuna scheda creata</value>
-  </data>
-  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
-    <value>Non è stata creata alcuna scheda per l'autore «{0}»</value>
-  </data>
-  <data name="AuthorCardCreateButton" xml:space="preserve">
-    <value>Crea scheda</value>
+    <value>Nessuna scheda autore</value>
   </data>
   <data name="ContextMenuMoveToArchive" xml:space="preserve">
-    <value>Sposta nell'archivio</value>
+    <value>Sposta nell’archivio</value>
   </data>
   <data name="MenuOpenArchive" xml:space="preserve">
     <value>Archivio</value>
@@ -686,10 +629,10 @@ Creane una per unire i nickname di un autore sotto un unico nome.</value>
     <value>Archivio</value>
   </data>
   <data name="ArchiveEmptyHint" xml:space="preserve">
-    <value>L'archivio è vuoto</value>
+    <value>L’archivio è vuoto</value>
   </data>
   <data name="ArchiveSelectedCountFormat" xml:space="preserve">
-    <value>{0} selezionati</value>
+    <value>Selezionate: {0}</value>
   </data>
   <data name="ArchiveRestoreButton" xml:space="preserve">
     <value>Ripristina</value>
@@ -701,34 +644,34 @@ Creane una per unire i nickname di un autore sotto un unico nome.</value>
     <value>Eliminare definitivamente?</value>
   </data>
   <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
-    <value>{0} verranno spostati nel Cestino. Questa azione non può essere annullata dall'app.</value>
+    <value>{0} verranno spostate nel Cestino. La galleria non può annullare questa operazione.</value>
   </data>
   <data name="ArchivedOnFormat" xml:space="preserve">
-    <value>Archiviato {0}</value>
+    <value>Archiviata il {0}</value>
   </data>
   <data name="ArchiveNoSavePathMessage" xml:space="preserve">
-    <value>Prima di ripristinare le livree, scelga una cartella di salvataggio (Impostazioni)</value>
+    <value>Prima di ripristinare le livree, scelga la cartella di salvataggio nelle impostazioni</value>
   </data>
   <data name="FileOperationFailedMessage" xml:space="preserve">
-    <value>Si è verificato un errore durante questa operazione. Controlli i log per maggiori dettagli.</value>
+    <value>L’operazione non è riuscita. I dettagli sono nel log.</value>
   </data>
   <data name="PreviewDialogTitle" xml:space="preserve">
     <value>Anteprima</value>
   </data>
   <data name="PreviewNotFoundMessage" xml:space="preserve">
-    <value>Impossibile trovare l'immagine di anteprima originale di questa livrea.</value>
+    <value>L’anteprima originale di questa livrea non è stata trovata.</value>
   </data>
   <data name="ViewPreviewTooltip" xml:space="preserve">
-    <value>Visualizza anteprima originale</value>
+    <value>Apri l’anteprima originale</value>
   </data>
   <data name="LoadingMovingToArchive" xml:space="preserve">
-    <value>Spostamento nell'archivio...</value>
+    <value>Spostamento nell’archivio…</value>
   </data>
   <data name="ArchiveSelectAllButton" xml:space="preserve">
-    <value>Seleziona tutto</value>
+    <value>Seleziona tutte</value>
   </data>
   <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
-    <value>Sconosciuto (voce recuperata)</value>
+    <value>Sconosciuto, la voce è stata recuperata</value>
   </data>
   <data name="BackupUnknownDate" xml:space="preserve">
     <value>Data sconosciuta</value>
@@ -737,16 +680,16 @@ Creane una per unire i nickname di un autore sotto un unico nome.</value>
     <value>Livree: {0}</value>
   </data>
   <data name="BackupNothingToBackUpMessage" xml:space="preserve">
-    <value>Niente da salvare — la galleria è vuota</value>
+    <value>Non c’è nulla da salvare: la galleria è vuota</value>
   </data>
   <data name="BackupsDialogTitle" xml:space="preserve">
     <value>Backup</value>
   </data>
   <data name="BackupsEmptyHint" xml:space="preserve">
-    <value>Ancora nessun backup</value>
+    <value>Non ci sono ancora backup</value>
   </data>
   <data name="BackupDiffFormat" xml:space="preserve">
-    <value>(+{0} / -{1})</value>
+    <value>(+{0} / −{1})</value>
   </data>
   <data name="BackupCreateButton" xml:space="preserve">
     <value>Crea backup</value>
@@ -758,51 +701,51 @@ Creane una per unire i nickname di un autore sotto un unico nome.</value>
     <value>Elimina</value>
   </data>
   <data name="BackupDeleteConfirmTitle" xml:space="preserve">
-    <value>Eliminare questo backup?</value>
+    <value>Eliminare il backup?</value>
   </data>
   <data name="BackupDeleteConfirmMessage" xml:space="preserve">
-    <value>Il backup del {0} ({1}) verrà spostato nel Cestino.</value>
+    <value>Il backup del {0}, {1}, verrà spostato nel Cestino.</value>
   </data>
   <data name="BackupUnreadableMessage" xml:space="preserve">
-    <value>Impossibile leggere il contenuto di questo backup — il file potrebbe essere danneggiato o non è un backup valido</value>
+    <value>Impossibile leggere il backup. Il file potrebbe essere danneggiato o non essere un backup.</value>
   </data>
   <data name="BackupDetailTitleFormat" xml:space="preserve">
     <value>Backup del {0}</value>
   </data>
   <data name="BackupRemovedSectionLabel" xml:space="preserve">
-    <value>Rimosse da questo backup</value>
+    <value>Rimosse dopo questo backup</value>
   </data>
   <data name="BackupAddedSectionLabel" xml:space="preserve">
-    <value>Aggiunte da questo backup</value>
+    <value>Aggiunte dopo questo backup</value>
   </data>
   <data name="BackupNoneRemovedHint" xml:space="preserve">
-    <value>Nulla è stato rimosso da questo backup</value>
+    <value>Nessuna livrea rimossa dopo questo backup</value>
   </data>
   <data name="BackupNoneAddedHint" xml:space="preserve">
-    <value>Nulla è stato aggiunto da questo backup</value>
+    <value>Nessuna livrea aggiunta dopo questo backup</value>
   </data>
   <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
-    <value>Queste livree non sono state ripristinate perché esattamente le stesse livree (stesse cartelle) sono già nel gioco:
+    <value>Queste livree non sono state ripristinate perché il gioco le ha già nelle stesse cartelle:
 {0}</value>
   </data>
   <data name="RestoreFailedMessage" xml:space="preserve">
-    <value>Impossibile ripristinare queste livree. Controlli i log per maggiori dettagli:
+    <value>Impossibile ripristinare queste livree. I dettagli sono nel log:
 {0}</value>
   </data>
   <data name="RestoreListMoreFormat" xml:space="preserve">
-    <value>…e altre {0}</value>
+    <value>e altre {0}</value>
   </data>
   <data name="RestoreDuplicateTitle" xml:space="preserve">
     <value>Trovati duplicati</value>
   </data>
   <data name="RestoreDuplicateMessage" xml:space="preserve">
-    <value>La galleria contiene già duplicati di queste livree (stessa auto, dati della livrea identici):
+    <value>La galleria contiene già livree identiche per le stesse auto:
 {0}
 
-Ripristinarle comunque?</value>
+Ripristinare comunque queste livree?</value>
   </data>
   <data name="RestoreDuplicateLineFormat" xml:space="preserve">
-    <value>• {0} — duplicato: {1}</value>
+    <value>{0}: duplicato di {1}</value>
   </data>
   <data name="RestoreDuplicateOthersNote" xml:space="preserve">
     <value>Le altre livree selezionate verranno ripristinate in ogni caso.</value>
@@ -814,10 +757,10 @@ Ripristinarle comunque?</value>
     <value>Salta</value>
   </data>
   <data name="ParsePartialBadgeLabel" xml:space="preserve">
-    <value>Letta parzialmente</value>
+    <value>Letta in parte</value>
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
-    <value>La livrea è stata letta, ma non è stato possibile analizzare parte del suo file. I dati principali sono mostrati; alcuni controlli (generazione, duplicati) potrebbero non essere disponibili.</value>
+    <value>La livrea è stata letta, ma non una parte del suo file. I dati principali sono mostrati, ma alcuni controlli, come generazione e duplicati, potrebbero non essere disponibili.</value>
   </data>
   <data name="GameFolderProblemNotSet" xml:space="preserve">
     <value>la cartella del gioco non è impostata</value>
@@ -829,25 +772,25 @@ Ripristinarle comunque?</value>
     <value>nessun accesso alla cartella</value>
   </data>
   <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
-    <value>non è la cartella del gioco (manca la cartella media)</value>
+    <value>non è la cartella del gioco: non contiene la cartella media</value>
   </data>
   <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
     <value>media\cars non trovata</value>
   </data>
   <data name="GameFolderProblemNoCarArchives" xml:space="preserve">
-    <value>non ci sono auto in media\cars</value>
+    <value>media\cars non contiene auto</value>
   </data>
   <data name="GameFolderProblemNoLiveryFolder" xml:space="preserve">
     <value>media\Livery non trovata</value>
   </data>
   <data name="GameFolderProblemNoVinyls" xml:space="preserve">
-    <value>vinili del gioco non trovati (media\Livery\Vinyls.zip)</value>
+    <value>vinili del gioco non trovati: media\Livery\Vinyls.zip</value>
   </data>
   <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
     <value>impossibile leggere i vinili del gioco</value>
   </data>
   <data name="GameFolderProblemNoDecals" xml:space="preserve">
-    <value>loghi non trovati, alcuni adesivi non verranno disegnati</value>
+    <value>loghi non trovati, quindi alcuni vinili non vengono disegnati</value>
   </data>
   <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
     <value>alcune auto non sono state lette</value>
@@ -856,19 +799,19 @@ Ripristinarle comunque?</value>
     <value>la cartella non è adatta</value>
   </data>
   <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
-    <value>Vinili del gioco non trovati. Controlli la cartella del gioco (media\Livery).</value>
+    <value>Vinili del gioco non trovati. Controlli la cartella del gioco: media\Livery.</value>
   </data>
   <data name="RenderErrorGamePathInvalid" xml:space="preserve">
     <value>La cartella del gioco non è impostata o non è stata trovata.</value>
   </data>
   <data name="RenderErrorCarNotFound" xml:space="preserve">
-    <value>L'auto di questa livrea non è nella cartella del gioco.</value>
+    <value>L’auto di questa livrea non è nella cartella del gioco.</value>
   </data>
   <data name="RenderErrorCarFormat" xml:space="preserve">
-    <value>Impossibile leggere i file dell'auto.</value>
+    <value>Impossibile leggere i file dell’auto.</value>
   </data>
   <data name="RenderErrorNoLiveryLayout" xml:space="preserve">
-    <value>Quest'auto non ha un layout per le livree.</value>
+    <value>Questa auto non ha un layout per le livree.</value>
   </data>
   <data name="RenderErrorMissingShapesFormat" xml:space="preserve">
     <value>Forme non disegnate: {0}</value>
@@ -883,25 +826,25 @@ Ripristinarle comunque?</value>
     <value>Impossibile disegnare la livrea.</value>
   </data>
   <data name="View3DGameFolderChecking" xml:space="preserve">
-    <value>3D non ancora disponibile: verifica della cartella del gioco</value>
+    <value>Vista 3D non ancora disponibile: è in corso la verifica della cartella del gioco</value>
   </data>
   <data name="View3DTooltip" xml:space="preserve">
     <value>Visualizza in 3D</value>
   </data>
   <data name="View3DNoCLivery" xml:space="preserve">
-    <value>3D non disponibile: la livrea non ha il file C_livery</value>
+    <value>Vista 3D non disponibile: la livrea non ha il file C_livery</value>
   </data>
   <data name="View3DParseError" xml:space="preserve">
-    <value>3D non disponibile: impossibile leggere la livrea</value>
+    <value>Vista 3D non disponibile: impossibile leggere la livrea</value>
   </data>
   <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
-    <value>3D non disponibile: {0}. Imposti la cartella del gioco nelle impostazioni.</value>
+    <value>Vista 3D non disponibile: {0}. Imposti la cartella del gioco nelle impostazioni.</value>
   </data>
   <data name="View3DDialogTitle" xml:space="preserve">
     <value>Vista 3D</value>
   </data>
   <data name="View3DReadFailed" xml:space="preserve">
-    <value>Impossibile leggere il file della livrea. Dettagli nel log.</value>
+    <value>Impossibile leggere il file della livrea. I dettagli sono nel log.</value>
   </data>
   <data name="View3DParseFailedFormat" xml:space="preserve">
     <value>Impossibile leggere la livrea: {0}</value>
@@ -910,7 +853,7 @@ Ripristinarle comunque?</value>
     <value>{0:N0} triangoli (LOD {1}) · livrea {2}×{3} · fotogramma {4}×{5}, MSAA {6}× · {7:F1} ms</value>
   </data>
   <data name="ViewerNoOpenGl" xml:space="preserve">
-    <value>Vista 3D non disponibile: impossibile inizializzare OpenGL.</value>
+    <value>Vista 3D non disponibile: impossibile avviare OpenGL.</value>
   </data>
   <data name="ViewerQualityLow" xml:space="preserve">
     <value>Bassa</value>
@@ -928,10 +871,10 @@ Ripristinarle comunque?</value>
     <value>Reimposta vista</value>
   </data>
   <data name="ViewerTitleFormat" xml:space="preserve">
-    <value>{0} — 3D</value>
+    <value>Vista 3D: {0}</value>
   </data>
   <data name="GameFolderNotSetHint" xml:space="preserve">
-    <value>La cartella del gioco serve per la vista 3D delle livree</value>
+    <value>La cartella del gioco serve per vedere le livree in 3D</value>
   </data>
   <data name="GameFolderChecking" xml:space="preserve">
     <value>Verifica della cartella del gioco…</value>
@@ -943,29 +886,29 @@ Ripristinarle comunque?</value>
     <value>Cartella del gioco trovata, auto: {0}</value>
   </data>
   <data name="GameFolderValidWithWarningsFormat" xml:space="preserve">
-    <value>Cartella del gioco trovata, auto: {0}. Tuttavia: {1}</value>
+    <value>Cartella del gioco trovata, auto: {0}. Però: {1}</value>
   </data>
   <data name="ViewerControlsHint" xml:space="preserve">
-    <value>Tasto sinistro: ruota · Tasto destro: sposta · Rotellina: zoom · Doppio clic: reimposta</value>
+    <value>Tasto sinistro: ruota. Tasto destro: sposta. Rotellina: zoom. Doppio clic: reimposta.</value>
   </data>
   <data name="AuctionBadgeLabel" xml:space="preserve">
     <value>Asta</value>
   </data>
   <data name="AuctionBadgeTooltip" xml:space="preserve">
-    <value>Acquistata alla casa d'aste.
-Può essere spostata nell'archivio solo quando il server delle livree conferma che nessuna auto la usa.</value>
+    <value>Acquistata alla casa d’aste.
+Può essere spostata nell’archivio solo dopo che il server delle livree conferma che nessuna auto la usa.</value>
   </data>
   <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
-    <value>Le livree d'asta possono essere spostate nell'archivio solo quando il server delle livree conferma che nessuna auto le usa</value>
+    <value>Le livree dell’asta possono essere spostate nell’archivio solo dopo che il server delle livree conferma che nessuna auto le usa</value>
   </data>
   <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
-    <value>{0} delle livree d'asta selezionate restano nel gioco: non è confermato che nessuna auto le usi. Potranno essere spostate quando il server delle livree avrà il salvataggio attuale.</value>
+    <value>Livree dell’asta selezionate rimaste nel gioco: {0}. Non è confermato che nessuna auto le usi. Potranno essere spostate quando il server delle livree avrà il salvataggio attuale.</value>
   </data>
   <data name="ContextMenuOnlyThisCar" xml:space="preserve">
     <value>Solo questa auto</value>
   </data>
   <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
-    <value>Solo questa marca</value>
+    <value>Solo questo produttore</value>
   </data>
   <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
     <value>Solo questo autore</value>
@@ -980,7 +923,7 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
     <value>Auto: {0}</value>
   </data>
   <data name="QuickFilterManufacturerFormat" xml:space="preserve">
-    <value>Marca: {0}</value>
+    <value>Produttore: {0}</value>
   </data>
   <data name="QuickFilterAuthorFormat" xml:space="preserve">
     <value>Autore: {0}</value>
@@ -989,7 +932,7 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
     <value>Rimuovi questo filtro</value>
   </data>
   <data name="StatusAutoRefreshedFormat" xml:space="preserve">
-    <value>Salvataggio modificato: +{0} / −{1}, galleria aggiornata</value>
+    <value>Il salvataggio è cambiato: +{0} / −{1}, la galleria è aggiornata</value>
   </data>
   <data name="FilterAuctionLabel" xml:space="preserve">
     <value>Asta</value>
@@ -998,31 +941,31 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
     <value>Tutte le livree</value>
   </data>
   <data name="AuctionFilterSeparately" xml:space="preserve">
-    <value>Mostra le livree d'asta separatamente</value>
+    <value>Mostra le livree dell’asta a parte</value>
   </data>
   <data name="AuctionFilterOnly" xml:space="preserve">
-    <value>Solo livree d'asta</value>
+    <value>Solo livree dell’asta</value>
   </data>
   <data name="AuctionFilterHide" xml:space="preserve">
-    <value>Nascondi livree d'asta</value>
+    <value>Nascondi le livree dell’asta</value>
   </data>
   <data name="SeparateAuctionGroupName" xml:space="preserve">
     <value>Asta</value>
   </data>
   <data name="AuthorInferredTooltip" xml:space="preserve">
-    <value>La livrea non contiene il nome dell'autore: è stato preso da altre livree dello stesso autore</value>
+    <value>La livrea non contiene il nome dell’autore. È stato preso da altre livree dello stesso autore.</value>
   </data>
   <data name="AuthorUnknownMessage" xml:space="preserve">
-    <value>Questa livrea non contiene il nome dell'autore e nella galleria non ci sono altre livree dello stesso autore da cui ricavarlo.</value>
+    <value>Questa livrea non contiene il nome dell’autore e la galleria non ha altre livree di questo autore da cui ricavarlo.</value>
   </data>
   <data name="QuickFilterAddButton" xml:space="preserve">
     <value>Filtro</value>
   </data>
   <data name="QuickFilterAddTooltip" xml:space="preserve">
-    <value>Mostra solo una marca, un'auto o un autore</value>
+    <value>Mostra solo un produttore, un’auto o un autore</value>
   </data>
   <data name="QuickFilterKindManufacturer" xml:space="preserve">
-    <value>Marca</value>
+    <value>Produttore</value>
   </data>
   <data name="QuickFilterKindCar" xml:space="preserve">
     <value>Auto</value>
@@ -1037,7 +980,7 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
     <value>Nessun risultato</value>
   </data>
   <data name="GroupShowOnlyButton" xml:space="preserve">
-    <value>Solo questa</value>
+    <value>Solo questo</value>
   </data>
   <data name="GroupShowOnlyTooltip" xml:space="preserve">
     <value>Mostra solo questo gruppo</value>
@@ -1049,13 +992,13 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
     <value>Duplicati</value>
   </data>
   <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
-    <value>Considera possibile duplicato da una somiglianza di</value>
+    <value>Segna come possibile duplicato da una somiglianza di</value>
   </data>
   <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
-    <value>Le corrispondenze meno simili non vengono mostrate. I duplicati esatti sono sempre mostrati. Si applica subito, senza una nuova scansione.</value>
+    <value>Le livree meno simili non vengono segnate. I duplicati esatti sono sempre segnati. La modifica si applica subito, senza una nuova scansione.</value>
   </data>
   <data name="View3DDifferenceNote" xml:space="preserve">
-    <value>La vista 3D è un'approssimazione: colori, materiali, illuminazione e alcuni dettagli possono apparire diversi rispetto al gioco.</value>
+    <value>La vista 3D è approssimativa: colori, materiali, illuminazione e alcuni dettagli possono apparire diversi rispetto al gioco.</value>
   </data>
   <data name="ServerStatusChecking" xml:space="preserve">
     <value>Server: connessione…</value>
@@ -1067,7 +1010,7 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
     <value>Server: lettura del salvataggio…</value>
   </data>
   <data name="ServerStatusSaveNotSupported" xml:space="preserve">
-    <value>Server: salvataggio non ancora supportato</value>
+    <value>Server: questo salvataggio non è ancora supportato</value>
   </data>
   <data name="ServerStatusDegraded" xml:space="preserve">
     <value>Server: funzionamento limitato</value>
@@ -1076,7 +1019,7 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
     <value>Server: manutenzione</value>
   </data>
   <data name="ServerStatusUnreachable" xml:space="preserve">
-    <value>Server non disponibile</value>
+    <value>Server: non disponibile</value>
   </data>
   <data name="ServerStatusNoInternet" xml:space="preserve">
     <value>Nessuna connessione a Internet</value>
@@ -1085,7 +1028,7 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
     <value>Server: troppe richieste</value>
   </data>
   <data name="ServerStatusUpdateRequired" xml:space="preserve">
-    <value>Server: aggiorni l'app</value>
+    <value>Server: serve una versione più recente della galleria</value>
   </data>
   <data name="ServerStatusAppRejected" xml:space="preserve">
     <value>Server: questa build non è accettata</value>
@@ -1094,28 +1037,28 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
     <value>Server: connessione sicura non riuscita</value>
   </data>
   <data name="ServerStatusServerError" xml:space="preserve">
-    <value>Errore del server</value>
+    <value>Server: errore</value>
   </data>
   <data name="ServerStatusNotConfigured" xml:space="preserve">
-    <value>Server non configurato in questa build</value>
+    <value>Server: non configurato in questa build</value>
   </data>
   <data name="ServerStatusVersionFormat" xml:space="preserve">
     <value>Server {0}</value>
   </data>
   <data name="ServerStatusRetryHint" xml:space="preserve">
-    <value>L'app riproverà automaticamente.</value>
+    <value>La galleria riproverà automaticamente.</value>
   </data>
   <data name="ServerStatusRetryInFormat" xml:space="preserve">
     <value>Prossimo tentativo tra {0} s.</value>
   </data>
   <data name="ServerStatusUpdateHint" xml:space="preserve">
-    <value>Il server richiede una versione più recente dell'app. La aggiorni.</value>
+    <value>Il server richiede una versione più recente della galleria. Aggiorni la galleria.</value>
   </data>
   <data name="ServerStatusAppRejectedHint" xml:space="preserve">
-    <value>Il server non accetta questa build dell'app. Usi la versione ufficiale.</value>
+    <value>Il server non accetta questa build della galleria. Usi la versione ufficiale.</value>
   </data>
   <data name="ServerStatusCertificateHint" xml:space="preserve">
-    <value>Il certificato del server non ha superato il controllo: la connessione potrebbe essere intercettata (ad esempio da un antivirus o da un proxy). L'app non riproverà da sola.</value>
+    <value>Il certificato del server non ha superato il controllo. La connessione potrebbe essere intercettata, ad esempio da un antivirus o da un proxy. La galleria non riproverà da sola.</value>
   </data>
   <data name="ServerStatusClickToRecheck" xml:space="preserve">
     <value>Faccia clic per controllare lo stato del server</value>
@@ -1125,107 +1068,107 @@ Può essere spostata nell'archivio solo quando il server delle livree conferma c
 Aggiornato alle {1}</value>
   </data>
   <data name="ServerSyncProfileNotFound" xml:space="preserve">
-    <value>Il file del profilo (C_ProfileData) non è stato trovato nella cartella dei salvataggi.</value>
+    <value>La cartella di salvataggio non contiene il file del profilo C_ProfileData.</value>
   </data>
   <data name="ServerSyncSaveNotSupported" xml:space="preserve">
-    <value>Il server non può ancora leggere questo salvataggio: probabilmente il gioco è stato aggiornato. Il supporto arriverà presto.</value>
+    <value>Il server non può ancora leggere questo salvataggio. Probabilmente il gioco è stato aggiornato. Il supporto verrà aggiunto.</value>
   </data>
   <data name="ServerSyncSaveRejected" xml:space="preserve">
-    <value>Secondo il server questo file non è un salvataggio del profilo valido.</value>
+    <value>Secondo il server, questo file non è un file del profilo valido.</value>
   </data>
   <data name="ServerSyncFailed" xml:space="preserve">
-    <value>Impossibile aggiornare le livree applicate; l'app riproverà.</value>
+    <value>Impossibile aggiornare le livree applicate alle auto. La galleria riproverà.</value>
   </data>
   <data name="InstalledBadgeLabel" xml:space="preserve">
-    <value>Applicata</value>
+    <value>Su un’auto</value>
   </data>
   <data name="InstalledBadgeTooltip" xml:space="preserve">
-    <value>Applicata a un'auto nel gioco</value>
+    <value>Questa livrea è applicata a un’auto nel gioco</value>
   </data>
   <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
-    <value>Applicata a {0} auto nel gioco</value>
+    <value>Questa livrea è applicata a {0} auto nel gioco</value>
   </data>
   <data name="SettingsSectionServer" xml:space="preserve">
-    <value>Server dei dati delle livree</value>
+    <value>Server delle livree</value>
   </data>
   <data name="ServerConnectionLabel" xml:space="preserve">
-    <value>Connettersi al server per determinare le livree applicate</value>
+    <value>Usa il server per individuare le livree applicate alle auto</value>
   </data>
   <data name="ServerConnectionDescription" xml:space="preserve">
-    <value>Per determinare le livree applicate alle auto, l'applicazione invia il file di salvataggio (C_ProfileData) al server. Il file viene elaborato esclusivamente per ottenere le informazioni sulle livree applicate e non viene conservato sul server.
+    <value>Per sapere quali livree sono applicate alle Sue auto, la galleria invia al server il file di salvataggio C_ProfileData. Il server usa il file solo a questo scopo e non lo conserva.
 
-I dati del file di salvataggio non vengono conservati né utilizzati per altri scopi. Il server viene utilizzato per custodire in modo sicuro le chiavi necessarie per decifrare il file di salvataggio.
+I dati del file non vengono conservati né usati per altro. Il server custodisce in modo sicuro le chiavi necessarie per decifrare il file di salvataggio.
 
-Il server non è collegato ai server ufficiali di Forza Horizon, Xbox o Microsoft.</value>
+Il server non ha alcun legame con i server ufficiali di Forza Horizon, Xbox o Microsoft.</value>
   </data>
   <data name="ServerConsentMessage" xml:space="preserve">
-    <value>Per determinare le livree applicate alle auto, l'applicazione invia il file di salvataggio (C_ProfileData) al server. Il file viene elaborato esclusivamente per ottenere le informazioni sulle livree applicate e non viene conservato sul server.
+    <value>Per sapere quali livree sono applicate alle Sue auto, la galleria invia al server il file di salvataggio C_ProfileData. Il server usa il file solo a questo scopo e non lo conserva.
 
-I dati del file di salvataggio non vengono conservati né utilizzati per altri scopi. Il server viene utilizzato per custodire in modo sicuro le chiavi necessarie per decifrare il file di salvataggio.
+I dati del file non vengono conservati né usati per altro. Il server custodisce in modo sicuro le chiavi necessarie per decifrare il file di salvataggio.
 
-Il server non è collegato ai server ufficiali di Forza Horizon, Xbox o Microsoft.
+Il server non ha alcun legame con i server ufficiali di Forza Horizon, Xbox o Microsoft.
 
-I dati vengono inviati al server solo con il Suo consenso. Desidera attivare la connessione al server?</value>
+I dati vengono inviati al server solo con il Suo consenso. Attivare la connessione al server?</value>
   </data>
   <data name="ServerConsentTitle" xml:space="preserve">
-    <value>Connessione al server dei dati delle livree</value>
+    <value>Connessione al server delle livree</value>
   </data>
   <data name="ServerConsentAccept" xml:space="preserve">
-    <value>Sì, ho capito e voglio continuare</value>
+    <value>Sì, attiva la connessione</value>
   </data>
   <data name="FilterInstalledLabel" xml:space="preserve">
-    <value>Livree applicate</value>
+    <value>Sulle auto</value>
   </data>
   <data name="InstalledAllToggle" xml:space="preserve">
     <value>Tutte le livree</value>
   </data>
   <data name="InstalledFirstToggle" xml:space="preserve">
-    <value>Prima le applicate</value>
+    <value>Prima quelle applicate alle auto</value>
   </data>
   <data name="OnlyInstalledToggle" xml:space="preserve">
-    <value>Solo applicate</value>
+    <value>Solo quelle applicate alle auto</value>
   </data>
   <data name="FilterValueUnavailable" xml:space="preserve">
     <value>Disattivato</value>
   </data>
   <data name="InstalledFilterNeedsServer" xml:space="preserve">
-    <value>Attivi la connessione al server dei dati delle livree nelle impostazioni per determinare le livree applicate.</value>
+    <value>Per individuare le livree applicate alle auto, attivi il server delle livree nelle impostazioni.</value>
   </data>
   <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
-    <value>Alcune cartelle non sono state rimosse dalla posizione precedente: probabilmente un file è in uso (il gioco è in esecuzione?). Non è andato perso nulla: la copia valida è completa. Questi residui non servono più e possono essere eliminati:
+    <value>Alcune cartelle non sono state rimosse dalla vecchia posizione. Probabilmente un file è in uso, ad esempio dal gioco avviato. Non è andato perso nulla: la nuova copia è completa. Questi residui non servono più e possono essere eliminati:
 {0}</value>
   </data>
   <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
-    <value>Le livree applicate ad auto nel gioco non possono essere spostate nell'archivio</value>
+    <value>Le livree applicate alle auto nel gioco non possono essere spostate nell’archivio</value>
   </data>
   <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
-    <value>Le livree applicate ad auto nel gioco non possono essere spostate nell'archivio: {0} delle livree selezionate restano nel gioco.</value>
+    <value>Le livree applicate alle auto nel gioco non possono essere spostate nell’archivio. Livree selezionate rimaste nel gioco: {0}.</value>
   </data>
   <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
-    <value>Non si sa quali livree sono applicate alle auto, quindi spostare questa livrea nell'archivio non è sicuro: potrebbe essere applicata a un'auto nel gioco.
+    <value>Non si sa quali livree sono applicate alle auto, quindi spostare questa livrea nell’archivio non è sicuro: potrebbe essere applicata a un’auto nel gioco.
 
-Spostare la livrea nell'archivio?</value>
+Spostare la livrea nell’archivio?</value>
   </data>
   <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
-    <value>Non si sa quali livree sono applicate alle auto, quindi spostare queste livree nell'archivio non è sicuro: alcune potrebbero essere applicate ad auto nel gioco.
+    <value>Non si sa quali livree sono applicate alle auto, quindi spostare queste livree nell’archivio non è sicuro: alcune potrebbero essere applicate ad auto nel gioco.
 
-Spostare le livree nell'archivio?</value>
+Spostare le livree nell’archivio?</value>
   </data>
   <data name="DontShowAgainCheckBox" xml:space="preserve">
     <value>Non mostrare più</value>
   </data>
   <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
-    <value>Le livree applicate ad auto nel gioco non possono essere spostate nell'archivio, e quelle d'asta solo quando il server delle livree conferma che nessuna auto le usa</value>
+    <value>Le livree applicate alle auto nel gioco non possono essere spostate nell’archivio. Quelle dell’asta solo dopo che il server delle livree conferma che nessuna auto le usa.</value>
   </data>
   <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
-    <value>Il file di salvataggio è cambiato dall'ultima sincronizzazione e i nuovi dati non sono ancora stati inviati al server delle livree. L'elenco delle livree applicate alle auto potrebbe quindi non essere aggiornato, e spostare questa livrea nell'archivio non è sicuro: potrebbe essere applicata a un'auto nel gioco.
+    <value>Il salvataggio è cambiato dall’ultima sincronizzazione e i nuovi dati non sono ancora arrivati al server delle livree. L’elenco delle livree applicate alle auto potrebbe non essere aggiornato, quindi spostare questa livrea nell’archivio non è sicuro: potrebbe essere applicata a un’auto nel gioco.
 
-È meglio attendere la sincronizzazione (avviene automaticamente e può richiedere alcuni minuti) e riprovare. Spostare la livrea nell'archivio adesso?</value>
+È meglio attendere la sincronizzazione, che è automatica e può richiedere alcuni minuti, e poi riprovare. Spostare la livrea nell’archivio adesso?</value>
   </data>
   <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
-    <value>Il file di salvataggio è cambiato dall'ultima sincronizzazione e i nuovi dati non sono ancora stati inviati al server delle livree. L'elenco delle livree applicate alle auto potrebbe quindi non essere aggiornato, e spostare queste livree nell'archivio non è sicuro: alcune potrebbero essere applicate ad auto nel gioco.
+    <value>Il salvataggio è cambiato dall’ultima sincronizzazione e i nuovi dati non sono ancora arrivati al server delle livree. L’elenco delle livree applicate alle auto potrebbe non essere aggiornato, quindi spostare queste livree nell’archivio non è sicuro: alcune potrebbero essere applicate ad auto nel gioco.
 
-È meglio attendere la sincronizzazione (avviene automaticamente e può richiedere alcuni minuti) e riprovare. Spostare le livree nell'archivio adesso?</value>
+È meglio attendere la sincronizzazione, che è automatica e può richiedere alcuni minuti, e poi riprovare. Spostare le livree nell’archivio adesso?</value>
   </data>
   <data name="ContextMenuNavigateInGame" xml:space="preserve">
     <value>Trova nel gioco</value>
@@ -1237,20 +1180,21 @@ Spostare le livree nell'archivio?</value>
     <value>Posizione in «I miei design»: {0}</value>
   </data>
   <data name="NavigateInGameTooltipFormat" xml:space="preserve">
-    <value>Trova nel gioco: sposta il cursore di «I miei design» su {0}.
-Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza filtri. Esc annulla.</value>
+    <value>Trova nel gioco: porta il cursore di «I miei design» su {0}.
+Prima apra «I miei design» nel gioco, senza filtri. La galleria passa da sola al gioco, sposta il puntatore del mouse fuori dalla sua finestra e riapre il menu per partire dalla prima livrea.
+Mentre il cursore si muove, non tocchi mouse e tastiera: muovere il mouse, premere Esc o cambiare finestra interrompe la ricerca.</value>
   </data>
   <data name="NavigateInGameAuctionTooltip" xml:space="preserve">
-    <value>Le livree dell'asta non compaiono in «I miei design»</value>
+    <value>Le livree dell’asta non compaiono in «I miei design»</value>
   </data>
   <data name="NavigateInGameNoPositionTooltip" xml:space="preserve">
     <value>La posizione in «I miei design» non è ancora nota</value>
   </data>
   <data name="NavigateInGameMultipleSelectedTooltip" xml:space="preserve">
-    <value>Selezioni una sola livrea per trovarla nel gioco</value>
+    <value>Per trovare una livrea nel gioco, ne selezioni una sola</value>
   </data>
   <data name="NavigateFailedMessage" xml:space="preserve">
-    <value>Impossibile spostare il cursore nel gioco. I dettagli sono nel registro.</value>
+    <value>Impossibile spostare il cursore nel gioco. I dettagli sono nel log.</value>
   </data>
   <data name="NavigateNoSavePathMessage" xml:space="preserve">
     <value>La cartella di salvataggio non è impostata. La scelga nelle impostazioni.</value>
@@ -1259,19 +1203,19 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
     <value>La cartella del gioco è ancora in verifica. Riprovi tra un momento.</value>
   </data>
   <data name="NavigateRowsUnknownMessage" xml:space="preserve">
-    <value>Impossibile stabilire quante righe ha «I miei design»: il file del menu è stato modificato da una mod in modo sconosciuto. Scelga il numero di righe in Impostazioni → Trova nel gioco.</value>
+    <value>Impossibile stabilire quante righe ha «I miei design»: una mod ha modificato il file del menu in modo sconosciuto. Scelga il numero di righe nelle impostazioni, sezione «Trova nel gioco».</value>
   </data>
   <data name="NavigateSaveReadFailedMessage" xml:space="preserve">
     <value>Impossibile leggere la cartella di salvataggio.</value>
   </data>
   <data name="NavigateLiveryNotInSaveMessage" xml:space="preserve">
-    <value>Questa livrea non è più nella cartella di salvataggio. Aggiorni l'elenco.</value>
+    <value>Questa livrea non è più nella cartella di salvataggio. Aggiorni l’elenco.</value>
   </data>
   <data name="NavigateProgressFormat" xml:space="preserve">
-    <value>Spostamento su {0} nel gioco: {1} di {2} tasti · Esc per annullare</value>
+    <value>Spostamento su {0} nel gioco: {1} di {2} tasti. Non muova il mouse. Esc annulla.</value>
   </data>
   <data name="NavigateCompletedFormat" xml:space="preserve">
-    <value>Il cursore è stato spostato su {0}. Controlli la selezione nel gioco.</value>
+    <value>Il cursore è su {0}. Controlli la selezione nel gioco.</value>
   </data>
   <data name="NavigateCursorParkedNote" xml:space="preserve">
     <value>Il puntatore del mouse è stato spostato fuori dal gioco per non cambiare la selezione.</value>
@@ -1289,13 +1233,13 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
     <value>Impossibile portare in primo piano la finestra del gioco. Nessun tasto è stato inviato.</value>
   </data>
   <data name="NavigateCursorParkFailedMessage" xml:space="preserve">
-    <value>Impossibile spostare il puntatore del mouse fuori dalla finestra del gioco, quindi non è stato inviato alcun tasto: il passaggio del mouse sul gioco cambierebbe la selezione.</value>
+    <value>Impossibile spostare il puntatore del mouse fuori dalla finestra del gioco, quindi non è stato inviato alcun tasto: un puntatore sopra il gioco cambierebbe la selezione.</value>
   </data>
   <data name="NavigateInputRejectedMessage" xml:space="preserve">
-    <value>Windows ha rifiutato l'input dei tasti. Se il gioco è avviato come amministratore, avvii come amministratore anche la galleria.</value>
+    <value>Windows ha rifiutato l’input dei tasti. Se il gioco è avviato come amministratore, avvii come amministratore anche la galleria.</value>
   </data>
   <data name="NavigateSceneChangedMessage" xml:space="preserve">
-    <value>Il menu «I miei design» è stato modificato da una mod dopo l'avvio del gioco, che quindi mostra ancora il layout precedente. Riavvii il gioco e riprovi.</value>
+    <value>Una mod ha modificato il menu «I miei design» dopo l’avvio del gioco, che quindi mostra ancora il layout precedente. Riavvii il gioco e riprovi.</value>
   </data>
   <data name="SettingsSectionNavigation" xml:space="preserve">
     <value>Trova nel gioco</value>
@@ -1307,22 +1251,22 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
     <value>Automatico</value>
   </data>
   <data name="NavigationRowsTwo" xml:space="preserve">
-    <value>2 righe (standard)</value>
+    <value>2 righe, menu standard</value>
   </data>
   <data name="NavigationRowsThree" xml:space="preserve">
-    <value>3 righe (mod del menu)</value>
+    <value>3 righe, mod del menu</value>
   </data>
   <data name="NavigationRowsDetectedVanilla" xml:space="preserve">
     <value>Rilevato: 2 righe, menu standard.</value>
   </data>
   <data name="NavigationRowsDetectedModFormat" xml:space="preserve">
-    <value>Rilevato: {0} righe, il menu è modificato da una mod.</value>
+    <value>Rilevato: {0} righe, una mod ha modificato il menu.</value>
   </data>
   <data name="NavigationRowsDetectedNoGameFolder" xml:space="preserve">
-    <value>La cartella del gioco non è impostata, quindi si presumono 2 righe. La imposti per rilevare le mod del menu.</value>
+    <value>La cartella del gioco non è impostata, quindi si presumono 2 righe. Imposti la cartella del gioco per rilevare le mod del menu.</value>
   </data>
   <data name="NavigationRowsDetectedUnknown" xml:space="preserve">
-    <value>Impossibile rilevare le righe: il file del menu è modificato in modo sconosciuto. Scelga 2 o 3 righe.</value>
+    <value>Impossibile rilevare le righe: il file del menu è stato modificato in modo sconosciuto. Scelga 2 o 3 righe.</value>
   </data>
   <data name="NavigationKeyIntervalLabel" xml:space="preserve">
     <value>Pausa tra le pressioni dei tasti</value>
@@ -1343,7 +1287,7 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
     <value>Non presenti in «I miei design»</value>
   </data>
   <data name="ChangesDialogTitle" xml:space="preserve">
-    <value>Modifiche dall'ultimo avvio</value>
+    <value>Modifiche dall’ultimo avvio</value>
   </data>
   <data name="ChangesSummaryFormat" xml:space="preserve">
     <value>Mentre la galleria era chiusa: +{0} nuove, −{1} rimosse</value>
@@ -1361,16 +1305,16 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
     <value>Nessuna livrea rimossa</value>
   </data>
   <data name="ChangesDontShowAgainCheckBox" xml:space="preserve">
-    <value>Non mostrare più (riattivabile nelle Impostazioni)</value>
+    <value>Non mostrare più. Può riattivarlo nelle impostazioni.</value>
   </data>
   <data name="ShowChangesSinceLastLaunchLabel" xml:space="preserve">
-    <value>Mostra le modifiche dall'ultimo avvio</value>
+    <value>Mostra le modifiche dall’ultimo avvio</value>
   </data>
   <data name="DiagnosticsSectionLabel" xml:space="preserve">
     <value>Diagnostica</value>
   </data>
   <data name="DiagnosticsHint" xml:space="preserve">
-    <value>Salva uno ZIP con i log, le impostazioni senza percorsi né ID e gli errori di lettura delle livree, da allegare a una segnalazione. Non viene inviato nulla.</value>
+    <value>Salva un file ZIP con il log, le impostazioni senza percorsi né ID e gli errori di lettura delle livree, da allegare a una segnalazione di errore. Non viene inviato nulla.</value>
   </data>
   <data name="ExportDiagnosticsButton" xml:space="preserve">
     <value>Esporta diagnostica…</value>
@@ -1391,16 +1335,16 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
     <value>Impossibile salvare il file di diagnostica. I dettagli sono nel log.</value>
   </data>
   <data name="AccountSwitcherTooltip" xml:space="preserve">
-    <value>Account di gioco: passa da un account all'altro su questo PC</value>
+    <value>Account di gioco: passa da un account all’altro tra quelli trovati su questo PC</value>
   </data>
   <data name="AccountUnnamedFormat" xml:space="preserve">
     <value>Account …{0}</value>
   </data>
   <data name="AccountLiveriesFormat" xml:space="preserve">
-    <value>{0} livree</value>
+    <value>livree: {0}</value>
   </data>
   <data name="AccountUnavailableMessage" xml:space="preserve">
-    <value>La cartella dei salvataggi di questo account non è più disponibile.</value>
+    <value>La cartella di salvataggio di questo account non è più disponibile.</value>
   </data>
   <data name="AccountSourceOtherFormat" xml:space="preserve">
     <value>Da un altro account: {0}</value>
@@ -1409,22 +1353,22 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
     <value>Ripristinare in questo account?</value>
   </data>
   <data name="RestoreFromOtherAccountMessage" xml:space="preserve">
-    <value>Livree da un altro account ({1}): {0}. Verranno ripristinate nell'account attuale: {2}.</value>
+    <value>Livree dall’account {1}: {0}. Verranno ripristinate nell’account attuale, {2}.</value>
   </data>
   <data name="RestoreIntoCurrentAccountButton" xml:space="preserve">
     <value>Ripristina qui</value>
   </data>
   <data name="BackupOtherAccountNote" xml:space="preserve">
-    <value>Questo backup è stato creato su un altro account ({0}). Il confronto qui sotto è con l'account attuale ({1}) e le livree ripristinate finiranno lì.</value>
+    <value>Questo backup è stato creato su un altro account, {0}. Il confronto qui sotto è con l’account attuale, {1}, dove andranno le livree ripristinate.</value>
   </data>
   <data name="AccountFilterOnlyCurrent" xml:space="preserve">
     <value>Solo questo account</value>
   </data>
   <data name="AccountFilterHiddenFormat" xml:space="preserve">
-    <value>Nascosti da altri account: {0}</value>
+    <value>Nascoste, da altri account: {0}</value>
   </data>
   <data name="AuthorsSelectForMergeTooltip" xml:space="preserve">
-    <value>Seleziona per unire con altre schede</value>
+    <value>Seleziona per unire ad altre schede</value>
   </data>
   <data name="AuthorCardSplitButton" xml:space="preserve">
     <value>Dividi</value>
@@ -1439,7 +1383,7 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
     <value>Autori diversi</value>
   </data>
   <data name="AuthorsRestoreHiddenButton" xml:space="preserve">
-    <value>Ripristina</value>
+    <value>Mostra di nuovo</value>
   </data>
   <data name="AuthorsSuggestionsTitle" xml:space="preserve">
     <value>Forse lo stesso autore</value>
@@ -1454,10 +1398,10 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
     <value>account «{0}»</value>
   </data>
   <data name="AuthorsSuggestionFormat" xml:space="preserve">
-    <value>{0} e {1}: nome in comune «{2}»</value>
+    <value>{0} e {1}: lo stesso nickname «{2}»</value>
   </data>
   <data name="AuthorCardHideAutoMessage" xml:space="preserve">
-    <value>Nascondere la scheda automatica «{0}»? Non verrà ricreata dopo la prossima scansione. Puoi ripristinarla in «Schede automatiche nascoste».</value>
+    <value>Nascondere la scheda automatica «{0}»? Non verrà ricreata dopo la prossima scansione. Può mostrarla di nuovo in «Schede automatiche nascoste».</value>
   </data>
   <data name="AuthorsMergeConfirmTitle" xml:space="preserve">
     <value>Unisci schede autore</value>
@@ -1465,55 +1409,55 @@ Apra prima «I miei design» nel gioco, con il cursore sul primo design e senza 
   <data name="AuthorsMergeConfirmMessage" xml:space="preserve">
     <value>Unire in una sola scheda: {0}?
 
-Tutti gli account e i nomi di questi autori apparterranno a una scheda. In seguito potrai dividerla di nuovo.</value>
+Tutti gli account e i nickname di questi autori saranno in una sola scheda. Potrà dividerla di nuovo in seguito.</value>
   </data>
   <data name="AuthorsMergeFailedMessage" xml:space="preserve">
-    <value>Impossibile unire: uno degli account appartiene a un'altra scheda, oppure il nome della scheda unita è già usato da un'altra scheda.</value>
+    <value>Impossibile unire: uno degli account appartiene a un’altra scheda, oppure un’altra scheda usa già il nome della scheda unita.</value>
   </data>
   <data name="AuthorCardSplitConfirmTitle" xml:space="preserve">
     <value>Dividi scheda autore</value>
   </data>
   <data name="AuthorCardSplitConfirmMessage" xml:space="preserve">
-    <value>Dividere «{0}» in schede separate? La scheda mantiene l'account con più livree; gli altri account tornano separati.</value>
+    <value>Dividere «{0}» in schede separate? La scheda mantiene l’account con più livree e gli altri account tornano separati.</value>
   </data>
   <data name="AccountSourceGoneFormat" xml:space="preserve">
     <value>Da un account rimosso: {0}</value>
   </data>
   <data name="StatusGoneAccountsFormat" xml:space="preserve">
-    <value>Dati di account rimossi: {0} ({1}). Puoi eliminarli nelle Impostazioni.</value>
+    <value>Dati di account rimossi: {0} ({1}). Può eliminarli nelle impostazioni.</value>
   </data>
   <data name="AccountDataSectionLabel" xml:space="preserve">
     <value>Dati degli account</value>
   </data>
   <data name="AccountDataHint" xml:space="preserve">
-    <value>Ogni account di gioco conserva la propria cache di scansione e le anteprime. Dimenticare un account libera questo spazio; se l'account ricompare, le sue livree vengono scansionate di nuovo. Archivio e backup non vengono toccati.</value>
+    <value>Ogni account di gioco ha la propria cache di scansione e le proprie anteprime. Dimenticare un account libera questo spazio. Se l’account ricompare, le sue livree vengono scansionate di nuovo. L’archivio e i backup non vengono toccati.</value>
   </data>
   <data name="AccountDataCurrent" xml:space="preserve">
     <value>Account attuale</value>
   </data>
   <data name="AccountDataPresent" xml:space="preserve">
-    <value>Cartella dei salvataggi presente</value>
+    <value>Cartella di salvataggio presente</value>
   </data>
   <data name="AccountDataGoneSinceFormat" xml:space="preserve">
     <value>Non trovato dal {0}</value>
   </data>
   <data name="AccountDataGone" xml:space="preserve">
-    <value>Cartella dei salvataggi non trovata</value>
+    <value>Cartella di salvataggio non trovata</value>
   </data>
   <data name="AccountDataForgetButton" xml:space="preserve">
     <value>Dimentica</value>
   </data>
   <data name="AccountDataForgetTitle" xml:space="preserve">
-    <value>Dimentica account</value>
+    <value>Dimentica l’account</value>
   </data>
   <data name="AccountDataForgetMessage" xml:space="preserve">
-    <value>Dimenticare «{0}»? La sua cache di scansione e le anteprime (circa {1}) verranno eliminate. Archivio e backup restano. Se l'account ricompare, le sue livree verranno scansionate di nuovo.</value>
+    <value>Dimenticare l’account {0}? La sua cache di scansione e le anteprime, circa {1}, verranno eliminate. L’archivio e i backup restano. Se l’account ricompare, le sue livree verranno scansionate di nuovo.</value>
   </data>
   <data name="AccountDataForgetFailedMessage" xml:space="preserve">
-    <value>Impossibile eliminare i dati dell'account. I dettagli sono nel log.</value>
+    <value>Impossibile eliminare i dati dell’account. I dettagli sono nel log.</value>
   </data>
   <data name="GameRunningFileChangeMessage" xml:space="preserve">
-    <value>Le livree verranno spostate nella cartella di salvataggio mentre il gioco è aperto. Il gioco può tenere i file in uso o non vedere la modifica fino al riavvio, e il suo salvataggio può sovrascriverla. È più sicuro chiudere prima il gioco.</value>
+    <value>Le livree verranno spostate nella cartella di salvataggio mentre il gioco è avviato. Il gioco può tenere i file in uso o non vedere la modifica fino al riavvio, e il suo salvataggio può annullarla. È più sicuro chiudere prima il gioco.</value>
   </data>
   <data name="GameRunningContinueButton" xml:space="preserve">
     <value>Continua comunque</value>
@@ -1552,7 +1496,7 @@ Tutti gli account e i nomi di questi autori apparterranno a una scheda. In segui
     <value>Tipo di auto sconosciuto</value>
   </data>
   <data name="CarCountryLabel" xml:space="preserve">
-    <value>Paese del costruttore</value>
+    <value>Paese del produttore</value>
   </data>
   <data name="CarTypeLabel" xml:space="preserve">
     <value>Tipo di auto nel gioco</value>
@@ -1564,10 +1508,10 @@ Tutti gli account e i nomi di questi autori apparterranno a una scheda. In segui
     <value>Come l’interfaccia</value>
   </data>
   <data name="CarTextLanguageHint" xml:space="preserve">
-    <value>I nomi di auto e costruttori, i paesi e i tipi di auto vengono presi dai file del gioco in questa lingua.</value>
+    <value>I nomi di auto e produttori, i paesi e i tipi di auto vengono presi dai file del gioco in questa lingua.</value>
   </data>
   <data name="CarTextLanguageNoGameTexts" xml:space="preserve">
-    <value>I file del gioco non sono ancora stati letti (cartella del gioco non trovata): i nomi sono mostrati in inglese.</value>
+    <value>I file del gioco non sono ancora stati letti perché la cartella del gioco non è stata trovata. I nomi delle auto sono mostrati in inglese.</value>
   </data>
   <data name="ContextMenuOnlyThisCountry" xml:space="preserve">
     <value>Solo auto di questo paese</value>
@@ -1585,52 +1529,922 @@ Tutti gli account e i nomi di questi autori apparterranno a una scheda. In segui
     <value>I nomi nella lingua scelta non sono disponibili: la cartella del gioco non è impostata o non è stata trovata. Sono mostrati i nomi del database delle auto.</value>
   </data>
   <data name="CarTextsNoStringTables" xml:space="preserve">
-    <value>I nomi nella lingua scelta non sono disponibili: nella cartella del gioco mancano i file di lingua (StringTables). Sono mostrati i nomi del database delle auto.</value>
+    <value>I nomi nella lingua scelta non sono disponibili: nella cartella del gioco mancano i file di lingua StringTables. Sono mostrati i nomi del database delle auto.</value>
   </data>
   <data name="GameFolderProblemNoPaintMaterials" xml:space="preserve">
-    <value>nessuna finitura della vernice (media\cars\_library\materials): la vista 3D usa quelle integrate</value>
+    <value>nessuna finitura della vernice in media\cars\_library\materials: la vista 3D usa quelle integrate</value>
   </data>
   <data name="GameFolderProblemNoPaintTextures" xml:space="preserve">
-    <value>nessuna texture di finitura (media\cars\_library\textures): le finiture con texture sono mostrate in un colore medio</value>
+    <value>nessuna texture di finitura in media\cars\_library\textures: le finiture con texture sono mostrate in un colore medio</value>
   </data>
   <data name="GameFolderProblemNoStringTables" xml:space="preserve">
-    <value>nessun file di lingua (StringTables): i nomi delle auto vengono dal database delle auto</value>
+    <value>nessun file di lingua StringTables: i nomi delle auto vengono dal database delle auto</value>
   </data>
   <data name="AboutTitleFormat" xml:space="preserve">
     <value>Informazioni su {0}</value>
   </data>
   <data name="AboutDescriptionFormat" xml:space="preserve">
-    <value>Un visualizzatore a galleria per le livree salvate di {0}.</value>
+    <value>Una galleria delle livree dei salvataggi di {0}.</value>
   </data>
   <data name="FolderNotFoundMessageFormat" xml:space="preserve">
-    <value>Impossibile trovare automaticamente la cartella dei salvataggi di {0}.
+    <value>Impossibile trovare automaticamente la cartella di salvataggio di {0}.
 
 Sceglierla manualmente?
-(Di solito: C:\XboxGames\GameSave\pgs\u_[numero]_{1})</value>
+Di solito è C:\XboxGames\GameSave\pgs\u_[numero]_{1}</value>
   </data>
   <data name="NavigateGameNotFoundFormat" xml:space="preserve">
     <value>Finestra di {0} non trovata. Avvii il gioco e apra «I miei design».</value>
   </data>
   <data name="NavigateMultipleWindowsFormat" xml:space="preserve">
-    <value>Sono state trovate più finestre di {0}. Per non inviare tasti a quella sbagliata, non è stato inviato nulla. Chiuda la finestra in più e riprovi.</value>
+    <value>Sono state trovate più finestre di {0}. Per non inviare tasti alla finestra sbagliata, non è stato inviato nulla. Chiuda la finestra in più e riprovi.</value>
   </data>
   <data name="NavigateGameElevatedFormat" xml:space="preserve">
-    <value>{0} è avviato come amministratore e la galleria no, quindi Windows scarterebbe i tasti. Nessun tasto è stato inviato. Avvii anche la galleria come amministratore oppure il gioco senza diritti di amministratore.</value>
+    <value>{0} è avviato come amministratore e la galleria no, quindi Windows scarterebbe i tasti. Nessun tasto è stato inviato. Avvii anche la galleria come amministratore oppure avvii il gioco senza diritti di amministratore.</value>
   </data>
   <data name="DiagnosticsReadmeFormat" xml:space="preserve">
     <value>Diagnostica di {0}
 
-- info.json: versione dell'app, versioni di Windows e .NET, lingua dell'interfaccia, numero di livree nella cache.
-- settings.json: impostazioni; percorsi e ID sono sostituiti da "&lt;removed&gt;".
-- parse-issues.json: livree i cui file non è stato possibile leggere del tutto o in parte, per nome della cartella.
-- logs/: il log dell'app degli ultimi giorni; le cartelle note e l'ID del giocatore sono sostituiti da segnaposto come &lt;save-folder&gt; o &lt;user-id&gt;.
+info.json: la versione della galleria, le versioni di Windows e .NET, la lingua dell’interfaccia e il numero di livree nella cache.
+settings.json: le impostazioni. Percorsi e ID sono sostituiti da &lt;removed&gt;.
+parse-issues.json: le livree i cui file non è stato possibile leggere del tutto o in parte, per nome della cartella.
+logs: il log degli ultimi giorni. Le cartelle note e l’ID del giocatore sono sostituiti da segnaposto come &lt;save-folder&gt; o &lt;user-id&gt;.
 
-Controlla i file prima di inviarli: i valori che l'app non conosce (ad esempio un nome scritto nel percorso di una cartella) non vengono sostituiti.</value>
+Controlli i file prima di inviarli. I valori che la galleria non conosce, ad esempio un nome scritto nel percorso di una cartella, non vengono sostituiti.</value>
   </data>
   <data name="GameRunningTitleFormat" xml:space="preserve">
     <value>{0} è in esecuzione</value>
   </data>
   <data name="SaveFolderContentHintFormat" xml:space="preserve">
     <value>Di solito: C:\XboxGames\GameSave\pgs\u_[numero]_{0}</value>
+  </data>
+  <data name="RenderedThumbnailTooltip" xml:space="preserve">
+    <value>Il salvataggio non contiene un’anteprima di questa livrea, quindi la galleria ne ha disegnata una dal modello 3D. Può essere diversa da quella del gioco e non viene scritta nel salvataggio.</value>
+  </data>
+  <data name="AuthorIdInvalidTooltip" xml:space="preserve">
+    <value>L’ID autore di questa livrea non è un account valido. Probabilmente l’intestazione è stata modificata e il nome dell’autore potrebbe essere inventato. Faccia clic per indicare l’autore.</value>
+  </data>
+  <data name="AuthorIdNoneTooltip" xml:space="preserve">
+    <value>Questa livrea non ha un ID autore. È una livrea di fabbrica, una livrea comprata all’asta, che non conserva l’autore, oppure una livrea creata su questo PC e non pubblicata.</value>
+  </data>
+  <data name="AuthorAssignedTooltip" xml:space="preserve">
+    <value>L’autore di questa livrea è stato indicato da Lei: il suo ID autore non dice nulla.</value>
+  </data>
+  <data name="AuthorHintsTooltipHeader" xml:space="preserve">
+    <value>Possibili autori:</value>
+  </data>
+  <data name="AuthorHintReasonSameId" xml:space="preserve">
+    <value>lo stesso ID autore di una livrea che ha assegnato a questo autore</value>
+  </data>
+  <data name="AuthorHintReasonSameName" xml:space="preserve">
+    <value>lo stesso nome</value>
+  </data>
+  <data name="AuthorHintReasonArtworkFormat" xml:space="preserve">
+    <value>il disegno somiglia al {0}% a «{1}»</value>
+  </data>
+  <data name="ContextMenuAssignAuthor" xml:space="preserve">
+    <value>Indica l’autore…</value>
+  </data>
+  <data name="ContextMenuUnassignAuthor" xml:space="preserve">
+    <value>Rimuovi l’autore indicato</value>
+  </data>
+  <data name="AssignAuthorDialogTitle" xml:space="preserve">
+    <value>Di chi è questa livrea?</value>
+  </data>
+  <data name="AssignAuthorInvalidIdNote" xml:space="preserve">
+    <value>L’ID autore di questa livrea non è un account valido: probabilmente l’intestazione è stata modificata. Indichi l’autore solo se ne è sicuro, ad esempio se riconosce lo stile o la firma.</value>
+  </data>
+  <data name="AssignAuthorNoIdNote" xml:space="preserve">
+    <value>Questa livrea non ha un ID autore: è di fabbrica, dell’asta o non pubblicata. Indichi l’autore solo se ne è sicuro.</value>
+  </data>
+  <data name="AssignAuthorSearchWatermark" xml:space="preserve">
+    <value>Cerca autore…</value>
+  </data>
+  <data name="AssignAuthorNewCardButton" xml:space="preserve">
+    <value>+ Nuova scheda autore</value>
+  </data>
+  <data name="AssignAuthorConfirmCheckBox" xml:space="preserve">
+    <value>Sono sicuro di chi sia l’autore</value>
+  </data>
+  <data name="AssignAuthorNoResults" xml:space="preserve">
+    <value>Nessun autore trovato</value>
+  </data>
+  <data name="AssignAuthorFailedMessage" xml:space="preserve">
+    <value>Impossibile salvare: la scheda autore non esiste più oppure il suo nome è già usato.</value>
+  </data>
+  <data name="AuthorCardAssignedSectionFormat" xml:space="preserve">
+    <value>Assegnate da Lei ({0})</value>
+  </data>
+  <data name="AuthorCardRemoveAssignedTooltip" xml:space="preserve">
+    <value>Togli la livrea dalla scheda</value>
+  </data>
+  <data name="AuthorCardAccountHintsHeader" xml:space="preserve">
+    <value>Possibili account di questo autore</value>
+  </data>
+  <data name="AuthorCardAddAccountButton" xml:space="preserve">
+    <value>Aggiungi</value>
+  </data>
+  <data name="AuthorCardNotThisButton" xml:space="preserve">
+    <value>Non è questo autore</value>
+  </data>
+  <data name="AuthorCardNoAliasesOrNameError" xml:space="preserve">
+    <value>Scelga un account o inserisca un nome visualizzato</value>
+  </data>
+  <data name="AuthorCardNoAccountNotice" xml:space="preserve">
+    <value>Questa scheda non ha ancora un account. Le livree si aggiungono a mano con «Indica l’autore…» e la galleria lo segnala quando trova un account che potrebbe essere di questo autore.</value>
+  </data>
+  <data name="AuthorCardImplicitNotice" xml:space="preserve">
+    <value>Questa scheda non è ancora salvata. Verrà salvata quando modificherà qualcosa.</value>
+  </data>
+  <data name="AuthorsArtworkSuggestionFormat" xml:space="preserve">
+    <value>{0} e {1}: lo stesso disegno «{2}»</value>
+  </data>
+  <data name="AuthorsAccountHintFormat" xml:space="preserve">
+    <value>{0} potrebbe essere un account di {1}: {2}</value>
+  </data>
+  <data name="StatsScopeAll" xml:space="preserve">
+    <value>Tutta la galleria</value>
+  </data>
+  <data name="StatsScopeShownFormat" xml:space="preserve">
+    <value>Mostrate · {0}</value>
+  </data>
+  <data name="StatsScopeShownTooltip" xml:space="preserve">
+    <value>Conta solo ciò che la galleria mostra ora. I numeri seguono i filtri e la ricerca.</value>
+  </data>
+  <data name="StatsScopeNoteFormat" xml:space="preserve">
+    <value>Mostrate: {0} livree su {1}</value>
+  </data>
+  <data name="StatsTabCollection" xml:space="preserve">
+    <value>Collezione</value>
+  </data>
+  <data name="StatsTabTime" xml:space="preserve">
+    <value>Nel tempo</value>
+  </data>
+  <data name="StatsTabAuthors" xml:space="preserve">
+    <value>Autori</value>
+  </data>
+  <data name="StatsTileLiveries" xml:space="preserve">
+    <value>Livree</value>
+  </data>
+  <data name="StatsTileNewFormat" xml:space="preserve">
+    <value>+{0} in 30 giorni</value>
+  </data>
+  <data name="StatsTileLiveriesTooltip" xml:space="preserve">
+    <value>Mostra tutte le livree: azzera ricerca e filtri</value>
+  </data>
+  <data name="StatsTileAuthors" xml:space="preserve">
+    <value>Autori</value>
+  </data>
+  <data name="StatsTileWithoutAuthorFormat" xml:space="preserve">
+    <value>livree senza autore: {0}</value>
+  </data>
+  <data name="StatsTileAuthorsTooltip" xml:space="preserve">
+    <value>Raggruppa la galleria per autore</value>
+  </data>
+  <data name="StatsTileCars" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="StatsTileManufacturersFormat" xml:space="preserve">
+    <value>produttori: {0}</value>
+  </data>
+  <data name="StatsTileCarsTooltip" xml:space="preserve">
+    <value>Raggruppa la galleria per produttore</value>
+  </data>
+  <data name="StatsTileFavorites" xml:space="preserve">
+    <value>Preferiti</value>
+  </data>
+  <data name="StatsTileShareFormat" xml:space="preserve">
+    <value>{0} del totale</value>
+  </data>
+  <data name="StatsTileFavoritesTooltip" xml:space="preserve">
+    <value>Mostra solo i preferiti</value>
+  </data>
+  <data name="StatsTileInstalled" xml:space="preserve">
+    <value>Sulle auto</value>
+  </data>
+  <data name="StatsTileInstalledCarsFormat" xml:space="preserve">
+    <value>su {0} auto</value>
+  </data>
+  <data name="StatsTileInstalledTooltip" xml:space="preserve">
+    <value>Mostra solo le livree applicate alle auto</value>
+  </data>
+  <data name="StatsTileInstalledUnknown" xml:space="preserve">
+    <value>richiede il server delle livree</value>
+  </data>
+  <data name="StatsTileAuction" xml:space="preserve">
+    <value>Asta</value>
+  </data>
+  <data name="StatsTileAuctionTooltip" xml:space="preserve">
+    <value>Mostra solo le livree dell’asta</value>
+  </data>
+  <data name="StatsSectionManufacturers" xml:space="preserve">
+    <value>Produttori</value>
+  </data>
+  <data name="StatsSectionCountries" xml:space="preserve">
+    <value>Paesi</value>
+  </data>
+  <data name="StatsSectionCarTypes" xml:space="preserve">
+    <value>Tipi di auto</value>
+  </data>
+  <data name="StatsSectionDecades" xml:space="preserve">
+    <value>Decenni delle auto</value>
+  </data>
+  <data name="StatsSectionTags" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="StatsSectionTraits" xml:space="preserve">
+    <value>Tipi di livrea</value>
+  </data>
+  <data name="StatsUnknownValue" xml:space="preserve">
+    <value>Sconosciuto</value>
+  </data>
+  <data name="StatsDecadeFormat" xml:space="preserve">
+    <value>Anni {0}</value>
+  </data>
+  <data name="StatsRowTooltip" xml:space="preserve">
+    <value>Mostra solo queste livree</value>
+  </data>
+  <data name="StatsMoreFormat" xml:space="preserve">
+    <value>e altri {0}</value>
+  </data>
+  <data name="StatsNothing" xml:space="preserve">
+    <value>Niente da contare</value>
+  </data>
+  <data name="StatsNoTags" xml:space="preserve">
+    <value>Ancora nessun tag</value>
+  </data>
+  <data name="StatsTraitMine" xml:space="preserve">
+    <value>Mie</value>
+  </data>
+  <data name="StatsTraitGenerated" xml:space="preserve">
+    <value>Forse generate</value>
+  </data>
+  <data name="StatsTraitDuplicates" xml:space="preserve">
+    <value>Duplicati e possibili duplicati</value>
+  </data>
+  <data name="StatsTraitPaintOnly" xml:space="preserve">
+    <value>Solo vernice, senza livelli</value>
+  </data>
+  <data name="StatsNoJournal" xml:space="preserve">
+    <value>La cronologia inizia con la prossima scansione. Fino ad allora il grafico mostra le livree per data di download.</value>
+  </data>
+  <data name="StatsJournalSinceFormat" xml:space="preserve">
+    <value>La cronologia è tenuta dal {0}. La parte chiara delle colonne è il periodo precedente: livree per data di download. Le livree eliminate allora non sono note.</value>
+  </data>
+  <data name="StatsShownHistoryNote" xml:space="preserve">
+    <value>Vengono contate solo le livree mostrate, quindi quelle eliminate non sono incluse.</value>
+  </data>
+  <data name="StatsLegendNew" xml:space="preserve">
+    <value>Nuove</value>
+  </data>
+  <data name="StatsLegendReturned" xml:space="preserve">
+    <value>Tornate</value>
+  </data>
+  <data name="StatsLegendDeleted" xml:space="preserve">
+    <value>Eliminate</value>
+  </data>
+  <data name="StatsLegendArchived" xml:space="preserve">
+    <value>Archiviate</value>
+  </data>
+  <data name="StatsSizeTooltipFormat" xml:space="preserve">
+    <value>Livree a fine mese: {0}</value>
+  </data>
+  <data name="StatsSizeUnknown" xml:space="preserve">
+    <value>Prima della cronologia: sconosciuto</value>
+  </data>
+  <data name="StatsNewAuthorsTitle" xml:space="preserve">
+    <value>Nuovi autori</value>
+  </data>
+  <data name="StatsRangeYear" xml:space="preserve">
+    <value>12 mesi</value>
+  </data>
+  <data name="StatsRangeTwoYears" xml:space="preserve">
+    <value>2 anni</value>
+  </data>
+  <data name="StatsRangeAll" xml:space="preserve">
+    <value>Tutto</value>
+  </data>
+  <data name="StatsFlowTitle" xml:space="preserve">
+    <value>Arrivate e uscite</value>
+  </data>
+  <data name="StatsSizeTitle" xml:space="preserve">
+    <value>Livree nel salvataggio</value>
+  </data>
+  <data name="StatsAuthorsTileUnique" xml:space="preserve">
+    <value>Autori distinti</value>
+  </data>
+  <data name="StatsAuthorsTileTopFormat" xml:space="preserve">
+    <value>Quota dei primi {0} autori</value>
+  </data>
+  <data name="StatsAuthorsTopDetail" xml:space="preserve">
+    <value>delle livree con autore</value>
+  </data>
+  <data name="StatsAuthorsTileSingle" xml:space="preserve">
+    <value>Con una livrea</value>
+  </data>
+  <data name="StatsAuthorsSingleDetailFormat" xml:space="preserve">
+    <value>{0} degli autori</value>
+  </data>
+  <data name="StatsAuthorsTileNew" xml:space="preserve">
+    <value>Nuovi in 30 giorni</value>
+  </data>
+  <data name="StatsAuthorsNewDetail" xml:space="preserve">
+    <value>visti per la prima volta nella collezione</value>
+  </data>
+  <data name="StatsTopAuthorsTitleFormat" xml:space="preserve">
+    <value>I primi {0} autori</value>
+  </data>
+  <data name="StatsAuthorRowTooltip" xml:space="preserve">
+    <value>Apri la scheda autore</value>
+  </data>
+  <data name="StatsAuthorsSearch" xml:space="preserve">
+    <value>Cerca autore…</value>
+  </data>
+  <data name="StatsAuthorsNotFound" xml:space="preserve">
+    <value>Nessun autore trovato</value>
+  </data>
+  <data name="StatsColumnAuthor" xml:space="preserve">
+    <value>Autore</value>
+  </data>
+  <data name="StatsColumnLiveries" xml:space="preserve">
+    <value>Livree</value>
+  </data>
+  <data name="StatsColumnCars" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="StatsColumnFavorites" xml:space="preserve">
+    <value>Preferiti</value>
+  </data>
+  <data name="StatsColumnFirstDownload" xml:space="preserve">
+    <value>Primo download</value>
+  </data>
+  <data name="StatsColumnFirstDownloadTooltip" xml:space="preserve">
+    <value>La data di download più vecchia tra le livree dell’autore nella collezione</value>
+  </data>
+  <data name="StatsColumnLast" xml:space="preserve">
+    <value>Ultima</value>
+  </data>
+  <data name="StatsColumnLastDownload" xml:space="preserve">
+    <value>Ultimo download</value>
+  </data>
+  <data name="StatsColumnLastDownloadTooltip" xml:space="preserve">
+    <value>La data di download più recente tra le livree dell’autore nella collezione</value>
+  </data>
+  <data name="StatsLegendEstimated" xml:space="preserve">
+    <value>Prima della cronologia</value>
+  </data>
+  <data name="StatsEstimatedTooltipFormat" xml:space="preserve">
+    <value>Di cui prima della cronologia, per data di download: {0}</value>
+  </data>
+  <data name="AuthorCardStatLiveries" xml:space="preserve">
+    <value>livree</value>
+  </data>
+  <data name="AuthorCardStatCars" xml:space="preserve">
+    <value>auto</value>
+  </data>
+  <data name="AuthorCardStatFavorites" xml:space="preserve">
+    <value>nei preferiti</value>
+  </data>
+  <data name="AuthorCardStatFirstDownload" xml:space="preserve">
+    <value>primo download</value>
+  </data>
+  <data name="AuthorCardStatLast" xml:space="preserve">
+    <value>ultimo download</value>
+  </data>
+  <data name="AuthorCardDuplicatesLineFormat" xml:space="preserve">
+    <value>Duplicati: {0}, possibili duplicati: {1}</value>
+  </data>
+  <data name="AuthorCardMonthsTitle" xml:space="preserve">
+    <value>Download per mese</value>
+  </data>
+  <data name="StatsPageOverview" xml:space="preserve">
+    <value>Panoramica</value>
+  </data>
+  <data name="StatsPageHealth" xml:space="preserve">
+    <value>Stato della collezione</value>
+  </data>
+  <data name="StatsPageCars" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="StatsPageLiveries" xml:space="preserve">
+    <value>Livree</value>
+  </data>
+  <data name="StatsScopeLabel" xml:space="preserve">
+    <value>Cosa contare</value>
+  </data>
+  <data name="StatsAccountsTitle" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="StatsSlotsTitle" xml:space="preserve">
+    <value>Spazio nel salvataggio</value>
+  </data>
+  <data name="StatsSlotsFreeFormat" xml:space="preserve">
+    <value>Posti liberi: {0}</value>
+  </data>
+  <data name="StatsSlotsAlmostFormat" xml:space="preserve">
+    <value>Quasi pieno: ne restano {0}</value>
+  </data>
+  <data name="StatsSlotsFull" xml:space="preserve">
+    <value>Pieno: il gioco non Le permetterà di scaricare né creare livree</value>
+  </data>
+  <data name="StatsSlotsNote" xml:space="preserve">
+    <value>Al limite il gioco non Le permette di scaricare né creare livree. Le livree dell’asta appartengono a un’auto e non vengono contate.</value>
+  </data>
+  <data name="StatsSlotsNoLimit" xml:space="preserve">
+    <value>Nessun limite noto per questo gioco</value>
+  </data>
+  <data name="StatsHealthBackupsTitle" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="StatsHealthNotBackedUp" xml:space="preserve">
+    <value>In nessun backup</value>
+  </data>
+  <data name="StatsHealthLastBackup" xml:space="preserve">
+    <value>Ultimo backup</value>
+  </data>
+  <data name="StatsHealthBackupsNote" xml:space="preserve">
+    <value>Una livrea conta come salvata solo se il backup la contiene così com’è ora. Una livrea modificata dopo il backup non conta.</value>
+  </data>
+  <data name="StatsHealthNoBackups" xml:space="preserve">
+    <value>Non ci sono ancora backup.</value>
+  </data>
+  <data name="StatsHealthAllBackedUp" xml:space="preserve">
+    <value>Tutte le livree sono in un backup.</value>
+  </data>
+  <data name="StatsHealthDuplicatesTitle" xml:space="preserve">
+    <value>Duplicati</value>
+  </data>
+  <data name="StatsHealthDuplicatesNote" xml:space="preserve">
+    <value>Tenendo una copia di ciascuna si libera spazio nel salvataggio.</value>
+  </data>
+  <data name="StatsHealthDuplicates" xml:space="preserve">
+    <value>Duplicati, tutte le copie</value>
+  </data>
+  <data name="StatsHealthFreeable" xml:space="preserve">
+    <value>Posti liberabili</value>
+  </data>
+  <data name="StatsHealthPossible" xml:space="preserve">
+    <value>Possibili duplicati</value>
+  </data>
+  <data name="StatsHealthUnusedTitle" xml:space="preserve">
+    <value>Inutilizzate</value>
+  </data>
+  <data name="StatsHealthUnusedNote" xml:space="preserve">
+    <value>Non applicate alle auto, non nei preferiti, non bloccate, non Sue e non dell’asta. Sono le prime da archiviare.</value>
+  </data>
+  <data name="StatsHealthUnused" xml:space="preserve">
+    <value>Livree inutilizzate</value>
+  </data>
+  <data name="StatsHealthArchiveTitle" xml:space="preserve">
+    <value>Archivio</value>
+  </data>
+  <data name="StatsHealthArchived" xml:space="preserve">
+    <value>Nell’archivio</value>
+  </data>
+  <data name="StatsHealthLastArchived" xml:space="preserve">
+    <value>Ultimo spostamento</value>
+  </data>
+  <data name="StatsShowTheseTooltip" xml:space="preserve">
+    <value>Mostra queste livree nella galleria</value>
+  </data>
+  <data name="StatsCarsInGame" xml:space="preserve">
+    <value>Auto nel gioco</value>
+  </data>
+  <data name="StatsCarsCovered" xml:space="preserve">
+    <value>Con livree</value>
+  </data>
+  <data name="StatsCarsSingle" xml:space="preserve">
+    <value>Con una livrea</value>
+  </data>
+  <data name="StatsCarsSingleDetail" xml:space="preserve">
+    <value>tra le auto con livree</value>
+  </data>
+  <data name="StatsCoverageTitle" xml:space="preserve">
+    <value>Copertura per produttore</value>
+  </data>
+  <data name="StatsCoverageMoreFormat" xml:space="preserve">
+    <value>Altri produttori con livree: {0}, senza: {1}</value>
+  </data>
+  <data name="StatsCoverageSortLiveries" xml:space="preserve">
+    <value>Livree</value>
+  </data>
+  <data name="StatsCoverageSortCars" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="StatsCoverageSortShare" xml:space="preserve">
+    <value>Quota</value>
+  </data>
+  <data name="StatsCoverageSortLiveriesTooltip" xml:space="preserve">
+    <value>Prima i produttori con più livree</value>
+  </data>
+  <data name="StatsCoverageSortCarsTooltip" xml:space="preserve">
+    <value>Prima i produttori con più auto con livree</value>
+  </data>
+  <data name="StatsCoverageSortShareTooltip" xml:space="preserve">
+    <value>Prima i produttori con la quota più alta di auto con livree</value>
+  </data>
+  <data name="StatsLiveryCountOne" xml:space="preserve">
+    <value>{0} livrea</value>
+  </data>
+  <data name="StatsLiveryCountFew" xml:space="preserve">
+    <value>{0} livree</value>
+  </data>
+  <data name="StatsLiveryCountMany" xml:space="preserve">
+    <value>{0} livree</value>
+  </data>
+  <data name="StatsTopCarsTitle" xml:space="preserve">
+    <value>Con più livree</value>
+  </data>
+  <data name="StatsNoCarDatabase" xml:space="preserve">
+    <value>L’elenco delle auto non è ancora caricato</value>
+  </data>
+  <data name="StatsComparedTooltip" xml:space="preserve">
+    <value>Gli ultimi 30 giorni rispetto ai 30 precedenti</value>
+  </data>
+  <data name="StatsMoreThanBeforeFormat" xml:space="preserve">
+    <value>▲ {0} (prima {1})</value>
+  </data>
+  <data name="StatsLessThanBeforeFormat" xml:space="preserve">
+    <value>▼ {0} (prima {1})</value>
+  </data>
+  <data name="StatsSameAsBefore" xml:space="preserve">
+    <value>= come prima</value>
+  </data>
+  <data name="StatsCreatedTitle" xml:space="preserve">
+    <value>Quando sono state create</value>
+  </data>
+  <data name="StatsCreatedTooltipFormat" xml:space="preserve">
+    <value>Create in questo mese: {0}</value>
+  </data>
+  <data name="StatsAgeFormat" xml:space="preserve">
+    <value>Mediana dalla creazione al download: {0} mesi. Nello stesso mese: {1}. Un anno o più dopo: {2}.</value>
+  </data>
+  <data name="StatsCalendarTitle" xml:space="preserve">
+    <value>Attività</value>
+  </data>
+  <data name="StatsCalendarNoteFormat" xml:space="preserve">
+    <value>Scaricate nell’ultimo anno: {0}, giorni con download: {1}</value>
+  </data>
+  <data name="StatsCalendarTooltipFormat" xml:space="preserve">
+    <value>{0}: scaricate {1}</value>
+  </data>
+  <data name="StatsWeekdaysTitle" xml:space="preserve">
+    <value>Per giorno della settimana</value>
+  </data>
+  <data name="StatsSharedTitle" xml:space="preserve">
+    <value>Possibili ricaricamenti</value>
+  </data>
+  <data name="StatsSharedNone" xml:space="preserve">
+    <value>Nessun disegno è in comune tra due autori</value>
+  </data>
+  <data name="StatsSharedRowTooltip" xml:space="preserve">
+    <value>Mostra entrambe le livree: lo stesso disegno con due autori</value>
+  </data>
+  <data name="StatsGeneratorsTitle" xml:space="preserve">
+    <value>Usano generatori</value>
+  </data>
+  <data name="StatsGeneratorsNone" xml:space="preserve">
+    <value>Nessun autore ha livree generate</value>
+  </data>
+  <data name="StatsFavoriteAuthorsTitle" xml:space="preserve">
+    <value>Più spesso nei preferiti</value>
+  </data>
+  <data name="StatsDeparturesTitle" xml:space="preserve">
+    <value>Di chi rimuove le livree</value>
+  </data>
+  <data name="StatsDeparturesCellFormat" xml:space="preserve">
+    <value>{0} + {1} archiviate</value>
+  </data>
+  <data name="StatsNoJournalShort" xml:space="preserve">
+    <value>Nella cronologia non ci sono ancora rimozioni</value>
+  </data>
+  <data name="StatsLayersMedian" xml:space="preserve">
+    <value>Mediana dei livelli</value>
+  </data>
+  <data name="StatsLayersMedianDetail" xml:space="preserve">
+    <value>la metà ne ha meno</value>
+  </data>
+  <data name="StatsLayersMax" xml:space="preserve">
+    <value>Più livelli</value>
+  </data>
+  <data name="StatsLayersMaxDetail" xml:space="preserve">
+    <value>in una livrea</value>
+  </data>
+  <data name="StatsLayersKnown" xml:space="preserve">
+    <value>Contate</value>
+  </data>
+  <data name="StatsLayersKnownDetailFormat" xml:space="preserve">
+    <value>su {0} livree</value>
+  </data>
+  <data name="StatsLayersTitle" xml:space="preserve">
+    <value>Livelli</value>
+  </data>
+  <data name="StatsLayersFilterFormat" xml:space="preserve">
+    <value>Livelli: {0}</value>
+  </data>
+  <data name="StatsLayersUnknown" xml:space="preserve">
+    <value>Il numero di livelli comparirà dopo la prossima scansione</value>
+  </data>
+  <data name="StatsMostComplexTitle" xml:space="preserve">
+    <value>Le più complesse</value>
+  </data>
+  <data name="StatsLayersByAuthorTitle" xml:space="preserve">
+    <value>Più livelli in media</value>
+  </data>
+  <data name="StatsRecordsTitle" xml:space="preserve">
+    <value>Fatti sulla collezione</value>
+  </data>
+  <data name="StatsRecordOldest" xml:space="preserve">
+    <value>Scaricata per prima</value>
+  </data>
+  <data name="StatsRecordNewest" xml:space="preserve">
+    <value>Scaricata per ultima</value>
+  </data>
+  <data name="StatsRecordOldestMade" xml:space="preserve">
+    <value>Creata per prima</value>
+  </data>
+  <data name="StatsRecordMostLayers" xml:space="preserve">
+    <value>Più livelli</value>
+  </data>
+  <data name="StatsRecordBusiestCar" xml:space="preserve">
+    <value>Più livree per un’auto</value>
+  </data>
+  <data name="StatsRecordBusiestMonth" xml:space="preserve">
+    <value>Mese più attivo</value>
+  </data>
+  <data name="StatsUntaggedFormat" xml:space="preserve">
+    <value>senza tag: {0}</value>
+  </data>
+  <data name="StatsExport" xml:space="preserve">
+    <value>Esporta</value>
+  </data>
+  <data name="StatsExportLiveries" xml:space="preserve">
+    <value>Livree in CSV…</value>
+  </data>
+  <data name="StatsExportAuthors" xml:space="preserve">
+    <value>Autori in CSV…</value>
+  </data>
+  <data name="StatsExportLiveriesFileName" xml:space="preserve">
+    <value>livree</value>
+  </data>
+  <data name="StatsExportAuthorsFileName" xml:space="preserve">
+    <value>autori</value>
+  </data>
+  <data name="StatsExportFailed" xml:space="preserve">
+    <value>Impossibile salvare il file.</value>
+  </data>
+  <data name="StatsSaveChart" xml:space="preserve">
+    <value>Salva come PNG…</value>
+  </data>
+  <data name="StatsAuthorsTopTooltipFormat" xml:space="preserve">
+    <value>{1} delle {2} livree con autore noto sono dei {0} autori di cui ha più livree</value>
+  </data>
+  <data name="ContextMenuAddToFavorites" xml:space="preserve">
+    <value>Aggiungi ai preferiti</value>
+  </data>
+  <data name="ContextMenuRemoveFromFavorites" xml:space="preserve">
+    <value>Rimuovi dai preferiti</value>
+  </data>
+  <data name="ContextMenuEditTags" xml:space="preserve">
+    <value>Modifica tag…</value>
+  </data>
+  <data name="TagChipTooltip" xml:space="preserve">
+    <value>Clic per mostrare solo le livree con questo tag, clic destro per nasconderle. Un altro clic annulla.</value>
+  </data>
+  <data name="TagsDialogManyTitleFormat" xml:space="preserve">
+    <value>Tag delle livree selezionate: {0}</value>
+  </data>
+  <data name="TagsDialogManyHint" xml:space="preserve">
+    <value>Una spunta aggiunge il tag a tutte le livree selezionate, una casella vuota lo toglie da tutte. Un quadrato pieno indica che solo alcune lo hanno. Resta com’è.</value>
+  </data>
+  <data name="TagsDialogNewTagsLabel" xml:space="preserve">
+    <value>Nuovi tag, separati da virgole. Vengono aggiunti a tutte le livree selezionate.</value>
+  </data>
+  <data name="TagsDialogPartialTooltipFormat" xml:space="preserve">
+    <value>Su {0} di {1} selezionate</value>
+  </data>
+  <data name="ContextMenuLock" xml:space="preserve">
+    <value>Blocca</value>
+  </data>
+  <data name="ContextMenuUnlock" xml:space="preserve">
+    <value>Sblocca</value>
+  </data>
+  <data name="LockToggleTooltip" xml:space="preserve">
+    <value>Blocca la livrea perché non possa essere spostata nell’archivio</value>
+  </data>
+  <data name="LockedTooltip" xml:space="preserve">
+    <value>Bloccata: la livrea non può essere spostata nell’archivio. Faccia clic per sbloccarla.</value>
+  </data>
+  <data name="ArchiveLockedNotAllowedTooltip" xml:space="preserve">
+    <value>Le livree bloccate non possono essere spostate nell’archivio. Le sblocchi prima.</value>
+  </data>
+  <data name="ArchiveLockedSkippedFormat" xml:space="preserve">
+    <value>Le livree bloccate non possono essere spostate nell’archivio. Livree bloccate selezionate rimaste nel gioco: {0}.</value>
+  </data>
+  <data name="AuthorLabelOwnFormat" xml:space="preserve">
+    <value>{0} (Lei)</value>
+  </data>
+  <data name="AuthorLabelFormerNameFormat" xml:space="preserve">
+    <value>{0} (prima {1})</value>
+  </data>
+  <data name="AuthorLabelNoAccountFormat" xml:space="preserve">
+    <value>{0} (senza account)</value>
+  </data>
+  <data name="AuthorLabelNumberFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="AuthorDetailsNamesFormat" xml:space="preserve">
+    <value>Nickname: {0}</value>
+  </data>
+  <data name="AuthorDetailsLiveriesFormat" xml:space="preserve">
+    <value>Livree: {0}</value>
+  </data>
+  <data name="AuthorDetailsFirstFormat" xml:space="preserve">
+    <value>Prima livrea: {0}</value>
+  </data>
+  <data name="AuthorOwnUnpublishedTooltip" xml:space="preserve">
+    <value>La Sua livrea, creata su questo PC e non pubblicata: non ha un ID autore, quindi conta come del Suo account.</value>
+  </data>
+  <data name="AuthorCardAccountWithoutName" xml:space="preserve">
+    <value>account senza nickname</value>
+  </data>
+  <data name="AuthorCardTwitchLabel" xml:space="preserve">
+    <value>Twitch</value>
+  </data>
+  <data name="AuthorCardInvalidTwitchUrlError" xml:space="preserve">
+    <value>Inserisca un link a un canale Twitch, ad esempio twitch.tv/username, non a un video o a una clip</value>
+  </data>
+  <data name="ArchiveSearchPlaceholder" xml:space="preserve">
+    <value>Cerca per auto, anno, nome, autore o numero…</value>
+  </data>
+  <data name="ArchiveSearchPlaceholderWithFolder" xml:space="preserve">
+    <value>Cerca per auto, anno, nome, autore, numero o cartella…</value>
+  </data>
+  <data name="ArchiveNoSearchResultsHint" xml:space="preserve">
+    <value>Nessun risultato</value>
+  </data>
+  <data name="KeyCtrl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyShift" xml:space="preserve">
+    <value>Maiusc</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Canc</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>Spazio</value>
+  </data>
+  <data name="ShortcutSearch" xml:space="preserve">
+    <value>Vai alla ricerca</value>
+  </data>
+  <data name="ShortcutSelectAll" xml:space="preserve">
+    <value>Seleziona tutte le livree mostrate</value>
+  </data>
+  <data name="ShortcutEscape" xml:space="preserve">
+    <value>Cancella la ricerca o deseleziona</value>
+  </data>
+  <data name="ShortcutLock" xml:space="preserve">
+    <value>Blocca o sblocca</value>
+  </data>
+  <data name="ShortcutTags" xml:space="preserve">
+    <value>Modifica tag</value>
+  </data>
+  <data name="ShortcutsTitle" xml:space="preserve">
+    <value>Scorciatoie da tastiera</value>
+  </data>
+  <data name="ShortcutsGroupSearch" xml:space="preserve">
+    <value>Ricerca e selezione</value>
+  </data>
+  <data name="ShortcutsGroupSelected" xml:space="preserve">
+    <value>Livree selezionate</value>
+  </data>
+  <data name="ShortcutsGroupWindows" xml:space="preserve">
+    <value>Finestre</value>
+  </data>
+  <data name="ShortcutsNoteFormat" xml:space="preserve">
+    <value>Lettere, cifre, {0} e {1} non fanno nulla mentre il cursore è in un campo di testo. {0}, 3 e G funzionano quando è selezionata una sola livrea.</value>
+  </data>
+  <data name="SlotsCounterClickHint" xml:space="preserve">
+    <value>Faccia clic per liberare spazio: le copie in più delle livree duplicate vanno nell’archivio.</value>
+  </data>
+  <data name="FreeSpaceMenuItem" xml:space="preserve">
+    <value>Libera spazio…</value>
+  </data>
+  <data name="FreeSpaceTitle" xml:space="preserve">
+    <value>Libera spazio</value>
+  </data>
+  <data name="FreeSpaceNote" xml:space="preserve">
+    <value>Di ogni livrea duplicata resta una copia: prima una con tag o una sua, altrimenti la prima scaricata. Restano anche le livree bloccate, quelle applicate a un’auto, quelle dell’asta e i preferiti. Tolga la spunta a una copia per tenerla. Tutto ciò che va via si può recuperare dall’archivio.</value>
+  </data>
+  <data name="FreeSpaceDownloadedFormat" xml:space="preserve">
+    <value>Scaricata: {0}</value>
+  </data>
+  <data name="FreeSpaceStayBest" xml:space="preserve">
+    <value>Resta: la copia migliore</value>
+  </data>
+  <data name="FreeSpaceStayLocked" xml:space="preserve">
+    <value>Resta: bloccata</value>
+  </data>
+  <data name="FreeSpaceStayInstalled" xml:space="preserve">
+    <value>Resta: su un’auto</value>
+  </data>
+  <data name="FreeSpaceStayAuction" xml:space="preserve">
+    <value>Resta: livrea dell’asta</value>
+  </data>
+  <data name="FreeSpaceStayFavorite" xml:space="preserve">
+    <value>Resta: preferita</value>
+  </data>
+  <data name="FreeSpaceCopiesFormat" xml:space="preserve">
+    <value>Copie: {0}</value>
+  </data>
+  <data name="FreeSpaceNothing" xml:space="preserve">
+    <value>Non c’è niente da liberare: nessuna livrea ha copie in più che possano andare via. Le copie bloccate, applicate a un’auto, dell’asta o preferite restano sempre.</value>
+  </data>
+  <data name="FreeSpaceNowFormat" xml:space="preserve">
+    <value>Ora nel salvataggio: {0} su {1}.</value>
+  </data>
+  <data name="FreeSpaceAfterFormat" xml:space="preserve">
+    <value>Nell’archivio: {0}, liberi dopo: {1}.</value>
+  </data>
+  <data name="FreeSpaceAfterNoLimitFormat" xml:space="preserve">
+    <value>Nell’archivio: {0}.</value>
+  </data>
+  <data name="FreeSpaceApplyFormat" xml:space="preserve">
+    <value>Sposta nell’archivio ({0})</value>
+  </data>
+  <data name="FewFreeSlotsMessageFormat" xml:space="preserve">
+    <value>Nel salvataggio restano solo {0} posti liberi su {1}. Al limite, il gioco non permette di scaricare né di creare livree. Liberare spazio ora spostando nell’archivio le copie in più delle livree duplicate?</value>
+  </data>
+  <data name="FewFreeSlotsFullMessageFormat" xml:space="preserve">
+    <value>Il salvataggio è pieno: tutti i {0} posti sono occupati e il gioco non permette di scaricare né di creare livree. Liberare spazio ora spostando nell’archivio le copie in più delle livree duplicate?</value>
+  </data>
+  <data name="AutoBackupFailedTitle" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="AutoBackupFailedMessage" xml:space="preserve">
+    <value>Non è stato possibile creare il backup prima dello spostamento nell’archivio. Spostare le livree nell’archivio senza backup?</value>
+  </data>
+  <data name="AutoBackupFailedContinueButton" xml:space="preserve">
+    <value>Sposta senza backup</value>
+  </data>
+  <data name="LoadingBackupBeforeArchive" xml:space="preserve">
+    <value>Creazione del backup prima dello spostamento nell’archivio…</value>
+  </data>
+  <data name="StatusAutoBackupMade" xml:space="preserve">
+    <value>È stato creato un backup automatico</value>
+  </data>
+  <data name="AutoBackupSectionLabel" xml:space="preserve">
+    <value>Backup automatici</value>
+  </data>
+  <data name="AutoBackupBeforeArchiveLabel" xml:space="preserve">
+    <value>Prima di spostare livree nell’archivio</value>
+  </data>
+  <data name="AutoBackupOnChangeLabel" xml:space="preserve">
+    <value>Quando cambiano le livree nel salvataggio, al massimo una volta al giorno</value>
+  </data>
+  <data name="AutoBackupPeriodicLabel" xml:space="preserve">
+    <value>A intervalli, ogni:</value>
+  </data>
+  <data name="AutoBackupDaysFormat" xml:space="preserve">
+    <value>{0} g</value>
+  </data>
+  <data name="AutoBackupKeepLabel" xml:space="preserve">
+    <value>Backup automatici da conservare per account:</value>
+  </data>
+  <data name="AutoBackupHint" xml:space="preserve">
+    <value>Un backup viene creato solo se il più recente non contiene già il salvataggio così com’è. I backup automatici più vecchi oltre questo numero vengono rimossi. I backup creati da Lei non vengono mai rimossi.</value>
+  </data>
+  <data name="BackupKindAutomatic" xml:space="preserve">
+    <value>Automatico</value>
+  </data>
+  <data name="BackupKindBeforeArchive" xml:space="preserve">
+    <value>Creato prima di spostare livree nell’archivio</value>
+  </data>
+  <data name="BackupKindSaveChanged" xml:space="preserve">
+    <value>Creato dopo che le livree nel salvataggio sono cambiate</value>
+  </data>
+  <data name="BackupKindScheduled" xml:space="preserve">
+    <value>Creato a intervalli</value>
+  </data>
+  <data name="BackupKindPrunedNote" xml:space="preserve">
+    <value>I backup automatici più vecchi oltre il numero impostato nelle impostazioni vengono rimossi.</value>
+  </data>
+  <data name="AuthorIdMissingTooltip" xml:space="preserve">
+    <value>Questa livrea non ha un ID autore, quindi il nome può essere di chiunque. È una livrea di fabbrica, dell’asta o non pubblicata. Faccia clic per scegliere l’autore.</value>
+  </data>
+  <data name="WarnFewFreeSlotsLabel" xml:space="preserve">
+    <value>Avvisa all’avvio quando il salvataggio è quasi pieno</value>
+  </data>
+  <data name="AssignAuthorDialogTitleSeveral" xml:space="preserve">
+    <value>Di chi sono queste livree?</value>
+  </data>
+  <data name="AssignAuthorLiveriesFormat" xml:space="preserve">
+    <value>Livree: {0}</value>
+  </data>
+  <data name="AssignAuthorSeveralNote" xml:space="preserve">
+    <value>Nessuna di queste livree ha un account come ID autore. L’autore scelto viene indicato per tutte insieme, quindi lo scelga solo se ne è sicuro.</value>
+  </data>
+  <data name="AssignAuthorSkippedFormat" xml:space="preserve">
+    <value>Le livree selezionate con un account come ID autore restano invariate: {0}.</value>
   </data>
 </root>

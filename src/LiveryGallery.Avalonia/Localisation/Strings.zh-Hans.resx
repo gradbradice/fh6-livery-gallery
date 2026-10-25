@@ -118,49 +118,49 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SavePathNotChosen" xml:space="preserve">
-    <value>尚未选择存档文件夹</value>
+    <value>未选择存档文件夹</value>
   </data>
   <data name="RefreshTooltip" xml:space="preserve">
-    <value>刷新(重新扫描更改)</value>
+    <value>刷新：重新扫描更改</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>按车辆(厂牌、车型、年份)、涂装名称或作者搜索…</value>
+    <value>按车辆、制造商、年份、涂装名称或作者搜索…</value>
   </data>
   <data name="UnknownDownloadDate" xml:space="preserve">
     <value>日期未知</value>
   </data>
   <data name="StatusProcessed" xml:space="preserve">
-    <value>已处理: {0} 个新增/更改, {1} 个来自缓存</value>
+    <value>已处理：新增或更改 {0} 个，来自缓存 {1} 个</value>
   </data>
   <data name="StatusErrors" xml:space="preserve">
-    <value>，{0} 个出错</value>
+    <value>，出错 {0} 个</value>
   </data>
   <data name="StatusRemoved" xml:space="preserve">
     <value>，已移除 {0} 个</value>
   </data>
   <data name="StatusScanError" xml:space="preserve">
-    <value>扫描错误: {0}</value>
+    <value>扫描错误：{0}</value>
   </data>
   <data name="CountShowing" xml:space="preserve">
-    <value>显示 {0} / {1}</value>
+    <value>已显示：{0} / {1}</value>
   </data>
   <data name="EmptyNoLiveries" xml:space="preserve">
-    <value>所选文件夹中未找到任何涂装(Livery_*)</value>
+    <value>所选文件夹中没有涂装：没有名为 Livery_* 的文件夹</value>
   </data>
   <data name="EmptyNoResults" xml:space="preserve">
-    <value>未找到与「{0}」匹配的结果</value>
+    <value>未找到与“{0}”匹配的结果</value>
   </data>
   <data name="LoadingScanning" xml:space="preserve">
-    <value>扫描中…</value>
+    <value>正在扫描…</value>
   </data>
   <data name="LoadingSavingCache" xml:space="preserve">
-    <value>正在保存缓存...</value>
+    <value>正在保存缓存…</value>
   </data>
   <data name="ParsingProgress" xml:space="preserve">
-    <value>解析中 {0}/{1}: {2}</value>
+    <value>正在读取第 {0} 个，共 {1} 个：{2}</value>
   </data>
   <data name="UnknownManufacturer" xml:space="preserve">
-    <value>未知厂牌</value>
+    <value>未知制造商</value>
   </data>
   <data name="UnknownCarIdFormat" xml:space="preserve">
     <value>ID {0}</value>
@@ -171,26 +171,23 @@
   <data name="ButtonYes" xml:space="preserve">
     <value>是</value>
   </data>
-  <data name="ButtonNo" xml:space="preserve">
-    <value>否</value>
-  </data>
   <data name="SelectFolderDialogTitle" xml:space="preserve">
-    <value>请选择存档文件夹(名称以 "u_" 开头的文件夹)</value>
+    <value>请选择存档文件夹，其名称以 u_ 开头</value>
   </data>
   <data name="CarDbUpdating" xml:space="preserve">
     <value>正在检查车辆数据库更新…</value>
   </data>
   <data name="CarDbUpdated" xml:space="preserve">
-    <value>车辆数据库已更新 ({0})</value>
+    <value>车辆数据库已更新：{0}</value>
   </data>
   <data name="CarDbUpToDate" xml:space="preserve">
-    <value>车辆数据库已是最新 ({0})</value>
+    <value>车辆数据库已是最新：{0}</value>
   </data>
   <data name="CarDbDownloadFailed" xml:space="preserve">
-    <value>无法下载车辆数据库 — 使用上次保存的数据 ({0})</value>
+    <value>无法下载车辆数据库，将使用上次保存的副本：{0}</value>
   </data>
   <data name="CarDbNoDataAtAll" xml:space="preserve">
-    <value>无法下载车辆数据库，且没有本地备份 — 车辆名称将无法显示</value>
+    <value>无法下载车辆数据库，也没有已保存的副本。无法显示车辆名称。</value>
   </data>
   <data name="CarDbCarsWord" xml:space="preserve">
     <value>辆车</value>
@@ -211,7 +208,7 @@
     <value>标签</value>
   </data>
   <data name="TagsDialogHint" xml:space="preserve">
-    <value>以逗号分隔，例如: 漂移, 动漫, 收藏</value>
+    <value>用逗号分隔标签，例如：漂移, 动漫, 竞速</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
     <value>保存</value>
@@ -220,73 +217,73 @@
     <value>取消</value>
   </data>
   <data name="EditTagsTooltip" xml:space="preserve">
-    <value>编辑标签</value>
+    <value>编辑标签。如果该涂装与其他涂装一起选中，则编辑所有选中涂装的标签。</value>
   </data>
   <data name="ClearSelectionLabel" xml:space="preserve">
-    <value>清除</value>
+    <value>取消选择</value>
   </data>
   <data name="SelectedCountLabel" xml:space="preserve">
-    <value>已选择 {0} 个</value>
+    <value>已选择：{0} 个</value>
   </data>
   <data name="TagsFilterLabel" xml:space="preserve">
-    <value>标签:</value>
+    <value>标签：</value>
   </data>
   <data name="OnlyFavoritesToggle" xml:space="preserve">
-    <value>仅显示收藏</value>
+    <value>仅收藏</value>
   </data>
   <data name="FavoritesFirstToggle" xml:space="preserve">
     <value>收藏优先</value>
   </data>
   <data name="NormalOrderToggle" xml:space="preserve">
-    <value>常规顺序</value>
+    <value>默认顺序</value>
   </data>
   <data name="FavoriteToggleTooltip" xml:space="preserve">
-    <value>添加/移除收藏</value>
+    <value>添加到收藏或从收藏中移除</value>
   </data>
   <data name="SeparateFavoritesToggle" xml:space="preserve">
-    <value>将收藏单独显示</value>
+    <value>单独显示收藏</value>
   </data>
   <data name="SeparateFavoritesGroupName" xml:space="preserve">
     <value>收藏</value>
   </data>
   <data name="MineFirstToggle" xml:space="preserve">
-    <value>我的优先</value>
+    <value>我的涂装优先</value>
   </data>
   <data name="OnlyMineToggle" xml:space="preserve">
-    <value>仅我的</value>
+    <value>仅我的涂装</value>
   </data>
   <data name="SeparateMineToggle" xml:space="preserve">
-    <value>单独显示我的</value>
+    <value>单独显示我的涂装</value>
   </data>
   <data name="SeparateMineGroupName" xml:space="preserve">
-    <value>我的</value>
+    <value>我的涂装</value>
   </data>
   <data name="UpdateAvailableFormat" xml:space="preserve">
-    <value>发现新版本 {0} →</value>
+    <value>{0} 版本已发布</value>
   </data>
   <data name="ButtonUpdateDownload" xml:space="preserve">
     <value>下载</value>
   </data>
   <data name="WhatsNewTitleFormat" xml:space="preserve">
-    <value>版本 {0} 的新增内容</value>
+    <value>{0} 版本的新功能</value>
   </data>
   <data name="ChangelogNotAvailable" xml:space="preserve">
-    <value>暂无详细更新日志。请前往 GitHub 发布页面查看详情。</value>
+    <value>没有详细的更改列表。可在 GitHub 的发布页面查看。</value>
   </data>
   <data name="ChangelogSectionHeader" xml:space="preserve">
-    <value>中文（简体）</value>
+    <value>简体中文</value>
   </data>
   <data name="MinimizeTooltip" xml:space="preserve">
     <value>最小化</value>
   </data>
   <data name="MaximizeTooltip" xml:space="preserve">
-    <value>最大化 / 还原</value>
+    <value>最大化或还原</value>
   </data>
   <data name="CloseTooltip" xml:space="preserve">
     <value>关闭</value>
   </data>
   <data name="LiveryNoName" xml:space="preserve">
-    <value>（未命名）</value>
+    <value>未命名</value>
   </data>
   <data name="UnknownAuthor" xml:space="preserve">
     <value>未知</value>
@@ -295,22 +292,22 @@
     <value>设置</value>
   </data>
   <data name="SettingsMenuGamePath" xml:space="preserve">
-    <value>游戏路径</value>
+    <value>游戏文件夹</value>
   </data>
   <data name="SelectGameFolderDialogTitle" xml:space="preserve">
-    <value>选择游戏安装文件夹</value>
+    <value>请选择游戏的安装文件夹</value>
   </data>
   <data name="SettingsMenuPaths" xml:space="preserve">
-    <value>路径</value>
+    <value>文件夹</value>
   </data>
   <data name="SavePathFieldLabel" xml:space="preserve">
-    <value>存档路径</value>
+    <value>存档文件夹</value>
   </data>
   <data name="PathFieldAutoHint" xml:space="preserve">
-    <value>留空以自动检测路径</value>
+    <value>留空则自动查找文件夹</value>
   </data>
   <data name="SaveFolderValidationFailed" xml:space="preserve">
-    <value>未找到存档数据</value>
+    <value>未找到存档</value>
   </data>
   <data name="ButtonRetry" xml:space="preserve">
     <value>重试</value>
@@ -319,7 +316,7 @@
     <value>未找到涂装</value>
   </data>
   <data name="SavedPathNotFoundNotice" xml:space="preserve">
-    <value>未找到指定的存档文件夹 — 将自动搜索。</value>
+    <value>未找到指定的存档文件夹。图库将自动查找。</value>
   </data>
   <data name="ButtonOk" xml:space="preserve">
     <value>确定</value>
@@ -329,24 +326,6 @@
   </data>
   <data name="StatsTitle" xml:space="preserve">
     <value>统计</value>
-  </data>
-  <data name="StatsTotalLiveries" xml:space="preserve">
-    <value>涂装总数</value>
-  </data>
-  <data name="StatsFavoriteManufacturer" xml:space="preserve">
-    <value>最喜爱的厂牌</value>
-  </data>
-  <data name="StatsFavoriteAuthor" xml:space="preserve">
-    <value>最喜爱的作者</value>
-  </data>
-  <data name="StatsTotalDuplicates" xml:space="preserve">
-    <value>重复总数</value>
-  </data>
-  <data name="StatsPossibleDuplicates" xml:space="preserve">
-    <value>可能重复总数</value>
-  </data>
-  <data name="StatsFavoritesCount" xml:space="preserve">
-    <value>已收藏</value>
   </data>
   <data name="SettingsMenuContacts" xml:space="preserve">
     <value>联系方式</value>
@@ -361,10 +340,10 @@
     <value>重复</value>
   </data>
   <data name="DuplicateBadgeTooltip" xml:space="preserve">
-    <value>此作者对这辆车有完全相同的涂装</value>
+    <value>此作者为这辆车制作了完全相同的涂装</value>
   </data>
   <data name="DuplicateMatchScoreHeader" xml:space="preserve">
-    <value>匹配结果：</value>
+    <value>匹配：</value>
   </data>
   <data name="DuplicateMatchRelationFormat" xml:space="preserve">
     <value>{0}：{1}%</value>
@@ -373,19 +352,19 @@
     <value>可能重复（{0}）</value>
   </data>
   <data name="DuplicatesFilterAll" xml:space="preserve">
-    <value>所有涂装</value>
+    <value>全部涂装</value>
   </data>
   <data name="DuplicatesFilterAndPossible" xml:space="preserve">
-    <value>重复与可能重复</value>
+    <value>重复和可能重复</value>
   </data>
   <data name="DuplicatesFilterOnly" xml:space="preserve">
     <value>仅重复</value>
   </data>
   <data name="GeneratedFilterAll" xml:space="preserve">
-    <value>所有涂装</value>
+    <value>全部涂装</value>
   </data>
   <data name="GeneratedFilterOnly" xml:space="preserve">
-    <value>仅可能生成的</value>
+    <value>仅可能生成的涂装</value>
   </data>
   <data name="PossibleDuplicateBadgeLabel" xml:space="preserve">
     <value>可能重复</value>
@@ -397,37 +376,37 @@
     <value>我的</value>
   </data>
   <data name="PossiblyGeneratedBadgeLabel" xml:space="preserve">
-    <value>可能是生成的</value>
+    <value>可能为生成</value>
   </data>
   <data name="PossiblyGeneratedBadgeTooltip" xml:space="preserve">
-    <value>这个涂装的图案看起来是通过程序生成的(例如从照片/图片),而不是手绘的。</value>
+    <value>此涂装的图案看起来是由程序生成的，例如根据照片生成，而不是手绘的。</value>
   </data>
   <data name="PaintBadgeLabel" xml:space="preserve">
-    <value>喷漆</value>
+    <value>仅喷漆</value>
   </data>
   <data name="PaintBadgeTooltip" xml:space="preserve">
-    <value>这个涂装没有任何贴花 — 只是重新喷涂的颜色。</value>
+    <value>此涂装没有贴纸，只有新的喷漆颜色。</value>
   </data>
   <data name="ParseErrorBadgeLabel" xml:space="preserve">
-    <value>解析错误</value>
+    <value>读取错误</value>
   </data>
   <data name="ParseErrorBadgeTooltip" xml:space="preserve">
-    <value>这个涂装的文件无法正确读取 — 可能已损坏或格式不受支持。</value>
+    <value>无法正确读取此涂装的文件。文件可能已损坏，或格式不受图库支持。</value>
   </data>
   <data name="PaintFilterAll" xml:space="preserve">
-    <value>所有涂装</value>
+    <value>全部涂装</value>
   </data>
   <data name="PaintFilterHide" xml:space="preserve">
-    <value>隐藏喷漆</value>
+    <value>隐藏仅喷漆</value>
   </data>
   <data name="PaintFilterOnly" xml:space="preserve">
     <value>仅喷漆</value>
   </data>
   <data name="PossibleDuplicateBadgeTooltip" xml:space="preserve">
-    <value>此作者对这辆车有类似的涂装(大部分贴花区块相符，但并非全部内容)</value>
+    <value>此作者为这辆车制作了相似的涂装：大部分贴纸区块相同，但并非全部。</value>
   </data>
   <data name="DisplayFilterTooltip" xml:space="preserve">
-    <value>显示(收藏、重复)</value>
+    <value>显示内容：收藏、重复等</value>
   </data>
   <data name="FilterMenuTitle" xml:space="preserve">
     <value>筛选</value>
@@ -451,10 +430,10 @@
     <value>生成</value>
   </data>
   <data name="FilterPaintLabel" xml:space="preserve">
-    <value>喷漆</value>
+    <value>仅喷漆</value>
   </data>
   <data name="SortOptionManufacturer" xml:space="preserve">
-    <value>厂牌</value>
+    <value>制造商</value>
   </data>
   <data name="SortOptionAuthor" xml:space="preserve">
     <value>作者</value>
@@ -466,22 +445,22 @@
     <value>无</value>
   </data>
   <data name="GroupingOptionByManufacturer" xml:space="preserve">
-    <value>按厂牌</value>
+    <value>按制造商</value>
   </data>
   <data name="GroupingOptionByAuthor" xml:space="preserve">
     <value>按作者</value>
   </data>
   <data name="GroupingOptionByMonth" xml:space="preserve">
-    <value>按月</value>
+    <value>按月份</value>
   </data>
   <data name="FilterValueAll" xml:space="preserve">
     <value>全部</value>
   </data>
   <data name="FilterValueFirst" xml:space="preserve">
-    <value>置顶</value>
+    <value>优先</value>
   </data>
   <data name="FilterValueOnly" xml:space="preserve">
-    <value>仅此类</value>
+    <value>仅此</value>
   </data>
   <data name="FilterValueSeparately" xml:space="preserve">
     <value>单独</value>
@@ -493,7 +472,7 @@
     <value>含可能重复</value>
   </data>
   <data name="AllLiveriesGroupName" xml:space="preserve">
-    <value>所有涂装</value>
+    <value>全部涂装</value>
   </data>
   <data name="SettingsDialogTitle" xml:space="preserve">
     <value>设置</value>
@@ -517,19 +496,10 @@
     <value>未保存的更改</value>
   </data>
   <data name="UnsavedChangesMessage" xml:space="preserve">
-    <value>您进行了尚未保存的更改。如果现在退出，这些更改将会丢失。</value>
-  </data>
-  <data name="ButtonBack" xml:space="preserve">
-    <value>返回</value>
-  </data>
-  <data name="ButtonSaveAndExit" xml:space="preserve">
-    <value>保存并退出</value>
-  </data>
-  <data name="ButtonExitWithoutSaving" xml:space="preserve">
-    <value>不保存退出</value>
+    <value>有未保存的更改。如果现在退出，这些更改将丢失。</value>
   </data>
   <data name="ThemeSystemLabel" xml:space="preserve">
-    <value>系统</value>
+    <value>跟随 Windows</value>
   </data>
   <data name="SettingsSectionScanning" xml:space="preserve">
     <value>扫描</value>
@@ -541,31 +511,13 @@
     <value>显示文件夹名称并可按其搜索</value>
   </data>
   <data name="RefreshOnButtonClickLabel" xml:space="preserve">
-    <value>点击刷新按钮时也刷新涂装</value>
+    <value>使用刷新按钮刷新涂装</value>
   </data>
   <data name="SettingsSaveFailedTitle" xml:space="preserve">
-    <value>保存失败</value>
+    <value>无法保存</value>
   </data>
   <data name="SettingsSaveFailedNotice" xml:space="preserve">
-    <value>无法将设置写入磁盘。更改未生效。请重试保存。</value>
-  </data>
-  <data name="StatsPopularManufacturer" xml:space="preserve">
-    <value>热门制造商</value>
-  </data>
-  <data name="StatsPopularModel" xml:space="preserve">
-    <value>热门车型</value>
-  </data>
-  <data name="StatsPopularCar" xml:space="preserve">
-    <value>热门车辆</value>
-  </data>
-  <data name="StatsPopularAuthor" xml:space="preserve">
-    <value>热门作者</value>
-  </data>
-  <data name="StatsFavoriteModel" xml:space="preserve">
-    <value>最爱车型</value>
-  </data>
-  <data name="StatsFavoriteCar" xml:space="preserve">
-    <value>最爱车辆</value>
+    <value>无法将设置写入磁盘，因此更改未生效。请再次保存。</value>
   </data>
   <data name="AuthorsButtonTooltip" xml:space="preserve">
     <value>作者</value>
@@ -578,7 +530,7 @@
   </data>
   <data name="AuthorsEmptyHint" xml:space="preserve">
     <value>还没有作者卡片。
-创建一张卡片，将同一作者的多个昵称合并为一个名字。</value>
+卡片会把同一作者的多个昵称归到一个名称下。</value>
   </data>
   <data name="AuthorCardNewTitle" xml:space="preserve">
     <value>新建作者卡片</value>
@@ -587,37 +539,34 @@
     <value>编辑作者卡片</value>
   </data>
   <data name="AuthorCardAliasesLabel" xml:space="preserve">
-    <value>昵称</value>
+    <value>账户</value>
   </data>
   <data name="AuthorCardAliasesHint" xml:space="preserve">
-    <value>选择一个或多个昵称——同一个人可能用不同账号发布涂装。</value>
+    <value>请选择作者的账户。同一个人可能用多个账户发布涂装，不同的人也可能使用相同的昵称。</value>
   </data>
   <data name="AuthorCardCustomNameLabel" xml:space="preserve">
     <value>显示名称</value>
   </data>
   <data name="AuthorCardCustomNameHint" xml:space="preserve">
-    <value>可选——默认为第一个选中的昵称</value>
+    <value>可选。默认使用所选账户的最新昵称</value>
   </data>
   <data name="AuthorCardDescriptionLabel" xml:space="preserve">
     <value>描述</value>
   </data>
   <data name="AuthorCardTwitterLabel" xml:space="preserve">
-    <value>Twitter/X</value>
+    <value>X</value>
   </data>
   <data name="AuthorCardYouTubeLabel" xml:space="preserve">
     <value>YouTube</value>
   </data>
-  <data name="AuthorCardNoAliasesError" xml:space="preserve">
-    <value>请至少选择一个昵称</value>
-  </data>
   <data name="AuthorCardAliasTakenError" xml:space="preserve">
-    <value>昵称《{0}》已属于另一张卡片</value>
+    <value>账户“{0}”已属于另一张卡片</value>
   </data>
   <data name="AuthorCardAutoGeneratedNotice" xml:space="preserve">
-    <value>此卡片是在检测到昵称更改后自动创建的。保存后将变为手动管理——自动检测将不再修改它。</value>
+    <value>图库在发现昵称变更时自动创建了此卡片。保存后，卡片将由您管理，不再自动更改。</value>
   </data>
   <data name="AuthorCardAutoGeneratedBadge" xml:space="preserve">
-    <value>自动检测</value>
+    <value>自动</value>
   </data>
   <data name="AuthorCardAliasesFormat" xml:space="preserve">
     <value>昵称：{0}</value>
@@ -638,7 +587,7 @@
     <value>删除卡片？</value>
   </data>
   <data name="AuthorCardDeleteMessage" xml:space="preserve">
-    <value>删除卡片《{0}》？其昵称将再次可用于新卡片。</value>
+    <value>删除卡片“{0}”？其昵称之后可以添加到其他卡片。</value>
   </data>
   <data name="ButtonEdit" xml:space="preserve">
     <value>编辑</value>
@@ -647,31 +596,25 @@
     <value>删除</value>
   </data>
   <data name="AuthorsSearchPlaceholder" xml:space="preserve">
-    <value>按名称或昵称搜索...</value>
+    <value>按名称或昵称搜索…</value>
   </data>
   <data name="AuthorsNoSearchResultsHint" xml:space="preserve">
     <value>未找到结果</value>
   </data>
   <data name="AuthorCardDisplayNameTakenError" xml:space="preserve">
-    <value>显示名称《{0}》已被另一张卡片使用</value>
+    <value>显示名称“{0}”已被另一张卡片使用</value>
   </data>
   <data name="AuthorCardAliasSearchPlaceholder" xml:space="preserve">
-    <value>搜索昵称...</value>
+    <value>搜索昵称…</value>
   </data>
   <data name="AuthorCardInvalidTwitterUrlError" xml:space="preserve">
-    <value>需要的是个人资料链接（例如 x.com/username），而不是具体推文或其他页面</value>
+    <value>请输入个人资料链接，例如 x.com/username，而不是帖子或其他页面的链接</value>
   </data>
   <data name="AuthorCardInvalidYouTubeUrlError" xml:space="preserve">
-    <value>需要的是 YouTube 频道链接（例如 youtube.com/@username），而不是视频链接</value>
+    <value>请输入 YouTube 频道链接，例如 youtube.com/@username，而不是视频链接</value>
   </data>
   <data name="AuthorCardViewNoCardTitle" xml:space="preserve">
-    <value>尚未创建卡片</value>
-  </data>
-  <data name="AuthorCardViewNoCardMessage" xml:space="preserve">
-    <value>尚未为作者《{0}》创建卡片</value>
-  </data>
-  <data name="AuthorCardCreateButton" xml:space="preserve">
-    <value>创建卡片</value>
+    <value>没有作者卡片</value>
   </data>
   <data name="ContextMenuMoveToArchive" xml:space="preserve">
     <value>移至归档</value>
@@ -686,10 +629,10 @@
     <value>归档</value>
   </data>
   <data name="ArchiveEmptyHint" xml:space="preserve">
-    <value>归档为空</value>
+    <value>归档中没有涂装</value>
   </data>
   <data name="ArchiveSelectedCountFormat" xml:space="preserve">
-    <value>已选择 {0} 个</value>
+    <value>已选择：{0} 个</value>
   </data>
   <data name="ArchiveRestoreButton" xml:space="preserve">
     <value>恢复</value>
@@ -701,52 +644,52 @@
     <value>永久删除？</value>
   </data>
   <data name="ArchiveDeleteConfirmMessage" xml:space="preserve">
-    <value>{0} 将被移至回收站。此操作在应用内无法撤销。</value>
+    <value>{0}将被移至回收站。图库无法撤销此操作。</value>
   </data>
   <data name="ArchivedOnFormat" xml:space="preserve">
-    <value>归档于 {0}</value>
+    <value>归档日期：{0}</value>
   </data>
   <data name="ArchiveNoSavePathMessage" xml:space="preserve">
     <value>恢复涂装前，请先在设置中选择存档文件夹</value>
   </data>
   <data name="FileOperationFailedMessage" xml:space="preserve">
-    <value>执行此操作时出现问题。请查看日志了解详细信息。</value>
+    <value>操作失败。详细信息见日志。</value>
   </data>
   <data name="PreviewDialogTitle" xml:space="preserve">
-    <value>预览</value>
+    <value>预览图</value>
   </data>
   <data name="PreviewNotFoundMessage" xml:space="preserve">
-    <value>找不到这个涂装的原始预览图片。</value>
+    <value>未找到此涂装的原始预览图。</value>
   </data>
   <data name="ViewPreviewTooltip" xml:space="preserve">
-    <value>查看原始预览</value>
+    <value>打开原始预览图</value>
   </data>
   <data name="LoadingMovingToArchive" xml:space="preserve">
-    <value>正在移至归档...</value>
+    <value>正在移至归档…</value>
   </data>
   <data name="ArchiveSelectAllButton" xml:space="preserve">
     <value>全选</value>
   </data>
   <data name="ArchiveRecoveredUnknownValue" xml:space="preserve">
-    <value>未知（恢复的条目）</value>
+    <value>未知：已恢复的条目</value>
   </data>
   <data name="BackupUnknownDate" xml:space="preserve">
-    <value>未知日期</value>
+    <value>日期未知</value>
   </data>
   <data name="BackupEntryCountFormat" xml:space="preserve">
     <value>涂装：{0}</value>
   </data>
   <data name="BackupNothingToBackUpMessage" xml:space="preserve">
-    <value>没有可备份的内容 — 图库为空</value>
+    <value>没有可备份的内容：图库为空</value>
   </data>
   <data name="BackupsDialogTitle" xml:space="preserve">
     <value>备份</value>
   </data>
   <data name="BackupsEmptyHint" xml:space="preserve">
-    <value>暂无备份</value>
+    <value>还没有备份</value>
   </data>
   <data name="BackupDiffFormat" xml:space="preserve">
-    <value>（+{0} / -{1}）</value>
+    <value>（+{0} / −{1}）</value>
   </data>
   <data name="BackupCreateButton" xml:space="preserve">
     <value>创建备份</value>
@@ -758,54 +701,54 @@
     <value>删除</value>
   </data>
   <data name="BackupDeleteConfirmTitle" xml:space="preserve">
-    <value>删除此备份？</value>
+    <value>删除备份？</value>
   </data>
   <data name="BackupDeleteConfirmMessage" xml:space="preserve">
-    <value>{0} 的备份（{1}）将被移至回收站。</value>
+    <value>{0} 的备份，{1}，将被移至回收站。</value>
   </data>
   <data name="BackupUnreadableMessage" xml:space="preserve">
-    <value>无法读取此备份的内容 — 文件可能已损坏或不是有效的备份</value>
+    <value>无法读取备份。文件可能已损坏，或不是备份文件。</value>
   </data>
   <data name="BackupDetailTitleFormat" xml:space="preserve">
     <value>{0} 的备份</value>
   </data>
   <data name="BackupRemovedSectionLabel" xml:space="preserve">
-    <value>自此备份后已删除</value>
+    <value>此备份之后删除的</value>
   </data>
   <data name="BackupAddedSectionLabel" xml:space="preserve">
-    <value>自此备份后已添加</value>
+    <value>此备份之后添加的</value>
   </data>
   <data name="BackupNoneRemovedHint" xml:space="preserve">
-    <value>自此备份后没有删除任何内容</value>
+    <value>此备份之后没有删除涂装</value>
   </data>
   <data name="BackupNoneAddedHint" xml:space="preserve">
-    <value>自此备份后没有添加任何内容</value>
+    <value>此备份之后没有添加涂装</value>
   </data>
   <data name="RestoreAlreadyExistsMessage" xml:space="preserve">
-    <value>以下涂装未恢复，因为完全相同的涂装（相同文件夹）已存在于游戏中：
+    <value>以下涂装未恢复，因为游戏中相同的文件夹里已有这些涂装：
 {0}</value>
   </data>
   <data name="RestoreFailedMessage" xml:space="preserve">
-    <value>无法恢复以下涂装。请查看日志了解详细信息：
+    <value>无法恢复以下涂装。详细信息见日志：
 {0}</value>
   </data>
   <data name="RestoreListMoreFormat" xml:space="preserve">
-    <value>…以及另外 {0} 个</value>
+    <value>以及另外 {0} 个</value>
   </data>
   <data name="RestoreDuplicateTitle" xml:space="preserve">
-    <value>发现重复项</value>
+    <value>发现重复</value>
   </data>
   <data name="RestoreDuplicateMessage" xml:space="preserve">
-    <value>图库中已有这些涂装的重复项（同一车辆，涂装数据完全相同）：
+    <value>图库中已有相同车辆的相同涂装：
 {0}
 
-仍要恢复吗？</value>
+仍要恢复这些涂装吗？</value>
   </data>
   <data name="RestoreDuplicateLineFormat" xml:space="preserve">
-    <value>• {0} — 重复：{1}</value>
+    <value>{0}：与 {1} 重复</value>
   </data>
   <data name="RestoreDuplicateOthersNote" xml:space="preserve">
-    <value>其他选中的涂装无论如何都会被恢复。</value>
+    <value>其他选中的涂装都会恢复。</value>
   </data>
   <data name="RestoreAnywayButton" xml:space="preserve">
     <value>仍然恢复</value>
@@ -817,7 +760,7 @@
     <value>部分读取</value>
   </data>
   <data name="ParsePartialBadgeTooltip" xml:space="preserve">
-    <value>已读取涂装，但其文件的一部分无法解析。已显示主要数据；部分检查（生成、重复）可能不可用。</value>
+    <value>已读取涂装，但其文件的一部分无法读取。主要数据已显示，但生成、重复等部分检查可能不可用。</value>
   </data>
   <data name="GameFolderProblemNotSet" xml:space="preserve">
     <value>未设置游戏文件夹</value>
@@ -829,7 +772,7 @@
     <value>无法访问文件夹</value>
   </data>
   <data name="GameFolderProblemNoMediaFolder" xml:space="preserve">
-    <value>这不是游戏文件夹（没有 media 文件夹）</value>
+    <value>这不是游戏文件夹：其中没有 media 文件夹</value>
   </data>
   <data name="GameFolderProblemNoCarsFolder" xml:space="preserve">
     <value>未找到 media\cars</value>
@@ -841,25 +784,25 @@
     <value>未找到 media\Livery</value>
   </data>
   <data name="GameFolderProblemNoVinyls" xml:space="preserve">
-    <value>未找到游戏贴纸（media\Livery\Vinyls.zip）</value>
+    <value>未找到游戏贴纸：media\Livery\Vinyls.zip</value>
   </data>
   <data name="GameFolderProblemVinylsUnreadable" xml:space="preserve">
     <value>无法读取游戏贴纸</value>
   </data>
   <data name="GameFolderProblemNoDecals" xml:space="preserve">
-    <value>未找到标志，部分贴花将不会绘制</value>
+    <value>未找到标志，部分贴纸不会绘制</value>
   </data>
   <data name="GameFolderProblemCarArchiveUnreadable" xml:space="preserve">
     <value>部分车辆无法读取</value>
   </data>
   <data name="GameFolderProblemUnknown" xml:space="preserve">
-    <value>该文件夹不可用</value>
+    <value>此文件夹不可用</value>
   </data>
   <data name="RenderErrorLiveryFilesNotFound" xml:space="preserve">
-    <value>未找到游戏贴纸。请检查游戏文件夹（media\Livery）。</value>
+    <value>未找到游戏贴纸。请检查游戏文件夹：media\Livery。</value>
   </data>
   <data name="RenderErrorGamePathInvalid" xml:space="preserve">
-    <value>未设置或未找到游戏文件夹。</value>
+    <value>未设置游戏文件夹，或找不到该文件夹。</value>
   </data>
   <data name="RenderErrorCarNotFound" xml:space="preserve">
     <value>游戏文件夹中没有此涂装的车辆。</value>
@@ -877,31 +820,31 @@
     <value>未绘制的标志：{0}</value>
   </data>
   <data name="RenderErrorShapesWithoutSectionFormat" xml:space="preserve">
-    <value>没有分区的图形：{0}</value>
+    <value>没有区块的图形：{0}</value>
   </data>
   <data name="RenderErrorGeneric" xml:space="preserve">
     <value>无法绘制涂装。</value>
   </data>
   <data name="View3DGameFolderChecking" xml:space="preserve">
-    <value>3D 暂不可用：正在检查游戏文件夹</value>
+    <value>3D 视图暂不可用：正在检查游戏文件夹</value>
   </data>
   <data name="View3DTooltip" xml:space="preserve">
     <value>以 3D 查看</value>
   </data>
   <data name="View3DNoCLivery" xml:space="preserve">
-    <value>3D 不可用：涂装没有 C_livery 文件</value>
+    <value>3D 视图不可用：涂装没有 C_livery 文件</value>
   </data>
   <data name="View3DParseError" xml:space="preserve">
-    <value>3D 不可用：无法读取涂装</value>
+    <value>3D 视图不可用：无法读取涂装</value>
   </data>
   <data name="View3DGameFolderInvalidFormat" xml:space="preserve">
-    <value>3D 不可用：{0}。请在设置中指定游戏文件夹。</value>
+    <value>3D 视图不可用：{0}。请在设置中指定游戏文件夹。</value>
   </data>
   <data name="View3DDialogTitle" xml:space="preserve">
-    <value>3D 查看</value>
+    <value>3D 视图</value>
   </data>
   <data name="View3DReadFailed" xml:space="preserve">
-    <value>无法读取涂装文件。详情请查看日志。</value>
+    <value>无法读取涂装文件。详细信息见日志。</value>
   </data>
   <data name="View3DParseFailedFormat" xml:space="preserve">
     <value>无法读取涂装：{0}</value>
@@ -910,7 +853,7 @@
     <value>{0:N0} 个三角形（LOD {1}）· 涂装 {2}×{3} · 画面 {4}×{5}，MSAA {6}× · {7:F1} 毫秒</value>
   </data>
   <data name="ViewerNoOpenGl" xml:space="preserve">
-    <value>3D 查看不可用：无法初始化 OpenGL。</value>
+    <value>3D 视图不可用：无法启动 OpenGL。</value>
   </data>
   <data name="ViewerQualityLow" xml:space="preserve">
     <value>低</value>
@@ -922,22 +865,22 @@
     <value>高</value>
   </data>
   <data name="ViewerQualityUltra" xml:space="preserve">
-    <value>超高</value>
+    <value>极高</value>
   </data>
   <data name="ViewerResetView" xml:space="preserve">
     <value>重置视图</value>
   </data>
   <data name="ViewerTitleFormat" xml:space="preserve">
-    <value>{0} — 3D</value>
+    <value>3D 视图：{0}</value>
   </data>
   <data name="GameFolderNotSetHint" xml:space="preserve">
-    <value>3D 查看涂装需要游戏文件夹</value>
+    <value>以 3D 查看涂装需要游戏文件夹</value>
   </data>
   <data name="GameFolderChecking" xml:space="preserve">
     <value>正在检查游戏文件夹…</value>
   </data>
   <data name="GameFolderInvalidFormat" xml:space="preserve">
-    <value>该游戏文件夹不可用：{0}</value>
+    <value>此游戏文件夹不可用：{0}</value>
   </data>
   <data name="GameFolderValidFormat" xml:space="preserve">
     <value>已找到游戏文件夹，车辆：{0}</value>
@@ -946,7 +889,7 @@
     <value>已找到游戏文件夹，车辆：{0}。但是：{1}</value>
   </data>
   <data name="ViewerControlsHint" xml:space="preserve">
-    <value>左键拖动：旋转 · 右键拖动：移动 · 滚轮：缩放 · 双击：重置</value>
+    <value>左键：旋转。右键：移动。滚轮：缩放。双击：重置。</value>
   </data>
   <data name="AuctionBadgeLabel" xml:space="preserve">
     <value>拍卖</value>
@@ -956,46 +899,46 @@
 只有在涂装服务器确认没有车辆使用后，才能移至归档。</value>
   </data>
   <data name="ArchiveAuctionNotAllowedTooltip" xml:space="preserve">
-    <value>只有在涂装服务器确认没有车辆使用拍卖涂装后，才能将其移至归档</value>
+    <value>只有在涂装服务器确认没有车辆使用后，拍卖涂装才能移至归档</value>
   </data>
   <data name="ArchiveAuctionSkippedFormat" xml:space="preserve">
-    <value>所选拍卖涂装中有 {0} 个仍保留在游戏中：尚未确认没有车辆使用它们。涂装服务器收到当前存档后即可移动。</value>
+    <value>所选拍卖涂装中仍留在游戏里的有 {0} 个。尚未确认没有车辆使用它们。涂装服务器收到当前存档后即可移动。</value>
   </data>
   <data name="ContextMenuOnlyThisCar" xml:space="preserve">
-    <value>仅显示该车型</value>
+    <value>仅此车辆</value>
   </data>
   <data name="ContextMenuOnlyThisManufacturer" xml:space="preserve">
-    <value>仅显示该厂牌</value>
+    <value>仅此制造商</value>
   </data>
   <data name="ContextMenuOnlyThisAuthor" xml:space="preserve">
-    <value>仅显示该作者</value>
+    <value>仅此作者</value>
   </data>
   <data name="ContextMenuClearQuickFilters" xml:space="preserve">
     <value>重新显示全部</value>
   </data>
   <data name="QuickFiltersLabel" xml:space="preserve">
-    <value>仅显示:</value>
+    <value>仅显示：</value>
   </data>
   <data name="QuickFilterCarFormat" xml:space="preserve">
-    <value>车型: {0}</value>
+    <value>车辆：{0}</value>
   </data>
   <data name="QuickFilterManufacturerFormat" xml:space="preserve">
-    <value>厂牌: {0}</value>
+    <value>制造商：{0}</value>
   </data>
   <data name="QuickFilterAuthorFormat" xml:space="preserve">
-    <value>作者: {0}</value>
+    <value>作者：{0}</value>
   </data>
   <data name="QuickFilterRemoveTooltip" xml:space="preserve">
     <value>移除此筛选</value>
   </data>
   <data name="StatusAutoRefreshedFormat" xml:space="preserve">
-    <value>存档已变化: +{0} / −{1}，图库已刷新</value>
+    <value>存档已更改：+{0} / −{1}，图库已更新</value>
   </data>
   <data name="FilterAuctionLabel" xml:space="preserve">
     <value>拍卖</value>
   </data>
   <data name="AuctionFilterAll" xml:space="preserve">
-    <value>所有涂装</value>
+    <value>全部涂装</value>
   </data>
   <data name="AuctionFilterSeparately" xml:space="preserve">
     <value>单独显示拍卖涂装</value>
@@ -1010,22 +953,22 @@
     <value>拍卖</value>
   </data>
   <data name="AuthorInferredTooltip" xml:space="preserve">
-    <value>此涂装未保存作者名称，已从同一作者的其他涂装中获取</value>
+    <value>此涂装没有保存作者名称，名称取自同一作者的其他涂装。</value>
   </data>
   <data name="AuthorUnknownMessage" xml:space="preserve">
-    <value>此涂装未保存作者名称，图库中也没有该作者的其他涂装可供获取。</value>
+    <value>此涂装没有保存作者名称，图库中也没有该作者的其他涂装可以获取名称。</value>
   </data>
   <data name="QuickFilterAddButton" xml:space="preserve">
     <value>筛选</value>
   </data>
   <data name="QuickFilterAddTooltip" xml:space="preserve">
-    <value>仅显示某个厂牌、车型或作者</value>
+    <value>仅显示一个制造商、车辆或作者</value>
   </data>
   <data name="QuickFilterKindManufacturer" xml:space="preserve">
-    <value>厂牌</value>
+    <value>制造商</value>
   </data>
   <data name="QuickFilterKindCar" xml:space="preserve">
-    <value>车型</value>
+    <value>车辆</value>
   </data>
   <data name="QuickFilterKindAuthor" xml:space="preserve">
     <value>作者</value>
@@ -1034,28 +977,28 @@
     <value>搜索…</value>
   </data>
   <data name="QuickFilterPickerEmpty" xml:space="preserve">
-    <value>未找到</value>
+    <value>未找到结果</value>
   </data>
   <data name="GroupShowOnlyButton" xml:space="preserve">
-    <value>仅此项</value>
+    <value>仅此组</value>
   </data>
   <data name="GroupShowOnlyTooltip" xml:space="preserve">
     <value>仅显示此组</value>
   </data>
   <data name="QuickFilterPickerCarsOfFormat" xml:space="preserve">
-    <value>{0} 的车型</value>
+    <value>{0} 的车辆</value>
   </data>
   <data name="SettingsSectionDuplicates" xml:space="preserve">
     <value>重复</value>
   </data>
   <data name="PossibleDuplicateThresholdLabel" xml:space="preserve">
-    <value>相似度达到以下值时视为可能重复</value>
+    <value>相似度达到以下值时标记为可能重复</value>
   </data>
   <data name="PossibleDuplicateThresholdHint" xml:space="preserve">
-    <value>相似度更低的匹配不会显示。完全重复始终显示。立即生效，无需重新扫描。</value>
+    <value>相似度更低的涂装不会标记。完全重复的涂装始终标记。更改立即生效，无需重新扫描。</value>
   </data>
   <data name="View3DDifferenceNote" xml:space="preserve">
-    <value>3D 预览仅供参考：颜色、材质、光照和部分细节可能与游戏中不同。</value>
+    <value>3D 视图仅为近似效果：颜色、材质、光照和部分细节可能与游戏中不同。</value>
   </data>
   <data name="ServerStatusChecking" xml:space="preserve">
     <value>服务器：正在连接…</value>
@@ -1076,16 +1019,16 @@
     <value>服务器：维护中</value>
   </data>
   <data name="ServerStatusUnreachable" xml:space="preserve">
-    <value>服务器不可用</value>
+    <value>服务器：不可用</value>
   </data>
   <data name="ServerStatusNoInternet" xml:space="preserve">
-    <value>无网络连接</value>
+    <value>没有网络连接</value>
   </data>
   <data name="ServerStatusRateLimited" xml:space="preserve">
     <value>服务器：请求过多</value>
   </data>
   <data name="ServerStatusUpdateRequired" xml:space="preserve">
-    <value>服务器：请更新应用</value>
+    <value>服务器：需要更新版本的图库</value>
   </data>
   <data name="ServerStatusAppRejected" xml:space="preserve">
     <value>服务器：不接受此版本</value>
@@ -1094,120 +1037,120 @@
     <value>服务器：安全连接失败</value>
   </data>
   <data name="ServerStatusServerError" xml:space="preserve">
-    <value>服务器错误</value>
+    <value>服务器：错误</value>
   </data>
   <data name="ServerStatusNotConfigured" xml:space="preserve">
-    <value>此版本未配置服务器</value>
+    <value>服务器：此版本未配置</value>
   </data>
   <data name="ServerStatusVersionFormat" xml:space="preserve">
     <value>服务器 {0}</value>
   </data>
   <data name="ServerStatusRetryHint" xml:space="preserve">
-    <value>应用将自动重试。</value>
+    <value>图库将自动重试。</value>
   </data>
   <data name="ServerStatusRetryInFormat" xml:space="preserve">
     <value>{0} 秒后重试。</value>
   </data>
   <data name="ServerStatusUpdateHint" xml:space="preserve">
-    <value>服务器需要更新版本的应用，请更新。</value>
+    <value>服务器需要更新版本的图库。请更新图库。</value>
   </data>
   <data name="ServerStatusAppRejectedHint" xml:space="preserve">
-    <value>服务器不接受此应用版本，请使用官方发布版。</value>
+    <value>服务器不接受此图库版本。请使用官方发布版。</value>
   </data>
   <data name="ServerStatusCertificateHint" xml:space="preserve">
-    <value>服务器证书未通过验证：连接可能被拦截（例如杀毒软件或代理）。应用不会自动重试。</value>
+    <value>服务器证书未通过验证。连接可能被拦截，例如被杀毒软件或代理拦截。图库不会自动重试。</value>
   </data>
   <data name="ServerStatusClickToRecheck" xml:space="preserve">
     <value>点击检查服务器状态</value>
   </data>
   <data name="ServerSyncDoneFormat" xml:space="preserve">
     <value>已应用到车辆的涂装：{0}
-更新于 {1}</value>
+更新时间：{1}</value>
   </data>
   <data name="ServerSyncProfileNotFound" xml:space="preserve">
-    <value>在存档文件夹中找不到配置文件存档（C_ProfileData）。</value>
+    <value>存档文件夹中没有配置文件 C_ProfileData。</value>
   </data>
   <data name="ServerSyncSaveNotSupported" xml:space="preserve">
-    <value>服务器暂时无法读取此存档，可能是游戏已更新。即将支持。</value>
+    <value>服务器暂时无法读取此存档。游戏可能已更新。之后会加入支持。</value>
   </data>
   <data name="ServerSyncSaveRejected" xml:space="preserve">
-    <value>服务器提示此文件不是有效的配置文件存档。</value>
+    <value>服务器认为此文件不是有效的配置文件。</value>
   </data>
   <data name="ServerSyncFailed" xml:space="preserve">
-    <value>无法更新已应用的涂装，应用将重试。</value>
+    <value>无法更新已应用到车辆的涂装。图库将重试。</value>
   </data>
   <data name="InstalledBadgeLabel" xml:space="preserve">
     <value>已应用</value>
   </data>
   <data name="InstalledBadgeTooltip" xml:space="preserve">
-    <value>已在游戏中应用到车辆</value>
+    <value>此涂装已在游戏中应用到车辆</value>
   </data>
   <data name="InstalledBadgeTooltipManyFormat" xml:space="preserve">
-    <value>已在游戏中应用到 {0} 辆车</value>
+    <value>此涂装已在游戏中应用到 {0} 辆车</value>
   </data>
   <data name="SettingsSectionServer" xml:space="preserve">
-    <value>涂装数据服务器</value>
+    <value>涂装服务器</value>
   </data>
   <data name="ServerConnectionLabel" xml:space="preserve">
-    <value>连接服务器以确定已应用的涂装</value>
+    <value>使用服务器确定已应用到车辆的涂装</value>
   </data>
   <data name="ServerConnectionDescription" xml:space="preserve">
-    <value>为确定已应用到车辆的涂装，应用程序会将存档文件（C_ProfileData）传输至服务器。该文件仅用于获取已应用涂装的信息，不会保存在服务器上。
+    <value>为了确定哪些涂装已应用到车辆，图库会将存档文件 C_ProfileData 发送到服务器。服务器仅将该文件用于此目的，不会保存它。
 
-存档文件中的数据不会被保存，也不会用于任何其他目的。服务器用于安全保管解密存档文件所需的密钥。
+文件中的数据不会被保留，也不会用于其他任何用途。服务器会安全保管解密存档文件所需的密钥。
 
 该服务器与 Forza Horizon、Xbox 或 Microsoft 的官方服务器无关。</value>
   </data>
   <data name="ServerConsentMessage" xml:space="preserve">
-    <value>为确定已应用到车辆的涂装，应用程序会将存档文件（C_ProfileData）传输至服务器。该文件仅用于获取已应用涂装的信息，不会保存在服务器上。
+    <value>为了确定哪些涂装已应用到车辆，图库会将存档文件 C_ProfileData 发送到服务器。服务器仅将该文件用于此目的，不会保存它。
 
-存档文件中的数据不会被保存，也不会用于任何其他目的。服务器用于安全保管解密存档文件所需的密钥。
+文件中的数据不会被保留，也不会用于其他任何用途。服务器会安全保管解密存档文件所需的密钥。
 
 该服务器与 Forza Horizon、Xbox 或 Microsoft 的官方服务器无关。
 
-仅在您同意的情况下才会向服务器发送数据。是否启用服务器连接？</value>
+只有在您同意后才会向服务器发送数据。要开启服务器连接吗？</value>
   </data>
   <data name="ServerConsentTitle" xml:space="preserve">
-    <value>连接涂装数据服务器</value>
+    <value>连接涂装服务器</value>
   </data>
   <data name="ServerConsentAccept" xml:space="preserve">
-    <value>是的，我已了解并希望继续</value>
+    <value>是，开启连接</value>
   </data>
   <data name="FilterInstalledLabel" xml:space="preserve">
-    <value>已应用的涂装</value>
+    <value>已应用到车辆</value>
   </data>
   <data name="InstalledAllToggle" xml:space="preserve">
-    <value>所有涂装</value>
+    <value>全部涂装</value>
   </data>
   <data name="InstalledFirstToggle" xml:space="preserve">
-    <value>已应用的优先</value>
+    <value>已应用到车辆的优先</value>
   </data>
   <data name="OnlyInstalledToggle" xml:space="preserve">
-    <value>仅已应用</value>
+    <value>仅已应用到车辆的</value>
   </data>
   <data name="FilterValueUnavailable" xml:space="preserve">
     <value>关闭</value>
   </data>
   <data name="InstalledFilterNeedsServer" xml:space="preserve">
-    <value>请在设置中启用涂装数据服务器连接，以确定已应用的涂装。</value>
+    <value>要确定已应用到车辆的涂装，请在设置中开启涂装服务器。</value>
   </data>
   <data name="ArchiveLeftoverFoldersFormat" xml:space="preserve">
-    <value>部分文件夹无法从原位置删除——其中的文件可能正在被使用（游戏是否正在运行？）。没有丢失任何数据：有效的副本是完整的。以下残留文件夹已不再需要，可以删除：
+    <value>部分文件夹无法从原位置删除。其中的文件可能正在被使用，例如被正在运行的游戏使用。没有丢失任何内容：新副本是完整的。以下残留文件夹已不再需要，可以删除：
 {0}</value>
   </data>
   <data name="ArchiveInstalledNotAllowedTooltip" xml:space="preserve">
     <value>已在游戏中应用到车辆的涂装无法移至归档</value>
   </data>
   <data name="ArchiveInstalledSkippedFormat" xml:space="preserve">
-    <value>已在游戏中应用到车辆的涂装无法移至归档，所选涂装中有 {0} 个仍保留在游戏中。</value>
+    <value>已在游戏中应用到车辆的涂装无法移至归档。所选涂装中仍留在游戏里的有 {0} 个。</value>
   </data>
   <data name="ArchiveInstalledUnknownMessage" xml:space="preserve">
-    <value>目前无法得知哪些涂装已应用到车辆，因此将此涂装移至归档并不安全：它可能已在游戏中应用到车辆。
+    <value>目前不知道哪些涂装已应用到车辆，因此将此涂装移至归档并不安全：它可能已在游戏中应用到车辆。
 
 要将涂装移至归档吗？</value>
   </data>
   <data name="ArchiveInstalledUnknownMessageMany" xml:space="preserve">
-    <value>目前无法得知哪些涂装已应用到车辆，因此将这些涂装移至归档并不安全：其中一些可能已在游戏中应用到车辆。
+    <value>目前不知道哪些涂装已应用到车辆，因此将这些涂装移至归档并不安全：其中一些可能已在游戏中应用到车辆。
 
 要将涂装移至归档吗？</value>
   </data>
@@ -1215,51 +1158,52 @@
     <value>不再显示</value>
   </data>
   <data name="ArchiveAuctionOrInstalledNotAllowedTooltip" xml:space="preserve">
-    <value>已在游戏中应用到车辆的涂装无法移至归档；拍卖涂装只有在涂装服务器确认没有车辆使用后才能移动</value>
+    <value>已在游戏中应用到车辆的涂装无法移至归档。拍卖涂装只有在涂装服务器确认没有车辆使用后才能移动。</value>
   </data>
   <data name="ArchiveInstalledOutdatedMessage" xml:space="preserve">
-    <value>存档文件在上次同步后已发生变化，新数据尚未发送到涂装服务器。已应用到车辆的涂装列表可能已过时，因此将此涂装移至归档并不安全：它可能已在游戏中应用到车辆。
+    <value>存档在上次同步后发生了变化，新数据尚未到达涂装服务器。已应用到车辆的涂装列表可能已过时，因此将此涂装移至归档并不安全：它可能已在游戏中应用到车辆。
 
-建议等待同步完成（同步会自动进行，可能需要几分钟）后再试。现在就将涂装移至归档吗？</value>
+建议等待自动同步完成后再试，同步可能需要几分钟。现在就将涂装移至归档吗？</value>
   </data>
   <data name="ArchiveInstalledOutdatedMessageMany" xml:space="preserve">
-    <value>存档文件在上次同步后已发生变化，新数据尚未发送到涂装服务器。已应用到车辆的涂装列表可能已过时，因此将这些涂装移至归档并不安全：其中一些可能已在游戏中应用到车辆。
+    <value>存档在上次同步后发生了变化，新数据尚未到达涂装服务器。已应用到车辆的涂装列表可能已过时，因此将这些涂装移至归档并不安全：其中一些可能已在游戏中应用到车辆。
 
-建议等待同步完成（同步会自动进行，可能需要几分钟）后再试。现在就将涂装移至归档吗？</value>
+建议等待自动同步完成后再试，同步可能需要几分钟。现在就将涂装移至归档吗？</value>
   </data>
   <data name="ContextMenuNavigateInGame" xml:space="preserve">
     <value>在游戏中定位</value>
   </data>
   <data name="GamePositionDescriptionFormat" xml:space="preserve">
-    <value>第 {0} 列，第 {1} 行（共 {2} 行）（第 {3} 个，共 {4} 个）</value>
+    <value>第 {0} 列，第 {1} / {2} 行（第 {3} / {4} 个）</value>
   </data>
   <data name="GamePositionTooltipFormat" xml:space="preserve">
     <value>在“我的设计”中的位置：{0}</value>
   </data>
   <data name="NavigateInGameTooltipFormat" xml:space="preserve">
-    <value>在游戏中定位：将“我的设计”中的光标移到{0}。
-请先在游戏中打开“我的设计”，光标位于第一个设计且未使用筛选。按 Esc 取消。</value>
+    <value>在游戏中定位：把“我的设计”中的光标移到{0}。
+请先在游戏中打开“我的设计”，不要使用筛选。图库会自动切换到游戏，把鼠标指针移出游戏窗口，并重新打开菜单，从第一个涂装开始。
+光标移动期间请勿触碰鼠标和键盘：移动鼠标、按 Esc 或切换到其他窗口都会停止定位。</value>
   </data>
   <data name="NavigateInGameAuctionTooltip" xml:space="preserve">
     <value>拍卖涂装不会显示在“我的设计”中</value>
   </data>
   <data name="NavigateInGameNoPositionTooltip" xml:space="preserve">
-    <value>尚不清楚在“我的设计”中的位置</value>
+    <value>尚不知道在“我的设计”中的位置</value>
   </data>
   <data name="NavigateInGameMultipleSelectedTooltip" xml:space="preserve">
-    <value>只选择一个涂装才能在游戏中定位</value>
+    <value>要在游戏中定位，请只选择一个涂装</value>
   </data>
   <data name="NavigateFailedMessage" xml:space="preserve">
-    <value>无法在游戏中移动光标。详情请查看日志。</value>
+    <value>无法在游戏中移动光标。详细信息见日志。</value>
   </data>
   <data name="NavigateNoSavePathMessage" xml:space="preserve">
-    <value>尚未设置存档文件夹。请在设置中选择。</value>
+    <value>未设置存档文件夹。请在设置中选择。</value>
   </data>
   <data name="NavigateGameFolderCheckingMessage" xml:space="preserve">
     <value>仍在检查游戏文件夹。请稍后再试。</value>
   </data>
   <data name="NavigateRowsUnknownMessage" xml:space="preserve">
-    <value>无法判断“我的设计”有几行：菜单文件被模组以未知方式修改。请在“设置 → 在游戏中定位”中选择行数。</value>
+    <value>无法判断“我的设计”有几行：模组以未知方式修改了菜单文件。请在设置的“在游戏中定位”部分中选择行数。</value>
   </data>
   <data name="NavigateSaveReadFailedMessage" xml:space="preserve">
     <value>无法读取存档文件夹。</value>
@@ -1268,7 +1212,7 @@
     <value>存档文件夹中已没有此涂装。请刷新列表。</value>
   </data>
   <data name="NavigateProgressFormat" xml:space="preserve">
-    <value>正在游戏中移到{0}：第 {1}/{2} 次按键 · 按 Esc 取消</value>
+    <value>正在游戏中移到{0}：第 {1} / {2} 次按键。请勿移动鼠标。按 Esc 取消。</value>
   </data>
   <data name="NavigateCompletedFormat" xml:space="preserve">
     <value>光标已移到{0}。请在游戏中确认选中的位置。</value>
@@ -1277,25 +1221,25 @@
     <value>为避免改变选中项，鼠标指针已移出游戏窗口。</value>
   </data>
   <data name="NavigateCancelledByUserFormat" xml:space="preserve">
-    <value>已按 Esc 停止（已发送 {0}/{1} 次按键）。</value>
+    <value>已按 Esc 停止。已发送按键：{0} / {1} 次。</value>
   </data>
   <data name="NavigateFocusLostFormat" xml:space="preserve">
-    <value>已停止（已发送 {0}/{1} 次按键）：游戏窗口不再处于活动状态。</value>
+    <value>在第 {0} / {1} 次按键时停止：游戏窗口不再处于活动状态。</value>
   </data>
   <data name="NavigateMouseMovedFormat" xml:space="preserve">
-    <value>已停止（已发送 {0}/{1} 次按键）：鼠标移动了。</value>
+    <value>在第 {0} / {1} 次按键时停止：鼠标移动了。</value>
   </data>
   <data name="NavigateActivationFailedMessage" xml:space="preserve">
     <value>无法将游戏窗口切到前台。未发送任何按键。</value>
   </data>
   <data name="NavigateCursorParkFailedMessage" xml:space="preserve">
-    <value>无法将鼠标指针移出游戏窗口，因此未发送按键：指针悬停在游戏上会改变选中项。</value>
+    <value>无法将鼠标指针移出游戏窗口，因此未发送按键：指针停在游戏上会改变选中项。</value>
   </data>
   <data name="NavigateInputRejectedMessage" xml:space="preserve">
-    <value>Windows 拒绝了按键输入。如果游戏以管理员身份运行，请也以管理员身份运行本程序。</value>
+    <value>Windows 拒绝了按键输入。如果游戏以管理员身份运行，请也以管理员身份运行图库。</value>
   </data>
   <data name="NavigateSceneChangedMessage" xml:space="preserve">
-    <value>游戏启动后“我的设计”菜单被模组修改，游戏仍在显示旧的布局。请重启游戏后重试。</value>
+    <value>游戏启动后模组修改了“我的设计”菜单，因此游戏仍显示旧的布局。请重启游戏后重试。</value>
   </data>
   <data name="SettingsSectionNavigation" xml:space="preserve">
     <value>在游戏中定位</value>
@@ -1307,10 +1251,10 @@
     <value>自动</value>
   </data>
   <data name="NavigationRowsTwo" xml:space="preserve">
-    <value>2 行（标准）</value>
+    <value>2 行，标准菜单</value>
   </data>
   <data name="NavigationRowsThree" xml:space="preserve">
-    <value>3 行（菜单模组）</value>
+    <value>3 行，菜单模组</value>
   </data>
   <data name="NavigationRowsDetectedVanilla" xml:space="preserve">
     <value>检测结果：2 行，标准菜单。</value>
@@ -1319,7 +1263,7 @@
     <value>检测结果：{0} 行，菜单已被模组修改。</value>
   </data>
   <data name="NavigationRowsDetectedNoGameFolder" xml:space="preserve">
-    <value>未设置游戏文件夹，因此按 2 行处理。设置游戏文件夹后才能识别菜单模组。</value>
+    <value>未设置游戏文件夹，因此按 2 行处理。设置游戏文件夹后即可识别菜单模组。</value>
   </data>
   <data name="NavigationRowsDetectedUnknown" xml:space="preserve">
     <value>无法检测行数：菜单文件以未知方式被修改。请选择 2 行或 3 行。</value>
@@ -1328,49 +1272,49 @@
     <value>按键间隔</value>
   </data>
   <data name="NavigationKeyIntervalHint" xml:space="preserve">
-    <value>如果光标停在涂装之前，请调大：按键过快时游戏会漏掉。</value>
+    <value>如果光标停在涂装之前，请调大间隔：按键过快时游戏会忽略。</value>
   </data>
   <data name="MillisecondsFormat" xml:space="preserve">
     <value>{0} 毫秒</value>
   </data>
   <data name="SortOptionGameOrder" xml:space="preserve">
-    <value>游戏内顺序</value>
+    <value>与游戏相同</value>
   </data>
   <data name="GroupingOptionByCar" xml:space="preserve">
-    <value>按车型</value>
+    <value>按车辆</value>
   </data>
   <data name="GroupNotInMyDesigns" xml:space="preserve">
     <value>不在“我的设计”中</value>
   </data>
   <data name="ChangesDialogTitle" xml:space="preserve">
-    <value>自上次启动以来的变化</value>
+    <value>上次启动以来的变化</value>
   </data>
   <data name="ChangesSummaryFormat" xml:space="preserve">
     <value>图库关闭期间：新增 +{0}，删除 −{1}</value>
   </data>
   <data name="ChangesAddedTabFormat" xml:space="preserve">
-    <value>新增 (+{0})</value>
+    <value>新增（+{0}）</value>
   </data>
   <data name="ChangesRemovedTabFormat" xml:space="preserve">
-    <value>已删除 (−{0})</value>
+    <value>已删除（−{0}）</value>
   </data>
   <data name="ChangesNoneAddedHint" xml:space="preserve">
     <value>没有新涂装</value>
   </data>
   <data name="ChangesNoneRemovedHint" xml:space="preserve">
-    <value>没有删除任何涂装</value>
+    <value>没有删除涂装</value>
   </data>
   <data name="ChangesDontShowAgainCheckBox" xml:space="preserve">
-    <value>不再显示（可在设置中重新开启）</value>
+    <value>不再显示。可在设置中重新开启。</value>
   </data>
   <data name="ShowChangesSinceLastLaunchLabel" xml:space="preserve">
-    <value>显示自上次启动以来的变化</value>
+    <value>显示上次启动以来的变化</value>
   </data>
   <data name="DiagnosticsSectionLabel" xml:space="preserve">
     <value>诊断</value>
   </data>
   <data name="DiagnosticsHint" xml:space="preserve">
-    <value>将日志、去除路径和 ID 的设置以及涂装解析错误保存为 ZIP，可附在错误报告中。不会自动发送任何内容。</value>
+    <value>将日志、去除路径和 ID 的设置以及涂装读取错误保存为 ZIP 文件，可附在错误报告中。不会发送到任何地方。</value>
   </data>
   <data name="ExportDiagnosticsButton" xml:space="preserve">
     <value>导出诊断信息…</value>
@@ -1388,16 +1332,16 @@
     <value>在文件夹中显示</value>
   </data>
   <data name="DiagnosticsExportFailedMessage" xml:space="preserve">
-    <value>无法保存诊断文件。详情请查看日志。</value>
+    <value>无法保存诊断文件。详细信息见日志。</value>
   </data>
   <data name="AccountSwitcherTooltip" xml:space="preserve">
-    <value>游戏账户：在此电脑上的账户之间切换</value>
+    <value>游戏账户：在此电脑上找到的账户之间切换</value>
   </data>
   <data name="AccountUnnamedFormat" xml:space="preserve">
     <value>账户 …{0}</value>
   </data>
   <data name="AccountLiveriesFormat" xml:space="preserve">
-    <value>{0} 个涂装</value>
+    <value>涂装：{0}</value>
   </data>
   <data name="AccountUnavailableMessage" xml:space="preserve">
     <value>此账户的存档文件夹已不可用。</value>
@@ -1409,22 +1353,22 @@
     <value>恢复到此账户？</value>
   </data>
   <data name="RestoreFromOtherAccountMessage" xml:space="preserve">
-    <value>来自其他账户（{1}）的涂装：{0} 个。它们将恢复到当前账户：{2}。</value>
+    <value>来自账户 {1} 的涂装：{0} 个。它们将恢复到当前账户 {2}。</value>
   </data>
   <data name="RestoreIntoCurrentAccountButton" xml:space="preserve">
-    <value>恢复到这里</value>
+    <value>恢复到此处</value>
   </data>
   <data name="BackupOtherAccountNote" xml:space="preserve">
-    <value>此备份来自其他账户（{0}）。下方的对比基于当前账户（{1}），恢复的涂装也会进入当前账户。</value>
+    <value>此备份来自其他账户 {0}。下方的对比基于当前账户 {1}，恢复的涂装也会进入当前账户。</value>
   </data>
   <data name="AccountFilterOnlyCurrent" xml:space="preserve">
     <value>仅此账户</value>
   </data>
   <data name="AccountFilterHiddenFormat" xml:space="preserve">
-    <value>已隐藏其他账户的项目：{0}</value>
+    <value>已隐藏其他账户的涂装：{0}</value>
   </data>
   <data name="AuthorsSelectForMergeTooltip" xml:space="preserve">
-    <value>选择以与其他卡片合并</value>
+    <value>选择后可与其他卡片合并</value>
   </data>
   <data name="AuthorCardSplitButton" xml:space="preserve">
     <value>拆分</value>
@@ -1439,7 +1383,7 @@
     <value>不同作者</value>
   </data>
   <data name="AuthorsRestoreHiddenButton" xml:space="preserve">
-    <value>恢复</value>
+    <value>重新显示</value>
   </data>
   <data name="AuthorsSuggestionsTitle" xml:space="preserve">
     <value>可能是同一作者</value>
@@ -1454,10 +1398,10 @@
     <value>账户“{0}”</value>
   </data>
   <data name="AuthorsSuggestionFormat" xml:space="preserve">
-    <value>{0} 和 {1}：共同名称“{2}”</value>
+    <value>{0} 和 {1}：相同的昵称“{2}”</value>
   </data>
   <data name="AuthorCardHideAutoMessage" xml:space="preserve">
-    <value>隐藏自动卡片“{0}”？下次扫描后不会再自动创建。可在“已隐藏的自动卡片”中恢复。</value>
+    <value>隐藏自动卡片“{0}”？下次扫描后不会再创建。可在“已隐藏的自动卡片”中重新显示。</value>
   </data>
   <data name="AuthorsMergeConfirmTitle" xml:space="preserve">
     <value>合并作者卡片</value>
@@ -1465,7 +1409,7 @@
   <data name="AuthorsMergeConfirmMessage" xml:space="preserve">
     <value>合并为一张卡片：{0}？
 
-这些作者的所有账户和名称将归入同一张卡片。之后可以再次拆分。</value>
+这些作者的所有账户和昵称将归入同一张卡片。之后可以再次拆分。</value>
   </data>
   <data name="AuthorsMergeFailedMessage" xml:space="preserve">
     <value>无法合并：其中一个账户属于另一张卡片，或合并后卡片的名称已被另一张卡片使用。</value>
@@ -1474,7 +1418,7 @@
     <value>拆分作者卡片</value>
   </data>
   <data name="AuthorCardSplitConfirmMessage" xml:space="preserve">
-    <value>将“{0}”拆分为独立卡片？卡片保留涂装最多的账户，其他账户将重新独立。</value>
+    <value>将“{0}”拆分为独立卡片？卡片保留涂装最多的账户，其他账户重新独立。</value>
   </data>
   <data name="AccountSourceGoneFormat" xml:space="preserve">
     <value>来自已删除的账户：{0}</value>
@@ -1486,13 +1430,13 @@
     <value>账户数据</value>
   </data>
   <data name="AccountDataHint" xml:space="preserve">
-    <value>每个游戏账户都有各自的扫描缓存和预览图。忘记账户可释放这部分空间；如果该账户再次出现，其涂装会重新扫描。存档库和备份不受影响。</value>
+    <value>每个游戏账户都有各自的扫描缓存和预览图。删除账户数据可释放这部分空间。如果该账户再次出现，其涂装会重新扫描。归档和备份不受影响。</value>
   </data>
   <data name="AccountDataCurrent" xml:space="preserve">
     <value>当前账户</value>
   </data>
   <data name="AccountDataPresent" xml:space="preserve">
-    <value>存档文件夹存在</value>
+    <value>已找到存档文件夹</value>
   </data>
   <data name="AccountDataGoneSinceFormat" xml:space="preserve">
     <value>自 {0} 起未找到</value>
@@ -1501,19 +1445,19 @@
     <value>未找到存档文件夹</value>
   </data>
   <data name="AccountDataForgetButton" xml:space="preserve">
-    <value>忘记</value>
+    <value>删除数据</value>
   </data>
   <data name="AccountDataForgetTitle" xml:space="preserve">
-    <value>忘记账户</value>
+    <value>删除账户数据</value>
   </data>
   <data name="AccountDataForgetMessage" xml:space="preserve">
-    <value>忘记“{0}”？其扫描缓存和预览图（约 {1}）将被删除。存档库和备份会保留。如果该账户再次出现，其涂装会重新扫描。</value>
+    <value>删除账户 {0} 的数据？其扫描缓存和预览图，约 {1}，将被删除。归档和备份会保留。如果该账户再次出现，其涂装会重新扫描。</value>
   </data>
   <data name="AccountDataForgetFailedMessage" xml:space="preserve">
-    <value>无法删除该账户的数据。详情请查看日志。</value>
+    <value>无法删除账户数据。详细信息见日志。</value>
   </data>
   <data name="GameRunningFileChangeMessage" xml:space="preserve">
-    <value>游戏打开时将移动存档文件夹中的涂装。游戏可能仍占用文件，或在重启前看不到更改，游戏自身的存档也可能覆盖更改。先关闭游戏更安全。</value>
+    <value>游戏运行时将移动存档文件夹中的涂装。游戏可能仍在使用这些文件，或在重启前看不到更改，游戏自身的保存也可能撤销更改。先关闭游戏更安全。</value>
   </data>
   <data name="GameRunningContinueButton" xml:space="preserve">
     <value>仍然继续</value>
@@ -1537,76 +1481,76 @@
     <value>国家</value>
   </data>
   <data name="SortOptionCarType" xml:space="preserve">
-    <value>车型</value>
+    <value>车辆类型</value>
   </data>
   <data name="GroupingOptionByCountry" xml:space="preserve">
     <value>按国家</value>
   </data>
   <data name="GroupingOptionByCarType" xml:space="preserve">
-    <value>按车型</value>
+    <value>按车辆类型</value>
   </data>
   <data name="UnknownCountry" xml:space="preserve">
     <value>未知国家</value>
   </data>
   <data name="UnknownCarType" xml:space="preserve">
-    <value>未知车型</value>
+    <value>未知车辆类型</value>
   </data>
   <data name="CarCountryLabel" xml:space="preserve">
     <value>制造商国家</value>
   </data>
   <data name="CarTypeLabel" xml:space="preserve">
-    <value>游戏内车型</value>
+    <value>游戏内的车辆类型</value>
   </data>
   <data name="SettingsSectionCarTextLanguage" xml:space="preserve">
-    <value>车名语言</value>
+    <value>车辆名称语言</value>
   </data>
   <data name="CarTextLanguageAsInterface" xml:space="preserve">
     <value>与界面相同</value>
   </data>
   <data name="CarTextLanguageHint" xml:space="preserve">
-    <value>车名、制造商名称、国家和车型取自该语言的游戏文件。</value>
+    <value>车辆和制造商名称、国家及车辆类型取自该语言的游戏文件。</value>
   </data>
   <data name="CarTextLanguageNoGameTexts" xml:space="preserve">
-    <value>尚未读取游戏文件（未找到游戏文件夹）：车名以英文显示。</value>
+    <value>未找到游戏文件夹，因此尚未读取游戏文件。车辆名称以英文显示。</value>
   </data>
   <data name="ContextMenuOnlyThisCountry" xml:space="preserve">
     <value>仅此国家的车辆</value>
   </data>
   <data name="ContextMenuOnlyThisCarType" xml:space="preserve">
-    <value>仅此车型</value>
+    <value>仅此车辆类型</value>
   </data>
   <data name="QuickFilterCountryFormat" xml:space="preserve">
     <value>国家：{0}</value>
   </data>
   <data name="QuickFilterCarTypeFormat" xml:space="preserve">
-    <value>车型：{0}</value>
+    <value>车辆类型：{0}</value>
   </data>
   <data name="CarTextsNoGameFolder" xml:space="preserve">
-    <value>所选语言的名称不可用：未指定游戏文件夹或找不到游戏文件夹。显示的是车辆数据库中的名称。</value>
+    <value>所选语言的名称不可用：未设置游戏文件夹，或找不到该文件夹。显示的是车辆数据库中的名称。</value>
   </data>
   <data name="CarTextsNoStringTables" xml:space="preserve">
-    <value>所选语言的名称不可用：游戏文件夹中没有语言文件（StringTables）。显示的是车辆数据库中的名称。</value>
+    <value>所选语言的名称不可用：游戏文件夹中没有语言文件 StringTables。显示的是车辆数据库中的名称。</value>
   </data>
   <data name="GameFolderProblemNoPaintMaterials" xml:space="preserve">
-    <value>没有涂装材质（media\cars\_library\materials）：3D 视图使用内置材质</value>
+    <value>media\cars\_library\materials 中没有喷漆材质：3D 视图使用内置材质</value>
   </data>
   <data name="GameFolderProblemNoPaintTextures" xml:space="preserve">
-    <value>没有涂装纹理（media\cars\_library\textures）：纹理涂装以平均颜色显示</value>
+    <value>media\cars\_library\textures 中没有喷漆纹理：带纹理的喷漆以平均颜色显示</value>
   </data>
   <data name="GameFolderProblemNoStringTables" xml:space="preserve">
-    <value>没有语言文件（StringTables）：车名取自车辆数据库</value>
+    <value>没有语言文件 StringTables：车辆名称取自车辆数据库</value>
   </data>
   <data name="AboutTitleFormat" xml:space="preserve">
     <value>关于 {0}</value>
   </data>
   <data name="AboutDescriptionFormat" xml:space="preserve">
-    <value>用于浏览 {0} 存档中涂装的图库查看器。</value>
+    <value>用于浏览 {0} 存档中涂装的图库。</value>
   </data>
   <data name="FolderNotFoundMessageFormat" xml:space="preserve">
     <value>无法自动找到 {0} 的存档文件夹。
 
-是否手动选择?
-(通常位于: C:\XboxGames\GameSave\pgs\u_[编号]_{1})</value>
+要手动选择吗？
+通常为 C:\XboxGames\GameSave\pgs\u_[编号]_{1}</value>
   </data>
   <data name="NavigateGameNotFoundFormat" xml:space="preserve">
     <value>未找到 {0} 窗口。请启动游戏并打开“我的设计”。</value>
@@ -1615,22 +1559,892 @@
     <value>找到多个 {0} 窗口。为避免把按键发到错误的窗口，未发送任何按键。请关闭多余的窗口后重试。</value>
   </data>
   <data name="NavigateGameElevatedFormat" xml:space="preserve">
-    <value>{0} 以管理员身份运行，而本程序没有，因此 Windows 会丢弃按键。未发送任何按键。请也以管理员身份运行本程序，或以非管理员身份启动游戏。</value>
+    <value>{0} 以管理员身份运行，而图库没有，因此 Windows 会丢弃按键。未发送任何按键。请也以管理员身份运行图库，或以非管理员身份启动游戏。</value>
   </data>
   <data name="DiagnosticsReadmeFormat" xml:space="preserve">
     <value>{0} 诊断信息
 
-- info.json：应用版本、Windows 和 .NET 版本、界面语言、缓存中的涂装数量。
-- settings.json：设置；路径和 ID 已替换为 "&lt;removed&gt;"。
-- parse-issues.json：文件无法完整或部分读取的涂装，按文件夹名称列出。
-- logs/：最近几天的应用日志；已知文件夹和玩家 ID 已替换为 &lt;save-folder&gt;、&lt;user-id&gt; 等占位符。
+info.json：图库版本、Windows 和 .NET 版本、界面语言以及缓存中的涂装数量。
+settings.json：设置。路径和 ID 已替换为 &lt;removed&gt;。
+parse-issues.json：文件无法完整或部分读取的涂装，按文件夹名称列出。
+logs：最近几天的日志。已知文件夹和玩家 ID 已替换为 &lt;save-folder&gt;、&lt;user-id&gt; 等标记。
 
-发送前请检查这些文件：应用不知道的值（例如文件夹路径中输入的名字）不会被替换。</value>
+发送前请检查这些文件。图库不知道的值，例如文件夹路径中输入的名字，不会被替换。</value>
   </data>
   <data name="GameRunningTitleFormat" xml:space="preserve">
     <value>{0} 正在运行</value>
   </data>
   <data name="SaveFolderContentHintFormat" xml:space="preserve">
-    <value>通常位于: C:\XboxGames\GameSave\pgs\u_[编号]_{0}</value>
+    <value>通常为：C:\XboxGames\GameSave\pgs\u_[编号]_{0}</value>
+  </data>
+  <data name="RenderedThumbnailTooltip" xml:space="preserve">
+    <value>存档中没有此涂装的预览图，因此图库根据 3D 模型绘制了一张。它可能与游戏中的预览图不同，也不会写入存档。</value>
+  </data>
+  <data name="AuthorIdInvalidTooltip" xml:space="preserve">
+    <value>此涂装的作者 ID 不是有效账户。文件头很可能被修改过，作者名称也可能是编造的。点击可指定作者。</value>
+  </data>
+  <data name="AuthorIdNoneTooltip" xml:space="preserve">
+    <value>此涂装没有作者 ID。它可能是原厂涂装、在不保存作者的拍卖行购买的涂装，或在本电脑上制作且未发布的涂装。</value>
+  </data>
+  <data name="AuthorAssignedTooltip" xml:space="preserve">
+    <value>此涂装的作者由您指定：涂装自身的作者 ID 无法说明作者。</value>
+  </data>
+  <data name="AuthorHintsTooltipHeader" xml:space="preserve">
+    <value>可能的作者：</value>
+  </data>
+  <data name="AuthorHintReasonSameId" xml:space="preserve">
+    <value>与您指定给该作者的涂装作者 ID 相同</value>
+  </data>
+  <data name="AuthorHintReasonSameName" xml:space="preserve">
+    <value>名称相同</value>
+  </data>
+  <data name="AuthorHintReasonArtworkFormat" xml:space="preserve">
+    <value>图案与“{1}”的相似度为 {0}%</value>
+  </data>
+  <data name="ContextMenuAssignAuthor" xml:space="preserve">
+    <value>指定作者…</value>
+  </data>
+  <data name="ContextMenuUnassignAuthor" xml:space="preserve">
+    <value>取消指定的作者</value>
+  </data>
+  <data name="AssignAuthorDialogTitle" xml:space="preserve">
+    <value>这是谁的涂装？</value>
+  </data>
+  <data name="AssignAuthorInvalidIdNote" xml:space="preserve">
+    <value>此涂装的作者 ID 不是有效账户：文件头很可能被修改过。只有在确定时才指定作者，例如您认出了画风或签名。</value>
+  </data>
+  <data name="AssignAuthorNoIdNote" xml:space="preserve">
+    <value>此涂装没有作者 ID：它是原厂涂装、拍卖涂装或未发布的涂装。只有在确定时才指定作者。</value>
+  </data>
+  <data name="AssignAuthorSearchWatermark" xml:space="preserve">
+    <value>搜索作者…</value>
+  </data>
+  <data name="AssignAuthorNewCardButton" xml:space="preserve">
+    <value>+ 新建作者卡片</value>
+  </data>
+  <data name="AssignAuthorConfirmCheckBox" xml:space="preserve">
+    <value>我确定作者是谁</value>
+  </data>
+  <data name="AssignAuthorNoResults" xml:space="preserve">
+    <value>未找到作者</value>
+  </data>
+  <data name="AssignAuthorFailedMessage" xml:space="preserve">
+    <value>无法保存：作者卡片已不存在，或其名称已被占用。</value>
+  </data>
+  <data name="AuthorCardAssignedSectionFormat" xml:space="preserve">
+    <value>手动指定（{0}）</value>
+  </data>
+  <data name="AuthorCardRemoveAssignedTooltip" xml:space="preserve">
+    <value>从卡片中移除此涂装</value>
+  </data>
+  <data name="AuthorCardAccountHintsHeader" xml:space="preserve">
+    <value>可能是该作者的账户</value>
+  </data>
+  <data name="AuthorCardAddAccountButton" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="AuthorCardNotThisButton" xml:space="preserve">
+    <value>不是该作者</value>
+  </data>
+  <data name="AuthorCardNoAliasesOrNameError" xml:space="preserve">
+    <value>请选择账户或输入显示名称</value>
+  </data>
+  <data name="AuthorCardNoAccountNotice" xml:space="preserve">
+    <value>此卡片还没有账户。涂装需要通过“指定作者…”手动添加，图库发现可能属于该作者的账户时会提示您。</value>
+  </data>
+  <data name="AuthorCardImplicitNotice" xml:space="preserve">
+    <value>此卡片尚未保存。修改任何内容后即会保存。</value>
+  </data>
+  <data name="AuthorsArtworkSuggestionFormat" xml:space="preserve">
+    <value>{0} 和 {1}：相同的图案“{2}”</value>
+  </data>
+  <data name="AuthorsAccountHintFormat" xml:space="preserve">
+    <value>{0} 可能是 {1} 的账户：{2}</value>
+  </data>
+  <data name="StatsScopeAll" xml:space="preserve">
+    <value>整个图库</value>
+  </data>
+  <data name="StatsScopeShownFormat" xml:space="preserve">
+    <value>当前显示 · {0}</value>
+  </data>
+  <data name="StatsScopeShownTooltip" xml:space="preserve">
+    <value>只统计图库当前显示的内容。数字会随筛选和搜索变化。</value>
+  </data>
+  <data name="StatsScopeNoteFormat" xml:space="preserve">
+    <value>已显示：{0} / {1} 个涂装</value>
+  </data>
+  <data name="StatsTabCollection" xml:space="preserve">
+    <value>收藏集</value>
+  </data>
+  <data name="StatsTabTime" xml:space="preserve">
+    <value>时间</value>
+  </data>
+  <data name="StatsTabAuthors" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="StatsTileLiveries" xml:space="preserve">
+    <value>涂装</value>
+  </data>
+  <data name="StatsTileNewFormat" xml:space="preserve">
+    <value>30 天内 +{0}</value>
+  </data>
+  <data name="StatsTileLiveriesTooltip" xml:space="preserve">
+    <value>显示所有涂装：清除搜索和筛选</value>
+  </data>
+  <data name="StatsTileAuthors" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="StatsTileWithoutAuthorFormat" xml:space="preserve">
+    <value>无作者的涂装：{0}</value>
+  </data>
+  <data name="StatsTileAuthorsTooltip" xml:space="preserve">
+    <value>按作者分组显示图库</value>
+  </data>
+  <data name="StatsTileCars" xml:space="preserve">
+    <value>车辆</value>
+  </data>
+  <data name="StatsTileManufacturersFormat" xml:space="preserve">
+    <value>制造商：{0}</value>
+  </data>
+  <data name="StatsTileCarsTooltip" xml:space="preserve">
+    <value>按制造商分组显示图库</value>
+  </data>
+  <data name="StatsTileFavorites" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="StatsTileShareFormat" xml:space="preserve">
+    <value>占全部的 {0}</value>
+  </data>
+  <data name="StatsTileFavoritesTooltip" xml:space="preserve">
+    <value>仅显示收藏</value>
+  </data>
+  <data name="StatsTileInstalled" xml:space="preserve">
+    <value>已应用到车辆</value>
+  </data>
+  <data name="StatsTileInstalledCarsFormat" xml:space="preserve">
+    <value>应用到 {0} 辆车</value>
+  </data>
+  <data name="StatsTileInstalledTooltip" xml:space="preserve">
+    <value>仅显示已应用到车辆的涂装</value>
+  </data>
+  <data name="StatsTileInstalledUnknown" xml:space="preserve">
+    <value>需要涂装服务器</value>
+  </data>
+  <data name="StatsTileAuction" xml:space="preserve">
+    <value>拍卖</value>
+  </data>
+  <data name="StatsTileAuctionTooltip" xml:space="preserve">
+    <value>仅显示拍卖涂装</value>
+  </data>
+  <data name="StatsSectionManufacturers" xml:space="preserve">
+    <value>制造商</value>
+  </data>
+  <data name="StatsSectionCountries" xml:space="preserve">
+    <value>国家和地区</value>
+  </data>
+  <data name="StatsSectionCarTypes" xml:space="preserve">
+    <value>车辆类型</value>
+  </data>
+  <data name="StatsSectionDecades" xml:space="preserve">
+    <value>车辆年代</value>
+  </data>
+  <data name="StatsSectionTags" xml:space="preserve">
+    <value>标签</value>
+  </data>
+  <data name="StatsSectionTraits" xml:space="preserve">
+    <value>涂装类型</value>
+  </data>
+  <data name="StatsUnknownValue" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="StatsDecadeFormat" xml:space="preserve">
+    <value>{0} 年代</value>
+  </data>
+  <data name="StatsRowTooltip" xml:space="preserve">
+    <value>仅显示这些涂装</value>
+  </data>
+  <data name="StatsMoreFormat" xml:space="preserve">
+    <value>另有 {0} 项</value>
+  </data>
+  <data name="StatsNothing" xml:space="preserve">
+    <value>没有可统计的内容</value>
+  </data>
+  <data name="StatsNoTags" xml:space="preserve">
+    <value>还没有标签</value>
+  </data>
+  <data name="StatsTraitMine" xml:space="preserve">
+    <value>我的涂装</value>
+  </data>
+  <data name="StatsTraitGenerated" xml:space="preserve">
+    <value>可能为生成</value>
+  </data>
+  <data name="StatsTraitDuplicates" xml:space="preserve">
+    <value>重复和可能重复</value>
+  </data>
+  <data name="StatsTraitPaintOnly" xml:space="preserve">
+    <value>仅喷漆，无图层</value>
+  </data>
+  <data name="StatsNoJournal" xml:space="preserve">
+    <value>记录将从下次扫描开始。在此之前，图表按下载日期显示涂装。</value>
+  </data>
+  <data name="StatsJournalSinceFormat" xml:space="preserve">
+    <value>记录始于 {0}。柱形的浅色部分是此前的时间：按下载日期统计的涂装。当时删除的涂装无法得知。</value>
+  </data>
+  <data name="StatsShownHistoryNote" xml:space="preserve">
+    <value>只统计当前显示的涂装，因此不包括已删除的涂装。</value>
+  </data>
+  <data name="StatsLegendNew" xml:space="preserve">
+    <value>新增</value>
+  </data>
+  <data name="StatsLegendReturned" xml:space="preserve">
+    <value>回归</value>
+  </data>
+  <data name="StatsLegendDeleted" xml:space="preserve">
+    <value>已删除</value>
+  </data>
+  <data name="StatsLegendArchived" xml:space="preserve">
+    <value>已归档</value>
+  </data>
+  <data name="StatsSizeTooltipFormat" xml:space="preserve">
+    <value>月末涂装：{0}</value>
+  </data>
+  <data name="StatsSizeUnknown" xml:space="preserve">
+    <value>记录之前：未知</value>
+  </data>
+  <data name="StatsNewAuthorsTitle" xml:space="preserve">
+    <value>新作者</value>
+  </data>
+  <data name="StatsRangeYear" xml:space="preserve">
+    <value>12 个月</value>
+  </data>
+  <data name="StatsRangeTwoYears" xml:space="preserve">
+    <value>2 年</value>
+  </data>
+  <data name="StatsRangeAll" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="StatsFlowTitle" xml:space="preserve">
+    <value>新增与移除</value>
+  </data>
+  <data name="StatsSizeTitle" xml:space="preserve">
+    <value>存档中的涂装</value>
+  </data>
+  <data name="StatsAuthorsTileUnique" xml:space="preserve">
+    <value>作者数</value>
+  </data>
+  <data name="StatsAuthorsTileTopFormat" xml:space="preserve">
+    <value>前 {0} 位作者的占比</value>
+  </data>
+  <data name="StatsAuthorsTopDetail" xml:space="preserve">
+    <value>在有作者的涂装中</value>
+  </data>
+  <data name="StatsAuthorsTileSingle" xml:space="preserve">
+    <value>只有一个涂装的作者</value>
+  </data>
+  <data name="StatsAuthorsSingleDetailFormat" xml:space="preserve">
+    <value>占全部作者的 {0}</value>
+  </data>
+  <data name="StatsAuthorsTileNew" xml:space="preserve">
+    <value>30 天内的新作者</value>
+  </data>
+  <data name="StatsAuthorsNewDetail" xml:space="preserve">
+    <value>首次出现在收藏集中</value>
+  </data>
+  <data name="StatsTopAuthorsTitleFormat" xml:space="preserve">
+    <value>前 {0} 位作者</value>
+  </data>
+  <data name="StatsAuthorRowTooltip" xml:space="preserve">
+    <value>打开作者卡片</value>
+  </data>
+  <data name="StatsAuthorsSearch" xml:space="preserve">
+    <value>搜索作者…</value>
+  </data>
+  <data name="StatsAuthorsNotFound" xml:space="preserve">
+    <value>未找到作者</value>
+  </data>
+  <data name="StatsColumnAuthor" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="StatsColumnLiveries" xml:space="preserve">
+    <value>涂装</value>
+  </data>
+  <data name="StatsColumnCars" xml:space="preserve">
+    <value>车辆</value>
+  </data>
+  <data name="StatsColumnFavorites" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="StatsColumnFirstDownload" xml:space="preserve">
+    <value>首次下载</value>
+  </data>
+  <data name="StatsColumnFirstDownloadTooltip" xml:space="preserve">
+    <value>收藏集中该作者涂装的最早下载日期</value>
+  </data>
+  <data name="StatsColumnLast" xml:space="preserve">
+    <value>最新</value>
+  </data>
+  <data name="StatsColumnLastDownload" xml:space="preserve">
+    <value>最近下载</value>
+  </data>
+  <data name="StatsColumnLastDownloadTooltip" xml:space="preserve">
+    <value>收藏集中该作者涂装的最近下载日期</value>
+  </data>
+  <data name="StatsLegendEstimated" xml:space="preserve">
+    <value>记录之前</value>
+  </data>
+  <data name="StatsEstimatedTooltipFormat" xml:space="preserve">
+    <value>其中在记录之前、按下载日期统计的：{0}</value>
+  </data>
+  <data name="AuthorCardStatLiveries" xml:space="preserve">
+    <value>涂装</value>
+  </data>
+  <data name="AuthorCardStatCars" xml:space="preserve">
+    <value>车辆</value>
+  </data>
+  <data name="AuthorCardStatFavorites" xml:space="preserve">
+    <value>已收藏</value>
+  </data>
+  <data name="AuthorCardStatFirstDownload" xml:space="preserve">
+    <value>首次下载</value>
+  </data>
+  <data name="AuthorCardStatLast" xml:space="preserve">
+    <value>最近下载</value>
+  </data>
+  <data name="AuthorCardDuplicatesLineFormat" xml:space="preserve">
+    <value>重复：{0}，可能重复：{1}</value>
+  </data>
+  <data name="AuthorCardMonthsTitle" xml:space="preserve">
+    <value>每月下载</value>
+  </data>
+  <data name="StatsPageOverview" xml:space="preserve">
+    <value>概览</value>
+  </data>
+  <data name="StatsPageHealth" xml:space="preserve">
+    <value>收藏集状况</value>
+  </data>
+  <data name="StatsPageCars" xml:space="preserve">
+    <value>车辆</value>
+  </data>
+  <data name="StatsPageLiveries" xml:space="preserve">
+    <value>涂装</value>
+  </data>
+  <data name="StatsScopeLabel" xml:space="preserve">
+    <value>统计范围</value>
+  </data>
+  <data name="StatsAccountsTitle" xml:space="preserve">
+    <value>账户</value>
+  </data>
+  <data name="StatsSlotsTitle" xml:space="preserve">
+    <value>存档空间</value>
+  </data>
+  <data name="StatsSlotsFreeFormat" xml:space="preserve">
+    <value>剩余：{0}</value>
+  </data>
+  <data name="StatsSlotsAlmostFormat" xml:space="preserve">
+    <value>即将用满：还剩 {0}</value>
+  </data>
+  <data name="StatsSlotsFull" xml:space="preserve">
+    <value>已满：游戏将不允许下载或制作涂装</value>
+  </data>
+  <data name="StatsSlotsNote" xml:space="preserve">
+    <value>达到上限后，游戏将不允许下载或制作涂装。拍卖涂装属于车辆，不计入。</value>
+  </data>
+  <data name="StatsSlotsNoLimit" xml:space="preserve">
+    <value>此游戏的上限未知</value>
+  </data>
+  <data name="StatsHealthBackupsTitle" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="StatsHealthNotBackedUp" xml:space="preserve">
+    <value>不在任何备份中</value>
+  </data>
+  <data name="StatsHealthLastBackup" xml:space="preserve">
+    <value>最近的备份</value>
+  </data>
+  <data name="StatsHealthBackupsNote" xml:space="preserve">
+    <value>只有备份中的涂装与当前状态相同时才算已备份。备份后修改过的涂装不计入。</value>
+  </data>
+  <data name="StatsHealthNoBackups" xml:space="preserve">
+    <value>还没有备份。</value>
+  </data>
+  <data name="StatsHealthAllBackedUp" xml:space="preserve">
+    <value>所有涂装都已备份。</value>
+  </data>
+  <data name="StatsHealthDuplicatesTitle" xml:space="preserve">
+    <value>重复</value>
+  </data>
+  <data name="StatsHealthDuplicatesNote" xml:space="preserve">
+    <value>每种只保留一份即可腾出存档空间。</value>
+  </data>
+  <data name="StatsHealthDuplicates" xml:space="preserve">
+    <value>重复，全部副本</value>
+  </data>
+  <data name="StatsHealthFreeable" xml:space="preserve">
+    <value>可腾出的位置</value>
+  </data>
+  <data name="StatsHealthPossible" xml:space="preserve">
+    <value>可能重复</value>
+  </data>
+  <data name="StatsHealthUnusedTitle" xml:space="preserve">
+    <value>未使用</value>
+  </data>
+  <data name="StatsHealthUnusedNote" xml:space="preserve">
+    <value>未应用到车辆、未收藏、未锁定、不是自己的也不是拍卖的涂装。最适合移至归档。</value>
+  </data>
+  <data name="StatsHealthUnused" xml:space="preserve">
+    <value>未使用的涂装</value>
+  </data>
+  <data name="StatsHealthArchiveTitle" xml:space="preserve">
+    <value>归档</value>
+  </data>
+  <data name="StatsHealthArchived" xml:space="preserve">
+    <value>在归档中</value>
+  </data>
+  <data name="StatsHealthLastArchived" xml:space="preserve">
+    <value>最近一次归档</value>
+  </data>
+  <data name="StatsShowTheseTooltip" xml:space="preserve">
+    <value>在图库中显示这些涂装</value>
+  </data>
+  <data name="StatsCarsInGame" xml:space="preserve">
+    <value>游戏中的车辆</value>
+  </data>
+  <data name="StatsCarsCovered" xml:space="preserve">
+    <value>有涂装</value>
+  </data>
+  <data name="StatsCarsSingle" xml:space="preserve">
+    <value>只有一个涂装</value>
+  </data>
+  <data name="StatsCarsSingleDetail" xml:space="preserve">
+    <value>在有涂装的车辆中</value>
+  </data>
+  <data name="StatsCoverageTitle" xml:space="preserve">
+    <value>按制造商的覆盖率</value>
+  </data>
+  <data name="StatsCoverageMoreFormat" xml:space="preserve">
+    <value>其他制造商，有涂装：{0}，无涂装：{1}</value>
+  </data>
+  <data name="StatsCoverageSortLiveries" xml:space="preserve">
+    <value>涂装</value>
+  </data>
+  <data name="StatsCoverageSortCars" xml:space="preserve">
+    <value>车辆</value>
+  </data>
+  <data name="StatsCoverageSortShare" xml:space="preserve">
+    <value>比例</value>
+  </data>
+  <data name="StatsCoverageSortLiveriesTooltip" xml:space="preserve">
+    <value>涂装最多的制造商在前</value>
+  </data>
+  <data name="StatsCoverageSortCarsTooltip" xml:space="preserve">
+    <value>有涂装的车辆最多的制造商在前</value>
+  </data>
+  <data name="StatsCoverageSortShareTooltip" xml:space="preserve">
+    <value>有涂装车辆比例最高的制造商在前</value>
+  </data>
+  <data name="StatsLiveryCountOne" xml:space="preserve">
+    <value>{0} 个涂装</value>
+  </data>
+  <data name="StatsLiveryCountFew" xml:space="preserve">
+    <value>{0} 个涂装</value>
+  </data>
+  <data name="StatsLiveryCountMany" xml:space="preserve">
+    <value>{0} 个涂装</value>
+  </data>
+  <data name="StatsTopCarsTitle" xml:space="preserve">
+    <value>涂装最多的车辆</value>
+  </data>
+  <data name="StatsNoCarDatabase" xml:space="preserve">
+    <value>车辆列表尚未加载</value>
+  </data>
+  <data name="StatsComparedTooltip" xml:space="preserve">
+    <value>最近 30 天与之前 30 天的对比</value>
+  </data>
+  <data name="StatsMoreThanBeforeFormat" xml:space="preserve">
+    <value>▲ {0}（之前 {1}）</value>
+  </data>
+  <data name="StatsLessThanBeforeFormat" xml:space="preserve">
+    <value>▼ {0}（之前 {1}）</value>
+  </data>
+  <data name="StatsSameAsBefore" xml:space="preserve">
+    <value>= 与之前相同</value>
+  </data>
+  <data name="StatsCreatedTitle" xml:space="preserve">
+    <value>制作时间</value>
+  </data>
+  <data name="StatsCreatedTooltipFormat" xml:space="preserve">
+    <value>本月制作：{0}</value>
+  </data>
+  <data name="StatsAgeFormat" xml:space="preserve">
+    <value>从制作到下载的中位数：{0} 个月。同月：{1}。一年或更久之后：{2}。</value>
+  </data>
+  <data name="StatsCalendarTitle" xml:space="preserve">
+    <value>活动</value>
+  </data>
+  <data name="StatsCalendarNoteFormat" xml:space="preserve">
+    <value>过去一年下载：{0}，有下载的天数：{1}</value>
+  </data>
+  <data name="StatsCalendarTooltipFormat" xml:space="preserve">
+    <value>{0}：下载 {1}</value>
+  </data>
+  <data name="StatsWeekdaysTitle" xml:space="preserve">
+    <value>按星期</value>
+  </data>
+  <data name="StatsSharedTitle" xml:space="preserve">
+    <value>可能的转载</value>
+  </data>
+  <data name="StatsSharedNone" xml:space="preserve">
+    <value>没有两位作者共用同一图案</value>
+  </data>
+  <data name="StatsSharedRowTooltip" xml:space="preserve">
+    <value>显示两个涂装：两位作者的相同图案</value>
+  </data>
+  <data name="StatsGeneratorsTitle" xml:space="preserve">
+    <value>使用生成器的作者</value>
+  </data>
+  <data name="StatsGeneratorsNone" xml:space="preserve">
+    <value>没有作者有生成的涂装</value>
+  </data>
+  <data name="StatsFavoriteAuthorsTitle" xml:space="preserve">
+    <value>收藏比例最高的作者</value>
+  </data>
+  <data name="StatsDeparturesTitle" xml:space="preserve">
+    <value>您常移除谁的涂装</value>
+  </data>
+  <data name="StatsDeparturesCellFormat" xml:space="preserve">
+    <value>{0} + 归档 {1}</value>
+  </data>
+  <data name="StatsNoJournalShort" xml:space="preserve">
+    <value>记录中还没有移除</value>
+  </data>
+  <data name="StatsLayersMedian" xml:space="preserve">
+    <value>图层数中位数</value>
+  </data>
+  <data name="StatsLayersMedianDetail" xml:space="preserve">
+    <value>一半少于此数</value>
+  </data>
+  <data name="StatsLayersMax" xml:space="preserve">
+    <value>最多图层数</value>
+  </data>
+  <data name="StatsLayersMaxDetail" xml:space="preserve">
+    <value>单个涂装</value>
+  </data>
+  <data name="StatsLayersKnown" xml:space="preserve">
+    <value>已统计</value>
+  </data>
+  <data name="StatsLayersKnownDetailFormat" xml:space="preserve">
+    <value>共 {0} 个涂装</value>
+  </data>
+  <data name="StatsLayersTitle" xml:space="preserve">
+    <value>图层</value>
+  </data>
+  <data name="StatsLayersFilterFormat" xml:space="preserve">
+    <value>图层数：{0}</value>
+  </data>
+  <data name="StatsLayersUnknown" xml:space="preserve">
+    <value>图层数将在下次扫描后显示</value>
+  </data>
+  <data name="StatsMostComplexTitle" xml:space="preserve">
+    <value>最复杂的涂装</value>
+  </data>
+  <data name="StatsLayersByAuthorTitle" xml:space="preserve">
+    <value>平均图层数最多的作者</value>
+  </data>
+  <data name="StatsRecordsTitle" xml:space="preserve">
+    <value>收藏概况</value>
+  </data>
+  <data name="StatsRecordOldest" xml:space="preserve">
+    <value>最早下载</value>
+  </data>
+  <data name="StatsRecordNewest" xml:space="preserve">
+    <value>最近下载</value>
+  </data>
+  <data name="StatsRecordOldestMade" xml:space="preserve">
+    <value>最早制作</value>
+  </data>
+  <data name="StatsRecordMostLayers" xml:space="preserve">
+    <value>图层最多</value>
+  </data>
+  <data name="StatsRecordBusiestCar" xml:space="preserve">
+    <value>涂装最多的车辆</value>
+  </data>
+  <data name="StatsRecordBusiestMonth" xml:space="preserve">
+    <value>最活跃的月份</value>
+  </data>
+  <data name="StatsUntaggedFormat" xml:space="preserve">
+    <value>无标签：{0}</value>
+  </data>
+  <data name="StatsExport" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="StatsExportLiveries" xml:space="preserve">
+    <value>将涂装导出为 CSV…</value>
+  </data>
+  <data name="StatsExportAuthors" xml:space="preserve">
+    <value>将作者导出为 CSV…</value>
+  </data>
+  <data name="StatsExportLiveriesFileName" xml:space="preserve">
+    <value>liveries</value>
+  </data>
+  <data name="StatsExportAuthorsFileName" xml:space="preserve">
+    <value>authors</value>
+  </data>
+  <data name="StatsExportFailed" xml:space="preserve">
+    <value>无法保存文件。</value>
+  </data>
+  <data name="StatsSaveChart" xml:space="preserve">
+    <value>另存为 PNG…</value>
+  </data>
+  <data name="StatsAuthorsTopTooltipFormat" xml:space="preserve">
+    <value>在 {2} 个已知作者的涂装中，有 {1} 个来自涂装最多的 {0} 位作者</value>
+  </data>
+  <data name="ContextMenuAddToFavorites" xml:space="preserve">
+    <value>添加到收藏</value>
+  </data>
+  <data name="ContextMenuRemoveFromFavorites" xml:space="preserve">
+    <value>从收藏中移除</value>
+  </data>
+  <data name="ContextMenuEditTags" xml:space="preserve">
+    <value>编辑标签…</value>
+  </data>
+  <data name="TagChipTooltip" xml:space="preserve">
+    <value>单击只显示带此标签的涂装，右键单击则隐藏它们。再次单击可取消。</value>
+  </data>
+  <data name="TagsDialogManyTitleFormat" xml:space="preserve">
+    <value>所选涂装的标签：{0} 个</value>
+  </data>
+  <data name="TagsDialogManyHint" xml:space="preserve">
+    <value>勾选会为所有选中的涂装添加此标签，留空则全部移除。实心方块表示只有部分涂装有此标签，将保持不变。</value>
+  </data>
+  <data name="TagsDialogNewTagsLabel" xml:space="preserve">
+    <value>新标签，用逗号分隔。将添加到所有选中的涂装。</value>
+  </data>
+  <data name="TagsDialogPartialTooltipFormat" xml:space="preserve">
+    <value>{1} 个选中涂装中有 {0} 个带此标签</value>
+  </data>
+  <data name="ContextMenuLock" xml:space="preserve">
+    <value>锁定</value>
+  </data>
+  <data name="ContextMenuUnlock" xml:space="preserve">
+    <value>解除锁定</value>
+  </data>
+  <data name="LockToggleTooltip" xml:space="preserve">
+    <value>锁定涂装，使其无法移至归档</value>
+  </data>
+  <data name="LockedTooltip" xml:space="preserve">
+    <value>已锁定：此涂装无法移至归档。单击可解除锁定。</value>
+  </data>
+  <data name="ArchiveLockedNotAllowedTooltip" xml:space="preserve">
+    <value>已锁定的涂装无法移至归档。请先解除锁定。</value>
+  </data>
+  <data name="ArchiveLockedSkippedFormat" xml:space="preserve">
+    <value>已锁定的涂装无法移至归档。留在游戏中的所选已锁定涂装：{0}。</value>
+  </data>
+  <data name="AuthorLabelOwnFormat" xml:space="preserve">
+    <value>{0}（您）</value>
+  </data>
+  <data name="AuthorLabelFormerNameFormat" xml:space="preserve">
+    <value>{0}（曾用名 {1}）</value>
+  </data>
+  <data name="AuthorLabelNoAccountFormat" xml:space="preserve">
+    <value>{0}（无账户）</value>
+  </data>
+  <data name="AuthorLabelNumberFormat" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
+  <data name="AuthorDetailsNamesFormat" xml:space="preserve">
+    <value>昵称：{0}</value>
+  </data>
+  <data name="AuthorDetailsLiveriesFormat" xml:space="preserve">
+    <value>涂装：{0}</value>
+  </data>
+  <data name="AuthorDetailsFirstFormat" xml:space="preserve">
+    <value>首个涂装：{0}</value>
+  </data>
+  <data name="AuthorOwnUnpublishedTooltip" xml:space="preserve">
+    <value>您在本电脑上制作且未发布的涂装：它没有作者 ID，因此算作您账户的涂装。</value>
+  </data>
+  <data name="AuthorCardAccountWithoutName" xml:space="preserve">
+    <value>无昵称的账户</value>
+  </data>
+  <data name="AuthorCardTwitchLabel" xml:space="preserve">
+    <value>Twitch</value>
+  </data>
+  <data name="AuthorCardInvalidTwitchUrlError" xml:space="preserve">
+    <value>请输入 Twitch 频道链接，例如 twitch.tv/username，而不是视频或剪辑链接</value>
+  </data>
+  <data name="ArchiveSearchPlaceholder" xml:space="preserve">
+    <value>按车辆、年份、名称、作者或编号搜索…</value>
+  </data>
+  <data name="ArchiveSearchPlaceholderWithFolder" xml:space="preserve">
+    <value>按车辆、年份、名称、作者、编号或文件夹搜索…</value>
+  </data>
+  <data name="ArchiveNoSearchResultsHint" xml:space="preserve">
+    <value>未找到结果</value>
+  </data>
+  <data name="KeyCtrl" xml:space="preserve">
+    <value>Ctrl</value>
+  </data>
+  <data name="KeyShift" xml:space="preserve">
+    <value>Shift</value>
+  </data>
+  <data name="KeyDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="KeySpace" xml:space="preserve">
+    <value>空格</value>
+  </data>
+  <data name="ShortcutSearch" xml:space="preserve">
+    <value>转到搜索</value>
+  </data>
+  <data name="ShortcutSelectAll" xml:space="preserve">
+    <value>选择显示的全部涂装</value>
+  </data>
+  <data name="ShortcutEscape" xml:space="preserve">
+    <value>清除搜索或取消选择</value>
+  </data>
+  <data name="ShortcutLock" xml:space="preserve">
+    <value>锁定或解除锁定</value>
+  </data>
+  <data name="ShortcutTags" xml:space="preserve">
+    <value>编辑标签</value>
+  </data>
+  <data name="ShortcutsTitle" xml:space="preserve">
+    <value>键盘快捷键</value>
+  </data>
+  <data name="ShortcutsGroupSearch" xml:space="preserve">
+    <value>搜索和选择</value>
+  </data>
+  <data name="ShortcutsGroupSelected" xml:space="preserve">
+    <value>已选择的涂装</value>
+  </data>
+  <data name="ShortcutsGroupWindows" xml:space="preserve">
+    <value>窗口</value>
+  </data>
+  <data name="ShortcutsNoteFormat" xml:space="preserve">
+    <value>光标位于文本框中时，字母、数字、{0} 和 {1} 不起作用。{0}、3 和 G 仅在只选择了一个涂装时起作用。</value>
+  </data>
+  <data name="SlotsCounterClickHint" xml:space="preserve">
+    <value>单击可腾出空间：重复涂装的多余副本将移至归档。</value>
+  </data>
+  <data name="FreeSpaceMenuItem" xml:space="preserve">
+    <value>腾出空间…</value>
+  </data>
+  <data name="FreeSpaceTitle" xml:space="preserve">
+    <value>腾出空间</value>
+  </data>
+  <data name="FreeSpaceNote" xml:space="preserve">
+    <value>每个重复涂装保留一个副本：优先保留有标签的或您自己的，否则保留最先下载的。已锁定、已应用到车辆的涂装、拍卖涂装和收藏也会保留。取消勾选即可保留该副本。移走的涂装都可以从归档中恢复。</value>
+  </data>
+  <data name="FreeSpaceDownloadedFormat" xml:space="preserve">
+    <value>下载于：{0}</value>
+  </data>
+  <data name="FreeSpaceStayBest" xml:space="preserve">
+    <value>保留：最佳副本</value>
+  </data>
+  <data name="FreeSpaceStayLocked" xml:space="preserve">
+    <value>保留：已锁定</value>
+  </data>
+  <data name="FreeSpaceStayInstalled" xml:space="preserve">
+    <value>保留：已应用</value>
+  </data>
+  <data name="FreeSpaceStayAuction" xml:space="preserve">
+    <value>保留：拍卖涂装</value>
+  </data>
+  <data name="FreeSpaceStayFavorite" xml:space="preserve">
+    <value>保留：收藏</value>
+  </data>
+  <data name="FreeSpaceCopiesFormat" xml:space="preserve">
+    <value>副本：{0} 个</value>
+  </data>
+  <data name="FreeSpaceNothing" xml:space="preserve">
+    <value>没有可以腾出的位置：没有涂装存在可以移走的多余副本。已锁定、已应用到车辆的副本、拍卖涂装和收藏始终保留。</value>
+  </data>
+  <data name="FreeSpaceNowFormat" xml:space="preserve">
+    <value>当前存档：{0} / {1}。</value>
+  </data>
+  <data name="FreeSpaceAfterFormat" xml:space="preserve">
+    <value>移至归档：{0} 个，之后剩余：{1}。</value>
+  </data>
+  <data name="FreeSpaceAfterNoLimitFormat" xml:space="preserve">
+    <value>移至归档：{0} 个。</value>
+  </data>
+  <data name="FreeSpaceApplyFormat" xml:space="preserve">
+    <value>移至归档（{0}）</value>
+  </data>
+  <data name="FewFreeSlotsMessageFormat" xml:space="preserve">
+    <value>存档中只剩 {0} 个空位（共 {1} 个）。达到上限后，游戏将无法下载或创建涂装。要将重复涂装的多余副本移至归档，立即腾出空间吗？</value>
+  </data>
+  <data name="FewFreeSlotsFullMessageFormat" xml:space="preserve">
+    <value>存档已满：{0} 个位置全部占用，游戏将无法下载或创建涂装。要将重复涂装的多余副本移至归档，立即腾出空间吗？</value>
+  </data>
+  <data name="AutoBackupFailedTitle" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="AutoBackupFailedMessage" xml:space="preserve">
+    <value>移至归档前无法创建备份。要在没有备份的情况下将涂装移至归档吗？</value>
+  </data>
+  <data name="AutoBackupFailedContinueButton" xml:space="preserve">
+    <value>不备份直接移动</value>
+  </data>
+  <data name="LoadingBackupBeforeArchive" xml:space="preserve">
+    <value>正在移至归档前创建备份…</value>
+  </data>
+  <data name="StatusAutoBackupMade" xml:space="preserve">
+    <value>已创建自动备份</value>
+  </data>
+  <data name="AutoBackupSectionLabel" xml:space="preserve">
+    <value>自动备份</value>
+  </data>
+  <data name="AutoBackupBeforeArchiveLabel" xml:space="preserve">
+    <value>将涂装移至归档前</value>
+  </data>
+  <data name="AutoBackupOnChangeLabel" xml:space="preserve">
+    <value>存档中的涂装发生变化时（每天最多一次）</value>
+  </data>
+  <data name="AutoBackupPeriodicLabel" xml:space="preserve">
+    <value>定期，间隔：</value>
+  </data>
+  <data name="AutoBackupDaysFormat" xml:space="preserve">
+    <value>{0} 天</value>
+  </data>
+  <data name="AutoBackupKeepLabel" xml:space="preserve">
+    <value>每个账户保留的自动备份数：</value>
+  </data>
+  <data name="AutoBackupHint" xml:space="preserve">
+    <value>只有当最新的备份尚未包含当前存档时才会创建备份。超出此数量的最旧自动备份会被删除。您自己创建的备份永远不会被删除。</value>
+  </data>
+  <data name="BackupKindAutomatic" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="BackupKindBeforeArchive" xml:space="preserve">
+    <value>在将涂装移至归档前创建</value>
+  </data>
+  <data name="BackupKindSaveChanged" xml:space="preserve">
+    <value>在存档中的涂装变化后创建</value>
+  </data>
+  <data name="BackupKindScheduled" xml:space="preserve">
+    <value>定期创建</value>
+  </data>
+  <data name="BackupKindPrunedNote" xml:space="preserve">
+    <value>超出设置中数量的最旧自动备份会被删除。</value>
+  </data>
+  <data name="AuthorIdMissingTooltip" xml:space="preserve">
+    <value>此涂装没有作者 ID，因此名称可能属于任何人。它是出厂涂装、拍卖涂装或未发布的涂装。单击可选择作者。</value>
+  </data>
+  <data name="WarnFewFreeSlotsLabel" xml:space="preserve">
+    <value>启动时存档空间快满时提醒</value>
+  </data>
+  <data name="AssignAuthorDialogTitleSeveral" xml:space="preserve">
+    <value>这些是谁的涂装？</value>
+  </data>
+  <data name="AssignAuthorLiveriesFormat" xml:space="preserve">
+    <value>涂装：{0} 个</value>
+  </data>
+  <data name="AssignAuthorSeveralNote" xml:space="preserve">
+    <value>这些涂装都没有以账户作为作者 ID。所选作者会一次性指定给全部涂装，只有在确定时才选择。</value>
+  </data>
+  <data name="AssignAuthorSkippedFormat" xml:space="preserve">
+    <value>作者 ID 为账户的已选涂装保持不变：{0} 个。</value>
   </data>
 </root>

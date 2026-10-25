@@ -1,9 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
-using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
-using LiveryGallery.Services;
 using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Views;
@@ -39,9 +36,7 @@ internal partial class AuthorsDialog : Window
 
     private async Task EditCardAsync(AuthorCard? existingCard)
     {
-        var (availableAliases, nameToTags) = _viewModel.BuildAliasIndex(existingCard?.Id);
-
-        var dialog = new AuthorCardEditDialog(_authorCardService, availableAliases, nameToTags, existingCard);
+        var dialog = new AuthorCardEditDialog(_authorCardService, _viewModel.AccountChoices(existingCard?.Id), existingCard);
         bool saved = await dialog.ShowDialog<bool>(this);
         if (!saved || dialog.Result is null) return;
 

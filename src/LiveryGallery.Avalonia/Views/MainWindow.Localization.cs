@@ -2,9 +2,7 @@ using Avalonia.Controls;
 using LiveryGallery.Configuration;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
-using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Views;
 
@@ -18,18 +16,20 @@ internal partial class MainWindow
         MaximizeButtonEl.SetValue(ToolTip.TipProperty, Strings.MaximizeTooltip);
         CloseButtonEl.SetValue(ToolTip.TipProperty, Strings.CloseTooltip);
 
-        RefreshButton.SetValue(ToolTip.TipProperty, Strings.RefreshTooltip);
-        StatsButton.SetValue(ToolTip.TipProperty, Strings.StatsToggleTooltip);
+        RefreshButton.SetValue(ToolTip.TipProperty, new ShortcutTip(Strings.RefreshTooltip, GalleryShortcut.Refresh));
+        StatsButton.SetValue(ToolTip.TipProperty, new ShortcutTip(Strings.StatsToggleTooltip, GalleryShortcut.Statistics));
         SettingsButton.SetValue(ToolTip.TipProperty, Strings.SettingsToggleTooltip);
         OpenSettingsMenuItem.Header = Strings.SettingsDialogTitle;
+        FreeSpaceMenuItem.Header = Strings.FreeSpaceMenuItem;
         OpenArchiveMenuItem.Header = Strings.MenuOpenArchive;
         OpenBackupsMenuItem.Header = Strings.MenuOpenBackups;
+        ShortcutsMenuItem.Header = Strings.ShortcutsTitle;
         ContactsMenuItem.Header = Strings.SettingsMenuContacts;
         AboutMenuItem.Header = string.Format(Strings.AboutTitleFormat, AppSettings.Identity.Name);
         SearchBox.PlaceholderText = Strings.SearchPlaceholder;
 
         DisplayFilterButton.SetValue(ToolTip.TipProperty, Strings.DisplayFilterTooltip);
-        AuthorsButton.SetValue(ToolTip.TipProperty, Strings.AuthorsButtonTooltip);
+        AuthorsButton.SetValue(ToolTip.TipProperty, new ShortcutTip(Strings.AuthorsButtonTooltip, GalleryShortcut.Authors));
         FilterMenuTitleText.Text = Strings.FilterMenuTitle;
         SortLabelText.Text = Strings.FilterSortLabel;
         GroupingLabelText.Text = Strings.FilterGroupingLabel;
@@ -85,8 +85,14 @@ internal partial class MainWindow
         _mainViewModel.FilterBar.RefreshLocalizedText();
         _mainViewModel.ServerStatus.RefreshLocalizedText();
         _ = _mainViewModel.RefreshAccountsAsync(); // the switcher's "Account …1234" and livery counts
+        bool authorLabelsChanged = false;
         foreach (var entry in _mainViewModel.Gallery.AllEntries)
+        {
+            authorLabelsChanged |= entry.RefreshAuthorLabel();
             entry.RefreshLocalizedText();
+        }
+        // "Ann (formerly Old)" in another language: the author groups and the author filter are named again
+        if (authorLabelsChanged) _mainViewModel.RefreshGallery();
 
         foreach (var group in _mainViewModel.Gallery.DisplayedGroups)
         {

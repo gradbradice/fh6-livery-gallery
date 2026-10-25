@@ -1,5 +1,4 @@
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using System.Globalization;
 
 namespace LiveryGallery.Services;
@@ -40,7 +39,7 @@ internal static class PlaceholderTexts
             }
             catch (Exception ex)
             {
-                AppLogger.LogErrorThrottled($"{resourceName}|{culture.Name}", $"Failed to load '{resourceName}' for '{culture.Name}'", ex);
+                AppLog.LogErrorThrottled($"{resourceName}|{culture.Name}", $"Failed to load '{resourceName}' for '{culture.Name}'", ex);
             }
         }
 

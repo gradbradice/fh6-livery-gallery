@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using System.Collections.ObjectModel;
 
@@ -178,6 +177,23 @@ internal sealed partial class FilterBarViewModel : ObservableObject
         OnQuickFiltersChanged();
     }
 
+    /// <summary>
+    /// Every livery shows again (the statistics' "Liveries" tile): no search, no quick filters, no "only …" filter. How
+    /// the gallery is ordered, and what it puts first or apart, stays
+    /// </summary>
+    public void ShowEverything()
+    {
+        SearchText = null;
+        if (FavoriteMode == FavoriteMode.OnlyFavorites) FavoriteMode = FavoriteMode.None;
+        if (MineMode == MineMode.OnlyMine) MineMode = MineMode.None;
+        if (InstalledMode == InstalledMode.OnlyInstalled) InstalledMode = InstalledMode.None;
+        if (AuctionFilterMode is AuctionFilterMode.OnlyAuction or AuctionFilterMode.HideAuction) AuctionFilterMode = AuctionFilterMode.All;
+        DuplicatesFilterMode = DuplicatesFilterMode.All;
+        GeneratedFilterMode = GeneratedFilterMode.All;
+        PaintFilterMode = PaintFilterMode.All;
+        ClearQuickFilters();
+    }
+
     public void ApplyQuickFilter(QuickFilter filter) => SetQuickFilter(filter);
 
     private void SetQuickFilter(QuickFilter filter)
@@ -196,6 +212,12 @@ internal sealed partial class FilterBarViewModel : ObservableObject
                 RemoveChips(c => c.Filter.Kind == QuickFilterKind.Manufacturer
                     || (c.Filter.Kind == QuickFilterKind.Car && !QuickFilter.SameManufacturer(c.Filter.Manufacturer, filter)));
                 QuickFilters.Insert(0, new QuickFilterChipViewModel(filter));
+                break;
+
+            case QuickFilterKind.Selection:
+                // A set named by the statistics stands alone: other quick filters would hide some of it
+                QuickFilters.Clear();
+                QuickFilters.Add(new QuickFilterChipViewModel(filter));
                 break;
 
             case QuickFilterKind.Car:

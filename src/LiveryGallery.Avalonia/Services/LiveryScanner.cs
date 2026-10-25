@@ -1,7 +1,7 @@
+using ForzaToolkit.Liveries.History;
 using ForzaToolkit.Liveries.Scanning;
 using LiveryGallery.Configuration;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.ViewModels;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
@@ -28,23 +28,30 @@ internal sealed class LiveryScanner
     private readonly AuthorCardService _authorCardService;
     private readonly LiveryEntryFactory _entryFactory;
     private readonly LiveryLibraryScanner _scanner;
+    // The account each scan is for: the duplicate check needs it to know the save's own liveries without an id
+    private readonly ConcurrentDictionary<string, ulong?> _userIds = new(StringComparer.OrdinalIgnoreCase);
+    private volatile AuthorContext _authors = AuthorContext.Empty;
 
     public LiveryScanner(
         AppCacheService appCacheService,
         CarDatabaseService carDatabaseService,
         FavoriteService favoriteService,
+        LockService lockService,
         TagService tagService,
         AuthorCardService authorCardService,
         LiveryArchive archiveService,
         SaveFolderLock saveFolderLock,
         LiveryIdService liveryIdService,
         GameProfile profile,
-        LiveryScanParts parts)
+        LiveryScanParts parts,
+        LiveryHistoryStore? history = null)
     {
         _appCacheService = appCacheService;
         _authorCardService = authorCardService;
+        History = history;
         _entryFactory = new LiveryEntryFactory(
-            appCacheService, carDatabaseService, favoriteService, tagService, authorCardService, liveryIdService, profile);
+            appCacheService, carDatabaseService, favoriteService, lockService, tagService, authorCardService, liveryIdService,
+            profile);
         _scanner = new LiveryLibraryScanner(new LiveryScannerOptions
         {
             Cache = appCacheService,
@@ -53,14 +60,21 @@ internal sealed class LiveryScanner
             Previews = new ThumbnailPreviewWriter(),
             Duplicates = parts.Duplicates,
             SaveFolderLock = saveFolderLock,
+            History = history,
             RemovedPreviewDirectory = AppSettings.ChangesPreviewsPath,
             Parallelism = ScanParallelism,
-            Logger = AppLogger.LoggerFactory.CreateLogger<LiveryLibraryScanner>(),
+            Logger = AppLog.LoggerFactory.CreateLogger<LiveryLibraryScanner>(),
             Hooks = new LiveryScanHooks
             {
                 NeedsReparse = PlaceholderTexts.NeedsTextMigration,
                 CacheScanned = _entryFactory.ReconcileAuthorCards,
-                DuplicateGroupAuthor = ResolvedAuthor,
+                // Duplicates are looked for among one author's liveries: one key per author, so two accounts of one
+                // name are not compared, and the save's own liveries without an id go with its account
+                DuplicateAuthors = (accountKey, cache) =>
+                {
+                    var authors = _entryFactory.CreateAuthorContext(cache, _userIds.GetValueOrDefault(accountKey));
+                    return new DuplicateAuthorScheme(e => _entryFactory.DuplicateGroupAuthor(e, authors), authors.Signature);
+                },
                 // With the detector's version in front, the same text as before the move: saved signatures stay valid
                 DuplicateSignature = entries =>
                     $"{_authorCardService.GetIdentityMappingFingerprint()}|{_entryFactory.AuthorInference.Fingerprint(entries)}",
@@ -70,8 +84,14 @@ internal sealed class LiveryScanner
         });
     }
 
-    private string ResolvedAuthor(LiveryCacheEntry entry) =>
-        _authorCardService.ResolveDisplayName(_entryFactory.ResolveRawAuthor(entry).Name, entry.AuthorIdentityTagHex);
+    /// <summary>The scan cache of an account (another account's, for the statistics); empty when it has none</summary>
+    public IReadOnlyCollection<LiveryCacheEntry> CacheOf(string accountKey) => _appCacheService.Load(accountKey).Cache.Values;
+
+    /// <summary>The journal every scan is recorded in; null without one</summary>
+    public LiveryHistoryStore? History { get; }
+
+    /// <summary>Who the liveries of the save last shown are by: its own account, labels for shared names</summary>
+    public AuthorContext Authors => _authors;
 
     /// <param name="collectChanges">
     /// Compare with the cache the previous launch saved and report what was added and removed. Only the first
@@ -83,6 +103,7 @@ internal sealed class LiveryScanner
         IProgress<string>? progress = null, CancellationToken ct = default)
     {
         var words = progress is null ? null : new Progress(progress);
+        _userIds[accountKey] = currentUserId;
         var result = await _scanner.ScanAsync(accountKey, savePath, collectChanges, words, ct);
         return await Task.Run(() => ToScanEntry(result, currentUserId, needEntries, ct), ct);
     }
@@ -91,7 +112,9 @@ internal sealed class LiveryScanner
         Task.Run(() =>
         {
             var (cache, _) = _appCacheService.Load(accountKey);
-            return _entryFactory.BuildEntries(cache.Values, currentUserId, ct);
+            var entries = _entryFactory.BuildEntries(cache.Values, currentUserId, ct, out var authors);
+            _authors = authors;
+            return entries;
         }, ct);
 
     /// <summary>The next scan cleans up orphaned previews even if its cache did not change (after an account was forgotten)</summary>
@@ -100,6 +123,8 @@ internal sealed class LiveryScanner
     private LiveryScanEntry ToScanEntry(LiveryScanResult result, ulong? currentUserId, bool needEntries, CancellationToken ct)
     {
         List<LiveryEntry> entries = [];
+        var authors = _entryFactory.CreateAuthorContext(result.Cache.Values, currentUserId);
+        _authors = authors;
         if (result.CacheChanged || needEntries)
         {
             var built = new ConcurrentBag<LiveryEntry>();
@@ -107,7 +132,7 @@ internal sealed class LiveryScanner
             {
                 CancellationToken = ct,
                 MaxDegreeOfParallelism = ScanParallelism,
-            }, cacheEntry => built.Add(_entryFactory.ToEntry(cacheEntry, currentUserId)));
+            }, cacheEntry => built.Add(_entryFactory.ToEntry(cacheEntry, currentUserId, authors)));
             entries = [.. built];
         }
 
@@ -120,20 +145,20 @@ internal sealed class LiveryScanner
             Removed = result.Removed,
             Added = result.Added,
             CacheChanged = result.CacheChanged,
-            ChangesSinceLastLaunch = result.Changes is { } changes ? ToChanges(changes, currentUserId) : null,
+            ChangesSinceLastLaunch = result.Changes is { } changes ? ToChanges(changes, currentUserId, authors) : null,
         };
     }
 
-    private LiveryChanges ToChanges(LiveryScanChanges changes, ulong? currentUserId)
+    private LiveryChanges ToChanges(LiveryScanChanges changes, ulong? currentUserId, AuthorContext authors)
     {
         var added = changes.Added
-            .Select(e => _entryFactory.ToEntry(e, currentUserId))
+            .Select(e => _entryFactory.ToEntry(e, currentUserId, authors))
             .OrderByDescending(e => e.DownloadDate ?? DateTime.MinValue)
             .ThenBy(e => e.LiveryName, StringComparer.CurrentCultureIgnoreCase)
             .ToList();
 
         var removed = changes.Removed
-            .Select(r => new RemovedLivery(_entryFactory.ToEntry(r.Entry, currentUserId), r.PreviewPath))
+            .Select(r => new RemovedLivery(_entryFactory.ToEntry(r.Entry, currentUserId, authors), r.PreviewPath))
             .ToList();
         removed.Sort((a, b) => StringComparer.CurrentCultureIgnoreCase.Compare(a.Entry.LiveryName, b.Entry.LiveryName));
 

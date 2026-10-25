@@ -38,7 +38,7 @@ internal static class RenderComponents
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to query the native fdata version", ex);
+            AppLog.LogError("Failed to query the native fdata version", ex);
             return "?";
         }
     }

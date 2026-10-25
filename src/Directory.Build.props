@@ -9,6 +9,8 @@
 
   <!-- ForzaToolkit packages and the gallery's own namespaces used in nearly every file, without a using in each -->
   <ItemGroup>
+    <!-- The log, HTTP client, settings file and interface languages every ForzaToolkit app shares -->
+    <Using Include="ForzaToolkit.AppHost" />
     <Using Include="ForzaToolkit.CarDatabase" />
     <Using Include="ForzaToolkit.Core.Diagnostics" />
     <Using Include="ForzaToolkit.Core.IO" />

@@ -44,6 +44,27 @@ internal readonly record struct Livery3DResult(Livery3DProblem Problem, string? 
     public static Livery3DResult Shown => new(Livery3DProblem.None);
 }
 
+/// <summary>A livery to draw a preview of, from its car's 3D model</summary>
+/// <param name="CarId">Its car</param>
+/// <param name="LiveryFilePath">Its livery file (C_livery)</param>
+internal sealed record LiveryThumbnailRequest(int CarId, string LiveryFilePath);
+
+/// <summary>
+/// Draws the preview of a livery whose save has none from the car's 3D model, with the game's preview camera and size.
+/// Where it is kept is the gallery's business (<see cref="Services.RenderedThumbnails"/>). Used from the UI thread.
+/// </summary>
+internal interface ILiveryThumbnails
+{
+    /// <summary>Previews can be drawn: the game folder is usable</summary>
+    bool IsAvailable { get; }
+
+    /// <summary>
+    /// The PNG of the livery's preview (seconds: the car is loaded). Null when it cannot be drawn: no game folder, the
+    /// file is unreadable, the car is unknown.
+    /// </summary>
+    Task<byte[]?> DrawAsync(LiveryThumbnailRequest request, CancellationToken ct);
+}
+
 /// <summary>
 /// The 3D viewer: knows the game folder (checked in the background), opens one viewer window and shows liveries in
 /// it. Used from the UI thread.
@@ -70,6 +91,9 @@ internal interface ILivery3DViewer
 
     /// <summary>Shows the livery in the viewer window, opening it over <paramref name="owner"/> when needed</summary>
     Task<Livery3DResult> ShowAsync(Window owner, Livery3DRequest request);
+
+    /// <summary>Previews drawn from the 3D model, with the same game folder</summary>
+    ILiveryThumbnails Thumbnails { get; }
 
     /// <summary>The app is closing: closes the viewer window and opens no new one</summary>
     void BeginShutdown();

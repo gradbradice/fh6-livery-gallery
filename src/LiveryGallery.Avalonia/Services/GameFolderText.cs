@@ -1,6 +1,5 @@
 using ForzaToolkit.Games.Installation;
 using LiveryGallery.Localisation;
-using LiveryGallery.Viewer3D;
 
 namespace LiveryGallery.Services;
 

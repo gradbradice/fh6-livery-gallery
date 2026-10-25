@@ -1,6 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.Services.Accounts;
 using System.Collections.ObjectModel;
@@ -24,7 +23,7 @@ internal sealed record AccountOption(AccountInfo Info, string Title, string? Sub
 /// <summary>
 /// Several game accounts on one PC. Each has its own scan cache (see <see cref="AppCacheService"/>), so switching
 /// only reads the other account's folder for changes, like a normal refresh, instead of parsing everything again.
-/// Favorites, tags, livery IDs and author cards stay shared: they are keyed by livery folder name or by author,
+/// Favorites, locks, tags, livery IDs and author cards stay shared: they are keyed by livery folder name or by author,
 /// which do not clash between accounts.
 /// </summary>
 internal sealed partial class MainViewModel
@@ -96,7 +95,7 @@ internal sealed partial class MainViewModel
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to list the stored accounts", ex);
+            AppLog.LogError("Failed to list the stored accounts", ex);
             return;
         }
 
@@ -163,7 +162,7 @@ internal sealed partial class MainViewModel
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to list the game accounts", ex);
+            AppLog.LogError("Failed to list the game accounts", ex);
             return;
         }
         if (version != _accountsVersion) return; // a newer refresh is on its way

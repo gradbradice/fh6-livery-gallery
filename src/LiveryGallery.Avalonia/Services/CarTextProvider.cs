@@ -1,7 +1,6 @@
 using ForzaToolkit.Games.Installation;
 using ForzaToolkit.StringTables;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 
 namespace LiveryGallery.Services;
 
@@ -31,8 +30,10 @@ internal sealed record CarTextResult(CarTexts Texts, string CountryRaw, string C
 /// <summary>
 /// The texts of a car as the gallery shows them: make, model, country and car type in the chosen game language
 /// (the setting, or the game language of the interface language). The texts come from the game's own string tables,
-/// kept by <see cref="CarLocalizationService"/> next to the car list in the ForzaToolkit cache. Without the game folder
-/// (or its language files) the car list's own texts are shown, whatever the language, with a note why. Thread-safe.
+/// kept by <see cref="CarLocalizationService"/> next to the car list in the ForzaToolkit cache; without the game folder
+/// (or its language files), from the texts published with the car list (<see cref="CarDatabaseService.Texts"/>:
+/// <c>strings.json</c>, <c>car-names.json</c>). Only when neither has the language are the car list's own (English)
+/// texts shown, with a note why. Thread-safe.
 /// </summary>
 internal sealed class CarTextProvider(CarDatabaseService cars, CarLocalizationService localization, AppSettingsData settings)
 {
@@ -48,19 +49,30 @@ internal sealed class CarTextProvider(CarDatabaseService cars, CarLocalizationSe
             ? chosen.ToUpperInvariant()
             : GameLanguages.CodeForCulture(AppLocalisationService.Culture);
 
+    /// <summary>The game folder gives the texts (or has not been looked at yet: the texts kept from the last run)</summary>
+    private bool GameTexts => _state is not (GameTextsState.NoGameFolder or GameTextsState.NoStringTables);
+
     /// <summary>
-    /// The language the texts are shown in: English (the car list's own texts) without the game folder; otherwise the
-    /// wanted one when the game has it, else the one of the interface
+    /// The language the texts are shown in: the wanted one when the game's tables or the published texts have it;
+    /// otherwise, with the game folder, the one of the interface, and without it English (the car list's own texts)
     /// </summary>
     public string LanguageCode
     {
         get
         {
-            if (_state is GameTextsState.NoGameFolder or GameTextsState.NoStringTables) return GameLanguages.EnglishCode;
             string wanted = WantedLanguage;
-            return localization.HasLanguage(wanted) ? wanted : GameLanguages.CodeForCulture(AppLocalisationService.Culture);
+            if ((GameTexts && localization.HasLanguage(wanted)) || cars.Texts.HasLanguage(wanted)) return wanted;
+            return GameTexts ? GameLanguages.CodeForCulture(AppLocalisationService.Culture) : GameLanguages.EnglishCode;
         }
     }
+
+    /// <summary>
+    /// The game languages there are car texts in: those read from the game, else (no game folder) those published with
+    /// the car list
+    /// </summary>
+    public IReadOnlyList<GameLanguage> Languages => GameTexts && localization.Languages.Count > 0
+        ? localization.Languages
+        : [.. cars.Texts.Languages.Select(GameLanguages.Get)];
 
     /// <summary>Why the texts are not in the wanted language; null when they are (or English is wanted)</summary>
     public string? UnavailableNote
@@ -68,6 +80,8 @@ internal sealed class CarTextProvider(CarDatabaseService cars, CarLocalizationSe
         get
         {
             if (string.Equals(WantedLanguage, GameLanguages.EnglishCode, StringComparison.OrdinalIgnoreCase)) return null;
+            // The texts published with the car list have it: nothing is missing
+            if (cars.Texts.HasLanguage(WantedLanguage)) return null;
             return _state switch
             {
                 GameTextsState.NoGameFolder => Strings.CarTextsNoGameFolder,
@@ -81,7 +95,9 @@ internal sealed class CarTextProvider(CarDatabaseService cars, CarLocalizationSe
     public CarTextResult? For(int carId)
     {
         if (cars.Get(carId) is not { } car) return null;
-        return new CarTextResult(localization.Localize(car, LanguageCode), car.Country ?? "", car.CarType ?? "", UnavailableNote);
+        // With the game folder its own tables first, the published texts for what they lack; without it only the published ones
+        var texts = GameTexts ? localization.Localize(car, LanguageCode, cars.Texts) : cars.Texts.Localize(car, LanguageCode);
+        return new CarTextResult(texts, car.Country ?? "", car.CarType ?? "", UnavailableNote);
     }
 
     /// <summary>
@@ -102,7 +118,7 @@ internal sealed class CarTextProvider(CarDatabaseService cars, CarLocalizationSe
         else if (report.StringTablesDirectory is not { } folder)
         {
             _state = GameTextsState.NoStringTables;
-            AppLogger.LogWarning($"No {GameFolder.StringTablesFolderName} folder in '{report.GameDirectory}': car names come from the car list");
+            AppLog.LogWarning($"No {GameFolder.StringTablesFolderName} folder in '{report.GameDirectory}': car names come from the car list");
         }
         else
         {

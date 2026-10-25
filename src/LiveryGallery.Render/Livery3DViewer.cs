@@ -3,8 +3,6 @@ using ForzaToolkit.Formats;
 using ForzaToolkit.Games.Installation;
 using ForzaToolkit.LiveryRender.Formats;
 using ForzaToolkit.LiveryRender.Livery;
-using LiveryGallery.Models;
-using LiveryGallery.Services;
 using LiveryGallery.Viewer3D;
 using LiveryGallery.Views;
 
@@ -19,7 +17,8 @@ internal sealed class Livery3DViewer : ILivery3DViewer, IDisposable
     // A window closed while a car was loading keeps the renderer until the load ends, at most this long
     private static readonly TimeSpan LoadDrainTimeout = TimeSpan.FromSeconds(30);
 
-    private readonly LiveryRenderService _service = new();
+    private readonly LiveryRenderService _service;
+    private readonly LiveryThumbnails _thumbnails;
     private readonly AppSettingsData _settings;
     private LiveryViewerWindow? _window;
     private Task _pendingRelease = Task.CompletedTask;
@@ -27,9 +26,13 @@ internal sealed class Livery3DViewer : ILivery3DViewer, IDisposable
     private bool _shuttingDown;
 
     /// <param name="settings">The viewer window remembers its quality setting there</param>
-    public Livery3DViewer(AppSettingsData settings)
+    /// <param name="cars">The car list: the stock wheels of each car (sizes and stance from the game database)</param>
+    public Livery3DViewer(AppSettingsData settings, CarDatabaseService cars)
     {
+        ArgumentNullException.ThrowIfNull(cars);
         _settings = settings;
+        _service = new LiveryRenderService(carId => cars.Get(carId)?.Wheels);
+        _thumbnails = new LiveryThumbnails(_service);
         _service.StateChanged += OnServiceStateChanged;
     }
 
@@ -37,6 +40,7 @@ internal sealed class Livery3DViewer : ILivery3DViewer, IDisposable
     public bool IsAvailable => _service.IsAvailable;
     public string? GameDirectory => _service.GameDirectory;
     public GameFolderReport? FolderReport => _report;
+    public ILiveryThumbnails Thumbnails => _thumbnails;
 
     public event Action? StateChanged;
 
@@ -66,12 +70,12 @@ internal sealed class Livery3DViewer : ILivery3DViewer, IDisposable
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"3D viewer: failed to read '{request.LiveryFilePath}'", ex);
+            AppLog.LogError($"3D viewer: failed to read '{request.LiveryFilePath}'", ex);
             return new Livery3DResult(Livery3DProblem.ReadFailed);
         }
 
         if (drawing.Error is { } parseError)
-            AppLogger.LogError($"3D viewer: '{request.LiveryFilePath}' parsed with status {drawing.Status}: {parseError.Message}",
+            AppLog.LogError($"3D viewer: '{request.LiveryFilePath}' parsed with status {drawing.Status}: {parseError.Message}",
                 new InvalidDataException(parseError.Message));
         if (!drawing.HasValue)
             return new Livery3DResult(Livery3DProblem.ParseFailed, drawing.Error is { } e ? $"{e.Code} ({(int)e.Code})" : null);
@@ -111,11 +115,11 @@ internal sealed class Livery3DViewer : ILivery3DViewer, IDisposable
         try
         {
             if (!await window.WaitForLoadsAsync(LoadDrainTimeout))
-                AppLogger.LogWarning($"3D viewer: a load was still running {LoadDrainTimeout.TotalSeconds:0} s after the window closed; releasing the renderer anyway");
+                AppLog.LogWarning($"3D viewer: a load was still running {LoadDrainTimeout.TotalSeconds:0} s after the window closed; releasing the renderer anyway");
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("3D viewer: waiting for the loads of a closed window failed", ex);
+            AppLog.LogError("3D viewer: waiting for the loads of a closed window failed", ex);
         }
         finally
         {
@@ -126,6 +130,7 @@ internal sealed class Livery3DViewer : ILivery3DViewer, IDisposable
     public void BeginShutdown()
     {
         _shuttingDown = true;
+        _thumbnails.BeginShutdown();
         _service.StateChanged -= OnServiceStateChanged;
         _window?.Close();
     }
@@ -146,7 +151,7 @@ internal sealed class Livery3DViewer : ILivery3DViewer, IDisposable
         }
         catch (TimeoutException)
         {
-            AppLogger.LogWarning($"3D viewer: the renderer was still in use {timeout.TotalSeconds:0.#} s after shutdown began");
+            AppLog.LogWarning($"3D viewer: the renderer was still in use {timeout.TotalSeconds:0.#} s after shutdown began");
         }
         await _service.ShutdownAsync(timeout);
     }

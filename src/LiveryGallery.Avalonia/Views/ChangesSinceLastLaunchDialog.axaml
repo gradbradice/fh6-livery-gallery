@@ -1,5 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:LiveryGallery.Views"
         xmlns:loc="clr-namespace:LiveryGallery.Localisation"
         xmlns:vm="clr-namespace:LiveryGallery.ViewModels"
         x:Class="LiveryGallery.Views.ChangesSinceLastLaunchDialog"
@@ -19,9 +20,7 @@
                     <Border Grid.Column="0" Width="144" Height="81" CornerRadius="6" ClipToBounds="True"
                             Background="{DynamicResource ThumbnailPlaceholderBrush}" Margin="0,0,12,0"
                             Opacity="{Binding ThumbnailOpacity}"
-                            AttachedToVisualTree="LiveryRow_AttachedToVisualTree"
-                            DetachedFromVisualTree="LiveryRow_DetachedFromVisualTree"
-                            DataContextChanged="LiveryRow_DataContextChanged">
+                            views:ThumbnailRows.Track="True">
                         <Grid>
                             <Path Data="{StaticResource IconCarSide}" Width="28" Height="28" Stretch="Uniform"
                                   HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -99,7 +98,7 @@
             <TabControl Grid.Row="1" SelectedIndex="{Binding InitialTabIndex, Mode=OneTime}">
                 <TabItem Header="{Binding AddedTabHeader}">
                     <Grid>
-                        <ScrollViewer IsVisible="{Binding !ShowNoAddedHint}" Margin="0,10,0,0">
+                        <ScrollViewer Classes="gutter" IsVisible="{Binding !ShowNoAddedHint}" Margin="0,10,0,0">
                             <ItemsControl ItemsSource="{Binding AddedRows}"
                                           ItemTemplate="{StaticResource ChangedLiveryRowTemplate}">
                                 <ItemsControl.ItemsPanel>
@@ -118,7 +117,7 @@
 
                 <TabItem Header="{Binding RemovedTabHeader}">
                     <Grid>
-                        <ScrollViewer IsVisible="{Binding !ShowNoRemovedHint}" Margin="0,10,0,0">
+                        <ScrollViewer Classes="gutter" IsVisible="{Binding !ShowNoRemovedHint}" Margin="0,10,0,0">
                             <ItemsControl ItemsSource="{Binding RemovedRows}"
                                           ItemTemplate="{StaticResource ChangedLiveryRowTemplate}">
                                 <ItemsControl.ItemsPanel>

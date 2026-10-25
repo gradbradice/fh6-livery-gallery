@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveryGallery.Localisation;
-using System.Globalization;
 using System.Text;
+using LiveryGallery.Services;
 
 namespace LiveryGallery.ViewModels;
 
@@ -80,7 +80,7 @@ internal sealed partial class ServerStatusViewModel : ObservableObject, IServerS
             Line(_sync switch
             {
                 InstalledSyncState.Synced when _syncedAt is { } at => string.Format(Strings.ServerSyncDoneFormat,
-                    _installedCount, at.ToString("t", CultureInfo.CurrentCulture)),
+                    _installedCount, at.ToString("t", AppLocalisationService.Culture)),
                 InstalledSyncState.Syncing => Strings.ServerStatusSyncing,
                 InstalledSyncState.ProfileNotFound => Strings.ServerSyncProfileNotFound,
                 InstalledSyncState.SaveNotSupported => Strings.ServerSyncSaveNotSupported,

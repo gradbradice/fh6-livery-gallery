@@ -1,8 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using LiveryGallery.Controller;
-using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using LiveryGallery.Services;
 

@@ -1,6 +1,5 @@
 using Avalonia.Media.Imaging;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using System.ComponentModel;
 using System.Globalization;
@@ -33,9 +32,125 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
     }
     public string LiveryName => Data.DisplayLiveryName;
     public string AuthorRaw => Data.DisplayAuthorRaw;
-    public bool IsAuthorUnknown => Data.IsAuthorUnknown;
-    public string AuthorTooltip => Data.IsAuthorInferred ? Strings.AuthorInferredTooltip : Strings.AuthorLabel;
-    public string? AuthorIdentityTagHex => Data.AuthorIdentityTagHex;
+    /// <summary>Unknown only when nobody, not even the user (<see cref="IsAuthorAssigned"/>), tells</summary>
+    public bool IsAuthorUnknown => Data.IsAuthorUnknown && !IsAuthorAssigned;
+    public string AuthorTooltip
+    {
+        get
+        {
+            string main = IsAuthorAssigned ? Strings.AuthorAssignedTooltip
+                : IsAuthorIdInvalid ? Strings.AuthorIdInvalidTooltip
+                : IsAuthorIdMissing ? Strings.AuthorIdMissingTooltip
+                : Data.IsAuthorUnknown && Data.AuthorIdKind == AuthorIdKind.None ? Strings.AuthorIdNoneTooltip
+                : IsOwnUnpublished ? Strings.AuthorOwnUnpublishedTooltip
+                : Data.IsAuthorInferred ? Strings.AuthorInferredTooltip
+                : Strings.AuthorLabel;
+            if (AuthorDetails is { } details) main += "\n\n" + AuthorContext.DescribeDetails(details);
+            return AuthorHintsText is { } hints ? $"{main}\n\n{hints}" : main;
+        }
+    }
+
+    /// <summary>The card the user assigned this livery to (its own author id says nothing); null when none</summary>
+    public string? AssignedCardId { get; init; }
+
+    private readonly string? _authorAccountTag;
+    private readonly bool _authorAccountTagSet;
+    /// <summary>
+    /// The author's account: the livery's own id, or the shown save's account for its own liveries without an id
+    /// (<see cref="IsOwnUnpublished"/>). <see cref="AuthorIdentityTagHex"/> reads it
+    /// </summary>
+    public string? AuthorAccountTag
+    {
+        get => _authorAccountTagSet ? _authorAccountTag : Data.AuthorIdentityTagHex;
+        init
+        {
+            _authorAccountTag = value;
+            _authorAccountTagSet = true;
+        }
+    }
+
+    private readonly string? _authorKey;
+    private readonly bool _authorKeySet;
+    /// <summary>Who the author is (<see cref="AuthorKeys"/>); by default the shown name's key</summary>
+    public string? AuthorKey
+    {
+        get => _authorKeySet ? _authorKey : IsAuthorUnknown ? null : AuthorKeys.ForName(Author);
+        init
+        {
+            _authorKey = value;
+            _authorKeySet = true;
+        }
+    }
+
+    /// <summary>How the author is told from others of its name (<see cref="Author"/> is it, worded); null when not known</summary>
+    public AuthorLabel? AuthorLabel { get; init; }
+
+    /// <summary>The author's nicknames, liveries and earliest livery, for an author whose name another one shares; null otherwise</summary>
+    public AuthorDetails? AuthorDetails { get; init; }
+
+    /// <summary>Made on this PC and not published: no author id, but the shown save's account's nickname</summary>
+    public bool IsOwnUnpublished { get; init; }
+
+    /// <summary>The user said whose livery this is (<see cref="AuthorCardService.AssignAsync"/>)</summary>
+    public bool IsAuthorAssigned => AssignedCardId is not null;
+
+    /// <summary>The author id is not an account (an edited header) and the user has not said whose livery it is</summary>
+    public bool IsAuthorIdInvalid => Data.AuthorIdKind == AuthorIdKind.Invalid && !IsAuthorAssigned;
+
+    /// <summary>Nothing but the user can tell the author: the id is invalid or zeros. Also when already assigned (to change it)</summary>
+    public bool CanAssignAuthor => Data.AuthorIdKind != AuthorIdKind.Account && !IsOwnUnpublished;
+
+    /// <summary>The author row shows a warning: an invalid id, or hints that nobody answered yet</summary>
+    public bool ShowAuthorWarning => IsAuthorIdInvalid || IsAuthorIdMissing || HasAuthorHints;
+
+    /// <summary>
+    /// A name without an author id (zeros), not the user's own unpublished livery and not assigned: the name may be
+    /// anyone's, so the card marks it as it marks an edited id. A livery with neither name nor id shows "unknown author"
+    /// and needs no mark
+    /// </summary>
+    public bool IsAuthorIdMissing =>
+        Data.AuthorIdKind == AuthorIdKind.None && !Data.IsAuthorUnknown && !IsOwnUnpublished && !IsAuthorAssigned;
+
+    private ArtworkSketch? _sketch;
+    private bool _sketchRead;
+    /// <summary>The fingerprint of the artwork, read once from <see cref="LiveryData.ArtworkSketch"/>; null when there is none</summary>
+    public ArtworkSketch? Sketch
+    {
+        get
+        {
+            if (!_sketchRead)
+            {
+                _sketch = ArtworkSketch.FromBase64(Data.ArtworkSketch);
+                _sketchRead = true;
+            }
+            return _sketch;
+        }
+    }
+
+    private IReadOnlyList<AuthorHintView> _authorHints = [];
+    /// <summary>Who this livery may be by, when nothing else tells (<see cref="AuthorHints"/>); best first</summary>
+    public IReadOnlyList<AuthorHintView> AuthorHints
+    {
+        get => _authorHints;
+        set
+        {
+            if (_authorHints.SequenceEqual(value)) return;
+            _authorHints = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasAuthorHints));
+            OnPropertyChanged(nameof(ShowAuthorWarning));
+            OnPropertyChanged(nameof(AuthorTooltip));
+        }
+    }
+
+    public bool HasAuthorHints => _authorHints.Count > 0;
+
+    private string? AuthorHintsText => _authorHints.Count == 0
+        ? null
+        : Strings.AuthorHintsTooltipHeader + "\n" + string.Join("\n", _authorHints.Select(h => "• " + h.Text));
+
+    /// <summary>The author's account (<see cref="AuthorAccountTag"/>); the livery's own id is <see cref="LiveryData.AuthorIdentityTagHex"/></summary>
+    public string? AuthorIdentityTagHex => AuthorAccountTag;
     public ulong? CreatorUserId => Data.CreatorUserId;
     public bool IsPossiblyGenerated => Data.IsPossiblyGenerated;
     public bool HasNoLayers => Data.HasNoLayers;
@@ -91,10 +206,50 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
     public bool CarKnown => Data.CarKnown;
     public int? CreatedYear => Data.CreatedYear;
     public int? CreatedMonth => Data.CreatedMonth;
+
+    /// <summary>The month the livery was made, as its header says (<see cref="IGalleryItem.CreatedOn"/>)</summary>
+    public DateOnly? CreatedOn => CreatedYear is > 1999 and < 2200 && CreatedMonth is >= 1 and <= 12
+        ? new DateOnly(CreatedYear.Value, CreatedMonth.Value, 1)
+        : null;
+
+    /// <summary>How many shapes the livery holds (<see cref="IGalleryItem.LayerCount"/>)</summary>
+    public int? LayerCount => Data.LayerCount;
     public DateTime? DownloadDate => Data.DownloadDate;
+    /// <summary>The livery's preview: the gallery's PNG of the game's one, or the one it drew (<see cref="LiveryData.ThumbnailDrawn"/>)</summary>
     public string? ThumbnailPath => Data.ThumbnailPath;
     public string? CLiveryHash => Data.CLiveryHash;
     public bool HasThumbnail => Data.HasThumbnail;
+
+    /// <summary>
+    /// The livery has no preview yet, and the gallery can draw one from the 3D model (<see cref="RenderedThumbnails"/>):
+    /// the livery file is there and readable, the car is known
+    /// </summary>
+    public bool CanRenderThumbnail => !HasThumbnail && Data.ThumbnailPath is null && CanParseForView3D && CarId > 0;
+
+    private string? _renderedThumbnailPath;
+    /// <summary>
+    /// The preview the gallery has just drawn, shown until the next scan makes it the livery's preview
+    /// (<see cref="ThumbnailPath"/>); null when none was drawn
+    /// </summary>
+    public string? RenderedThumbnailPath
+    {
+        get => _renderedThumbnailPath;
+        set
+        {
+            if (_renderedThumbnailPath == value) return;
+            _renderedThumbnailPath = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ThumbnailTooltip));
+        }
+    }
+
+    /// <summary>The livery's preview; the one just drawn until a scan attaches it</summary>
+    string? IThumbnailHost.ThumbnailPath => Data.ThumbnailPath ?? (CanRenderThumbnail ? RenderedThumbnailPath : null);
+
+    /// <summary>On the card's picture: it was drawn by the gallery, not taken from the save</summary>
+    public string? ThumbnailTooltip => Data.ThumbnailDrawn || (Data.ThumbnailPath is null && RenderedThumbnailPath is not null)
+        ? Strings.RenderedThumbnailTooltip
+        : null;
     /// <summary>A livery the game only lists (the auction house); the game profile tells</summary>
     public bool IsAuction { get; init; }
 
@@ -260,7 +415,7 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
     private string _author = string.Empty;
     public string Author
     {
-        get => Data.IsAuthorUnknown ? Strings.UnknownAuthor : _author;
+        get => Data.IsAuthorUnknown && !IsAuthorAssigned ? Strings.UnknownAuthor : _author;
         set
         {
             if (_author == value) return;
@@ -270,7 +425,13 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
             OnPropertyChanged(nameof(AuthorDisplayText));
         }
     }
-    public string AuthorDisplayText => string.Equals(Author, AuthorRaw, StringComparison.OrdinalIgnoreCase)
+    /// <summary>
+    /// The author, and the livery's own nickname after it when the author is shown under another name (a card's, or the
+    /// account's latest); not when the label already names it ("Ann (formerly Old)")
+    /// </summary>
+    public string AuthorDisplayText => string.Equals(AuthorLabel?.Name ?? Author, AuthorRaw, StringComparison.OrdinalIgnoreCase)
+        || string.Equals(AuthorLabel?.FormerName, AuthorRaw, StringComparison.OrdinalIgnoreCase)
+        || (IsAuthorAssigned && (Data.IsAuthorUnknown || AuthorAccounts.IsBlankName(Data.AuthorRaw)))
         ? Author
         : $"{Author} ({AuthorRaw})";
 
@@ -285,6 +446,22 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
             OnPropertyChanged();
         }
     }
+
+    private bool _isLocked;
+    /// <summary>Locked by the user: kept out of the archive</summary>
+    public bool IsLocked
+    {
+        get => _isLocked;
+        set
+        {
+            if (_isLocked == value) return;
+            _isLocked = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(LockTooltip));
+        }
+    }
+
+    public string LockTooltip => IsLocked ? Strings.LockedTooltip : Strings.LockToggleTooltip;
 
     private bool _isSelected;
     public bool IsSelected
@@ -319,8 +496,6 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
 
     public IReadOnlySet<string> TagsSet => _tagsSet;
 
-    public DateTime? DownloadYearMonth => Data.DownloadDate is { } d ? new DateTime(d.Year, d.Month, 1) : null;
-
     private DuplicateStatus _duplicateStatus;
     public DuplicateStatus DuplicateStatus
     {
@@ -333,7 +508,7 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
     }
     public bool IsDuplicate => DuplicateStatus == DuplicateStatus.Duplicate;
 
-    public static int PossibleDuplicateThresholdPercent { get; set; } = AppSettingsData.DefaultPossibleDuplicateThresholdPercent;
+    public static int PossibleDuplicateThresholdPercent { get; set; } = PossibleDuplicateThreshold.DefaultPercent;
 
     public bool IsPossibleDuplicate => DuplicateStatus == DuplicateStatus.PossibleDuplicate && VisiblePossibleRelations is not null;
 
@@ -356,7 +531,7 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
     private static IReadOnlyList<DuplicateRelation>? FilterByThreshold(IReadOnlyList<DuplicateRelation>? relations, int thresholdPercent)
     {
         if (relations is not { Count: > 0 }) return [];
-        var kept = relations.Where(r => r.Score is not { } score || score * 100 >= thresholdPercent - 1e-9).ToList();
+        var kept = relations.Where(r => PossibleDuplicateThreshold.Reaches(r.Score, thresholdPercent)).ToList();
         return kept.Count > 0 ? kept : null;
     }
 
@@ -456,7 +631,7 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
         }
     }
 
-    public bool ShowThumbnailImage => HasThumbnail && Thumbnail is not null;
+    public bool ShowThumbnailImage => Thumbnail is not null;
 
     public string DateDisplay
     {
@@ -496,8 +671,22 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
         return true;
     }
 
+    /// <summary>
+    /// The author's label in the interface language ("Ann (formerly Old)", "Ann (you)"): it is made when the livery is
+    /// read, so a change of language makes it again. True when it changed (author groups are then named again)
+    /// </summary>
+    public bool RefreshAuthorLabel()
+    {
+        if (AuthorLabel is not { } label) return false;
+        string text = AuthorContext.Format(label);
+        if (text == _author) return false;
+        Author = text;
+        return true;
+    }
+
     public void RefreshLocalizedText()
     {
+        RefreshAuthorLabel();
         RefreshCarTexts(); // "as in the interface" follows the interface language
         OnPropertyChanged(nameof(DateDisplay));
         _parseIssueTooltip = null;
@@ -506,11 +695,13 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
         OnPropertyChanged(nameof(DuplicateMatchTooltip));
         OnPropertyChanged(nameof(PossibleDuplicateBadgeText));
         OnPropertyChanged(nameof(AuthorTooltip));
+        OnPropertyChanged(nameof(ThumbnailTooltip));
         OnPropertyChanged(nameof(InstalledBadgeTooltip));
         OnPropertyChanged(nameof(LiveryName));
         OnPropertyChanged(nameof(Author));
         OnPropertyChanged(nameof(AuthorRaw));
         OnPropertyChanged(nameof(AuthorDisplayText));
+        OnPropertyChanged(nameof(LockTooltip));
         OnGamePositionTextsChanged();
         RefreshView3D();
     }
@@ -520,3 +711,10 @@ internal class LiveryEntry : INotifyPropertyChanged, IThumbnailHost, IGalleryIte
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
+
+/// <summary>A hint about who a livery is by, worded for the card</summary>
+/// <param name="Hint">The hint</param>
+/// <param name="TargetName">The author it points to, as shown</param>
+/// <param name="Text">"Name: why"</param>
+internal sealed record AuthorHintView(AuthorHint Hint, string TargetName, string Text);
+

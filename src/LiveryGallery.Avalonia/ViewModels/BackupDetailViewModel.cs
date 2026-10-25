@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.Services.Accounts;
 using System.Collections.ObjectModel;
@@ -108,7 +107,7 @@ internal sealed partial class BackupDetailViewModel : ObservableObject
         catch (Exception ex)
         {
             // Rows without a preview keep their placeholder
-            AppLogger.LogError($"Failed to generate previews from backup '{_backupPath}'", ex);
+            AppLog.LogError($"Failed to generate previews from backup '{_backupPath}'", ex);
         }
     }
 
@@ -174,27 +173,12 @@ internal sealed partial class BackupDetailViewModel : ObservableObject
 
         try
         {
-            var conflicts = LiveryRestoreConflicts.Find(
-                selected.Select(r => r.Data), _getCurrentEntries(), savePath);
+            var plan = await LiveryRestoreConflicts.PlanAsync(
+                [.. selected.Select(r => r.Data)], _getCurrentEntries(), savePath, _savePathService.Profile.Liveries,
+                ConfirmRestoreDuplicatesAsync);
 
-            var duplicateRows = selected.Where(r => conflicts.Duplicates.ContainsKey(r.FolderName)).ToList();
-            bool restoreDuplicates = false;
-            if (duplicateRows.Count > 0 && ConfirmRestoreDuplicatesAsync is { } confirm)
-            {
-                bool hasOtherLiveries = selected.Any(r =>
-                    !conflicts.SameFolder.Contains(r.FolderName) && !conflicts.Duplicates.ContainsKey(r.FolderName));
-                string prompt = LiveryRestoreConflicts.BuildDuplicatePrompt(
-                    [.. duplicateRows.Select(r => (r.Data, conflicts.Duplicates[r.FolderName]))], hasOtherLiveries);
-                restoreDuplicates = await confirm(prompt);
-            }
-
-            var toRestore = selected
-                .Where(r => !conflicts.SameFolder.Contains(r.FolderName)
-                    && (restoreDuplicates || !conflicts.Duplicates.ContainsKey(r.FolderName)))
-                .ToList();
-
-            IReadOnlyList<string> restored = toRestore.Count > 0
-                ? await _backupService.RestoreAsync(_backupPath, toRestore.Select(r => r.FolderName), savePath)
+            IReadOnlyList<string> restored = plan.ToRestore.Count > 0
+                ? await _backupService.RestoreAsync(_backupPath, plan.ToRestore.Select(d => d.FolderName), savePath)
                 : [];
             var restoredSet = restored.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
@@ -211,14 +195,12 @@ internal sealed partial class BackupDetailViewModel : ObservableObject
                 await _onRestored();
             }
 
-            string? report = LiveryRestoreConflicts.BuildReport(
-                [.. selected.Where(r => conflicts.SameFolder.Contains(r.FolderName)).Select(r => r.Data)],
-                [.. toRestore.Where(r => !restoredSet.Contains(r.FolderName)).Select(r => r.Data)]);
+            string? report = plan.Report(restoredSet);
             if (report is not null) ErrorMessageRequested?.Invoke(report);
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to restore from backup", ex);
+            AppLog.LogError("Failed to restore from backup", ex);
             ErrorMessageRequested?.Invoke(Strings.FileOperationFailedMessage);
         }
     }
