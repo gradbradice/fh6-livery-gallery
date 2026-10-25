@@ -1,4 +1,3 @@
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.ViewModels;
 

@@ -13,7 +13,7 @@ internal static class ExplorerLauncher
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled("ExplorerLauncher", $"Failed to show '{filePath}' in Explorer", ex);
+            AppLog.LogErrorThrottled("ExplorerLauncher", $"Failed to show '{filePath}' in Explorer", ex);
         }
     }
 }

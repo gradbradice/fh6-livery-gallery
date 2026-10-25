@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:enums="clr-namespace:LiveryGallery.Enums"
+        xmlns:ui="clr-namespace:ForzaToolkit.UI;assembly=ForzaToolkit.UI.Avalonia"
         xmlns:loc="clr-namespace:LiveryGallery.Localisation"
         xmlns:vm="clr-namespace:LiveryGallery.ViewModels"
         xmlns:views="using:LiveryGallery.Views"
@@ -139,13 +139,13 @@
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
                                 <RadioButton x:Name="SystemThemeRadio" GroupName="ThemeGroup" Margin="0,0,24,0"
                                              IsChecked="{Binding IsSystemTheme}"
-                                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.System}" />
+                                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static ui:AppThemeMode.System}" />
                                 <RadioButton x:Name="LightThemeRadio" GroupName="ThemeGroup" Margin="0,0,24,0"
                                              IsChecked="{Binding IsLightTheme}"
-                                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.Light}" />
+                                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static ui:AppThemeMode.Light}" />
                                 <RadioButton x:Name="DarkThemeRadio" GroupName="ThemeGroup"
                                              IsChecked="{Binding IsDarkTheme}"
-                                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static enums:AppThemeMode.Dark}" />
+                                             Command="{Binding SetThemeCommand}" CommandParameter="{x:Static ui:AppThemeMode.Dark}" />
                             </StackPanel>
 
                             <TextBlock x:Name="LanguageSectionLabel" Classes="sectionLabel" />
@@ -203,8 +203,9 @@
                             <CheckBox x:Name="AutoRefreshLiveriesCheckBox" Margin="0,0,0,10" IsChecked="{Binding AutoRefreshLiveries}" />
                             <CheckBox x:Name="RefreshOnButtonClickCheckBox" Margin="0,0,0,10" IsChecked="{Binding RefreshOnButtonClick}" />
                             <CheckBox x:Name="SearchByFolderNameCheckBox" Margin="0,0,0,10" IsChecked="{Binding SearchByFolderName}" />
-                            <CheckBox x:Name="ShowChangesSinceLastLaunchCheckBox" Margin="0,0,0,24"
+                            <CheckBox x:Name="ShowChangesSinceLastLaunchCheckBox" Margin="0,0,0,10"
                                       IsChecked="{Binding ShowChangesSinceLastLaunch}" />
+                            <CheckBox x:Name="WarnFewFreeSlotsCheckBox" Margin="0,0,0,24" IsChecked="{Binding WarnFewFreeSlots}" />
 
                             <TextBlock x:Name="DuplicatesSectionLabel" Classes="sectionLabel" />
                             <TextBlock x:Name="PossibleDuplicateThresholdLabel" FontSize="13" Margin="0,0,0,4" TextWrapping="Wrap" />
@@ -217,6 +218,30 @@
                                            Margin="12,0,0,0" VerticalAlignment="Center" TextAlignment="Right" FontWeight="SemiBold" />
                             </Grid>
                             <TextBlock x:Name="PossibleDuplicateThresholdHint" Classes="hint" Margin="0,2,0,0" />
+                        </StackPanel>
+
+                        <!-- Backups: what the gallery backs up on its own, and how many it keeps -->
+                        <StackPanel x:Name="BackupsPage" IsVisible="False">
+                            <TextBlock x:Name="AutoBackupSectionLabel" Classes="sectionLabel" />
+                            <CheckBox x:Name="AutoBackupBeforeArchiveCheckBox" Margin="0,0,0,10" IsChecked="{Binding AutoBackupBeforeArchive}" />
+                            <CheckBox x:Name="AutoBackupOnChangeCheckBox" Margin="0,0,0,10" IsChecked="{Binding AutoBackupOnChange}" />
+                            <CheckBox x:Name="AutoBackupPeriodicCheckBox" Margin="0,0,0,4" IsChecked="{Binding AutoBackupPeriodic}" />
+                            <Grid ColumnDefinitions="*,Auto" Margin="28,0,0,20" IsEnabled="{Binding AutoBackupPeriodic}">
+                                <Slider Grid.Column="0" Minimum="{Binding MinAutoBackupPeriodDays}" Maximum="{Binding MaxAutoBackupPeriodDays}"
+                                        TickFrequency="1" IsSnapToTickEnabled="True"
+                                        Value="{Binding AutoBackupPeriodDays, Mode=TwoWay}" />
+                                <TextBlock Grid.Column="1" Text="{Binding AutoBackupPeriodText}" MinWidth="64"
+                                           Margin="12,0,0,0" VerticalAlignment="Center" TextAlignment="Right" FontWeight="SemiBold" />
+                            </Grid>
+                            <TextBlock x:Name="AutoBackupKeepLabel" FontSize="13" Margin="0,0,0,4" TextWrapping="Wrap" />
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Slider Grid.Column="0" Minimum="{Binding MinAutoBackupKeep}" Maximum="{Binding MaxAutoBackupKeep}"
+                                        TickFrequency="1" IsSnapToTickEnabled="True"
+                                        Value="{Binding AutoBackupKeep, Mode=TwoWay}" />
+                                <TextBlock Grid.Column="1" Text="{Binding AutoBackupKeepText}" MinWidth="64"
+                                           Margin="12,0,0,0" VerticalAlignment="Center" TextAlignment="Right" FontWeight="SemiBold" />
+                            </Grid>
+                            <TextBlock x:Name="AutoBackupHint" Classes="hint" Margin="0,6,0,0" />
                         </StackPanel>
 
                         <!-- Find in game: the rows of the in-game list and the key interval -->

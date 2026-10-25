@@ -4,12 +4,12 @@ using CommunityToolkit.Mvvm.Input;
 using ForzaToolkit.StringTables;
 using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
-using LiveryGallery.Services.Accounts;
 using LiveryGallery.Viewer3D;
 using System.Collections.ObjectModel;
 using System.Globalization;
+// The view model has a PossibleDuplicateThreshold property of its own; the type is every app's range and default
+using DuplicateThreshold = ForzaToolkit.Liveries.PossibleDuplicateThreshold;
 
 namespace LiveryGallery.ViewModels;
 
@@ -56,6 +56,12 @@ internal sealed partial class SettingsViewModel : ObservableObject
     private MyDesignsRowsMode _savedRowsMode;
     private int _savedKeyInterval;
     private bool _savedShowChangesSinceLastLaunch;
+    private bool _savedWarnFewFreeSlots;
+    private bool _savedAutoBackupBeforeArchive;
+    private bool _savedAutoBackupOnChange;
+    private bool _savedAutoBackupPeriodic;
+    private int _savedAutoBackupPeriodDays;
+    private int _savedAutoBackupKeep;
     public bool SavePathChanged { get; private set; }
 
     /// <param name="carTextLanguages">The game languages whose texts were read from the game; empty before the first read</param>
@@ -77,11 +83,17 @@ internal sealed partial class SettingsViewModel : ObservableObject
         _savedAutoRefreshLiveries = settings.AutoRefreshLiveries;
         _savedRefreshOnButtonClick = settings.RefreshLiveriesOnButtonClick;
         _savedSearchByFolderName = settings.SearchByFolderName;
-        _savedPossibleDuplicateThreshold = AppSettingsData.ClampPossibleDuplicateThreshold(settings.PossibleDuplicateThresholdPercent);
+        _savedPossibleDuplicateThreshold = DuplicateThreshold.Clamp(settings.PossibleDuplicateThresholdPercent);
         _savedServerConnectionEnabled = settings.ServerConnectionEnabled;
         _savedRowsMode = settings.MyDesignsRowsMode;
         _savedKeyInterval = NavigationTiming.ClampKeyInterval(settings.NavigationKeyIntervalMs);
         _savedShowChangesSinceLastLaunch = settings.ShowChangesSinceLastLaunch;
+        _savedWarnFewFreeSlots = settings.WarnFewFreeSlots;
+        _savedAutoBackupBeforeArchive = settings.AutoBackupBeforeArchive;
+        _savedAutoBackupOnChange = settings.AutoBackupOnChange;
+        _savedAutoBackupPeriodic = settings.AutoBackupPeriodic;
+        _savedAutoBackupPeriodDays = AutoBackupPolicy.ClampPeriodDays(settings.AutoBackupPeriodDays);
+        _savedAutoBackupKeep = AutoBackupPolicy.ClampKeep(settings.AutoBackupKeep);
 
         _themeMode = _savedThemeMode;
         _language = _savedLanguage;
@@ -96,6 +108,12 @@ internal sealed partial class SettingsViewModel : ObservableObject
         _rowsMode = _savedRowsMode;
         _keyInterval = _savedKeyInterval;
         _showChangesSinceLastLaunch = _savedShowChangesSinceLastLaunch;
+        _warnFewFreeSlots = _savedWarnFewFreeSlots;
+        _autoBackupBeforeArchive = _savedAutoBackupBeforeArchive;
+        _autoBackupOnChange = _savedAutoBackupOnChange;
+        _autoBackupPeriodic = _savedAutoBackupPeriodic;
+        _autoBackupPeriodDays = _savedAutoBackupPeriodDays;
+        _autoBackupKeep = _savedAutoBackupKeep;
 
         _carTextLanguages = carTextLanguages ?? [];
         HasGameCarTexts = _carTextLanguages.Count > 0;
@@ -160,6 +178,8 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
 
         OnPropertyChanged(nameof(KeyIntervalText));
+        OnPropertyChanged(nameof(AutoBackupPeriodText));
+        OnPropertyChanged(nameof(AutoBackupKeepText));
         SetStoredAccounts([.. StoredAccounts.Select(r => r.Account)]); // their status lines, without reading the disk again
     }
 
@@ -184,20 +204,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
 
     /// <summary>The interface languages by their names, in the same order as the languages of car names</summary>
     public IReadOnlyList<LanguageOption> LanguageOptions { get; } =
-        new LanguageOption[]
-        {
-            new(AppLanguage.German, "Deutsch (DE)"),
-            new(AppLanguage.English, "English (EN)"),
-            new(AppLanguage.Spanish, "Español (ES)"),
-            new(AppLanguage.French, "Français (FR)"),
-            new(AppLanguage.Italian, "Italiano (IT)"),
-            new(AppLanguage.Japanese, "日本語 (JA)"),
-            new(AppLanguage.Korean, "한국어 (KO)"),
-            new(AppLanguage.Portuguese, "Português (PT)"),
-            new(AppLanguage.Russian, "Русский (RU)"),
-            new(AppLanguage.ChineseSimplified, "中文（简体） (ZH-CN)"),
-            new(AppLanguage.ChineseTraditional, "中文（繁體） (ZH-TW)"),
-        }.OrderBy(o => o.DisplayName, LanguageNameOrder).ToList();
+        [.. AppLanguages.InMenuOrder.Select(l => new LanguageOption(l, AppLanguages.DisplayName(l)))];
 
     public LanguageOption SelectedLanguageOption
     {
@@ -343,6 +350,10 @@ internal sealed partial class SettingsViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsDirty))]
     private bool _showChangesSinceLastLaunch;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDirty))]
+    private bool _warnFewFreeSlots;
+
     /// <summary>Filled by the dialog once it is open (the sizes take disk work); not part of the saved settings</summary>
     public ObservableCollection<StoredAccountRowViewModel> StoredAccounts { get; } = [];
     public bool HasStoredAccounts => StoredAccounts.Count > 0;
@@ -360,8 +371,8 @@ internal sealed partial class SettingsViewModel : ObservableObject
 
     public bool IsServerConnectionSaved => _savedServerConnectionEnabled;
 
-    public double MinPossibleDuplicateThreshold => AppSettingsData.MinPossibleDuplicateThresholdPercent;
-    public double MaxPossibleDuplicateThreshold => AppSettingsData.MaxPossibleDuplicateThresholdPercent;
+    public double MinPossibleDuplicateThreshold => DuplicateThreshold.MinPercent;
+    public double MaxPossibleDuplicateThreshold => DuplicateThreshold.MaxPercent;
 
     private int _possibleDuplicateThreshold;
 
@@ -370,7 +381,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         get => _possibleDuplicateThreshold;
         set
         {
-            int percent = AppSettingsData.ClampPossibleDuplicateThreshold((int)Math.Round(value));
+            int percent = DuplicateThreshold.Clamp((int)Math.Round(value));
             if (percent == _possibleDuplicateThreshold) return;
             _possibleDuplicateThreshold = percent;
             OnPropertyChanged();
@@ -380,6 +391,59 @@ internal sealed partial class SettingsViewModel : ObservableObject
     }
 
     public string PossibleDuplicateThresholdText => $"{_possibleDuplicateThreshold} %";
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDirty))]
+    private bool _autoBackupBeforeArchive;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDirty))]
+    private bool _autoBackupOnChange;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDirty))]
+    private bool _autoBackupPeriodic;
+
+    public double MinAutoBackupPeriodDays => AutoBackupPolicy.MinPeriodDays;
+    public double MaxAutoBackupPeriodDays => AutoBackupPolicy.MaxPeriodDays;
+    public double MinAutoBackupKeep => AutoBackupPolicy.MinKeep;
+    public double MaxAutoBackupKeep => AutoBackupPolicy.MaxKeep;
+
+    private int _autoBackupPeriodDays;
+
+    public double AutoBackupPeriodDays
+    {
+        get => _autoBackupPeriodDays;
+        set
+        {
+            int days = AutoBackupPolicy.ClampPeriodDays((int)Math.Round(value));
+            if (days == _autoBackupPeriodDays) return;
+            _autoBackupPeriodDays = days;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(AutoBackupPeriodText));
+            OnPropertyChanged(nameof(IsDirty));
+        }
+    }
+
+    public string AutoBackupPeriodText => string.Format(Strings.AutoBackupDaysFormat, _autoBackupPeriodDays);
+
+    private int _autoBackupKeep;
+
+    public double AutoBackupKeep
+    {
+        get => _autoBackupKeep;
+        set
+        {
+            int keep = AutoBackupPolicy.ClampKeep((int)Math.Round(value));
+            if (keep == _autoBackupKeep) return;
+            _autoBackupKeep = keep;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(AutoBackupKeepText));
+            OnPropertyChanged(nameof(IsDirty));
+        }
+    }
+
+    public string AutoBackupKeepText => _autoBackupKeep.ToString(AppLocalisationService.Culture);
 
     public IReadOnlyList<RowsModeOption> RowsModeOptions { get; }
 
@@ -460,7 +524,13 @@ internal sealed partial class SettingsViewModel : ObservableObject
         || ServerConnectionEnabled != _savedServerConnectionEnabled
         || RowsMode != _savedRowsMode
         || _keyInterval != _savedKeyInterval
-        || ShowChangesSinceLastLaunch != _savedShowChangesSinceLastLaunch;
+        || ShowChangesSinceLastLaunch != _savedShowChangesSinceLastLaunch
+        || WarnFewFreeSlots != _savedWarnFewFreeSlots
+        || AutoBackupBeforeArchive != _savedAutoBackupBeforeArchive
+        || AutoBackupOnChange != _savedAutoBackupOnChange
+        || AutoBackupPeriodic != _savedAutoBackupPeriodic
+        || _autoBackupPeriodDays != _savedAutoBackupPeriodDays
+        || _autoBackupKeep != _savedAutoBackupKeep;
 
     public async Task<SettingsSaveResult> SaveAsync()
     {
@@ -490,13 +560,19 @@ internal sealed partial class SettingsViewModel : ObservableObject
         candidate.MyDesignsRowsMode = RowsMode;
         candidate.NavigationKeyIntervalMs = _keyInterval;
         candidate.ShowChangesSinceLastLaunch = ShowChangesSinceLastLaunch;
+        candidate.WarnFewFreeSlots = WarnFewFreeSlots;
+        candidate.AutoBackupBeforeArchive = AutoBackupBeforeArchive;
+        candidate.AutoBackupOnChange = AutoBackupOnChange;
+        candidate.AutoBackupPeriodic = AutoBackupPeriodic;
+        candidate.AutoBackupPeriodDays = _autoBackupPeriodDays;
+        candidate.AutoBackupKeep = _autoBackupKeep;
 
         bool saved = await AppSettingsService.SaveImmediateAsync(candidate);
         if (!saved) return SettingsSaveResult.PersistFailed;
 
         bool languageChanged = Language != AppLocalisationService.AppLanguage;
         _settings.CopyFrom(candidate);
-        AppThemeService.ApplyTheme(ThemeMode);
+        AppThemes.Apply(ThemeMode);
         if (languageChanged) AppLocalisationService.AppLanguage = Language;
 
         if (SavePath != _initialSavePath) SavePathChanged = true;
@@ -520,6 +596,12 @@ internal sealed partial class SettingsViewModel : ObservableObject
         _savedRowsMode = RowsMode;
         _savedKeyInterval = _keyInterval;
         _savedShowChangesSinceLastLaunch = ShowChangesSinceLastLaunch;
+        _savedWarnFewFreeSlots = WarnFewFreeSlots;
+        _savedAutoBackupBeforeArchive = AutoBackupBeforeArchive;
+        _savedAutoBackupOnChange = AutoBackupOnChange;
+        _savedAutoBackupPeriodic = AutoBackupPeriodic;
+        _savedAutoBackupPeriodDays = _autoBackupPeriodDays;
+        _savedAutoBackupKeep = _autoBackupKeep;
         OnPropertyChanged(nameof(IsDirty));
     }
 }

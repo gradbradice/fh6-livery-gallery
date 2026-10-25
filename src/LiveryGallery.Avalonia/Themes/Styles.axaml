@@ -88,6 +88,15 @@
 	<Style Selector="Button.cardIconButton:pointerover /template/ ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
 	</Style>
+	<!-- A locked livery: the lock button filled with the accent colour, seen from afar like the gold star -->
+	<Style Selector="Button.cardIconButton.locked /template/ ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+	</Style>
+	<Style Selector="Button.cardIconButton.locked:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource AccentHoverBrush}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentHoverBrush}" />
+	</Style>
 
 	<Style Selector="Border.liveryCard">
 		<Setter Property="Background" Value="{DynamicResource CardBrush}" />
@@ -129,7 +138,8 @@
 		<Setter Property="Padding" Value="7,2" />
 	</Style>
 
-	<Style Selector=":is(ToggleButton).tagChip">
+	<!-- A chip: the quick filter kinds (toggle buttons) and the tags row (buttons: shown, hidden or off) -->
+	<Style Selector=":is(Button).tagChip">
 		<Setter Property="Padding" Value="10,5" />
 		<Setter Property="FontSize" Value="11.5" />
 		<Setter Property="Cursor" Value="Hand" />
@@ -141,7 +151,7 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="Template">
-			<ControlTemplate TargetType="ToggleButton">
+			<ControlTemplate TargetType="Button">
 				<Border Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -155,12 +165,43 @@
 			</ControlTemplate>
 		</Setter>
 	</Style>
-	<Style Selector=":is(ToggleButton).tagChip:checked">
+	<Style Selector=":is(ToggleButton).tagChip:checked, Button.tagChip.shown">
 		<Setter Property="Background" Value="{DynamicResource AccentBrush}" />
 		<Setter Property="Foreground" Value="White" />
 	</Style>
-	<Style Selector=":is(ToggleButton).tagChip:pointerover:not(:checked)">
+	<Style Selector=":is(Button).tagChip:pointerover:not(:checked):not(.shown):not(.hidden)">
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+	</Style>
+	<!-- A hidden tag: struck out, in the danger colour, so it does not read as one that is shown -->
+	<Style Selector="Button.tagChip.hidden">
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="BorderBrush" Value="{DynamicResource DangerBrush}" />
+		<Setter Property="Foreground" Value="{DynamicResource DangerBrush}" />
+	</Style>
+	<Style Selector="Button.tagChip.hidden TextBlock">
+		<Setter Property="TextDecorations" Value="Strikethrough" />
+	</Style>
+
+	<!-- The counter of the room in the save (status bar) -->
+	<Style Selector="Button.slots Ellipse.slotsDot">
+		<Setter Property="Fill" Value="{DynamicResource SuccessBrush}" />
+	</Style>
+	<Style Selector="Button.slots TextBlock.slotsText">
+		<Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+	</Style>
+	<Style Selector="Button.slots.warning Ellipse.slotsDot">
+		<Setter Property="Fill" Value="{DynamicResource WarningBrush}" />
+	</Style>
+	<Style Selector="Button.slots.warning TextBlock.slotsText">
+		<Setter Property="Foreground" Value="{DynamicResource WarningTextBrush}" />
+		<Setter Property="FontWeight" Value="SemiBold" />
+	</Style>
+	<Style Selector="Button.slots.full Ellipse.slotsDot">
+		<Setter Property="Fill" Value="{DynamicResource DangerBrush}" />
+	</Style>
+	<Style Selector="Button.slots.full TextBlock.slotsText">
+		<Setter Property="Foreground" Value="{DynamicResource DangerBrush}" />
+		<Setter Property="FontWeight" Value="SemiBold" />
 	</Style>
 
 	<Style Selector="Ellipse.serverDot">
@@ -270,7 +311,7 @@
 						<ContentPresenter Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                                           VerticalAlignment="Center" />
-						<Path x:Name="PART_Chevron" Grid.Column="1" Data="M 0 0 L 5 5 L 10 0"
+						<Path x:Name="PART_Chevron" Grid.Column="1" Data="{DynamicResource IconChevronDown}"
                               Width="10" Height="6" Stretch="Uniform" Margin="12,0,0,0"
                               Stroke="{DynamicResource TextSecondaryBrush}" StrokeThickness="1.5"
                               VerticalAlignment="Center" RenderTransformOrigin="50%,50%" />
@@ -311,4 +352,37 @@
 		<Setter Property="Background" Value="{DynamicResource HoverBrush}" />
 	</Style>
 
+	<!-- The scroll bar is drawn over the content. "edge": a list that fills a dialog moves its bar into the dialog's
+	     margin, the content keeps its width; "gutter": a list inside a panel leaves room for the bar on its right -->
+	<Style Selector="ScrollViewer.edge">
+		<Setter Property="Margin" Value="0,0,-16,0" />
+		<Setter Property="Padding" Value="0,0,16,0" />
+	</Style>
+	<Style Selector="ScrollViewer.gutter">
+		<Setter Property="Padding" Value="0,0,14,0" />
+	</Style>
+
+	<!-- A key of the keyboard, in tooltips and in the list of keys (F1) -->
+	<Style Selector="Border.keyCap">
+		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush2}" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="CornerRadius" Value="4" />
+		<Setter Property="Padding" Value="6,1" />
+		<Setter Property="MinWidth" Value="22" />
+		<Setter Property="VerticalAlignment" Value="Top" />
+		<Setter Property="HorizontalAlignment" Value="Left" />
+	</Style>
+	<Style Selector="Border.keyCap > TextBlock">
+		<Setter Property="FontSize" Value="11" />
+		<Setter Property="FontWeight" Value="SemiBold" />
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+	</Style>
+	<!-- The key of a menu item, right of its text -->
+	<Style Selector="TextBlock.menuGesture">
+		<Setter Property="FontSize" Value="12" />
+		<Setter Property="Margin" Value="28,0,0,0" />
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+	</Style>
 </Styles>

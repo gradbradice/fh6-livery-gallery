@@ -1,5 +1,4 @@
 using Avalonia;
-using LiveryGallery.Enums;
 using LiveryGallery.Localisation;
 using System.Globalization;
 
@@ -34,17 +33,13 @@ internal static class AppLocalisationService
 
     private static void ApplyCulture(AppLanguage language)
     {
-        string culture = AppLanguageToString(language);
-        var cultureInfo = new CultureInfo(culture);
+        // The process's cultures (ForzaToolkit.AppHost); the ForzaToolkit dialogs follow the UI culture
+        var cultureInfo = AppLanguages.Apply(language);
         _culture = cultureInfo;
-
-        // try to fix language change
-        CultureInfo.CurrentCulture = cultureInfo;
-        CultureInfo.CurrentUICulture = cultureInfo;
-        CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-        CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         Strings.Culture = cultureInfo;
-        ForzaToolkit.UI.Localisation.UiStrings.Culture = cultureInfo; // the texts of the ForzaToolkit dialogs
+        // The toolkit dialogs' buttons (Yes, No, OK): the UI culture set here does not reach code that runs later in
+        // another async flow (a dialog opened after the settings were saved), so their language is set outright
+        ForzaToolkit.UI.Localisation.UiStrings.Culture = cultureInfo;
 
         UpdateCardResourceStrings();
     }
@@ -54,7 +49,8 @@ internal static class AppLocalisationService
         var app = Application.Current;
         if (app is null) return;
 
-        app.Resources["Loc_FavoriteToggleTooltip"] = Strings.FavoriteToggleTooltip;
+        // The tooltips of a card's buttons show the key of their action
+        app.Resources["Loc_FavoriteToggleTooltip"] = new ShortcutTip(Strings.FavoriteToggleTooltip, GalleryShortcut.Favorite);
         app.Resources["Loc_DuplicateBadgeTooltip"] = Strings.DuplicateBadgeTooltip;
         app.Resources["Loc_DuplicateBadgeLabel"] = Strings.DuplicateBadgeLabel;
         app.Resources["Loc_PossibleDuplicateBadgeTooltip"] = Strings.PossibleDuplicateBadgeTooltip;
@@ -70,9 +66,11 @@ internal static class AppLocalisationService
         app.Resources["Loc_ParsePartialBadgeLabel"] = Strings.ParsePartialBadgeLabel;
         app.Resources["Loc_AuthorLabel"] = Strings.AuthorLabel;
         app.Resources["Loc_DateLabel"] = Strings.DateLabel;
-        app.Resources["Loc_EditTagsTooltip"] = Strings.EditTagsTooltip;
-        app.Resources["Loc_ViewPreviewTooltip"] = Strings.ViewPreviewTooltip;
+        app.Resources["Loc_EditTagsTooltip"] = new ShortcutTip(Strings.EditTagsTooltip, GalleryShortcut.Tags);
+        app.Resources["Loc_TagChipTooltip"] = Strings.TagChipTooltip;
+        app.Resources["Loc_ViewPreviewTooltip"] = new ShortcutTip(Strings.ViewPreviewTooltip, GalleryShortcut.Preview);
         app.Resources["Loc_ClearSelectionLabel"] = Strings.ClearSelectionLabel;
+        app.Resources["Loc_ClearSelectionTip"] = new ShortcutTip(Strings.ClearSelectionLabel, GalleryShortcut.Escape);
         app.Resources["Loc_AuctionBadgeLabel"] = Strings.AuctionBadgeLabel;
         app.Resources["Loc_InstalledBadgeLabel"] = Strings.InstalledBadgeLabel;
         app.Resources["Loc_AuctionBadgeTooltip"] = Strings.AuctionBadgeTooltip;
@@ -81,6 +79,8 @@ internal static class AppLocalisationService
         app.Resources["Loc_ContextMenuOnlyThisCar"] = Strings.ContextMenuOnlyThisCar;
         app.Resources["Loc_ContextMenuOnlyThisManufacturer"] = Strings.ContextMenuOnlyThisManufacturer;
         app.Resources["Loc_ContextMenuOnlyThisAuthor"] = Strings.ContextMenuOnlyThisAuthor;
+        app.Resources["Loc_ContextMenuAssignAuthor"] = Strings.ContextMenuAssignAuthor;
+        app.Resources["Loc_ContextMenuUnassignAuthor"] = Strings.ContextMenuUnassignAuthor;
         app.Resources["Loc_ContextMenuOnlyThisCountry"] = Strings.ContextMenuOnlyThisCountry;
         app.Resources["Loc_ContextMenuOnlyThisCarType"] = Strings.ContextMenuOnlyThisCarType;
         app.Resources["Loc_ContextMenuClearQuickFilters"] = Strings.ContextMenuClearQuickFilters;
@@ -95,61 +95,5 @@ internal static class AppLocalisationService
         app.Resources["Loc_QuickFilterPickerEmpty"] = Strings.QuickFilterPickerEmpty;
         app.Resources["Loc_GroupShowOnlyButton"] = Strings.GroupShowOnlyButton;
         app.Resources["Loc_GroupShowOnlyTooltip"] = Strings.GroupShowOnlyTooltip;
-    }
-
-    public static AppLanguage GetSystemLanguage()
-    {
-        var culture = CultureInfo.CurrentUICulture;
-        string iso = culture.TwoLetterISOLanguageName.ToLowerInvariant();
-
-        if (iso == "zh")
-        {
-            string fullName = culture.Name.ToLowerInvariant();
-            bool isTraditional = fullName.Contains("hant")
-                || fullName.EndsWith("-tw") || fullName.Contains("-tw-")
-                || fullName.EndsWith("-hk") || fullName.Contains("-hk-")
-                || fullName.EndsWith("-mo") || fullName.Contains("-mo-");
-            return isTraditional ? AppLanguage.ChineseTraditional : AppLanguage.ChineseSimplified;
-        }
-
-        return StringToAppLanguage(iso);
-    }
-
-    public static AppLanguage StringToAppLanguage(string language)
-    {
-        return language switch
-        {
-            "en" => AppLanguage.English,
-            "ru" => AppLanguage.Russian,
-            "ja" => AppLanguage.Japanese,
-            "de" => AppLanguage.German,
-            "fr" => AppLanguage.French,
-            "zh-Hant" => AppLanguage.ChineseTraditional,
-            "zh-Hans" => AppLanguage.ChineseSimplified,
-            "ko" => AppLanguage.Korean,
-            "es" => AppLanguage.Spanish,
-            "it" => AppLanguage.Italian,
-            "pt" => AppLanguage.Portuguese,
-            _ => AppLanguage.English,
-        };
-    }
-
-    public static string AppLanguageToString(AppLanguage language)
-    {
-        return language switch
-        {
-            AppLanguage.English => "en",
-            AppLanguage.Russian => "ru",
-            AppLanguage.Japanese => "ja",
-            AppLanguage.German => "de",
-            AppLanguage.French => "fr",
-            AppLanguage.ChineseTraditional => "zh-Hant",
-            AppLanguage.ChineseSimplified => "zh-Hans",
-            AppLanguage.Korean => "ko",
-            AppLanguage.Spanish => "es",
-            AppLanguage.Italian => "it",
-            AppLanguage.Portuguese => "pt",
-            _ => "en",
-        };
     }
 }

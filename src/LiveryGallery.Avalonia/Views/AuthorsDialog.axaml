@@ -61,6 +61,12 @@
                             <Path Data="{StaticResource IconYoutube}" Width="14" Height="14" Stretch="Uniform"
                                   Fill="{DynamicResource AccentBrush}" />
                         </Button>
+                        <Button IsVisible="{Binding HasTwitch}" Classes="icon" Width="28" Height="28"
+                                CornerRadius="14" Padding="0" ToolTip.Tip="{x:Static loc:Strings.AuthorCardTwitchLabel}"
+                                Command="{Binding OpenUrlCommand}" CommandParameter="{Binding TwitchUrl}">
+                            <Path Data="{StaticResource IconTwitch}" Width="14" Height="14" Stretch="Uniform"
+                                  Fill="{DynamicResource AccentBrush}" />
+                        </Button>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Spacing="14" Margin="0,10,0,0">
@@ -161,7 +167,7 @@
                     Background="{DynamicResource SurfaceBrush}">
                 <StackPanel Spacing="6">
                     <TextBlock Text="{x:Static loc:Strings.AuthorsSuggestionsTitle}" FontSize="12.5" FontWeight="SemiBold" />
-                    <ScrollViewer MaxHeight="130">
+                    <ScrollViewer MaxHeight="130" Classes="gutter">
                         <ItemsControl ItemsSource="{Binding Suggestions}" ItemTemplate="{StaticResource MergeSuggestionTemplate}" />
                     </ScrollViewer>
                 </StackPanel>
@@ -170,7 +176,7 @@
             <TextBox x:Name="SearchBox" Grid.Row="2" Classes="search" FontSize="13"
                      Margin="0,0,0,12" Text="{Binding SearchText, Mode=TwoWay}" />
 
-            <ScrollViewer Grid.Row="3" IsVisible="{Binding !ShowEmptyState}">
+            <ScrollViewer Grid.Row="3" Classes="edge" IsVisible="{Binding !ShowEmptyState}">
                 <ItemsControl ItemsSource="{Binding Cards}" ItemTemplate="{StaticResource AuthorCardRowTemplate}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -186,7 +192,7 @@
 
             <Expander Grid.Row="4" IsVisible="{Binding HasHiddenCards}" Header="{Binding HiddenCardsHeader}"
                       Margin="0,12,0,0" HorizontalAlignment="Stretch">
-                <ScrollViewer MaxHeight="130">
+                <ScrollViewer MaxHeight="130" Classes="gutter">
                     <ItemsControl ItemsSource="{Binding HiddenCards}" ItemTemplate="{StaticResource HiddenAutoCardTemplate}" />
                 </ScrollViewer>
             </Expander>

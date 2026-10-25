@@ -88,7 +88,7 @@ internal sealed partial class MainViewModel
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                AppLogger.LogErrorThrottled(saveDataPath + "|grid", $"Failed to list '{saveDataPath}' for the My Designs grid", ex);
+                AppLog.LogErrorThrottled(saveDataPath + "|grid", $"Failed to list '{saveDataPath}' for the My Designs grid", ex);
             }
         }
         ApplyGamePositions(layout, refreshGallery);
@@ -124,7 +124,7 @@ internal sealed partial class MainViewModel
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"In-game navigation to '{entry.FolderName}' failed", ex);
+            AppLog.LogError($"In-game navigation to '{entry.FolderName}' failed", ex);
             ErrorMessageRequested?.Invoke(Strings.NavigateFailedMessage);
         }
         finally
@@ -170,7 +170,7 @@ internal sealed partial class MainViewModel
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            AppLogger.LogError($"In-game navigation: failed to list '{saveDataPath}'", ex);
+            AppLog.LogError($"In-game navigation: failed to list '{saveDataPath}'", ex);
             ErrorMessageRequested?.Invoke(Strings.NavigateSaveReadFailedMessage);
             return;
         }

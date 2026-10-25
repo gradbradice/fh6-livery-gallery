@@ -8,6 +8,7 @@ internal enum SettingsPage
     Appearance,
     Folders,
     Gallery,
+    Backups,
     FindInGame,
     Server,
     Data,

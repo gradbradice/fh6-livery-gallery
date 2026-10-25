@@ -1,4 +1,3 @@
-using ForzaToolkit.GameInput;
 using ForzaToolkit.Games.Installation;
 using ForzaToolkit.Liveries.Scanning;
 
@@ -66,8 +65,9 @@ internal sealed class GameProfile
 
     public GameProfile()
     {
-        _installFolder = new(() => Task.Run(() => GameInstallLocator.FindFirst(Game)?.Directory));
-        RunningGuard = new GameRunningGuard(() => Game);
+        // Methods, not lambdas: the required Game is set after the constructor, and only these read it later
+        _installFolder = new(FindInstallFolder);
+        RunningGuard = new GameRunningGuard(CurrentGame);
     }
 
     /// <summary>The game in the toolkit's catalog: names, install and save hints, the window to send keys to</summary>
@@ -91,6 +91,12 @@ internal sealed class GameProfile
     /// <summary>The cache of previews of listed liveries; null when the game keeps none</summary>
     public ListingPreviewCache? ListingPreviews { get; init; }
 
+    /// <summary>
+    /// How many liveries the save may hold: past it the game lets the player neither download nor make one. Auction
+    /// liveries, which belong to a car, are not counted. Null when the game has no such limit or it is not known
+    /// </summary>
+    public int? MaxLiveries { get; init; }
+
     /// <summary>Asks before the save is changed while the game runs</summary>
     public GameRunningGuard RunningGuard { get; }
 
@@ -110,6 +116,10 @@ internal sealed class GameProfile
 
     /// <summary>The installed game's folder (Steam first, then the Xbox app); looked up once, in the background</summary>
     public Task<string?> FindInstallFolderAsync() => _installFolder.Value;
+
+    private Task<string?> FindInstallFolder() => Task.Run(() => GameInstallLocator.FindFirst(Game)?.Directory);
+
+    private ForzaGame CurrentGame() => Game;
 
     /// <summary>Starts looking for the installed game, so the folder is known by the time it is needed</summary>
     public void WarmUpInstallFolder() => _ = _installFolder.Value;

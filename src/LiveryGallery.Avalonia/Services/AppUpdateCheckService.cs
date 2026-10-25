@@ -1,5 +1,4 @@
 using LiveryGallery.Configuration;
-using LiveryGallery.Models;
 using System.Text.Json;
 
 namespace LiveryGallery.Services;
@@ -42,7 +41,7 @@ internal class AppUpdateCheckService
             string json = result.Content!;
             string? newETag = result.ETag;
 
-            var release = JsonSerializer.Deserialize<AppGitHubReleaseEntry>(json, JsonSettings.GitHubDeserializeOptions);
+            var release = JsonSerializer.Deserialize<AppGitHubReleaseEntry>(json, AppJson.CaseInsensitive);
             if (release?.TagName is null) return new AppUpdateCheckResult(false, null, null, null);
 
             string latest = NormalizeVersion(release.TagName);
@@ -61,7 +60,7 @@ internal class AppUpdateCheckService
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to check for updates", ex);
+            AppLog.LogError("Failed to check for updates", ex);
             return new AppUpdateCheckResult(false, null, null, null);
         }
     }
@@ -79,11 +78,11 @@ internal class AppUpdateCheckService
         {
             if (!File.Exists(_metaPath)) return new AppUpdateCheckMetadata();
             string json = File.ReadAllText(_metaPath);
-            var data = JsonSerializer.Deserialize<AppUpdateCheckMetadata>(json, JsonSettings.DefaultOptions);
+            var data = JsonSerializer.Deserialize<AppUpdateCheckMetadata>(json, AppJson.Indented);
             if (data is null) return new AppUpdateCheckMetadata();
             if (data.ETag is not null && data.LatestVersion is null)
             {
-                AppLogger.LogError(
+                AppLog.LogError(
                     "Update-check metadata is inconsistent, resetting",
                     new InvalidDataException("ETag present without LatestVersion"));
                 return new AppUpdateCheckMetadata();
@@ -92,7 +91,7 @@ internal class AppUpdateCheckService
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to load update-check metadata", ex);
+            AppLog.LogError("Failed to load update-check metadata", ex);
             return new AppUpdateCheckMetadata();
         }
     }
@@ -101,12 +100,12 @@ internal class AppUpdateCheckService
     {
         try
         {
-            string json = JsonSerializer.Serialize(metadata, JsonSettings.DefaultOptions);
+            string json = JsonSerializer.Serialize(metadata, AppJson.Indented);
             await AtomicFile.WriteAllTextAsync(_metaPath, json);
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to save update-check metadata", ex);
+            AppLog.LogError("Failed to save update-check metadata", ex);
         }
     }
 

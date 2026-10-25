@@ -1,12 +1,9 @@
 <Project>
-
-  <!-- Shared by every project of the gallery: the host, the open gallery, the closed 3D side and the tests -->
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <Version>1.5.0</Version>
+    <Version>1.6.0</Version>
   </PropertyGroup>
-
 </Project>

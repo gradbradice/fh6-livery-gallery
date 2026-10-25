@@ -1,4 +1,5 @@
 ﻿using LiveryGallery.Enums;
+using LiveryGallery.Services;
 
 namespace LiveryGallery.Models;
 
@@ -30,13 +31,8 @@ internal class AppSettingsData
 
     public bool WarnArchiveWithOutdatedInstalledData { get; set; } = true;
 
-    public const int MinPossibleDuplicateThresholdPercent = 50;
-    public const int MaxPossibleDuplicateThresholdPercent = 90;
-    public const int DefaultPossibleDuplicateThresholdPercent = 70;
-    public int PossibleDuplicateThresholdPercent { get; set; } = DefaultPossibleDuplicateThresholdPercent;
-
-    public static int ClampPossibleDuplicateThreshold(int percent) =>
-        Math.Clamp(percent, MinPossibleDuplicateThresholdPercent, MaxPossibleDuplicateThresholdPercent);
+    /// <summary>The range and default are every ForzaToolkit app's (<see cref="PossibleDuplicateThreshold"/>)</summary>
+    public int PossibleDuplicateThresholdPercent { get; set; } = PossibleDuplicateThreshold.DefaultPercent;
     public bool GroupingEnabled { get; set; } = true;
     public string? GameInstallPath { get; set; }
     public int ViewerQualityIndex { get; set; } = 2;
@@ -58,6 +54,16 @@ internal class AppSettingsData
     public int NavigationMenuOpenDelayMs { get; set; } = 2000;
 
     public bool ShowChangesSinceLastLaunch { get; set; } = true;
+
+    /// <summary>After the first scan of a launch, say when little room is left in the save (the "Room in the save" window)</summary>
+    public bool WarnFewFreeSlots { get; set; } = true;
+
+    // Automatic backups (AutoBackups)
+    public bool AutoBackupBeforeArchive { get; set; } = true;
+    public bool AutoBackupOnChange { get; set; } = true;
+    public bool AutoBackupPeriodic { get; set; }
+    public int AutoBackupPeriodDays { get; set; } = AutoBackupPolicy.DefaultPeriodDays;
+    public int AutoBackupKeep { get; set; } = AutoBackupPolicy.DefaultKeep;
 
     public AppSettingsData Clone() => new()
     {
@@ -96,6 +102,12 @@ internal class AppSettingsData
         NavigationMenuBackDelayMs = NavigationMenuBackDelayMs,
         NavigationMenuOpenDelayMs = NavigationMenuOpenDelayMs,
         ShowChangesSinceLastLaunch = ShowChangesSinceLastLaunch,
+        WarnFewFreeSlots = WarnFewFreeSlots,
+        AutoBackupBeforeArchive = AutoBackupBeforeArchive,
+        AutoBackupOnChange = AutoBackupOnChange,
+        AutoBackupPeriodic = AutoBackupPeriodic,
+        AutoBackupPeriodDays = AutoBackupPeriodDays,
+        AutoBackupKeep = AutoBackupKeep,
     };
 
     public void CopyFrom(AppSettingsData other)
@@ -135,5 +147,11 @@ internal class AppSettingsData
         NavigationMenuBackDelayMs = other.NavigationMenuBackDelayMs;
         NavigationMenuOpenDelayMs = other.NavigationMenuOpenDelayMs;
         ShowChangesSinceLastLaunch = other.ShowChangesSinceLastLaunch;
+        WarnFewFreeSlots = other.WarnFewFreeSlots;
+        AutoBackupBeforeArchive = other.AutoBackupBeforeArchive;
+        AutoBackupOnChange = other.AutoBackupOnChange;
+        AutoBackupPeriodic = other.AutoBackupPeriodic;
+        AutoBackupPeriodDays = other.AutoBackupPeriodDays;
+        AutoBackupKeep = other.AutoBackupKeep;
     }
 }

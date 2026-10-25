@@ -1,8 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
-using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.Services.Accounts;
 using LiveryGallery.ViewModels;

@@ -12,6 +12,7 @@ internal static class ComponentVersions
         .. new[]
         {
             typeof(global::ForzaToolkit.Core.AppVersion),
+            typeof(global::ForzaToolkit.AppHost.AppLog),
             typeof(global::ForzaToolkit.Games.ForzaGame),
             profile.Liveries.GetType(), // the game's package: ForzaToolkit.Games.FH6 for FH6
             typeof(global::ForzaToolkit.Saves.SaveFolderPointers),
@@ -49,7 +50,7 @@ internal static class ComponentVersions
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"Failed to read the package version of {assembly.GetName().Name}", ex);
+            AppLog.LogError($"Failed to read the package version of {assembly.GetName().Name}", ex);
             return "?";
         }
     }

@@ -14,7 +14,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <!-- The ForzaToolkit colours; the gallery's own ones below -->
                 <ResourceInclude Source="avares://ForzaToolkit.UI.Avalonia/Themes/Colors.axaml" />
-                <ResourceInclude Source="avares://LiveryGallery.Avalonia/Themes/Icons.axaml" />
+                <!-- Every icon of the gallery and of the dialogs: the gallery keeps none of its own -->
+                <ResourceInclude Source="avares://ForzaToolkit.UI.Avalonia/Themes/Icons.axaml" />
             </ResourceDictionary.MergedDictionaries>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">

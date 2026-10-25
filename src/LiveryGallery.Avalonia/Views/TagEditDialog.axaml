@@ -1,7 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:v="using:LiveryGallery.Views"
         x:Class="LiveryGallery.Views.TagEditDialog"
-        Width="440" Height="230" WindowStartupLocation="CenterOwner"
+        Width="460" SizeToContent="Height" WindowStartupLocation="CenterOwner"
         CanResize="False" ShowInTaskbar="False"
         Background="{DynamicResource BgBrush}"
         WindowDecorations="BorderOnly"
@@ -46,7 +47,29 @@
             <TextBlock x:Name="HintText" Grid.Row="1" FontSize="11.5" Margin="0,4,0,12"
                        Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" />
 
-            <TextBox x:Name="TagsBox" Grid.Row="2" Classes="search" FontSize="13" KeyDown="TagsBox_KeyDown" />
+            <StackPanel Grid.Row="2" Spacing="8">
+                <!-- Several liveries: every tag of the gallery, ticked on all of them, on some (a square) or on none -->
+                <ScrollViewer x:Name="ManyTagsScroll" IsVisible="False" MaxHeight="220"
+                              HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="ManyTagsList">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="v:TagCheckRow">
+                                <CheckBox Content="{Binding Tag}" IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                          IsThreeState="{Binding IsThreeState}" ToolTip.Tip="{Binding Tooltip}"
+                                          FontSize="13" Margin="0,0,16,2" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <TextBlock x:Name="NewTagsLabel" IsVisible="False" FontSize="12" Margin="0,6,0,0"
+                           Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" />
+                <TextBox x:Name="TagsBox" Classes="search" FontSize="13" KeyDown="TagsBox_KeyDown" />
+            </StackPanel>
 
             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
                 <Button x:Name="CancelButton" Classes="secondary" Width="100" Margin="0,0,10,0" Click="CancelButton_Click" />

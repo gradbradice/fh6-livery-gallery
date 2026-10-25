@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.Services.Accounts;
 using System.Collections.ObjectModel;
@@ -16,8 +15,29 @@ internal sealed partial class ArchiveViewModel : ObservableObject
     private readonly Func<Task> _onRestored;
     private readonly Func<IReadOnlyList<LiveryData>> _getCurrentEntries;
     private readonly AccountContext _accounts;
+
+    // Every row of the archive (after the account filter); Rows are the ones the search leaves
+    private readonly List<ArchivedLiveryRowViewModel> _allRows = [];
+
     public ObservableCollection<ArchivedLiveryRowViewModel> Rows { get; } = [];
     public bool ShowEmptyState => Rows.Count == 0;
+
+    /// <summary>The archive (after the account filter) has liveries: the search box is shown</summary>
+    public bool HasAnyRows => _allRows.Count > 0;
+
+    /// <summary>"Nothing found" when the search hides every livery, else "the archive is empty"</summary>
+    public string EmptyStateText => HasAnyRows ? Strings.ArchiveNoSearchResultsHint : Strings.ArchiveEmptyHint;
+
+    /// <summary>The setting "show folder names and search by them"</summary>
+    public bool SearchByFolderName { get; }
+
+    public string SearchPlaceholder => SearchByFolderName ? Strings.ArchiveSearchPlaceholderWithFolder : Strings.ArchiveSearchPlaceholder;
+
+    /// <summary>Words to look for, all of them, in the car, year, name, author, number (and folder name)</summary>
+    [ObservableProperty]
+    private string _searchText = "";
+
+    partial void OnSearchTextChanged(string value) => ApplySearch();
 
     /// <summary>On by default: another account's liveries are only shown when asked for</summary>
     [ObservableProperty]
@@ -42,8 +62,10 @@ internal sealed partial class ArchiveViewModel : ObservableObject
 
     public ArchiveViewModel(
         LiveryArchive archiveService, SavePathService savePathService,
-        Func<IReadOnlyList<LiveryData>> getCurrentEntries, Func<Task> onRestored, AccountContext accounts)
+        Func<IReadOnlyList<LiveryData>> getCurrentEntries, Func<Task> onRestored, AccountContext accounts,
+        bool searchByFolderName = false)
     {
+        SearchByFolderName = searchByFolderName;
         _accounts = accounts;
         _archiveService = archiveService;
         _savePathService = savePathService;
@@ -54,8 +76,8 @@ internal sealed partial class ArchiveViewModel : ObservableObject
 
     private void Reload()
     {
-        foreach (var row in Rows) row.PropertyChanged -= OnRowPropertyChanged;
-        Rows.Clear();
+        foreach (var row in _allRows) row.PropertyChanged -= OnRowPropertyChanged;
+        _allRows.Clear();
 
         // Liveries of unknown origin (archived before accounts were recorded) and of accounts that are gone are always shown
         var all = _archiveService.GetAll();
@@ -70,12 +92,28 @@ internal sealed partial class ArchiveViewModel : ObservableObject
         foreach (var entry in all)
         {
             if (OnlyCurrentAccount && _accounts.IsHiddenByAccountFilter(entry.SourceAccount)) continue;
-            var row = new ArchivedLiveryRowViewModel(entry, _accounts);
+            var row = new ArchivedLiveryRowViewModel(entry, _accounts, SearchByFolderName);
             row.PropertyChanged += OnRowPropertyChanged;
-            Rows.Add(row);
+            _allRows.Add(row);
+        }
+
+        ApplySearch();
+    }
+
+    // Shows the rows the search leaves. A row the search hides is unselected: restore and delete act on what is seen
+    private void ApplySearch()
+    {
+        string[] tokens = SearchText.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        Rows.Clear();
+        foreach (var row in _allRows)
+        {
+            if (tokens.Length == 0 || row.MatchesSearch(tokens)) Rows.Add(row);
+            else row.IsSelected = false;
         }
 
         OnPropertyChanged(nameof(ShowEmptyState));
+        OnPropertyChanged(nameof(HasAnyRows));
+        OnPropertyChanged(nameof(EmptyStateText));
         RaiseSelectionChanged();
     }
 
@@ -126,27 +164,12 @@ internal sealed partial class ArchiveViewModel : ObservableObject
 
         try
         {
-            var conflicts = LiveryRestoreConflicts.Find(
-                selected.Select(r => r.Entry.Data), _getCurrentEntries(), savePath);
+            var plan = await LiveryRestoreConflicts.PlanAsync(
+                [.. selected.Select(r => r.Entry.Data)], _getCurrentEntries(), savePath, _savePathService.Profile.Liveries,
+                ConfirmRestoreDuplicatesAsync);
 
-            var duplicateRows = selected.Where(r => conflicts.Duplicates.ContainsKey(r.FolderName)).ToList();
-            bool restoreDuplicates = false;
-            if (duplicateRows.Count > 0 && ConfirmRestoreDuplicatesAsync is { } confirm)
-            {
-                bool hasOtherLiveries = selected.Any(r =>
-                    !conflicts.SameFolder.Contains(r.FolderName) && !conflicts.Duplicates.ContainsKey(r.FolderName));
-                string prompt = LiveryRestoreConflicts.BuildDuplicatePrompt(
-                    [.. duplicateRows.Select(r => (r.Entry.Data, conflicts.Duplicates[r.FolderName]))], hasOtherLiveries);
-                restoreDuplicates = await confirm(prompt);
-            }
-
-            var toRestore = selected
-                .Where(r => !conflicts.SameFolder.Contains(r.FolderName)
-                    && (restoreDuplicates || !conflicts.Duplicates.ContainsKey(r.FolderName)))
-                .ToList();
-
-            var result = toRestore.Count > 0
-                ? await _archiveService.RestoreAsync(toRestore.Select(r => r.FolderName), savePath)
+            var result = plan.ToRestore.Count > 0
+                ? await _archiveService.RestoreAsync(plan.ToRestore.Select(d => d.FolderName), savePath)
                 : ArchiveOperationResult.Empty;
             var restoredSet = result.Completed.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
@@ -156,16 +179,14 @@ internal sealed partial class ArchiveViewModel : ObservableObject
                 await _onRestored();
             }
 
-            string? report = LiveryRestoreConflicts.BuildReport(
-                [.. selected.Where(r => conflicts.SameFolder.Contains(r.FolderName)).Select(r => r.Entry.Data)],
-                [.. toRestore.Where(r => !restoredSet.Contains(r.FolderName)).Select(r => r.Entry.Data)]);
+            string? report = plan.Report(restoredSet);
             if (report is not null) ErrorMessageRequested?.Invoke(report);
             if (result.LeftoverPaths.Count > 0)
                 ErrorMessageRequested?.Invoke(string.Format(Strings.ArchiveLeftoverFoldersFormat, string.Join("\n", result.LeftoverPaths)));
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to restore from archive", ex);
+            AppLog.LogError("Failed to restore from archive", ex);
             ErrorMessageRequested?.Invoke(Strings.FileOperationFailedMessage);
         }
     }
@@ -188,7 +209,7 @@ internal sealed partial class ArchiveViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to delete from archive", ex);
+            AppLog.LogError("Failed to delete from archive", ex);
             ErrorMessageRequested?.Invoke(Strings.FileOperationFailedMessage);
         }
     }

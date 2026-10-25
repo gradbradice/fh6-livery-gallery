@@ -2,20 +2,20 @@ using Avalonia.Threading;
 using ForzaToolkit.Games.Installation;
 using ForzaToolkit.LiveryRender;
 using ForzaToolkit.LiveryRender.Assets;
-using LiveryGallery.Services;
 
 namespace LiveryGallery.Render;
 
 internal sealed class LiveryRenderService : IDisposable
 {
     // Disk caches of the render library: car index (cars.tsv), vinyl shapes (vinyls.bin), shader defaults
-    // (shaders.tsv), thumbnails (thumbs). The library validates them against the game files and rebuilds
+    // (shaders.tsv). The library validates them against the game files and rebuilds
     // whatever is stale when archives change or new ones appear. In the program's local folder (AppIdentity).
     private static readonly string CacheDirectory = Path.Combine(LiveryGallery.Configuration.AppSettings.LocalCachePath, "render-cache");
 
     private static readonly TimeSpan MemoryReleaseDelay = TimeSpan.FromSeconds(2);
 
     private readonly DispatcherTimer _memoryReleaseTimer = new() { Interval = MemoryReleaseDelay };
+    private readonly Func<int, CarWheels?>? _wheels;
     private Task _pendingPathChange = Task.CompletedTask;
     private Task _carIndexPreparation = Task.CompletedTask;
     private volatile string? _preparationTarget;
@@ -35,8 +35,11 @@ internal sealed class LiveryRenderService : IDisposable
 
     public event Action? StateChanged;
 
-    public LiveryRenderService()
+    /// <param name="wheels">A car's stock wheels from the car list; the renderer places the wheels from the game files
+    /// for a car it gives none for</param>
+    public LiveryRenderService(Func<int, CarWheels?>? wheels = null)
     {
+        _wheels = wheels;
         _memoryReleaseTimer.Tick += (_, _) =>
         {
             _memoryReleaseTimer.Stop();
@@ -66,6 +69,7 @@ internal sealed class LiveryRenderService : IDisposable
                 GameDirectory = root,
                 CacheDirectory = CacheDirectory,
                 MaxCachedCars = 1,
+                WheelSizes = _wheels is null ? null : CarWheelSizes.From(_wheels),
             });
             _hasRenderer = true;
         }
@@ -108,7 +112,7 @@ internal sealed class LiveryRenderService : IDisposable
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"Game folder check failed for '{path}'", ex);
+            AppLog.LogError($"Game folder check failed for '{path}'", ex);
             check = new GameFolderReport
             {
                 InputPath = path,
@@ -124,7 +128,7 @@ internal sealed class LiveryRenderService : IDisposable
         IsChecking = false;
 
         foreach (var finding in check.Findings)
-            AppLogger.LogError($"Game folder '{path}': {finding.Code} ({(finding.IsError ? "error" : "warning")}): {finding.Path}",
+            AppLog.LogError($"Game folder '{path}': {finding.Code} ({(finding.IsError ? "error" : "warning")}): {finding.Path}",
                 new InvalidOperationException(finding.Code.ToString()));
 
         string? root = GameDirectory;
@@ -158,6 +162,7 @@ internal sealed class LiveryRenderService : IDisposable
     /// </summary>
     private static void PrepareRenderCaches(string root)
     {
+        DeleteOldDrawnPreviews();
         try
         {
             using var renderer = new LiveryRenderer(new LiveryRendererOptions
@@ -167,13 +172,28 @@ internal sealed class LiveryRenderService : IDisposable
             });
             var result = renderer.PrepareCaches();
             if (result.Warnings.Count > 0)
-                AppLogger.LogWarning($"Render caches prepared in {result.Elapsed.TotalSeconds:0.0} s ({result.Cars} cars, "
+                AppLog.LogWarning($"Render caches prepared in {result.Elapsed.TotalSeconds:0.0} s ({result.Cars} cars, "
                     + $"{result.VinylShapes} vinyl shapes, shader defaults: {result.ShaderDefaults}) with {result.Warnings.Count} warning(s): "
                     + string.Join("; ", result.Warnings.Take(10)) + (result.Warnings.Count > 10 ? "; …" : ""));
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to prepare the livery renderer caches", ex);
+            AppLog.LogError("Failed to prepare the livery renderer caches", ex);
+        }
+    }
+
+    // A build of 1.5.0 kept the previews it drew in the renderer's thumbnail cache; they live with the game's
+    // previews now (RenderedThumbnails), and the gallery does not use that cache
+    private static void DeleteOldDrawnPreviews()
+    {
+        string thumbs = Path.Combine(CacheDirectory, "thumbs");
+        try
+        {
+            if (Directory.Exists(thumbs)) Directory.Delete(thumbs, recursive: true);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.LogErrorThrottled(thumbs, $"Failed to delete the old drawn previews in '{thumbs}'", ex);
         }
     }
 
@@ -198,7 +218,7 @@ internal sealed class LiveryRenderService : IDisposable
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to dispose the livery renderer", ex);
+            AppLog.LogError("Failed to dispose the livery renderer", ex);
         }
         ScheduleMemoryRelease();
     }
@@ -210,8 +230,13 @@ internal sealed class LiveryRenderService : IDisposable
         _memoryReleaseTimer.Start();
     }
 
-    private void RequestMemoryRelease() =>
+    private void RequestMemoryRelease()
+    {
+        // The paints' decoded textures outlive the renderer (a cache for the whole process): with no renderer left
+        // they go too, and the next one reads them again
+        if (!_hasRenderer) PaintLibrary.ClearCache();
         MemoryReclaimer.ReclaimAfterLargeRelease("3D renderer released", () => !_hasRenderer && !_disposed);
+    }
 
     public async Task ShutdownAsync(TimeSpan timeout)
     {
@@ -222,7 +247,7 @@ internal sealed class LiveryRenderService : IDisposable
         }
         catch (TimeoutException)
         {
-            AppLogger.LogWarning($"The car index preparation was still running {timeout.TotalSeconds:0.#} s after shutdown began");
+            AppLog.LogWarning($"The car index preparation was still running {timeout.TotalSeconds:0.#} s after shutdown began");
         }
     }
 
@@ -242,7 +267,7 @@ internal sealed class LiveryRenderService : IDisposable
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to dispose the livery renderer", ex);
+            AppLog.LogError("Failed to dispose the livery renderer", ex);
         }
     }
 }

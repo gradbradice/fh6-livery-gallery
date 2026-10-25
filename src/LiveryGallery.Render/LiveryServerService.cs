@@ -1,5 +1,4 @@
 using ForzaToolkit.Crypto.Client;
-using ForzaToolkit.Liveries.Server;
 using LiveryGallery.Services;
 
 namespace LiveryGallery.Render;
@@ -24,7 +23,7 @@ internal sealed class LiveryServerService : ILiveryServerClient
             try { return ForzaLiveryServer.IsConfigured; }
             catch (Exception ex)
             {
-                AppLogger.LogErrorThrottled("LiveryServer.IsConfigured", "Failed to read the built-in livery server address", ex);
+                AppLog.LogErrorThrottled("LiveryServer.IsConfigured", "Failed to read the built-in livery server address", ex);
                 return false;
             }
         }
@@ -48,7 +47,7 @@ internal sealed class LiveryServerService : ILiveryServerClient
             catch (InvalidOperationException ex)
             {
                 _notConfigured = true;
-                AppLogger.LogError("The livery server client has no server address built in", ex);
+                AppLog.LogError("The livery server client has no server address built in", ex);
             }
             return _client;
         }

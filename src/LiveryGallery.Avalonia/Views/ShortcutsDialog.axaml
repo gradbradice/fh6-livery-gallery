@@ -1,0 +1,64 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="LiveryGallery.Views.ShortcutsDialog"
+        Width="800"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False"
+        Background="{DynamicResource BgBrush}"
+        WindowDecorations="BorderOnly"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="-1">
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="36" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<Border Grid.Row="0"
+                Background="{DynamicResource ToolbarBrush}"
+                PointerPressed="TitleBar_PointerPressed">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+
+				<StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Center"
+                            IsHitTestVisible="False">
+					<Path Data="{StaticResource IconKeyboard}"
+                          Width="14" Height="14" Stretch="Uniform"
+                          Fill="{DynamicResource TextSecondaryBrush}"
+                          Margin="0,0,8,0" />
+					<TextBlock x:Name="TitleBarText" FontSize="12"
+                               Foreground="{DynamicResource TextSecondaryBrush}" />
+				</StackPanel>
+
+				<Button Grid.Column="1" Classes="titlebar close" Click="CloseButton_Click">
+					<TextBlock Text="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10" />
+				</Button>
+			</Grid>
+		</Border>
+
+		<StackPanel Grid.Row="1" Margin="24,20,24,24">
+			<TextBlock x:Name="TitleText" FontSize="16" FontWeight="Bold" Margin="0,0,0,6" />
+
+			<!-- Two columns of groups, filled from GalleryShortcuts -->
+			<Grid ColumnDefinitions="*,32,*">
+				<StackPanel x:Name="LeftColumn" Grid.Column="0" />
+				<StackPanel x:Name="RightColumn" Grid.Column="2" />
+			</Grid>
+
+			<TextBlock x:Name="NoteText" FontSize="12" TextWrapping="Wrap" Margin="0,20,0,0"
+                       Foreground="{DynamicResource TextSecondaryBrush}" />
+
+			<Button x:Name="CloseDialogButton" Classes="primary"
+                    Width="120" HorizontalAlignment="Right" Margin="0,20,0,0" Click="CloseButton_Click" />
+		</StackPanel>
+	</Grid>
+</Window>

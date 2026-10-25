@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.Services.Accounts;
 using System.Collections.ObjectModel;
@@ -97,7 +96,7 @@ internal sealed partial class BackupsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to list backups", ex);
+            AppLog.LogError("Failed to list backups", ex);
             rows = [];
         }
 
@@ -137,7 +136,7 @@ internal sealed partial class BackupsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to create backup", ex);
+            AppLog.LogError("Failed to create backup", ex);
             ErrorMessageRequested?.Invoke(Strings.FileOperationFailedMessage);
         }
         finally

@@ -3,12 +3,9 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using ForzaToolkit.LiveryRender;
-using ForzaToolkit.LiveryRender.Avalonia;
 using ForzaToolkit.LiveryRender.Livery;
 using ForzaToolkit.LiveryRender.Rendering;
-using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Render;
 using LiveryGallery.Services;
 
@@ -58,7 +55,7 @@ internal partial class LiveryViewerWindow : Window
             s.Triangles, s.Lod, s.LiveryWidth, s.LiveryHeight, s.FrameWidth, s.FrameHeight, s.Samples, s.FrameMs);
         Viewer.RenderFailed += (_, message) =>
         {
-            AppLogger.LogError($"3D viewer: OpenGL failed: {message}", new InvalidOperationException(message));
+            AppLog.LogError($"3D viewer: OpenGL failed: {message}", new InvalidOperationException(message));
             ShowError(Strings.ViewerNoOpenGl);
             _gpuReady.TrySetResult();
         };
@@ -110,7 +107,7 @@ internal partial class LiveryViewerWindow : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"3D viewer: failed to show '{liveryName}'", ex);
+            AppLog.LogError($"3D viewer: failed to show '{liveryName}'", ex);
             ShowError(Strings.RenderErrorGeneric);
             return;
         }
@@ -118,7 +115,7 @@ internal partial class LiveryViewerWindow : Window
         if (result.Status == RenderStatus.Failed)
         {
             if (result.Error is { Code: RenderErrorCode.Cancelled }) return;
-            AppLogger.LogError($"3D viewer: failed to show '{liveryName}': {result.Error}",
+            AppLog.LogError($"3D viewer: failed to show '{liveryName}': {result.Error}",
                 new InvalidOperationException(result.Error?.Message));
             ShowError(result.Error is { } error ? RenderErrorText.Describe(error) : Strings.RenderErrorGeneric);
             return;
@@ -127,7 +124,7 @@ internal partial class LiveryViewerWindow : Window
         if (result.Status == RenderStatus.Partial && result.Warnings.Count > 0)
         {
             foreach (var warning in result.Warnings)
-                AppLogger.LogError($"3D viewer: '{liveryName}' drawn partially: {warning}",
+                AppLog.LogError($"3D viewer: '{liveryName}' drawn partially: {warning}",
                     new InvalidOperationException(warning.Message));
             WarningText.Text = string.Join("; ", result.Warnings.Select(RenderErrorText.Describe).Distinct());
             WarningText.IsVisible = true;

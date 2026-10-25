@@ -82,7 +82,7 @@ internal sealed class SaveFolderWatcher : IDisposable
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled(directory, $"Failed to watch '{directory}' for changes", ex);
+            AppLog.LogErrorThrottled(directory, $"Failed to watch '{directory}' for changes", ex);
             return null;
         }
     }
@@ -138,7 +138,7 @@ internal sealed class SaveFolderWatcher : IDisposable
 
     private void OnWatcherError(object sender, ErrorEventArgs e)
     {
-        AppLogger.LogErrorThrottled("SaveFolderWatcher.Error",
+        AppLog.LogErrorThrottled("SaveFolderWatcher.Error",
             "The save folder watcher reported an error (events may have been lost) — restarting it",
             e.GetException());
         Dispatcher.UIThread.Post(() =>
@@ -182,7 +182,7 @@ internal sealed class SaveFolderWatcher : IDisposable
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Automatic refresh after a save folder change failed", ex);
+            AppLog.LogError("Automatic refresh after a save folder change failed", ex);
             completed = true;
         }
         finally
@@ -218,7 +218,7 @@ internal sealed class SaveFolderWatcher : IDisposable
         }
         catch (Exception ex)
         {
-            AppLogger.LogError("Failed to dispose a file system watcher", ex);
+            AppLog.LogError("Failed to dispose a file system watcher", ex);
         }
         watcher = null;
     }

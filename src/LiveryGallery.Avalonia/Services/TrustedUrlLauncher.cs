@@ -10,9 +10,11 @@ internal static class TrustedUrlLauncher
     public static readonly IReadOnlyList<string> YouTubeHosts =
         ["youtube.com", "www.youtube.com", "m.youtube.com"];
 
+    public static readonly IReadOnlyList<string> TwitchHosts = ["twitch.tv", "www.twitch.tv", "m.twitch.tv"];
+
     public static readonly IReadOnlyList<string> GitHubHosts = ["github.com", "www.github.com"];
 
-    private static readonly string[] AllowedHosts = [.. TwitterHosts, .. YouTubeHosts, .. GitHubHosts];
+    private static readonly string[] AllowedHosts = [.. TwitterHosts, .. YouTubeHosts, .. TwitchHosts, .. GitHubHosts];
 
     public static void TryOpen(string url)
     {
@@ -26,7 +28,7 @@ internal static class TrustedUrlLauncher
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled("TrustedUrlLauncher", $"Failed to open '{url}'", ex);
+            AppLog.LogErrorThrottled("TrustedUrlLauncher", $"Failed to open '{url}'", ex);
         }
     }
 }

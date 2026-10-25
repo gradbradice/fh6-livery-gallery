@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using System.Collections.ObjectModel;
 
@@ -10,11 +9,15 @@ namespace LiveryGallery.ViewModels;
 internal sealed partial class GalleryViewModel : ObservableObject
 {
     private readonly FavoriteService favoriteService;
+    private readonly LockService lockService;
     private List<LiveryEntry> _allEntries = [];
     public IReadOnlyList<LiveryEntry> AllEntries => _allEntries;
     public ObservableCollection<LiveryGroup> DisplayedGroups { get; } = [];
     private readonly HashSet<string> _selectedTags = new(StringComparer.OrdinalIgnoreCase);
-    public IReadOnlySet<string> SelectedTags => _selectedTags;
+    private readonly HashSet<string> _excludedTags = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>Tags that hide a livery</summary>
+    public IReadOnlySet<string> ExcludedTags => _excludedTags;
+    public bool HasTagFilter => _selectedTags.Count > 0 || _excludedTags.Count > 0;
     private readonly HashSet<string> _selectedFolderNames = new(StringComparer.Ordinal);
     public ObservableCollection<LiveryEntry> SelectedEntries { get; } = [];
     public bool HasSelection => SelectedEntries.Count > 0;
@@ -36,37 +39,102 @@ internal sealed partial class GalleryViewModel : ObservableObject
 
     public event Action? GroupsReplaced;
     public event Action<LiveryEntry>? AuthorRowRequested;
-    public event Action<LiveryEntry>? EditTagsRequested;
+    /// <summary>The liveries whose tags to edit: one, or every selected one</summary>
+    public event Action<IReadOnlyList<LiveryEntry>>? EditTagsRequested;
     public event Action<LiveryEntry>? ViewPreviewRequested;
     public event Action<LiveryEntry>? View3DRequested;
     public event Action<GalleryCountsSnapshot>? CountsUpdated;
     public event Action? SelectedTagsChanged;
+    /// <summary>A livery was locked or unlocked: what may go to the archive changed</summary>
+    public event Action? LocksChanged;
 
-    public GalleryViewModel(FavoriteService favoriteService)
+    public GalleryViewModel(FavoriteService favoriteService, LockService lockService)
     {
         this.favoriteService = favoriteService;
+        this.lockService = lockService;
         SelectedEntries.CollectionChanged += (_, __) =>
         {
             OnPropertyChanged(nameof(HasSelection));
             OnPropertyChanged(nameof(SelectedCount));
             OnPropertyChanged(nameof(SelectionSummaryText));
+            OnSelectionMenuChanged();
         };
+    }
+
+    /// <summary>
+    /// What a card's action works on: every selected livery when the card is one of several selected, else the card
+    /// alone. The context menu selects its card first, so there it is the selection. No card (a menu whose card was
+    /// reused for another livery while it was open: the gallery regrouped meanwhile) — the selection
+    /// </summary>
+    public IReadOnlyList<LiveryEntry> TargetsOf(LiveryEntry? entry) =>
+        entry is null || (entry.IsSelected && SelectedEntries.Count > 1) ? [.. SelectedEntries] : [entry];
+
+    private int MenuCount => Math.Max(1, SelectedEntries.Count);
+
+    private static string WithCount(string text, int count) => count > 1 ? $"{text} ({count})" : text;
+
+    /// <summary>Every selected livery is a favorite: the context menu offers to remove them</summary>
+    public bool FavoriteMenuRemoves => SelectedEntries.Count > 0 && SelectedEntries.All(e => e.IsFavorite);
+
+    public string FavoriteMenuHeader => WithCount(
+        FavoriteMenuRemoves ? Strings.ContextMenuRemoveFromFavorites : Strings.ContextMenuAddToFavorites, MenuCount);
+
+    /// <summary>Every selected livery is locked: the context menu offers to unlock them</summary>
+    public bool LockMenuRemoves => SelectedEntries.Count > 0 && SelectedEntries.All(e => e.IsLocked);
+
+    public string LockMenuHeader => WithCount(LockMenuRemoves ? Strings.ContextMenuUnlock : Strings.ContextMenuLock, MenuCount);
+
+    public string EditTagsMenuHeader => WithCount(Strings.ContextMenuEditTags, MenuCount);
+
+    private void OnSelectionMenuChanged()
+    {
+        OnPropertyChanged(nameof(FavoriteMenuRemoves));
+        OnPropertyChanged(nameof(FavoriteMenuHeader));
+        OnPropertyChanged(nameof(LockMenuRemoves));
+        OnPropertyChanged(nameof(LockMenuHeader));
+        OnPropertyChanged(nameof(EditTagsMenuHeader));
+        OnPropertyChanged(nameof(AssignAuthorMenuVisible));
+        OnPropertyChanged(nameof(AssignAuthorMenuHeader));
+        OnPropertyChanged(nameof(UnassignAuthorMenuVisible));
+        OnPropertyChanged(nameof(UnassignAuthorMenuHeader));
     }
 
     public List<LiveryEntry> GetFilteredEntries() =>
         GalleryFilterService.Apply(
-            _allEntries, _filter.SearchText, _selectedTags,
+            _allEntries, _filter.SearchText, _selectedTags, _excludedTags,
             _filter.FavoriteMode == FavoriteMode.OnlyFavorites, _filter.MineMode == MineMode.OnlyMine,
             _filter.DuplicatesFilterMode, _filter.GeneratedFilterMode, _filter.PaintFilterMode,
             _filter.SearchByFolderName, _filter.QuickFilters,
             auctionFilterMode: _filter.AuctionFilterMode,
             onlyInstalled: _filter.InstalledMode == InstalledMode.OnlyInstalled);
 
+    /// <summary>The star on a card: that livery alone</summary>
     [RelayCommand]
-    private void ToggleFavorite(LiveryEntry entry)
+    private void ToggleFavorite(LiveryEntry entry) => SetFavorites([entry], !entry.IsFavorite);
+
+    /// <summary>
+    /// The context menu: every selected livery becomes a favorite, or, when all of them are already, none of them is
+    /// </summary>
+    [RelayCommand]
+    private void ToggleFavorites(LiveryEntry? entry)
     {
-        entry.IsFavorite = !entry.IsFavorite;
-        favoriteService.SetFavorite(entry.FolderName, entry.IsFavorite);
+        var targets = TargetsOf(entry);
+        if (targets.Count == 0) return;
+        SetFavorites(targets, targets.Any(e => !e.IsFavorite));
+    }
+
+    private void SetFavorites(IReadOnlyList<LiveryEntry> entries, bool favorite)
+    {
+        bool changed = false;
+        foreach (var entry in entries)
+        {
+            if (entry.IsFavorite == favorite) continue;
+            entry.IsFavorite = favorite;
+            favoriteService.SetFavorite(entry.FolderName, favorite);
+            changed = true;
+        }
+        if (!changed) return;
+        OnSelectionMenuChanged();
 
         if (_filter.FavoriteMode != FavoriteMode.None)
             Refresh(_filter);
@@ -74,11 +142,86 @@ internal sealed partial class GalleryViewModel : ObservableObject
             RefreshCountsOnly();
     }
 
+    /// <summary>The lock on a card: that livery alone</summary>
+    [RelayCommand]
+    private void ToggleLock(LiveryEntry entry) => SetLocks([entry], !entry.IsLocked);
+
+    /// <summary>The context menu: every selected livery gets locked, or, when all of them already are, unlocked</summary>
+    [RelayCommand]
+    private void ToggleLocks(LiveryEntry? entry)
+    {
+        var targets = TargetsOf(entry);
+        if (targets.Count == 0) return;
+        SetLocks(targets, targets.Any(e => !e.IsLocked));
+    }
+
+    private void SetLocks(IReadOnlyList<LiveryEntry> entries, bool locked)
+    {
+        bool changed = false;
+        foreach (var entry in entries)
+        {
+            if (entry.IsLocked == locked) continue;
+            entry.IsLocked = locked;
+            lockService.SetLocked(entry.FolderName, locked);
+            changed = true;
+        }
+        if (!changed) return;
+        OnSelectionMenuChanged();
+        LocksChanged?.Invoke();
+    }
+
     [RelayCommand]
     private void ShowAuthorRow(LiveryEntry entry) => AuthorRowRequested?.Invoke(entry);
 
+    /// <summary>The card's tag button or the context menu: the card, or every selected livery when it is one of them</summary>
     [RelayCommand]
-    private void EditTags(LiveryEntry entry) => EditTagsRequested?.Invoke(entry);
+    private void EditTags(LiveryEntry? entry)
+    {
+        var targets = TargetsOf(entry);
+        if (targets.Count > 0) EditTagsRequested?.Invoke(targets);
+    }
+
+    /// <summary>The liveries whose author the user may say: each selected one, or the card alone (never empty)</summary>
+    public event Action<IReadOnlyList<LiveryEntry>>? AssignAuthorRequested;
+
+    /// <summary>The liveries whose author the user said, to forget it (never empty)</summary>
+    public event Action<IReadOnlyList<LiveryEntry>>? UnassignAuthorRequested;
+
+    private static bool CanAssign(LiveryEntry entry) => entry.CanAssignAuthor && entry.CLiveryHash is not null;
+
+    /// <summary>
+    /// The context menu or the card: every selected livery whose own id does not tell the author (one author for all of
+    /// them), or the card alone. Liveries with an account's id are left out
+    /// </summary>
+    [RelayCommand]
+    private void AssignAuthor(LiveryEntry? entry)
+    {
+        var targets = TargetsOf(entry).Where(CanAssign).ToList();
+        if (targets.Count > 0) AssignAuthorRequested?.Invoke(targets);
+    }
+
+    [RelayCommand]
+    private void UnassignAuthor(LiveryEntry? entry)
+    {
+        var targets = TargetsOf(entry).Where(e => e.IsAuthorAssigned).ToList();
+        if (targets.Count > 0) UnassignAuthorRequested?.Invoke(targets);
+    }
+
+    private int AssignableSelectedCount => SelectedEntries.Count(CanAssign);
+    private int AssignedSelectedCount => SelectedEntries.Count(e => e.IsAuthorAssigned);
+
+    /// <summary>Some selected livery's author can be said (the menu selects its card first)</summary>
+    public bool AssignAuthorMenuVisible => AssignableSelectedCount > 0;
+
+    public string AssignAuthorMenuHeader => WithCount(Strings.ContextMenuAssignAuthor, AssignableSelectedCount);
+
+    /// <summary>Some selected livery has an author the user said</summary>
+    public bool UnassignAuthorMenuVisible => AssignedSelectedCount > 0;
+
+    public string UnassignAuthorMenuHeader => WithCount(Strings.ContextMenuUnassignAuthor, AssignedSelectedCount);
+
+    /// <summary>The menu's author items after the user changed whose liveries they are</summary>
+    public void RefreshAuthorMenu() => OnSelectionMenuChanged();
 
     public void RefreshDuplicateTooltips()
     {
@@ -104,21 +247,49 @@ internal sealed partial class GalleryViewModel : ObservableObject
         foreach (var entry in _allEntries) entry.RefreshView3D();
     }
 
-    public void SetTagSelected(string tag, bool selected)
+    public TagFilterState TagState(string tag) =>
+        _selectedTags.Contains(tag) ? TagFilterState.Show
+        : _excludedTags.Contains(tag) ? TagFilterState.Hide
+        : TagFilterState.Off;
+
+    /// <summary>Shows only the tag's liveries, hides them, or stops filtering by the tag</summary>
+    public void SetTagState(string tag, TagFilterState state)
     {
-        bool changed = selected ? _selectedTags.Add(tag) : _selectedTags.Remove(tag);
+        bool changed = state == TagFilterState.Show ? _selectedTags.Add(tag) : _selectedTags.Remove(tag);
+        changed |= state == TagFilterState.Hide ? _excludedTags.Add(tag) : _excludedTags.Remove(tag);
         if (!changed) return;
         SelectedTagsChanged?.Invoke();
         Refresh(_filter);
     }
 
-    [RelayCommand]
-    private void ToggleTag(string tag) => SetTagSelected(tag, !_selectedTags.Contains(tag));
+    public void SetTagSelected(string tag, bool selected) => SetTagState(tag, selected ? TagFilterState.Show : TagFilterState.Off);
 
-    public void SyncKnownTags(IReadOnlyCollection<string> knownTags)
+    /// <summary>No tag shows or hides anything</summary>
+    public void ClearTagFilter()
     {
-        if (_selectedTags.Count == 0) return;
-        _selectedTags.RemoveWhere(t => !knownTags.Contains(t));
+        if (!HasTagFilter) return;
+        _selectedTags.Clear();
+        _excludedTags.Clear();
+        SelectedTagsChanged?.Invoke();
+        Refresh(_filter);
+    }
+
+    /// <summary>A tag on a card: shows only its liveries, or stops</summary>
+    [RelayCommand]
+    private void ToggleTag(string tag) => SetTagSelected(tag, TagState(tag) != TagFilterState.Show);
+
+    /// <summary>
+    /// Stops filtering by tags no livery has any more (the last livery with one lost it): the row has no chip left to
+    /// turn them off. When one was dropped the gallery is shown again, and true is returned
+    /// </summary>
+    public bool SyncKnownTags(IReadOnlyCollection<string> knownTags)
+    {
+        bool dropped = _selectedTags.RemoveWhere(t => !knownTags.Contains(t)) > 0;
+        dropped |= _excludedTags.RemoveWhere(t => !knownTags.Contains(t)) > 0;
+        if (!dropped) return false;
+        SelectedTagsChanged?.Invoke();
+        Refresh(_filter);
+        return true;
     }
 
     public void Refresh(GalleryFilterState filter)
@@ -303,6 +474,7 @@ internal sealed partial class GalleryViewModel : ObservableObject
             if (previousByName.TryGetValue(newEntry.FolderName, out var previous))
             {
                 newEntry.IsFavorite = previous.IsFavorite;
+                newEntry.IsLocked = previous.IsLocked;
                 newEntry.Tags = previous.Tags;
 
                 if (HasEquivalentPresentationData(previous, newEntry))
@@ -341,7 +513,10 @@ internal sealed partial class GalleryViewModel : ObservableObject
             && a.HasParseError == b.HasParseError
             && ParseIssuesEqual(a.Data.ParseIssues, b.Data.ParseIssues)
             && a.LiveryId == b.LiveryId
-            && a.CLiveryHash == b.CLiveryHash;
+            && a.CLiveryHash == b.CLiveryHash
+            && a.AssignedCardId == b.AssignedCardId
+            && a.Data.ArtworkSketch == b.Data.ArtworkSketch
+            && a.Data.AuthorIdentityTagHex == b.Data.AuthorIdentityTagHex;
     }
 
     private static bool ParseIssuesEqual(IReadOnlyList<LiveryParseIssue>? a, IReadOnlyList<LiveryParseIssue>? b)

@@ -1,6 +1,4 @@
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
-using LiveryGallery.Services;
 using LiveryGallery.Services.Accounts;
 
 namespace LiveryGallery.ViewModels;
@@ -25,6 +23,20 @@ internal sealed class BackupRowViewModel(
         : Strings.BackupUnknownDate;
 
     public string SizeText => ByteSizeFormatter.Format(summary.SizeBytes);
+
+    /// <summary>The gallery made it on its own (<see cref="LiveryBackupManifest.IsAutomatic"/>)</summary>
+    public bool IsAutomatic => Manifest?.IsAutomatic == true;
+
+    public string KindText => Strings.BackupKindAutomatic;
+
+    /// <summary>Why the gallery made it</summary>
+    public string KindTooltip => Manifest?.Kind switch
+    {
+        LiveryBackupKind.BeforeArchive => Strings.BackupKindBeforeArchive,
+        LiveryBackupKind.SaveChanged => Strings.BackupKindSaveChanged,
+        LiveryBackupKind.Scheduled => Strings.BackupKindScheduled,
+        _ => "",
+    } + Environment.NewLine + Strings.BackupKindPrunedNote;
 
     public string EntryCountText => string.Format(Strings.BackupEntryCountFormat, Manifest?.Entries.Count ?? 0);
 

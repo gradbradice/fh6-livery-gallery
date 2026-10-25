@@ -1,7 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="LiveryGallery.Views.AuthorCardViewDialog"
-        Width="420" MaxHeight="700"
+        Width="520" MaxHeight="820"
         SizeToContent="Height" WindowStartupLocation="CenterOwner"
         CanResize="False" ShowInTaskbar="False"
         Background="{DynamicResource BgBrush}"
@@ -39,11 +39,12 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <ScrollViewer Grid.Row="0" MaxHeight="560">
+            <ScrollViewer Grid.Row="0" MaxHeight="660" Classes="edge">
                 <StackPanel x:Name="ContentPanel" />
             </ScrollViewer>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button x:Name="EditButton" Classes="secondary" MinWidth="100" Margin="0,0,10,0" Click="EditButton_Click" />
                 <Button x:Name="OkButton" Classes="primary" Width="100" Click="CloseButton_Click" />
             </StackPanel>
         </Grid>

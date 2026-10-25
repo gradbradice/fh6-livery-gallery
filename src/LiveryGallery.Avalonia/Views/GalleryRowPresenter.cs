@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using LiveryGallery.Models;
 
 namespace LiveryGallery.Views;
 

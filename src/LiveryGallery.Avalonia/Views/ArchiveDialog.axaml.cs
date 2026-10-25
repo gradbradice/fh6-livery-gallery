@@ -1,9 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.Services.Accounts;
 using LiveryGallery.ViewModels;
@@ -17,10 +14,11 @@ internal partial class ArchiveDialog : Window
 
     public ArchiveDialog(
         LiveryArchive archiveService, SavePathService savePathService,
-        Func<IReadOnlyList<LiveryData>> getCurrentEntries, Func<Task> onRestored, AccountContext accounts)
+        Func<IReadOnlyList<LiveryData>> getCurrentEntries, Func<Task> onRestored, AccountContext accounts,
+        bool searchByFolderName = false)
     {
         InitializeComponent();
-        _viewModel = new ArchiveViewModel(archiveService, savePathService, getCurrentEntries, onRestored, accounts);
+        _viewModel = new ArchiveViewModel(archiveService, savePathService, getCurrentEntries, onRestored, accounts, searchByFolderName);
         DataContext = _viewModel;
         _work = new DialogWorkScope(this, () => _viewModel.RestoreSelectedCommand.ExecutionTask);
 
@@ -55,32 +53,4 @@ internal partial class ArchiveDialog : Window
         await _viewModel.DeleteConfirmedAsync(rows);
     }
 
-    private async void Row_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        try
-        {
-            if (sender is Control control) await ThumbnailLifecycleController.OnAttachedAsync(control);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unhandled exception in Row_AttachedToVisualTree", ex);
-        }
-    }
-
-    private void Row_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        if (sender is Control control) ThumbnailLifecycleController.OnDetached(control);
-    }
-
-    private async void Row_DataContextChanged(object? sender, EventArgs e)
-    {
-        try
-        {
-            if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unhandled exception in Row_DataContextChanged", ex);
-        }
-    }
 }

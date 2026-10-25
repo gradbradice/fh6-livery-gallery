@@ -51,15 +51,6 @@ internal static class ThumbnailCacheService
     private static readonly HashSet<Lease> _activeLeases = [];
     private static volatile bool _shuttingDown;
 
-    public readonly record struct Statistics(
-        int CachedBitmaps, int ActiveLeases, int InFlightLoads, int RecentlyReleased, long RecentlyReleasedBytes);
-
-    public static Statistics GetStatistics()
-    {
-        Dispatcher.UIThread.VerifyAccess();
-        return new Statistics(_cache.Count, _activeLeases.Count, _inFlightLoads.Count, _recentlyReleased.Count, _recentlyReleasedBytes);
-    }
-
     public static async Task<(bool WasSuperseded, Bitmap? Bitmap)> AcquireForAsync(Control control, string? thumbnailPath)
     {
         Dispatcher.UIThread.VerifyAccess();
@@ -119,7 +110,7 @@ internal static class ThumbnailCacheService
             }
             catch (Exception ex)
             {
-                AppLogger.LogErrorThrottled(thumbnailPath, $"Failed to load preview '{thumbnailPath}'", ex);
+                AppLog.LogErrorThrottled(thumbnailPath, $"Failed to load preview '{thumbnailPath}'", ex);
                 result = new LoadResult(null, Skipped: false);
             }
 
@@ -280,7 +271,7 @@ internal static class ThumbnailCacheService
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled("ThumbnailCacheService.EstimateBytes", "Failed to read the size of a preview bitmap", ex);
+            AppLog.LogErrorThrottled("ThumbnailCacheService.EstimateBytes", "Failed to read the size of a preview bitmap", ex);
             return (long)MaxDecodeWidth * MaxDecodeWidth * 4;
         }
     }
@@ -314,7 +305,7 @@ internal static class ThumbnailCacheService
             }
             catch (Exception ex)
             {
-                AppLogger.LogErrorThrottled("ThumbnailCacheService.Dispose", "Failed to dispose a preview bitmap", ex);
+                AppLog.LogErrorThrottled("ThumbnailCacheService.Dispose", "Failed to dispose a preview bitmap", ex);
             }
         }
     }
@@ -351,7 +342,7 @@ internal static class ThumbnailCacheService
         }
         catch (Exception ex)
         {
-            AppLogger.LogErrorThrottled(path, $"Failed to load preview '{path}'", ex);
+            AppLog.LogErrorThrottled(path, $"Failed to load preview '{path}'", ex);
             return null;
         }
     }

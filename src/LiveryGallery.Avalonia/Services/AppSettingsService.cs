@@ -1,40 +1,17 @@
 using LiveryGallery.Configuration;
 using LiveryGallery.Enums;
-using LiveryGallery.Models;
-using System.Text.Json;
 
 namespace LiveryGallery.Services;
 
 internal static class AppSettingsService
 {
-    private static readonly string _path = Path.Combine(AppSettings.BaseCachePath, "settings.json");
+    // ForzaToolkit.AppHost: a broken file is kept as .corrupted, writes are atomic (now or debounced)
+    private static readonly JsonSettingsFile<AppSettingsData> File = new(Path.Combine(AppSettings.BaseCachePath, "settings.json"));
 
-    public static void Save(AppSettingsData data)
-    {
-        try
-        {
-            string json = JsonSerializer.Serialize(data, JsonSettings.DefaultOptions);
-            DebouncedFileWriter.Shared.Schedule(_path, json);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Failed to serialise settings (Save)", ex);
-        }
-    }
+    /// <summary>Writes the settings a moment after the last of several changes</summary>
+    public static void Save(AppSettingsData data) => File.Schedule(data);
 
-    public static async Task<bool> SaveImmediateAsync(AppSettingsData data)
-    {
-        try
-        {
-            string json = JsonSerializer.Serialize(data, JsonSettings.DefaultOptions);
-            return await DebouncedFileWriter.Shared.SaveNowAsync(_path, json);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Failed to serialise settings (SaveImmediateAsync)", ex);
-            return false;
-        }
-    }
+    public static Task<bool> SaveImmediateAsync(AppSettingsData data) => File.SaveNowAsync(data);
 
     private static bool NormalizeEnums(AppSettingsData data)
     {
@@ -51,31 +28,17 @@ internal static class AppSettingsService
 
     public static AppSettingsData Load()
     {
-        try
+        if (File.TryLoad() is { } data)
         {
-            if (File.Exists(_path))
-            {
-                string json = File.ReadAllText(_path);
-                var data = JsonSerializer.Deserialize<AppSettingsData>(json);
-                if (data != null)
-                {
-                    bool changed = AppSettingsMigration.Apply(data);
-                    changed |= NormalizeEnums(data);
-                    if (changed) Save(data);
-                    return data;
-                }
-                AtomicFile.TryBackupCorruptedFile(_path);
-            }
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Failed to load settings", ex);
-            AtomicFile.TryBackupCorruptedFile(_path);
+            bool changed = AppSettingsMigration.Apply(data);
+            changed |= NormalizeEnums(data);
+            if (changed) Save(data);
+            return data;
         }
 
         return new AppSettingsData
         {
-            Language = AppLocalisationService.GetSystemLanguage(),
+            Language = AppLanguages.System(),
             ThemeMode = AppThemeMode.System
         };
     }

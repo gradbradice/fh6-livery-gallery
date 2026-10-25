@@ -1,4 +1,3 @@
-using LiveryGallery.Models;
 
 namespace LiveryGallery.Services;
 
@@ -17,7 +16,7 @@ internal sealed class SavePathService(AppSettingsData settings, GameProfile prof
         {
             if (SavePath is null)
             {
-                AppLogger.LogErrorThrottled("CurrentIdentity.NoSavePath",
+                AppLog.LogErrorThrottled("CurrentIdentity.NoSavePath",
                     "SavePathService.CurrentIdentity: SavePath has not been set yet. The current UserId cannot be determined.",
                     new InvalidOperationException("SavePath is null"));
                 return null;
@@ -27,7 +26,7 @@ internal sealed class SavePathService(AppSettingsData settings, GameProfile prof
             var identity = profile.Saves.ResolveIdentity(SavePath, containerId);
             if (identity is null)
             {
-                AppLogger.LogErrorThrottled("CurrentIdentity.Unresolved",
+                AppLog.LogErrorThrottled("CurrentIdentity.Unresolved",
                     $"SavePathService.CurrentIdentity: Failed to parse UserId from either the SavePath folder name ('{Path.GetFileName(SavePath)}') or the manifest. " +
                     $"The MINE badge will not be shown for any livery.",
                     new InvalidOperationException("ResolveSaveIdentity returned null"));

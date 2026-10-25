@@ -1,11 +1,7 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
-using LiveryGallery.Services;
 using LiveryGallery.ViewModels;
 
 namespace LiveryGallery.Views;
@@ -30,32 +26,4 @@ internal partial class ChangesSinceLastLaunchDialog : Window
 
     private void CloseButton_Click(object? sender, RoutedEventArgs e) => Close();
 
-    private async void LiveryRow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        try
-        {
-            if (sender is Control control) await ThumbnailLifecycleController.OnAttachedAsync(control);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unhandled exception in ChangesSinceLastLaunchDialog.LiveryRow_AttachedToVisualTree", ex);
-        }
-    }
-
-    private void LiveryRow_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        if (sender is Control control) ThumbnailLifecycleController.OnDetached(control);
-    }
-
-    private async void LiveryRow_DataContextChanged(object? sender, EventArgs e)
-    {
-        try
-        {
-            if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unhandled exception in ChangesSinceLastLaunchDialog.LiveryRow_DataContextChanged", ex);
-        }
-    }
 }

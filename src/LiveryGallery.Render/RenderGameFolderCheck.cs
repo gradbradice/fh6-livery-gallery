@@ -1,6 +1,5 @@
 using ForzaToolkit.Games.Installation;
 using ForzaToolkit.LiveryRender.Assets;
-using LiveryGallery.Services;
 using LiveryGallery.Viewer3D;
 
 namespace LiveryGallery.Render;
@@ -19,7 +18,7 @@ internal sealed class RenderGameFolderCheck : IGameFolderCheck
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"Game folder check failed for '{path}'", ex);
+            AppLog.LogError($"Game folder check failed for '{path}'", ex);
             return new GameFolderReport
             {
                 InputPath = path,

@@ -20,7 +20,7 @@
     <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.1" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
     <!-- The game: FH6's profile (GameProfiles.cs) is built here, the gallery itself does not know the game -->
-    <PackageReference Include="ForzaToolkit.Games.FH6" Version="0.10.0" />
+    <PackageReference Include="ForzaToolkit.Games.FH6" Version="0.28.0" />
   </ItemGroup>
 
   <ItemGroup>

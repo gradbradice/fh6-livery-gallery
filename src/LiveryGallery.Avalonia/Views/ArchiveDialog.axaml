@@ -1,5 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:LiveryGallery.Views"
         xmlns:loc="clr-namespace:LiveryGallery.Localisation"
         xmlns:vm="clr-namespace:LiveryGallery.ViewModels"
         x:Class="LiveryGallery.Views.ArchiveDialog"
@@ -14,9 +15,7 @@
     <Window.Resources>
         <DataTemplate x:Key="ArchivedLiveryRowTemplate" x:DataType="vm:ArchivedLiveryRowViewModel">
             <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="10" Padding="10,8" Margin="0,0,0,8"
-                    AttachedToVisualTree="Row_AttachedToVisualTree"
-                    DetachedFromVisualTree="Row_DetachedFromVisualTree"
-                    DataContextChanged="Row_DataContextChanged">
+                    views:ThumbnailRows.Track="True">
                 <Grid ColumnDefinitions="Auto,Auto,*">
                     <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay}"
                               VerticalAlignment="Center" Margin="0,0,10,0" />
@@ -30,6 +29,7 @@
                                        TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding LiveryName}" />
                             <TextBlock Grid.Column="1" Text="{Binding LiveryIdText}" FontSize="11" FontWeight="SemiBold"
                                        Margin="8,0,0,0" VerticalAlignment="Center"
+                                       ToolTip.Tip="{Binding LiveryIdTooltip}"
                                        Foreground="{DynamicResource TextSecondaryBrush}" />
                         </Grid>
                         <TextBlock Text="{Binding AuthorRaw}" FontSize="11.5" Margin="0,2,0,0"
@@ -42,9 +42,13 @@
                         </StackPanel>
                         <TextBlock Text="{Binding ArchivedText}" FontSize="10.5" Margin="0,3,0,0"
                                    Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <!-- The folder, as on a gallery card, while folder names are shown: search finds rows by it -->
+                        <TextBlock Text="{Binding FolderName}" FontSize="10" Margin="0,3,0,0"
+                                   IsVisible="{Binding ShowFolderName}" TextTrimming="CharacterEllipsis"
+                                   Foreground="{DynamicResource TextTertiaryBrush}" />
                         <TextBlock Text="{Binding OtherAccountText}" FontSize="10.5" Margin="0,3,0,0"
                                    IsVisible="{Binding IsFromOtherAccount}" TextTrimming="CharacterEllipsis"
-                                   Foreground="{DynamicResource WarningBrush}" />
+                                   Foreground="{DynamicResource WarningTextBrush}" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -79,6 +83,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -95,7 +100,11 @@
                 </StackPanel>
             </Grid>
 
-            <Grid Grid.Row="1" Margin="0,0,0,10" IsVisible="{Binding !ShowEmptyState}">
+            <TextBox x:Name="SearchBox" Grid.Row="1" Classes="search" FontSize="13" Margin="0,0,0,12"
+                     IsVisible="{Binding HasAnyRows}" PlaceholderText="{Binding SearchPlaceholder}"
+                     Text="{Binding SearchText, Mode=TwoWay}" />
+
+            <Grid Grid.Row="2" Margin="0,0,0,10" IsVisible="{Binding !ShowEmptyState}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -111,7 +120,7 @@
                            Foreground="{DynamicResource TextSecondaryBrush}" />
             </Grid>
 
-            <ScrollViewer Grid.Row="2" IsVisible="{Binding !ShowEmptyState}">
+            <ScrollViewer Grid.Row="3" Classes="edge" IsVisible="{Binding !ShowEmptyState}">
                 <ItemsControl ItemsSource="{Binding Rows}" ItemTemplate="{StaticResource ArchivedLiveryRowTemplate}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -121,11 +130,11 @@
                 </ItemsControl>
             </ScrollViewer>
 
-            <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+            <TextBlock Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"
                        Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"
-                       IsVisible="{Binding ShowEmptyState}" Text="{x:Static loc:Strings.ArchiveEmptyHint}" />
+                       IsVisible="{Binding ShowEmptyState}" Text="{Binding EmptyStateText}" />
 
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10"
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10"
                         Margin="0,14,0,0">
                 <Button x:Name="DeleteButton" Classes="danger" MinWidth="140"
                         Command="{Binding RequestDeleteCommand}" />

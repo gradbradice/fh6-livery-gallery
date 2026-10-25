@@ -20,6 +20,8 @@ internal static class GameProfiles
         PreviewFileNames = Fh6LiveryFiles.PreviewFileNames,
         Features = new GameFeatures { Auction = true, LiveryServer = true },
         MyDesigns = new MyDesignsGrid(Fh6Rows, MyDesignsLayout.FromSaveFolder, DefaultRows: 2),
+        // The game's only limit on liveries: at 1000 it lets the player neither download nor make another
+        MaxLiveries = 1000,
         ListingPreviews = new ListingPreviewCache(AuctionThumbnailResolver.FindCacheDirectory, AuctionThumbnailResolver.ManifestFileName),
     };
 

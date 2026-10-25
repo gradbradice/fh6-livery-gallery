@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using ForzaToolkit.Liveries.Cache;
 using LiveryGallery.Configuration;
 
 namespace LiveryGallery.Services;
@@ -16,4 +15,4 @@ internal sealed class AppCacheService(string? accountsRoot = null, string? legac
         accountsRoot ?? AppSettings.AccountsPath,
         thumbsDirectory ?? AppSettings.ThumbsPath,
         legacyDirectory ?? AppSettings.BaseCachePath,
-        logger: AppLogger.LoggerFactory.CreateLogger<AppCacheService>());
+        logger: AppLog.LoggerFactory.CreateLogger<AppCacheService>());

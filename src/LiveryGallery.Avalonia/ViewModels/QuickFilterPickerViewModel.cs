@@ -1,13 +1,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
-using System.Globalization;
+using LiveryGallery.Services;
 
 namespace LiveryGallery.ViewModels;
 
 internal sealed record QuickFilterOption(QuickFilter Filter, string Label, int Count, bool IsUnknown)
 {
-    public string CountText => Count.ToString("N0", CultureInfo.CurrentCulture);
+    public string CountText => Count.ToString("N0", AppLocalisationService.Culture);
 }
 
 internal sealed partial class QuickFilterPickerViewModel : ObservableObject
@@ -89,8 +88,9 @@ internal sealed partial class QuickFilterPickerViewModel : ObservableObject
             _entries.GroupBy(e => e.CarKnown ? e.CarManufacturerRaw.ToUpperInvariant() : null),
             QuickFilter.ForManufacturer, e => !e.CarKnown, f => f.DisplayText);
         _authors = Build(
-            _entries.GroupBy(e => e.Data.IsAuthorUnknown ? null : e.Author.ToUpperInvariant()),
-            QuickFilter.ForAuthor, e => e.Data.IsAuthorUnknown, f => f.DisplayText);
+            // By who the author is: two authors of one name are two options (their labels tell them apart)
+            _entries.GroupBy(e => e.IsAuthorUnknown ? null : e.AuthorKey?.ToUpperInvariant()),
+            QuickFilter.ForAuthor, e => e.IsAuthorUnknown, f => f.DisplayText);
         // By the car list's value (one option per country whatever the language), named as the cards show it
         _countries = Build(
             _entries.GroupBy(e => e.CarCountryRaw.Length == 0 ? null : e.CarCountryRaw.ToUpperInvariant()),

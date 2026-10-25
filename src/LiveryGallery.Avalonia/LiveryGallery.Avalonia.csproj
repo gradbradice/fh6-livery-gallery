@@ -24,18 +24,17 @@
     <PackageReference Include="Avalonia" Version="12.1.1" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="ForzaToolkit.CarDatabase" Version="0.11.0" />
-    <PackageReference Include="ForzaToolkit.Core" Version="0.11.0" />
-    <PackageReference Include="ForzaToolkit.GameInput" Version="0.11.0" />
-    <PackageReference Include="ForzaToolkit.Games" Version="0.11.0" />
-    <PackageReference Include="ForzaToolkit.Liveries" Version="0.11.0" />
-    <PackageReference Include="ForzaToolkit.Liveries.Server" Version="0.11.0" />
-    <PackageReference Include="ForzaToolkit.Saves" Version="0.11.0" />
-    <PackageReference Include="ForzaToolkit.StringTables" Version="0.11.0" />
-    <PackageReference Include="ForzaToolkit.UI.Avalonia" Version="0.11.0" />
+    <PackageReference Include="ForzaToolkit.AppHost" Version="0.28.0" />
+    <PackageReference Include="ForzaToolkit.CarDatabase" Version="0.28.0" />
+    <PackageReference Include="ForzaToolkit.Core" Version="0.28.0" />
+    <PackageReference Include="ForzaToolkit.GameInput" Version="0.28.0" />
+    <PackageReference Include="ForzaToolkit.Games" Version="0.28.0" />
+    <PackageReference Include="ForzaToolkit.Liveries" Version="0.28.0" />
+    <PackageReference Include="ForzaToolkit.Liveries.Server" Version="0.28.0" />
+    <PackageReference Include="ForzaToolkit.Saves" Version="0.28.0" />
+    <PackageReference Include="ForzaToolkit.StringTables" Version="0.28.0" />
+    <PackageReference Include="ForzaToolkit.UI.Avalonia" Version="0.28.0" />
     <PackageReference Include="MarkView.Avalonia" Version="12.2.0" />
-    <PackageReference Include="Serilog" Version="4.4.0" />
-    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

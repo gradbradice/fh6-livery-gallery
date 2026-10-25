@@ -1,9 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media.Imaging;
-using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
-using LiveryGallery.Services;
 
 namespace LiveryGallery.Views;
 
@@ -23,7 +21,7 @@ internal partial class LiveryPreviewDialog : Window
         }
         catch (Exception ex)
         {
-            AppLogger.LogError($"Failed to load preview image '{webpPath}'", ex);
+            AppLog.LogError($"Failed to load preview image '{webpPath}'", ex);
         }
     }
 

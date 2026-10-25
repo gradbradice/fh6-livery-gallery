@@ -1,9 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using LiveryGallery.Controller;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 using LiveryGallery.ViewModels;
 
@@ -48,32 +45,4 @@ internal partial class BackupDetailDialog : Window
         base.OnClosed(e);
     }
 
-    private async void LiveryRow_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        try
-        {
-            if (sender is Control control) await ThumbnailLifecycleController.OnAttachedAsync(control);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unhandled exception in LiveryRow_AttachedToVisualTree", ex);
-        }
-    }
-
-    private void LiveryRow_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        if (sender is Control control) ThumbnailLifecycleController.OnDetached(control);
-    }
-
-    private async void LiveryRow_DataContextChanged(object? sender, EventArgs e)
-    {
-        try
-        {
-            if (sender is Control control) await ThumbnailLifecycleController.OnDataContextChangedAsync(control);
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Unhandled exception in LiveryRow_DataContextChanged", ex);
-        }
-    }
 }

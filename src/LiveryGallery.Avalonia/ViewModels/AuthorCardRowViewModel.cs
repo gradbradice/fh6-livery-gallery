@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveryGallery.Localisation;
-using LiveryGallery.Models;
 using LiveryGallery.Services;
 
 namespace LiveryGallery.ViewModels;
@@ -29,9 +28,11 @@ internal sealed partial class AuthorCardRowViewModel(AuthorCard card) : Observab
 
     public bool HasTwitter => Card.TwitterUrl is not null;
     public bool HasYouTube => Card.YouTubeUrl is not null;
-    public bool HasAnyLink => HasTwitter || HasYouTube;
+    public bool HasTwitch => Card.TwitchUrl is not null;
+    public bool HasAnyLink => HasTwitter || HasYouTube || HasTwitch;
     public string? TwitterUrl => Card.TwitterUrl;
     public string? YouTubeUrl => Card.YouTubeUrl;
+    public string? TwitchUrl => Card.TwitchUrl;
     public required int LiveriesCount { get; init; }
     public required int FavoritesCount { get; init; }
     public required int DuplicatesCount { get; init; }
